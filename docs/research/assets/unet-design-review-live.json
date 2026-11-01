@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "purpose": "One live main-figure review; model opinions, not aesthetic ground truth",
+  "source": "unet-mainfigure-before-review.json",
+  "mode": "main-figure-design-review",
+  "runId": "2fb4506e-6ac0-467b-a7f9-71ab841d32d7",
+  "cli": "codex-cli 0.165.0",
+  "model": "CLI default",
+  "image": {
+    "width": 1600,
+    "height": 992,
+    "figureSha256": "6eb15d9d3b6978d1fcb123401833bec9504999002a1f26022fb7eb78c3a9c8de",
+    "renderer": "fastfigure-browser-v1",
+    "fonts": [
+      "normal 700 15px Inter, Inter, MiSans, sans-serif",
+      "normal 400 17.3684px Inter, Inter, MiSans, sans-serif",
+      "normal 400 15px Inter, Inter, MiSans, sans-serif",
+      "normal 700 14px Inter, Inter, MiSans, sans-serif",
+      "normal 400 12px Inter, Inter, MiSans, sans-serif",
+      "normal 400 13px Inter, Inter, MiSans, sans-serif",
+      "italic 400 15px Inter, Inter, MiSans, sans-serif",
+      "normal 700 18px Inter, Inter, MiSans, sans-serif",
+      "normal 400 10px Inter, Inter, MiSans, sans-serif",
+      "normal 400 16px Inter, Inter, MiSans, sans-serif"
+    ],
+    "viewport": "canvas-1000x620",
+    "imageSha256": "8ee5fd162f25da450a176229ce1bfac23c88fc63e68a3154352210249c9fc615",
+    "contextVersion": "design-aliases-v1"
+  },
+  "report": {
+    "message": "值得保留的是清楚的 U 形布局、逐层横向跳连，以及用 C 区分拼接操作的表达。概览、机制与局部放大的结构搭配服务于当前说明目标；主要改进空间在于核心机制的视觉优先级，以及放大图两路输入的来源对应。",
+    "firstRead": "第一眼最醒目的是顶部深蓝色 Encoder–decoder 模块，随后注意到总标题和概览的横向流程。进入主体后，视线沿左侧 E1–E4 下行至深蓝色 B，再沿右侧解码器上行；横向 Copy/crop 与 C 节点使跳连关系容易被发现。右下角放大图最后被读到，需要沿较长的紫色引线回查来源。这条路径能够说明整体架构，但核心跳连机制尚未成为第一眼重点。",
+    "keep": [
+      "左侧编码、底部瓶颈、右侧解码的排列构成明确的 U 形，逐层内收的布局有助于追踪主干。",
+      "各层横向 Copy/crop → C → 解码特征的重复结构，使不同层级的跳连关系可以直接比较。",
+      "浅青色特征片层、紧凑的 Copy/crop 操作框与暖色 C 节点具有不同轮廓，能区分表示、操作和拼接。",
+      "画布以白底和留白组织内容，没有用大面积底色卡片包围三个分区；局部放大也确实对应主图中的具体机制。"
+    ],
+    "findings": [
+      {
+        "id": "f01",
+        "title": "概览模型的视觉重量超过核心跳连机制",
+        "category": "hierarchy",
+        "severity": "major",
+        "observation": "顶部 Encoder–decoder 是一块宽而深的实色模块；主体中的 Copy/crop 框、横向跳连和 C 节点则明显更轻。主体底部 B 也使用深蓝色，但它强调的是瓶颈位置。",
+        "impact": "读者先获得的是通用输入—模型—输出流程，随后才寻找本图重点解释的多尺度跳连与拼接。",
+        "suggestion": "减轻顶部模型模块的填色或体量，将少量深色强调留给一组具有代表性的跳连与拼接关系；其余层继续保持重复结构，形成由重点到全局的阅读入口。",
+        "box": {
+          "x": 0.028,
+          "y": 0.116,
+          "width": 0.704,
+          "height": 0.767
+        },
+        "objectIds": [
+          "overview-1",
+          "unet",
+          "unet-object-40"
+        ]
+      },
+      {
+        "id": "f02",
+        "title": "放大图的第二路输入缺少来源提示",
+        "category": "correspondence",
+        "severity": "minor",
+        "observation": "右下角放大图中，上路明确写有 Copy/crop，下路只有一条从空白处起笔、进入 C 的斜箭头，没有来源名称或上采样操作提示。",
+        "impact": "两路汇入 C 的几何关系清楚，但独立阅读放大图时，无法直接判断下路来自哪一级特征，以及它与主图上采样路径的对应。",
+        "suggestion": "在下路起点附近增加简短的来源或操作标注，并与主图使用同一名称；具体标注内容应先核对实际模型定义，无需扩展为新的网络模块。",
+        "box": {
+          "x": 0.74,
+          "y": 0.565,
+          "width": 0.217,
+          "height": 0.244
+        },
+        "objectIds": [
+          "detail-1-group",
+          "detail-1-copy-object-3",
+          "detail-1-copy-object-5"
+        ]
+      },
+      {
+        "id": "f03",
+        "title": "放大来源框与长引线干扰瓶颈附近的阅读",
+        "category": "composition",
+        "severity": "minor",
+        "observation": "主图最下层 Copy/crop 和 C 外有紫色虚线选框，其下边缘贴着 B 模块顶部；连接右侧放大图的紫色折线先向下，再横跨底部留白后向上，形成较大的绕行轮廓。",
+        "impact": "来源关联可以追踪，但选框边缘与瓶颈路径挤在一起，长折线也增加了与主干数据流区分的负担。",
+        "suggestion": "调整来源框的下缘，使其与 B 模块和斜向数据箭头留出明确间隔；适度靠近放大图或缩短关联引线，保留紫色作为局部对应提示。",
+        "box": {
+          "x": 0.317,
+          "y": 0.71,
+          "width": 0.433,
+          "height": 0.19
+        },
+        "objectIds": [
+          "detail-1-guide-1",
+          "detail-1-source",
+          "unet-object-40"
+        ]
+      }
+    ],
+    "uncertainties": [
+      "未提供最终刊印尺寸；当前完整画布上文字可以辨认，但尚不能据此确认缩至论文栏宽后的操作标注与底部说明是否可读。",
+      "仅凭本图不能验证 Copy/crop 的实际裁剪规则及下路上采样的具体实现；以上建议涉及标注与对应关系，不构成对模型拓扑正确性的判定。"
+    ]
+  }
+}

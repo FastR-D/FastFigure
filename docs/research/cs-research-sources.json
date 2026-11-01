@@ -1,0 +1,732 @@
+{
+  "research_date": "2026-10-28",
+  "scope": "Computer science paper-figure collection, executable component libraries, LLM-assisted vectorization, generation and recursive self-improvement.",
+  "reports": [
+    "docs/research/2026-10-28-cs-figure-library.md",
+    "docs/research/2026-10-28-vectorization-rsi.md"
+  ],
+  "counts": {
+    "unique_cited_primary_urls": 42,
+    "additional_https_probes": 15
+  },
+  "evidence_policy": [
+    "Paper methods, dataset sizes and author benchmarks remain author claims unless explicitly independently verified.",
+    "Static source inspection is not runtime validation. No model inference, paid image generation, training, benchmark reproduction or bulk corpus collection was performed.",
+    "Proposed dataset sizes, architectures and evaluation designs are recommendations, not achieved capabilities.",
+    "Mutable web pages and dataset cards were read on the research date. Pinned OXR source files and selected downloaded text have hashes below.",
+    "Failed HTTP/TLS probes were preserved; no certificate verification bypass was used.",
+    "The initial broad survey has a separate index, sources.json. Counts in the two indexes overlap and must not be added as unique totals."
+  ],
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2601.04390",
+      "labels": [
+        "SciFig 研究系统"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-001",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "research_paper"
+    },
+    {
+      "url": "https://arxiv.org/abs/2604.20857",
+      "labels": [
+        "论文"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-002",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "research_paper",
+      "caveat": "Current repository/paper report 57,100 schematic diagrams; older Hugging Face card lists 89,422. Do not merge version-specific counts and claims."
+    },
+    {
+      "url": "https://arxiv.org/html/2603.24575v1",
+      "labels": [
+        "VFIG",
+        "VFIG 数据与方法"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md",
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-003",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "research_paper"
+    },
+    {
+      "url": "https://arxiv.org/html/2603.29590v2",
+      "labels": [
+        "FigAgent",
+        "FigAgent 方法",
+        "FigAgent 论文"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-004",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "research_paper",
+      "caveat": "FigAgent method and dataset size are author-reported. Dataset sample retrieval failed; native artifact import was not validated."
+    },
+    {
+      "url": "https://dblp.org/",
+      "labels": [
+        "DBLP"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-005",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://dblp.org/faq/4621382.html",
+      "labels": [
+        "DBLP 快照建议"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-006",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://developers.openai.com/api/docs/guides/image-generation",
+      "labels": [
+        "GPT Image 文档"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-007",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://docs.openreview.net/how-to-guides/data-retrieval-and-modification/how-to-get-all-notes-for-submissions-reviews-rebuttals-etc",
+      "labels": [
+        "OpenReview 获取资料"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-008",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://github.com/BIT-DataLab/Edit-Banana",
+      "labels": [
+        "Edit Banana"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-009",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/ChartMimic/ChartMimic",
+      "labels": [
+        "ChartMimic"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-010",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/HarisIqbal88/PlotNeuralNet",
+      "labels": [
+        "PlotNeuralNet"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-011",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/RAIVNLab/VFig",
+      "labels": [
+        "作者代码",
+        "VFIG 代码"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md",
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-012",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/RAIVNLab/VFig/blob/main/rule-based-eval/README.md",
+      "labels": [
+        "规则评测说明"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-013",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/SoMarkAI/OXR",
+      "labels": [
+        "OXR",
+        "OXR README"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md",
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-014",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/LICENSE",
+      "labels": [
+        "该提交的 LICENSE"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-015",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file",
+      "caveat": "License text statically inspected at the pinned commit. Summary is a description of published terms, not legal advice."
+    },
+    {
+      "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/oxr/pipeline/postprocess/picture_postprocess.py",
+      "labels": [
+        "图片后处理"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-016",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/oxr/pipeline/recognition.py",
+      "labels": [
+        "识别路径"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-017",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/SoMarkAI/OXR/tree/c1a1dcb312ee9f691404f127785510453c0d9350",
+      "labels": [
+        "所查版本"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-018",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/alexlenail/NN-SVG",
+      "labels": [
+        "NN SVG"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-019",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/allenai/pdffigures2",
+      "labels": [
+        "PDFFigures 2"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-020",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/csml-rpi/DiagramBank",
+      "labels": [
+        "DiagramBank",
+        "DiagramBank 当前仓库"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-021",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file",
+      "caveat": "Current repository/paper report 57,100 schematic diagrams; older Hugging Face card lists 89,422. Do not merge version-specific counts and claims."
+    },
+    {
+      "url": "https://github.com/google-research/papervizagent",
+      "labels": [
+        "PaperVizAgent"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-022",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/google-research/papervizagent/blob/main/agents/planner_agent.py",
+      "labels": [
+        "planner"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-023",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/google-research/papervizagent/blob/main/agents/retriever_agent.py",
+      "labels": [
+        "retriever"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-024",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/lutzroeder/netron",
+      "labels": [
+        "Netron"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-025",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/mingrammer/diagrams",
+      "labels": [
+        "Diagrams"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-026",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/neverclover/generic-pixel-svg-rebuild",
+      "labels": [
+        "generic-pixel-svg-rebuild"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-027",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/potamides/DeTikZify",
+      "labels": [
+        "DeTikZify"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md",
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-028",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file"
+    },
+    {
+      "url": "https://github.com/yepengliu/FigTree",
+      "labels": [
+        "FigTree"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-029",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_or_source_file",
+      "caveat": "Repository page and author pipeline guide inspected. A lowercase readme.md raw URL failed; that does not establish absence of README.md or the implementation."
+    },
+    {
+      "url": "https://huggingface.co/datasets/ChartMimic/ChartMimic",
+      "labels": [
+        "数据卡"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-030",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "dataset_card_or_viewer"
+    },
+    {
+      "url": "https://huggingface.co/datasets/QijiaHe/VFIG-Data/raw/main/README.md",
+      "labels": [
+        "VFIG Data"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-031",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "dataset_card_or_viewer",
+      "caveat": "Public card/schema inspected. A dataset row request failed; original raster-to-SVG pairing and original-author source status were not verified."
+    },
+    {
+      "url": "https://huggingface.co/datasets/WestlakeNLP/FigureBench",
+      "labels": [
+        "FigureBench"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-032",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "dataset_card_or_viewer"
+    },
+    {
+      "url": "https://huggingface.co/datasets/dwzhu/PaperBananaBench",
+      "labels": [
+        "PaperBananaBench"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-033",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "dataset_card_or_viewer",
+      "caveat": "Dataset web card/viewer readable. Separate raw-card and row API probes failed; no batch download or benchmark execution."
+    },
+    {
+      "url": "https://huggingface.co/datasets/nllg/datikz",
+      "labels": [
+        "DaTikZ"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-034",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "dataset_card_or_viewer"
+    },
+    {
+      "url": "https://huggingface.co/datasets/zhangt20/DiagramBank/raw/main/README.md",
+      "labels": [
+        "DiagramBank 数据卡"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-035",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "dataset_card_or_viewer",
+      "caveat": "Current repository/paper report 57,100 schematic diagrams; older Hugging Face card lists 89,422. Do not merge version-specific counts and claims."
+    },
+    {
+      "url": "https://info.arxiv.org/help/bulk_data.html",
+      "labels": [
+        "arXiv 批量入口"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-036",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://info.arxiv.org/help/license/index.html",
+      "labels": [
+        "arXiv 许可说明"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-037",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://mermaid.js.org/intro/",
+      "labels": [
+        "Mermaid"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-038",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://openaccess.thecvf.com/menu/CVPR_2023",
+      "labels": [
+        "CVF 开放页面说明"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-039",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://plantuml.com/sequence-diagram",
+      "labels": [
+        "PlantUML"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-040",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "official_documentation_or_author_material"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/SoMarkAI/image_bed/main/OXR_README/assets/oxr_rsi_loop.png",
+      "labels": [
+        "官方 RSI 流程图"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-vectorization-rsi.md"
+      ],
+      "id": "CS-041",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "author_workflow_diagram",
+      "inspection": "Viewed in browser; workflow interpretation, not an executable training implementation."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/csml-rpi/DiagramBank/main/relations.md",
+      "labels": [
+        "schema"
+      ],
+      "cited_in": [
+        "docs/research/2026-10-28-cs-figure-library.md"
+      ],
+      "id": "CS-042",
+      "evidence_scope": "Cited primary material; author descriptions are not independently reproduced results.",
+      "kind": "repository_source_file",
+      "caveat": "Current repository/paper report 57,100 schematic diagrams; older Hugging Face card lists 89,422. Do not merge version-specific counts and claims."
+    }
+  ],
+  "read_only_https_probes": [
+    {
+      "name": "figagent-project",
+      "url": "https://zhuoling.site/FigAgent/",
+      "status": "unavailable",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1007)>",
+      "method": "read-only HTTPS fetch via Python urllib",
+      "interpretation": "This exact request failed. This does not prove the whole project or dataset is unavailable."
+    },
+    {
+      "name": "figagent-card",
+      "url": "https://huggingface.co/datasets/Eric03/FigAgent/raw/main/README.md",
+      "status": "unavailable",
+      "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1007)>",
+      "method": "read-only HTTPS fetch via Python urllib",
+      "interpretation": "This exact request failed. This does not prove the whole project or dataset is unavailable."
+    },
+    {
+      "name": "figagent-sample",
+      "url": "https://huggingface.co/datasets/Eric03/FigAgent/resolve/main/2105.02961/main_diagram/main_diagram.drawio",
+      "status": "unavailable",
+      "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1007)>",
+      "method": "read-only HTTPS fetch via Python urllib",
+      "interpretation": "This exact request failed. This does not prove the whole project or dataset is unavailable."
+    },
+    {
+      "name": "diagram-bank-relations",
+      "url": "https://raw.githubusercontent.com/csml-rpi/DiagramBank/main/relations.md",
+      "resolved_url": "https://raw.githubusercontent.com/csml-rpi/DiagramBank/main/relations.md",
+      "status": "retrieved",
+      "bytes": 3727,
+      "sha256": "830fc1e40e78ce723310f74d148636151040e3c6ef3f2fe51a88b84ad910f9f7",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "paperbanana-card",
+      "url": "https://huggingface.co/datasets/dwzhu/PaperBananaBench/raw/main/README.md",
+      "status": "unavailable",
+      "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1007)>",
+      "method": "read-only HTTPS fetch via Python urllib",
+      "interpretation": "This exact request failed. This does not prove the whole project or dataset is unavailable."
+    },
+    {
+      "name": "paperbanana-retriever",
+      "url": "https://raw.githubusercontent.com/google-research/papervizagent/main/agents/retriever_agent.py",
+      "resolved_url": "https://raw.githubusercontent.com/google-research/papervizagent/main/agents/retriever_agent.py",
+      "status": "retrieved",
+      "bytes": 15751,
+      "sha256": "61407d154f443fb8341a289117dbd9b3dbd0a7b156e24ec95112b908e5258587",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "paperbanana-planner",
+      "url": "https://raw.githubusercontent.com/google-research/papervizagent/main/agents/planner_agent.py",
+      "resolved_url": "https://raw.githubusercontent.com/google-research/papervizagent/main/agents/planner_agent.py",
+      "status": "retrieved",
+      "bytes": 7363,
+      "sha256": "55a5a95f05930fc69f91953a301ed46292d4342abc6a3c37456a92c089876f01",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "vfig-rules",
+      "url": "https://raw.githubusercontent.com/RAIVNLab/VFig/main/rule-based-eval/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/RAIVNLab/VFig/main/rule-based-eval/README.md",
+      "status": "retrieved",
+      "bytes": 15343,
+      "sha256": "9da538ebf18ccf201f4faa77d3185f945eaa5415b7eddbe19804e77767ecae27",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "editbanana-readme",
+      "url": "https://raw.githubusercontent.com/BIT-DataLab/Edit-Banana/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/BIT-DataLab/Edit-Banana/main/README.md",
+      "status": "retrieved",
+      "bytes": 15933,
+      "sha256": "8753ab3aa228003fb8234a62720fbefdf69d3127f057c7360a74b728e9e1b0fc",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "detikz-readme",
+      "url": "https://raw.githubusercontent.com/potamides/DeTikZify/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/potamides/DeTikZify/main/README.md",
+      "status": "retrieved",
+      "bytes": 16823,
+      "sha256": "ed238512195737f488e730d1e7f4bb8e09a28b5d94ca6b599e8901d8cdbc8eb5",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "chartmimic-readme",
+      "url": "https://raw.githubusercontent.com/ChartMimic/ChartMimic/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/ChartMimic/ChartMimic/main/README.md",
+      "status": "retrieved",
+      "bytes": 8300,
+      "sha256": "b341547ec98ce3d03c1332c5e08ce9d2e2356f1046c6e8d5fc466adb0b40a8d1",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "figtree-readme",
+      "url": "https://raw.githubusercontent.com/yepengliu/FigTree/main/readme.md",
+      "status": "unavailable",
+      "error": "HTTP Error 404: Not Found",
+      "method": "read-only HTTPS fetch via Python urllib",
+      "interpretation": "This exact request failed. This does not prove the whole project or dataset is unavailable."
+    },
+    {
+      "name": "openai-image-guide",
+      "url": "https://developers.openai.com/api/docs/guides/image-generation.md",
+      "resolved_url": "https://developers.openai.com/api/docs/guides/image-generation.md",
+      "status": "retrieved",
+      "bytes": 114687,
+      "sha256": "8e9337b4b505536c2785e90c7298b41537e6a61f27d81caa069d9467787e3fe5",
+      "method": "read-only HTTPS fetch via Python urllib"
+    },
+    {
+      "name": "paperbanana-row",
+      "url": "https://datasets-server.huggingface.co/rows?dataset=dwzhu%2FPaperBananaBench&config=diagram&split=test&offset=0&length=1",
+      "status": "unavailable",
+      "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1007)>",
+      "method": "read-only HTTPS fetch via Python urllib",
+      "interpretation": "This exact request failed. This does not prove the whole project or dataset is unavailable."
+    },
+    {
+      "name": "vfig-row",
+      "url": "https://datasets-server.huggingface.co/rows?dataset=QijiaHe%2FVFIG-Data&config=VFIG-Data-Complex-Diagrams&split=train&offset=0&length=1",
+      "status": "unavailable",
+      "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1007)>",
+      "method": "read-only HTTPS fetch via Python urllib",
+      "interpretation": "This exact request failed. This does not prove the whole project or dataset is unavailable."
+    }
+  ],
+  "oxr_static_inspection": {
+    "repository": "https://github.com/SoMarkAI/OXR",
+    "commit_sha": "c1a1dcb312ee9f691404f127785510453c0d9350",
+    "clone_method": "Shallow read-only clone with Git LFS smudge disabled; no installation or project execution.",
+    "tracked_file_count": 206,
+    "inspected_files": [
+      {
+        "path": "README.md",
+        "bytes": 19406,
+        "sha256": "14deade5f116d786d1f83bdb27079fd87f04f92829414814b5c774ed02e4d2fa",
+        "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/README.md"
+      },
+      {
+        "path": "LICENSE",
+        "bytes": 6588,
+        "sha256": "4577df88e499926976b390c4ea3992cc91baa9ebac29386f35b557bd3cb4a662",
+        "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/LICENSE"
+      },
+      {
+        "path": "docs/benchmark.md",
+        "bytes": 10674,
+        "sha256": "09b362c8ea636b584f9cc14dfcaf5c43a4a4c7038557a35ef89af8d3071c94bf",
+        "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/docs/benchmark.md"
+      },
+      {
+        "path": "oxr/pipeline/recognition.py",
+        "bytes": 10682,
+        "sha256": "908c367edb1bcfb3d4b2762d144a55695a7cbda3e9aff54d5e74dc36a6c08202",
+        "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/oxr/pipeline/recognition.py"
+      },
+      {
+        "path": "oxr/pipeline/postprocess/picture_postprocess.py",
+        "bytes": 1007,
+        "sha256": "5dedf97d652b6681982ddac1ce46ecfe241b45d7d714d38787825b9c847a1366",
+        "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/oxr/pipeline/postprocess/picture_postprocess.py"
+      },
+      {
+        "path": "oxr/pipeline/models.py",
+        "bytes": 954,
+        "sha256": "7a05a180e82c51e95cef17170a9383bec0387d2db701369486d65a25edd2e2bb",
+        "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/oxr/pipeline/models.py"
+      },
+      {
+        "path": "oxr/model/prompts.py",
+        "bytes": 3740,
+        "sha256": "023dda62749b0d0a7a7d18923d9ed9140afb0b31a69d9245b7ee3d509ebc6cde",
+        "url": "https://github.com/SoMarkAI/OXR/blob/c1a1dcb312ee9f691404f127785510453c0d9350/oxr/model/prompts.py"
+      }
+    ],
+    "findings": [
+      "The author workflow diagram describes error/uncertainty selection, attribution and clustering, targeted data generation and post-training feedback.",
+      "At this commit, inspected Picture recognition/postprocessing saves cropped image assets and returns image references rather than semantic figure objects.",
+      "A search of the checked file tree and focused source inspection did not identify a complete RSI attribution, synthesis and post-training pipeline. This is bounded evidence for this commit, not a claim about private code.",
+      "The license contains Apache-2.0 plus additional commercial, attribution and competing hosted API terms."
+    ]
+  }
+}

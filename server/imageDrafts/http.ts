@@ -1,0 +1,13 @@
+import type {IncomingMessage,ServerResponse} from 'node:http'
+import {ImageDraftError,ImageDraftService} from './service.ts'
+const json=(response:ServerResponse,value:unknown,status=200)=>{response.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});response.end(JSON.stringify(value))}
+async function body(request:IncomingMessage){if(!request.headers['content-type']?.startsWith('application/json'))throw new ImageDraftError(415,'请使用 JSON 请求');const chunks:Buffer[]=[];let size=0;for await(const chunk of request){const bytes=Buffer.from(chunk as Uint8Array);size+=bytes.length;if(size>2_000_000)throw new ImageDraftError(413,'请求超过 2 MB');chunks.push(bytes)}try{return JSON.parse(Buffer.concat(chunks).toString()) as unknown}catch{throw new ImageDraftError(400,'JSON 无效')}}
+export function imageDraftHttp(service:ImageDraftService){return async(request:IncomingMessage,response:ServerResponse)=>{try{
+  const host=request.headers.host??'',origin=request.headers.origin;if(!/^(127\.0\.0\.1|localhost|\[::1\])(?::\d+)?$/.test(host)||origin&&origin!==`http://${host}`)throw new ImageDraftError(403,'图像草稿服务仅允许本机同源请求')
+  const path=new URL(request.url??'/',`http://${host}`).pathname.replace(/\/$/,'')
+  if(request.method==='GET'&&path==='/api/image-drafts/status'){json(response,await service.status());return}
+  if(path==='/api/image-drafts/runs'){if(request.method==='GET'){json(response,service.list());return}if(request.method==='POST'){const run=service.start(await body(request));json(response,run.info,202);return}}
+  const match=/^\/api\/image-drafts\/runs\/([a-f0-9-]+)(?:\/(image|cancel|review))?$/.exec(path)
+  if(match){const [,id,action]=match;if(request.method==='GET'&&!action){json(response,service.get(id!).info);return}if(request.method==='GET'&&action==='image'){const image=service.image(id!);response.writeHead(200,{'Content-Type':image.mime,'Content-Length':image.bytes.length,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});response.end(image.bytes);return}if(request.method==='POST'&&action==='cancel'){await body(request);json(response,service.cancel(id!));return}if(request.method==='POST'&&action==='review'){const input=await body(request) as {decision?:unknown};if(input?.decision!=='imported'&&input?.decision!=='discarded')throw new ImageDraftError(400,'草稿处理状态无效');json(response,service.review(id!,input.decision));return}}
+  throw new ImageDraftError(404,'草稿接口不存在')
+}catch(e){json(response,{error:e instanceof Error?e.message:'图像草稿请求失败'},e instanceof ImageDraftError?e.status:500)}}}

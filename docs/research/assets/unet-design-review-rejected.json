@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "status": "failed",
+  "source": "unet-mainfigure-after-review.json",
+  "runId": "755519d3-aacb-4dca-a957-431b4049945d",
+  "image": {
+    "width": 1600,
+    "height": 992,
+    "figureSha256": "0955bc982c8f57a33e6240c54dd831f9eb98ac5a052ce0f1a863ef9d8c463fd4",
+    "renderer": "fastfigure-browser-v1",
+    "fonts": [
+      "normal 700 15px Inter, Inter, MiSans, sans-serif",
+      "normal 400 17.3684px Inter, Inter, MiSans, sans-serif",
+      "normal 400 14px Inter, Inter, MiSans, sans-serif",
+      "normal 400 15px Inter, Inter, MiSans, sans-serif",
+      "normal 700 14px Inter, Inter, MiSans, sans-serif",
+      "normal 400 12px Inter, Inter, MiSans, sans-serif",
+      "normal 400 13px Inter, Inter, MiSans, sans-serif",
+      "italic 400 15px Inter, Inter, MiSans, sans-serif",
+      "normal 700 18px Inter, Inter, MiSans, sans-serif",
+      "normal 400 10px Inter, Inter, MiSans, sans-serif",
+      "normal 700 11px Inter, Inter, MiSans, sans-serif",
+      "normal 700 17px Inter, Inter, MiSans, sans-serif"
+    ],
+    "viewport": "canvas-1000x620",
+    "imageSha256": "1fb5b0b4d55e8a6c778b04c5cabad6251afda17f98e4973ca1b4e52687656efd",
+    "contextVersion": "design-aliases-v1"
+  },
+  "error": "[\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 4,\n    \"inclusive\": true,\n    \"path\": [\n      \"keep\"\n    ],\n    \"message\": \"Too big: expected array to have <=4 items\"\n  }\n]",
+  "rawResponse": "{\n  \"message\": \"U 形主干、跨尺度跳连和金色代表分支值得保留，右侧拆解也直接服务于“两路输入如何拼接”的论点。主要可改进处是主图中上采样操作标签的位置：局部解释很清楚，但主图仍需要更准确地把操作与路径对应起来。\",\n  \"firstRead\": \"第一眼注意到左侧成对排列的青绿色编码／解码模块，以及底部金色的融合路径。我的实际阅读顺序是总标题→顶部任务概览→左侧多尺度主干→金色 E4／B 汇合处→右侧双输入拆解。整体能服务研究意图；不过，主图中 B 到 C 的上采样含义需要借助右侧细节才能迅速确认。\",\n  \"keep\": [\n    \"顶部 Image→Encoder–decoder→Mask type 概览保持轻量，能快速建立任务背景，没有压过下方机制。\",\n    \"编码与解码两侧逐层向底部收拢，横向跳连连接对应层级，U 形关系容易识别。\",\n    \"仅把最深层的跳连、汇合点及相关路径标成金色，其余层保持可比较，形成了有效的代表路径重点。\",\n    \"右侧将 E4→Copy/crop 与 B→2×2 up-conv 分别接入 C，再输出至 D4，两路来源和不同操作表达清楚；阶段名与主图一致，便于对应。\",\n    \"各分区主要依靠位置、间距和短标题组织，没有大面积背景卡片干扰主干。\"\n  ],\n  \"findings\": [\n    {\n      \"id\": \"f01\",\n      \"title\": \"主图的上采样标签与实际作用路径距离偏远\",\n      \"category\": \"correspondence\",\n      \"severity\": \"minor\",\n      \"observation\": \"在左侧最深层金色分支中，B 沿斜箭头进入 C，但“2×2 up-conv”文字位于 D4 下方、斜箭头右侧。上方几层也把该文字放在解码模块下方，而 Copy/crop 始终直接位于跳连路径上。右侧细节则明确把上采样放在 B 与 C 之间。\",\n      \"impact\": \"两类输入操作的标注方式不对称，读者可能先把“2×2 up-conv”归到相邻的 D 模块，需要查看右侧细节才能确认它发生在拼接之前。\",\n      \"suggestion\": \"优先把最深层的“2×2 up-conv”移到 B→C 金色斜箭头附近，并让其他层采用一致的路径标注位置。保留右侧细节中已有的明确操作模块，无需给主图每层增加外框。\",\n      \"box\": {\n        \"x\": 0.35,\n        \"y\": 0.69,\n        \"width\": 0.26,\n        \"height\": 0.2\n      },\n      \"objectIds\": [\n        \"d0078\",\n        \"d0080\",\n        \"d0083\"\n      ]\n    }\n  ],\n  \"uncertainties\": [\n    \"未提供最终刊印尺寸，无法验证缩至论文版面后，底部浅灰说明和各层操作标签是否仍足够清晰；当前只能判断屏幕渲染中的层级与对应关系。\"\n  ]\n}",
+  "scope": "Rejected by strict report contract; not an accepted review. Actual input has the same bytes as unet-design-review-after-input.webp."
+}

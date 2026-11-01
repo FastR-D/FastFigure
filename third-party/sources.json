@@ -1,0 +1,26 @@
+{
+  "topconf": {
+    "commit": "77a7d84570a6a9f3e63c22bb31b9fb59757e3dab",
+    "files": {
+      "LICENSE": "2350e38b3b77e35d200cc3424c6fded8d282bb5ba3f3b0b440730f8780020e0c",
+      "NOTICE.md": "467dd08d7f9cb851f46c22f999b06ddb45ea16c0a89e5b7197ec01507b497ea8",
+      "IMAGES_POLICY.md": "135582a3407482b7a7b56dbe82b4dd3a4333536f570e6d5324487c93313a671d",
+      "forge/retrieval.mjs": "fed62f0dfc3abd06817bf986865a320dffe64ef9750097b8a1e12dd30b373ba1",
+      "data/figures.json": "8949316de6703bc9d20ec8a60d81bb521b2b585c7dafc348fd89b62adfa062fb",
+      "forge/reconstruction-core.mjs": "a320a3e0fe39549918e7aecb4718239e78f50fd13415f016af3fb969ff9d1435",
+      "forge/reconstruction-pipeline.mjs": "331dd0b0ebf5b21bffcbceaf68753b4d93da2725500e5a638d5a3e01d6a02ed5",
+      "forge/editable-native.mjs": "5b8f529e8968ac44c32aff0c3a6a1ce499d034648884b4d8cf7447df9748070f",
+      "forge/editable-text-layout.mjs": "4baf51d3125b20e91c2cbbb286b9abb8ea479b345928c5a38728efa25c853223",
+      "forge/container-geometry.mjs": "5881e73390d562e4e563c1ecc425c2c588ab6c59c36c6dbcbe18802253138362"
+    }
+  },
+  "nature": {
+    "commit": "af778027c866e2e6b3432b946e44a4a2b4434d82",
+    "files": {
+      "LICENSE": "2d7c08f3d58ed5bd7cd8ea23b28b170573b1a23d3fbde89ee85ba7a1bc4ccc22",
+      "DERIVATIVE_NOTICE.md": "c942a201ee3420e1187092c53df8545b695b216a4fed1b6adede9c0a20feba63",
+      "figureforge/js/templates.js": "49321c42f83883cd98b875800fa9ac326db9309195eaed11bb08fe30bcc1d1ef",
+      "figureforge/js/palettes.js": "fcaf241ff57c697eebecce6ce31a91984457effc925a3047647b4c549c52dadb"
+    }
+  }
+}

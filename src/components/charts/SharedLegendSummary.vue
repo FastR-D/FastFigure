@@ -1,0 +1,8 @@
+<script setup lang="ts">
+import {Box,Text} from '../ui'
+import type {SharedLegendReport} from '../../core/sharedLegendContract'
+defineProps<{reports:SharedLegendReport[]}>()
+</script>
+<template>
+  <Box class="shared-yaxis-summary" aria-label="共享图例实际报告"><Box v-for="report in reports" :key="report.containerId" class="shared-yaxis-group"><Text>{{ report.operation==='update'?(report.changed?(report.sourceSync?'同步已有图例':'调整已有图例'):'图例无需调整'):'新建共享图例' }} · {{ report.chartIds.length }} 张图：{{ report.entries.join(' / ') }}</Text><Text class="muted-caption">{{ report.fontFamily||'保留不同字体' }} · {{ report.fontSize===undefined?'保留不同字号':+report.fontSize.toFixed(2) }} · {{ report.after.columns?`${report.after.columns} 列`:'自动换行' }} · 间距 {{ +report.after.gap.toFixed(2) }}</Text><Text v-if="report.before" class="muted-caption">尺寸 {{ +report.before.box.width.toFixed(1) }} × {{ +report.before.box.height.toFixed(1) }} → {{ +report.after.box.width.toFixed(1) }} × {{ +report.after.box.height.toFixed(1) }}；更新 {{ report.updatedNodes }} 个原图元，{{ report.sourceSync?'对应条目 ID 保留':'ID 保持' }}</Text><template v-if="report.sourceSync"><Text v-for="entry in report.sourceSync.entries" :key="entry.labelId" class="muted-caption">{{ entry.action==='added'?'新增':entry.action==='renamed'?`${entry.previousName} →`:'保留' }} {{ entry.name }}{{ entry.encodingChanged?' · 图示已同步':'' }}</Text><Text v-if="report.sourceSync.removed.length" class="placement-message">移除：{{ report.sourceSync.removed.map(entry=>entry.name).join(' / ') }}</Text></template><Text class="muted-caption">暂隐 {{ report.hiddenLocalNodes }} 个原图例对象，保留在工程中</Text><Text class="muted-caption">{{ report.reason }}</Text></Box></Box>
+</template>

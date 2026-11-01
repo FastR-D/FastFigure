@@ -1,0 +1,18 @@
+import {z} from 'zod'
+import {fontFamilies} from '../data/materials.ts'
+const id=z.string().min(1).max(80).regex(/^[a-zA-Z0-9_-]+$/),chartIds=z.array(id).min(2).max(8).refine(ids=>new Set(ids).size===ids.length,'共享图例的图表不能重复')
+const columns=z.number().int().min(0).max(4),gap=z.number().finite().min(0).max(120),reason=z.string().trim().min(1).max(500)
+export const sharedLegendRecordSchema=z.object({version:z.literal(1),chartIds,kind:z.enum(['line','bar','scatter']),layout:z.object({columns,gap:z.number().finite().min(0).max(2400)}).strict().optional(),entries:z.array(z.object({name:z.string().min(1).max(24),markId:id,labelId:id,encoding:z.string().min(1).max(4000)}).strict()).min(1).max(4)}).strict().refine(record=>new Set(record.entries.map(entry=>entry.name)).size===record.entries.length&&new Set(record.entries.flatMap(entry=>[entry.markId,entry.labelId])).size===record.entries.length*2,'共享图例条目标识不能重复')
+export const sharedLegendCreateRequestSchema=z.object({containerIds:chartIds,parentId:id.optional(),placement:z.enum(['top','bottom']).default('bottom'),fontFamily:z.enum(fontFamilies).optional(),fontSize:z.number().min(8).max(36).default(14),columns:columns.default(0),gap:gap.default(20),reason}).strict()
+const syncEntry=z.object({seriesName:z.string().trim().min(1).max(24),previousLabelId:id.nullable()}).strict()
+export const sharedLegendUpdateRequestSchema=z.object({containerId:id,placement:z.enum(['preserve','top','bottom']).default('preserve'),fontFamily:z.enum(fontFamilies).optional(),fontSize:z.number().min(8).max(36).optional(),columns:columns.optional(),gap:gap.optional(),syncEntries:z.array(syncEntry).min(1).max(4).refine(entries=>new Set(entries.map(e=>e.seriesName)).size===entries.length&&new Set(entries.flatMap(e=>e.previousLabelId?[e.previousLabelId]:[])).size===entries.filter(e=>e.previousLabelId).length,'每个源系列和旧图例条目只能匹配一次').optional(),reason}).strict()
+export const sharedLegendRequestSchema=z.union([sharedLegendCreateRequestSchema,sharedLegendUpdateRequestSchema])
+export const sharedLegendRequestsSchema=z.array(sharedLegendRequestSchema).max(1)
+export type SharedLegendRequest=z.infer<typeof sharedLegendRequestSchema>
+export type SharedLegendCreateRequest=z.infer<typeof sharedLegendCreateRequestSchema>
+export type SharedLegendUpdateRequest=z.infer<typeof sharedLegendUpdateRequestSchema>
+const box=z.object({x:z.number().finite(),y:z.number().finite(),width:z.number().positive(),height:z.number().positive()}).strict()
+export const sharedLegendPresentationSchema=z.object({box,columns,gap:z.number().finite().min(0).max(38400),labels:z.array(z.object({id,name:z.string().max(24),fontFamily:z.string().max(80),fontSize:z.number().min(1).max(256)}).strict()).min(1).max(4)}).strict()
+const sourceSync=z.object({entries:z.array(z.object({name:z.string().max(24),previousName:z.string().max(24).optional(),markId:id,labelId:id,action:z.enum(['kept','renamed','added']),encodingChanged:z.boolean()}).strict()).min(1).max(4),removed:z.array(z.object({name:z.string().max(24),markId:id,labelId:id}).strict()).max(4)}).strict()
+export const sharedLegendReportSchema=z.object({operation:z.enum(['create','update']),changed:z.boolean(),containerId:id,parentId:id,chartIds,title:z.string().max(100),entries:z.array(z.string().min(1).max(24)).min(1).max(4),hiddenLocalNodes:z.number().int().min(4).max(64),fontFamily:z.string().max(80).optional(),fontSize:z.number().min(1).max(256).optional(),before:sharedLegendPresentationSchema.optional(),after:sharedLegendPresentationSchema,updatedNodes:z.number().int().min(0).max(240),sourceSync:sourceSync.optional(),reason:z.string().max(500)}).strict()
+export type SharedLegendReport=z.infer<typeof sharedLegendReportSchema>

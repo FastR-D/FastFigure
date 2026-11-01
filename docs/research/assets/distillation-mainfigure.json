@@ -1,0 +1,1335 @@
+{
+  "version": "0.2",
+  "title": "蒸馏训练与学生推理",
+  "canvas": {
+    "width": 1000,
+    "height": 620
+  },
+  "style": {
+    "preset": "precise",
+    "roughness": 0.8,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "figureforge-publication-soft"
+  },
+  "nodes": [
+    {
+      "id": "train-heading",
+      "kind": "text",
+      "label": "Distillation training",
+      "parentId": "distill-train",
+      "x": 40,
+      "y": 78,
+      "width": 300,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 18,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "infer-heading",
+      "kind": "text",
+      "label": "Student inference",
+      "parentId": "distill-infer",
+      "x": 684,
+      "y": 78,
+      "width": 258,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 18,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "distill-input",
+      "kind": "rectangle",
+      "label": "Transfer\ninputs x",
+      "parentId": "distill-train",
+      "x": 40,
+      "y": 224,
+      "width": 92,
+      "height": 56,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "teacher",
+      "kind": "rectangle",
+      "label": "Teacher",
+      "parentId": "distill-train",
+      "x": 164,
+      "y": 142,
+      "width": 144,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "train-student",
+      "kind": "rectangle",
+      "label": "Student θ",
+      "parentId": "distill-train",
+      "x": 164,
+      "y": 316,
+      "width": 144,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "teacher-softmax",
+      "kind": "rectangle",
+      "label": "Softmax T",
+      "parentId": "distill-train",
+      "x": 356,
+      "y": 142,
+      "width": 112,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "student-softmax",
+      "kind": "rectangle",
+      "label": "Softmax T",
+      "parentId": "distill-train",
+      "x": 356,
+      "y": 316,
+      "width": 112,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "soft-loss",
+      "kind": "rectangle",
+      "label": "Soft CE",
+      "parentId": "distill-train",
+      "x": 504,
+      "y": 228,
+      "width": 112,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "total-loss",
+      "kind": "rectangle",
+      "label": "Total loss",
+      "parentId": "distill-train",
+      "x": 504,
+      "y": 322,
+      "width": 112,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "teacher-status",
+      "kind": "text",
+      "label": "Frozen teacher",
+      "parentId": "distill-train",
+      "x": 164,
+      "y": 112,
+      "width": 144,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "student-status",
+      "kind": "text",
+      "label": "Train student θ",
+      "parentId": "distill-train",
+      "x": 164,
+      "y": 286,
+      "width": 144,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "teacher-input",
+      "kind": "path",
+      "label": "teacher-input",
+      "parentId": "distill-train",
+      "x": 86,
+      "y": 168,
+      "width": 78,
+      "height": 56,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "distill-input",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "teacher",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "student-input",
+      "kind": "path",
+      "label": "student-input",
+      "parentId": "distill-train",
+      "x": 86,
+      "y": 280,
+      "width": 78,
+      "height": 62,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "distill-input",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "train-student",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "teacher-probabilities",
+      "kind": "path",
+      "label": "teacher-probabilities",
+      "parentId": "distill-train",
+      "x": 308,
+      "y": 168,
+      "width": 48,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "teacher",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "teacher-softmax",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "student-probabilities",
+      "kind": "path",
+      "label": "student-probabilities",
+      "parentId": "distill-train",
+      "x": 308,
+      "y": 342,
+      "width": 48,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "train-student",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "student-softmax",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "teacher-target",
+      "kind": "path",
+      "label": "teacher-target",
+      "parentId": "distill-train",
+      "x": 468,
+      "y": 168,
+      "width": 36,
+      "height": 72,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0.5,
+            "y": 0
+          },
+          {
+            "x": 0.5,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "teacher-softmax",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "soft-loss",
+          "x": 0,
+          "y": 0.25
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "student-target",
+      "kind": "path",
+      "label": "student-target",
+      "parentId": "distill-train",
+      "x": 468,
+      "y": 264,
+      "width": 36,
+      "height": 78,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0.5,
+            "y": 1
+          },
+          {
+            "x": 0.5,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "student-softmax",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "soft-loss",
+          "x": 0,
+          "y": 0.75
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "soft-objective",
+      "kind": "path",
+      "label": "soft-objective",
+      "parentId": "distill-train",
+      "x": 560,
+      "y": 276,
+      "width": 0,
+      "height": 46,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "soft-loss",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "total-loss",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "hard-loss",
+      "kind": "rectangle",
+      "label": "Hard CE\n(T=1)",
+      "parentId": "distill-train",
+      "x": 504,
+      "y": 414,
+      "width": 112,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "hard-labels",
+      "kind": "rectangle",
+      "label": "Labels y",
+      "parentId": "distill-train",
+      "x": 356,
+      "y": 470,
+      "width": 112,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "student-hard-logits",
+      "kind": "path",
+      "label": "student-hard-logits",
+      "parentId": "distill-train",
+      "x": 308,
+      "y": 342,
+      "width": 196,
+      "height": 96,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0.10204081632653061,
+            "y": 0
+          },
+          {
+            "x": 0.10204081632653061,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "train-student",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "hard-loss",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "hard-target",
+      "kind": "path",
+      "label": "hard-target",
+      "parentId": "distill-train",
+      "x": 468,
+      "y": 462,
+      "width": 92,
+      "height": 22,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "hard-labels",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "hard-loss",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "hard-objective",
+      "kind": "path",
+      "label": "hard-objective",
+      "parentId": "distill-train",
+      "x": 560,
+      "y": 370,
+      "width": 0,
+      "height": 44,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "hard-loss",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "total-loss",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "student-update",
+      "kind": "path",
+      "label": "student-update",
+      "parentId": "distill-train",
+      "x": 236,
+      "y": 346,
+      "width": 268,
+      "height": 44,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0.9477611940298507,
+            "y": 0
+          },
+          {
+            "x": 0.9477611940298507,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0.5
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "total-loss",
+          "x": 0,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "train-student",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "id": "update-label",
+      "kind": "text",
+      "label": "Optimize θ",
+      "parentId": "distill-train",
+      "x": 346,
+      "y": 370,
+      "width": 100,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "deploy-input",
+      "kind": "rectangle",
+      "label": "New inputs",
+      "parentId": "distill-infer",
+      "x": 734,
+      "y": 142,
+      "width": 160,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "deploy-student",
+      "kind": "rectangle",
+      "label": "Student θ",
+      "parentId": "distill-infer",
+      "x": 734,
+      "y": 248,
+      "width": 160,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "deploy-prediction",
+      "kind": "rectangle",
+      "label": "Prediction · T=1",
+      "parentId": "distill-infer",
+      "x": 734,
+      "y": 414,
+      "width": 160,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 2,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "infer-input",
+      "kind": "path",
+      "label": "infer-input",
+      "parentId": "distill-infer",
+      "x": 814,
+      "y": 186,
+      "width": 0,
+      "height": 62,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "deploy-input",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "deploy-student",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "infer-output",
+      "kind": "path",
+      "label": "infer-output",
+      "parentId": "distill-infer",
+      "x": 814,
+      "y": 300,
+      "width": 0,
+      "height": 114,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "deploy-student",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "deploy-prediction",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 2,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "student-checkpoint",
+      "kind": "path",
+      "label": "student-checkpoint",
+      "parentId": "stage",
+      "x": 236,
+      "y": 274,
+      "width": 498,
+      "height": 42,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0.8571428571428571
+          },
+          {
+            "x": 0.8112449799196787,
+            "y": 0.8571428571428571
+          },
+          {
+            "x": 0.8112449799196787,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "train-student",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "deploy-student",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 5,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          6,
+          4
+        ]
+      }
+    },
+    {
+      "id": "checkpoint-label",
+      "kind": "text",
+      "label": "Transfer trained θ",
+      "parentId": "stage",
+      "x": 344,
+      "y": 282,
+      "width": 142,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "distill-objective",
+      "kind": "text",
+      "label": "L = λ T² L_soft + (1−λ) L_hard",
+      "parentId": "stage",
+      "x": 40,
+      "y": 530,
+      "width": 900,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 17,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-title",
+      "kind": "text",
+      "label": "Teacher–student training and inference",
+      "parentId": "stage",
+      "x": 16,
+      "y": 14,
+      "width": 948,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 20,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-note",
+      "kind": "text",
+      "label": "Symbolic T and λ; no probabilities or performance values. Teacher pretraining is not shown.",
+      "parentId": "stage",
+      "x": 16,
+      "y": 570,
+      "width": 948,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-left",
+      "kind": "port",
+      "label": "Structure left",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-left",
+        "direction": "both",
+        "side": "left",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "structure-right",
+      "kind": "port",
+      "label": "Structure right",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-right",
+        "direction": "both",
+        "side": "right",
+        "position": 0.5
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "parametric": {
+        "version": 1,
+        "recipe": {
+          "id": "distillation-stages",
+          "version": 1,
+          "parameters": {
+            "hardTargets": "show"
+          }
+        },
+        "revision": 0,
+        "objects": {
+          "stage": "stage",
+          "distill-train": "distill-train",
+          "distill-infer": "distill-infer",
+          "train-heading": "train-heading",
+          "infer-heading": "infer-heading",
+          "distill-input": "distill-input",
+          "teacher": "teacher",
+          "train-student": "train-student",
+          "teacher-softmax": "teacher-softmax",
+          "student-softmax": "student-softmax",
+          "soft-loss": "soft-loss",
+          "total-loss": "total-loss",
+          "teacher-status": "teacher-status",
+          "student-status": "student-status",
+          "teacher-input": "teacher-input",
+          "student-input": "student-input",
+          "teacher-probabilities": "teacher-probabilities",
+          "student-probabilities": "student-probabilities",
+          "teacher-target": "teacher-target",
+          "student-target": "student-target",
+          "soft-objective": "soft-objective",
+          "hard-loss": "hard-loss",
+          "hard-labels": "hard-labels",
+          "student-hard-logits": "student-hard-logits",
+          "hard-target": "hard-target",
+          "hard-objective": "hard-objective",
+          "student-update": "student-update",
+          "update-label": "update-label",
+          "deploy-input": "deploy-input",
+          "deploy-student": "deploy-student",
+          "deploy-prediction": "deploy-prediction",
+          "infer-input": "infer-input",
+          "infer-output": "infer-output",
+          "student-checkpoint": "student-checkpoint",
+          "checkpoint-label": "checkpoint-label",
+          "distill-objective": "distill-objective",
+          "structure-title": "structure-title",
+          "structure-note": "structure-note",
+          "structure-left": "structure-left",
+          "structure-right": "structure-right"
+        }
+      },
+      "id": "stage",
+      "parentId": null,
+      "title": "Distillation training and student inference",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "title": "Distilling the Knowledge in a Neural Network · §2",
+        "reference": "https://arxiv.org/abs/1503.02531 · 依据同温度软目标、可选 T=1 硬目标、T² 平衡和部署学生独立构造分阶段图。λ、温度和概率均未赋观测值。教师已训练且固定；部署迁移的是学生参数，不复制教师权重。"
+      }
+    },
+    {
+      "id": "distill-train",
+      "parentId": "stage",
+      "title": "Distillation training",
+      "role": "component",
+      "x": 20,
+      "y": 60,
+      "width": 624,
+      "height": 452,
+      "visual": {
+        "colorIndex": 1,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "distill-infer",
+      "parentId": "stage",
+      "title": "Student inference",
+      "role": "component",
+      "x": 666,
+      "y": 60,
+      "width": 294,
+      "height": 452,
+      "visual": {
+        "colorIndex": 2,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    }
+  ],
+  "references": [],
+  "compositionPlans": [
+    {
+      "version": 1,
+      "runId": "f3b12d13-4522-48b1-ac31-e7597dd476c7",
+      "userGoal": "Explain the teacher/student objective, training-only losses and student-only inference, including checkpoint transfer rather than teacher weight copying.",
+      "plan": {
+        "status": "ready",
+        "title": "Distillation training and student inference",
+        "goal": "Explain the teacher/student objective, training-only losses and student-only inference, including checkpoint transfer rather than teacher weight copying.",
+        "readingOrder": "left-to-right",
+        "layout": "Large training fork and loss network on the left; compact student-only inference pipeline on the right. The checkpoint relation is a separate one-way dashed arrow.",
+        "style": {
+          "preset": "precise",
+          "paletteId": "figureforge-publication-soft",
+          "fontFamily": "Inter",
+          "surface": "transparent",
+          "usage": "Training and downstream phases have distinct boundaries. Data paths are solid, optimization is dotted, and checkpoint transfer uses a one-way dashed line with an explicit parameter label."
+        },
+        "sections": [
+          {
+            "id": "distill-train",
+            "title": "Distillation training",
+            "purpose": "A teacher/student fork and a two-target objective explain what is trained and what stays fixed.",
+            "visual": "A teacher/student fork and a two-target objective explain what is trained and what stays fixed.",
+            "design": {
+              "role": "mechanism",
+              "structure": "network",
+              "rationale": "A teacher/student fork and a two-target objective explain what is trained and what stays fixed.",
+              "emphasis": "primary",
+              "frame": {
+                "id": "distill-train",
+                "x": 0.018442622950819672,
+                "y": 0.09731543624161074,
+                "width": 0.639344262295082,
+                "height": 0.7583892617449665
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "distill-infer",
+            "title": "Student inference",
+            "purpose": "Deployment needs only the trained student and temperature-one prediction.",
+            "visual": "Deployment needs only the trained student and temperature-one prediction.",
+            "design": {
+              "role": "context",
+              "structure": "pipeline",
+              "rationale": "Deployment needs only the trained student and temperature-one prediction.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "distill-infer",
+                "x": 0.680327868852459,
+                "y": 0.09731543624161074,
+                "width": 0.3012295081967213,
+                "height": 0.7583892617449665
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          }
+        ],
+        "connections": [
+          {
+            "from": "distill-train",
+            "to": "distill-infer",
+            "kind": "parameter-transfer",
+            "meaning": "Copy trained student theta only; no teacher or training loss is deployed."
+          }
+        ],
+        "checks": [
+          "Teacher is fixed and only the student receives the training update.",
+          "Both soft distributions use T; hard CE and inference use T=1.",
+          "The phase connector transfers student parameters, not teacher weights or examples."
+        ],
+        "questions": [],
+        "uncertainties": [
+          "Program-built structural example, not an evaluated model-generated plan or a numeric learning result."
+        ]
+      },
+      "references": [],
+      "components": []
+    }
+  ]
+}

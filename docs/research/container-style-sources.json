@@ -1,0 +1,132 @@
+{
+  "research_date": "2026-10-28",
+  "scope": "Scientific figure containers, customizable skins, sketch rendering and integration with figure reconstruction and RSI; PDF tools are reference material only.",
+  "source_count": 10,
+  "sources": [
+    {
+      "url": "https://roughjs.com/",
+      "labels": [
+        "Rough.js"
+      ],
+      "id": "STYLE-01",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://github.com/rough-stuff/rough/wiki",
+      "labels": [
+        "Rough.js 参数",
+        "参数说明"
+      ],
+      "id": "STYLE-02",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://www.drawio.com/docs/reference/diagram-generation/style-reference/",
+      "labels": [
+        "draw.io 样式参考",
+        "官方样式参考"
+      ],
+      "id": "STYLE-03",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/excalidraw/excalidraw/master/packages/element/src/types.ts",
+      "labels": [
+        "Excalidraw 元素模型"
+      ],
+      "id": "STYLE-04",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://tldraw.dev/docs/shapes",
+      "labels": [
+        "tldraw ShapeUtil"
+      ],
+      "id": "STYLE-05",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://tldraw.dev/sdk-features/shapes",
+      "labels": [
+        "形状体系"
+      ],
+      "id": "STYLE-06",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://reactflow.dev/learn/layouting/sub-flows",
+      "labels": [
+        "React Flow 子流程"
+      ],
+      "id": "STYLE-07",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://github.com/rough-stuff/rough/wiki/RoughGenerator",
+      "labels": [
+        "Generator 文档"
+      ],
+      "id": "STYLE-08",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://docs.excalidraw.com/docs/@excalidraw/excalidraw/customizing-styles",
+      "labels": [
+        "Customizing Styles"
+      ],
+      "id": "STYLE-09",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    },
+    {
+      "url": "https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/props/initialdata",
+      "labels": [
+        "initialData 示例"
+      ],
+      "id": "STYLE-10",
+      "evidence": "Official documentation or upstream source inspected on 2026-10-28; capabilities do not imply FastFigure implementation or cross-format compatibility."
+    }
+  ],
+  "rendering_dependency": {
+    "package": "roughjs",
+    "version": "4.6.6",
+    "metadata_url": "https://registry.npmjs.org/roughjs/4.6.6",
+    "tarball_url": "https://registry.npmjs.org/roughjs/-/roughjs-4.6.6.tgz",
+    "tarball_sha256": "373873b2c3f1b7ddba878525c774816057c5818029780c7fba081f06018ba78c",
+    "registry_shasum_verified": true,
+    "bundle_sha256": "f10ad1eacdb19b1a837ad311f80de596ef206046247a3fae9951d8f2adc59e36",
+    "purpose": "Local deterministic SVG rendering probe; no dependency installed into the application repository."
+  },
+  "rendering_probe": {
+    "generator": "docs/research/examples/render-container-styles.cjs",
+    "svg": "docs/research/assets/container-style-comparison.svg",
+    "png": "docs/research/assets/container-style-comparison.png",
+    "svg_sha256": "a28f8e9ffa6a81d56d087953f232735129fb3f3ecdb74a02178c089981224b74",
+    "generator_sha256": "7a32e508c54cb913deb31818c6d5384ac3b005f3f65c0f084f558365f466f3b9",
+    "observations": [
+      "Generated 6 container skins from one shared 3-node/2-edge logical model.",
+      "Repeated render with the same dependency and parameters produced byte-identical SVG.",
+      "All 6 SVG groups retain 3 node records, 2 internal edge records and 2 boundary ports.",
+      "Text remains SVG text; PNG is only the preview.",
+      "PNG preview rendered with rsvg-convert and visually inspected."
+    ],
+    "limits": [
+      "This is a research rendering probe, not an editor.",
+      "No PPTX or draw.io file was generated or tested.",
+      "Drag behavior, style round-trip fidelity, small physical-size legibility and real-paper reconstruction remain proposed evaluations."
+    ]
+  },
+  "failed_lookup_notes": [
+    {
+      "url": "https://raw.githubusercontent.com/rough-stuff/rough/master/generator.ts",
+      "outcome": "404; corrected source is src/generator.ts."
+    },
+    {
+      "url": "https://www.drawio.com/doc/faq/shape-containers",
+      "outcome": "Web tool could not open; container claims use the readable official style reference."
+    },
+    {
+      "url": "https://tldraw.dev/examples/shape-with-ports",
+      "outcome": "Web tool could not open; not used to establish port implementation."
+    }
+  ]
+}

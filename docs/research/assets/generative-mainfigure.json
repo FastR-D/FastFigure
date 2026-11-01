@@ -1,0 +1,2190 @@
+{
+  "version": "0.2",
+  "title": "条件去噪与采样时间展开",
+  "canvas": {
+    "width": 1000,
+    "height": 620
+  },
+  "style": {
+    "preset": "precise",
+    "roughness": 0.8,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "figureforge-publication-soft"
+  },
+  "nodes": [
+    {
+      "id": "process-heading",
+      "kind": "text",
+      "label": "(c) Reverse process · S: sampler",
+      "parentId": "denoise-process",
+      "x": 38,
+      "y": 194,
+      "width": 756,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "latent-0",
+      "kind": "volume",
+      "label": "x(T)",
+      "parentId": "denoise-process",
+      "x": 36,
+      "y": 238,
+      "width": 64,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 4,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "latent-1",
+      "kind": "volume",
+      "label": "x(t1)",
+      "parentId": "denoise-process",
+      "x": 269.33333333333337,
+      "y": 238,
+      "width": 64,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 0,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "latent-2",
+      "kind": "volume",
+      "label": "x(t2)",
+      "parentId": "denoise-process",
+      "x": 502.6666666666667,
+      "y": 238,
+      "width": 64,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 0,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "latent-3",
+      "kind": "volume",
+      "label": "x(0)",
+      "parentId": "denoise-process",
+      "x": 736,
+      "y": 238,
+      "width": 64,
+      "height": 52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 2,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "condition-c",
+      "kind": "rectangle",
+      "label": "Condition c",
+      "parentId": "denoise-context",
+      "x": 36,
+      "y": 468,
+      "width": 760,
+      "height": 42,
+      "textStyle": {
+        "family": "Inter",
+        "size": 16,
+        "bold": true,
+        "color": "#ba6a4f",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "colorIndex": 4,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "context-heading",
+      "kind": "text",
+      "label": "Shared across the displayed steps",
+      "parentId": "denoise-context",
+      "x": 36,
+      "y": 524,
+      "width": 760,
+      "height": 16,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "color": "#657789",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "sampler-0",
+      "kind": "ellipse",
+      "label": "S",
+      "parentId": "denoise-process",
+      "x": 166.66666666666669,
+      "y": 246,
+      "width": 36,
+      "height": 36,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#fff4e2",
+        "stroke": "#c18b3f",
+        "colorIndex": 1,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "noise-model-0",
+      "kind": "rectangle",
+      "label": "εθ(x, t0, c)\nnoise estimate",
+      "parentId": "denoise-process",
+      "x": 124.66666666666669,
+      "y": 354,
+      "width": 120,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#23445f",
+        "stroke": "#23445f",
+        "colorIndex": 3,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "current-to-sampler-0",
+      "kind": "path",
+      "label": "current-to-sampler-0",
+      "parentId": "denoise-process",
+      "x": 100,
+      "y": 264,
+      "width": 66.66666666666669,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "latent-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "sampler-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "next-latent-0",
+      "kind": "path",
+      "label": "next-latent-0",
+      "parentId": "denoise-process",
+      "x": 202.66666666666669,
+      "y": 264,
+      "width": 66.66666666666669,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "sampler-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "latent-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "current-to-noise-0",
+      "kind": "path",
+      "label": "current-to-noise-0",
+      "parentId": "denoise-process",
+      "x": 68,
+      "y": 290,
+      "width": 56.666666666666686,
+      "height": 88,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "latent-0",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "noise-model-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "noise-to-sampler-0",
+      "kind": "path",
+      "label": "noise-to-sampler-0",
+      "parentId": "denoise-process",
+      "x": 184.66666666666669,
+      "y": 282,
+      "width": 0,
+      "height": 72,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "noise-model-0",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "sampler-0",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 3,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "condition-input-0",
+      "kind": "path",
+      "label": "condition-input-0",
+      "parentId": "stage",
+      "x": 184.66666666666669,
+      "y": 402,
+      "width": 0,
+      "height": 66,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "condition-c",
+          "x": 0.19561403508771932,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "noise-model-0",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#ba6a4f",
+        "colorIndex": 4,
+        "strokeWidth": 1.05,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "sampler-1",
+      "kind": "ellipse",
+      "label": "S",
+      "parentId": "denoise-process",
+      "x": 400,
+      "y": 246,
+      "width": 36,
+      "height": 36,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#fff4e2",
+        "stroke": "#c18b3f",
+        "colorIndex": 1,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "noise-model-1",
+      "kind": "rectangle",
+      "label": "εθ(x, t1, c)\nnoise estimate",
+      "parentId": "denoise-process",
+      "x": 358,
+      "y": 354,
+      "width": 120,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#23445f",
+        "stroke": "#23445f",
+        "colorIndex": 3,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "current-to-sampler-1",
+      "kind": "path",
+      "label": "current-to-sampler-1",
+      "parentId": "denoise-process",
+      "x": 333.33333333333337,
+      "y": 264,
+      "width": 66.66666666666663,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "latent-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "sampler-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "next-latent-1",
+      "kind": "path",
+      "label": "next-latent-1",
+      "parentId": "denoise-process",
+      "x": 436,
+      "y": 264,
+      "width": 66.66666666666669,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "sampler-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "latent-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "current-to-noise-1",
+      "kind": "path",
+      "label": "current-to-noise-1",
+      "parentId": "denoise-process",
+      "x": 301.33333333333337,
+      "y": 290,
+      "width": 56.66666666666663,
+      "height": 88,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "latent-1",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "noise-model-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "noise-to-sampler-1",
+      "kind": "path",
+      "label": "noise-to-sampler-1",
+      "parentId": "denoise-process",
+      "x": 418,
+      "y": 282,
+      "width": 0,
+      "height": 72,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "noise-model-1",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "sampler-1",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 3,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "condition-input-1",
+      "kind": "path",
+      "label": "condition-input-1",
+      "parentId": "stage",
+      "x": 418,
+      "y": 402,
+      "width": 0,
+      "height": 66,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "condition-c",
+          "x": 0.5026315789473684,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "noise-model-1",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#ba6a4f",
+        "colorIndex": 4,
+        "strokeWidth": 1.05,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "sampler-2",
+      "kind": "ellipse",
+      "label": "S",
+      "parentId": "denoise-process",
+      "x": 633.3333333333334,
+      "y": 246,
+      "width": 36,
+      "height": 36,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#fff4e2",
+        "stroke": "#c18b3f",
+        "colorIndex": 1,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "noise-model-2",
+      "kind": "rectangle",
+      "label": "εθ(x, t2, c)\nnoise estimate",
+      "parentId": "denoise-process",
+      "x": 591.3333333333334,
+      "y": 354,
+      "width": 120,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#23445f",
+        "stroke": "#23445f",
+        "colorIndex": 3,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "current-to-sampler-2",
+      "kind": "path",
+      "label": "current-to-sampler-2",
+      "parentId": "denoise-process",
+      "x": 566.6666666666667,
+      "y": 264,
+      "width": 66.66666666666663,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "latent-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "sampler-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "next-latent-2",
+      "kind": "path",
+      "label": "next-latent-2",
+      "parentId": "denoise-process",
+      "x": 669.3333333333334,
+      "y": 264,
+      "width": 66.66666666666663,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "sampler-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "latent-3",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "current-to-noise-2",
+      "kind": "path",
+      "label": "current-to-noise-2",
+      "parentId": "denoise-process",
+      "x": 534.6666666666667,
+      "y": 290,
+      "width": 56.66666666666663,
+      "height": 88,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "latent-2",
+          "x": 0.5000000000000009,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "noise-model-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "noise-to-sampler-2",
+      "kind": "path",
+      "label": "noise-to-sampler-2",
+      "parentId": "denoise-process",
+      "x": 651.3333333333334,
+      "y": 282,
+      "width": 0,
+      "height": 72,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "noise-model-2",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "sampler-2",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 3,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "condition-input-2",
+      "kind": "path",
+      "label": "condition-input-2",
+      "parentId": "stage",
+      "x": 651.3333333333334,
+      "y": 402,
+      "width": 0,
+      "height": 66,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "condition-c",
+          "x": 0.8096491228070176,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "noise-model-2",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#ba6a4f",
+        "colorIndex": 4,
+        "strokeWidth": 1.05,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "conditioning-rail",
+      "kind": "path",
+      "label": "conditioning-rail",
+      "parentId": "denoise-context",
+      "x": 184.66666666666669,
+      "y": 468,
+      "width": 466.6666666666667,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#ba6a4f",
+        "colorIndex": 4,
+        "strokeWidth": 1.05,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "id": "vae-decoder",
+      "kind": "projection",
+      "label": "VAE\ndecode",
+      "parentId": "denoise-output",
+      "x": 840,
+      "y": 238,
+      "width": 110,
+      "height": 54,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#eef2f6",
+        "stroke": "#7c8d9d",
+        "colorIndex": 2,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "decoded-image-type",
+      "kind": "text",
+      "label": "Decoded\nimage",
+      "parentId": "denoise-output",
+      "x": 840,
+      "y": 354,
+      "width": 110,
+      "height": 50,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "decode-heading",
+      "kind": "text",
+      "label": "Final only",
+      "parentId": "denoise-output",
+      "x": 840,
+      "y": 194,
+      "width": 110,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "decode-final",
+      "kind": "path",
+      "label": "decode-final",
+      "parentId": "stage",
+      "x": 800,
+      "y": 264,
+      "width": 40,
+      "height": 1,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "latent-3",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "vae-decoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "decoded-type",
+      "kind": "path",
+      "label": "decoded-type",
+      "parentId": "denoise-output",
+      "x": 895,
+      "y": 292,
+      "width": 0,
+      "height": 62,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "vae-decoder",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "decoded-image-type",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "structure-title",
+      "kind": "text",
+      "label": "Mixed attention and continuous denoising",
+      "parentId": "stage",
+      "x": 16,
+      "y": 14,
+      "width": 948,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 18,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-note",
+      "kind": "text",
+      "label": "Inference schematic · symbolic time intervals",
+      "parentId": "stage",
+      "x": 16,
+      "y": 570,
+      "width": 948,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#657789",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-left",
+      "kind": "port",
+      "label": "Structure left",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-left",
+        "direction": "both",
+        "side": "left",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "structure-right",
+      "kind": "port",
+      "label": "Structure right",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-right",
+        "direction": "both",
+        "side": "right",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "input-overview-heading",
+      "kind": "text",
+      "label": "(a) Mixed input",
+      "parentId": "input-overview",
+      "x": 34,
+      "y": 72,
+      "width": 500,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "overview-text1-0",
+      "kind": "rectangle",
+      "label": "t1",
+      "parentId": "input-overview",
+      "x": 50,
+      "y": 108,
+      "width": 42,
+      "height": 34,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 2,
+        "strokeWidth": 0.8,
+        "padding": 1,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "overview-image1-0",
+      "kind": "rectangle",
+      "label": "a1",
+      "parentId": "input-overview",
+      "x": 114,
+      "y": 108,
+      "width": 42,
+      "height": 34,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 2,
+        "strokeWidth": 0.8,
+        "padding": 1,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "overview-image1-1",
+      "kind": "rectangle",
+      "label": "a2",
+      "parentId": "input-overview",
+      "x": 178,
+      "y": 108,
+      "width": 42,
+      "height": 34,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 2,
+        "strokeWidth": 0.8,
+        "padding": 1,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "input-role-note",
+      "kind": "text",
+      "label": "Text c + continuous image block · schematic positions",
+      "parentId": "input-overview",
+      "x": 34,
+      "y": 146,
+      "width": 500,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "permission-detail-heading",
+      "kind": "text",
+      "label": "(b) Attention rule",
+      "parentId": "permission-detail",
+      "x": 580,
+      "y": 72,
+      "width": 200,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-query-text1-0",
+      "kind": "text",
+      "label": "t1",
+      "parentId": "permission-detail",
+      "x": 790,
+      "y": 96,
+      "width": 28,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-key-text1-0",
+      "kind": "text",
+      "label": "t1",
+      "parentId": "permission-detail",
+      "x": 822,
+      "y": 76,
+      "width": 24,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-permission-text1-0-text1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 822,
+      "y": 96,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#beded6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-permission-text1-0-image1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 846,
+      "y": 96,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f1f3f6",
+        "stroke": "#ffffff",
+        "colorIndex": 2,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-permission-text1-0-image1-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 870,
+      "y": 96,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f1f3f6",
+        "stroke": "#ffffff",
+        "colorIndex": 2,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-query-image1-0",
+      "kind": "text",
+      "label": "a1",
+      "parentId": "permission-detail",
+      "x": 790,
+      "y": 120,
+      "width": 28,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-key-image1-0",
+      "kind": "text",
+      "label": "a1",
+      "parentId": "permission-detail",
+      "x": 846,
+      "y": 76,
+      "width": 24,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-permission-image1-0-text1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 822,
+      "y": 120,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#beded6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-permission-image1-0-image1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 846,
+      "y": 120,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#beded6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-permission-image1-0-image1-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 870,
+      "y": 120,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#718fb0",
+        "stroke": "#ffffff",
+        "colorIndex": 2,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-query-image1-1",
+      "kind": "text",
+      "label": "a2",
+      "parentId": "permission-detail",
+      "x": 790,
+      "y": 144,
+      "width": 28,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-key-image1-1",
+      "kind": "text",
+      "label": "a2",
+      "parentId": "permission-detail",
+      "x": 870,
+      "y": 76,
+      "width": 24,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-permission-image1-1-text1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 822,
+      "y": 144,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#beded6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-permission-image1-1-image1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 846,
+      "y": 144,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#beded6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-permission-image1-1-image1-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 870,
+      "y": 144,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#beded6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-key-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 590,
+      "y": 104,
+      "width": 14,
+      "height": 14,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#beded6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-key-label-0",
+      "kind": "text",
+      "label": "Causal allowed",
+      "parentId": "permission-detail",
+      "x": 614,
+      "y": 102,
+      "width": 164,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-key-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 590,
+      "y": 126,
+      "width": 14,
+      "height": 14,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#718fb0",
+        "stroke": "#ffffff",
+        "colorIndex": 2,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-key-label-1",
+      "kind": "text",
+      "label": "Extra within image",
+      "parentId": "permission-detail",
+      "x": 614,
+      "y": 124,
+      "width": 164,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-key-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "permission-detail",
+      "x": 590,
+      "y": 148,
+      "width": 14,
+      "height": 14,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f1f3f6",
+        "stroke": "#ffffff",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.9,
+        "padding": 2,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "mini-key-label-2",
+      "kind": "text",
+      "label": "Blocked",
+      "parentId": "permission-detail",
+      "x": 614,
+      "y": 146,
+      "width": 164,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mini-axis-note",
+      "kind": "text",
+      "label": "q ↓\nk →",
+      "parentId": "permission-detail",
+      "x": 908,
+      "y": 108,
+      "width": 42,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "Mixed attention and continuous denoising",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "title": "Transfusion · ICLR 2025 · §2.2 / Fig. 3 / §3",
+        "reference": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/12678c3948153f4bc391f51e2082bd6e-Abstract-Conference.html · 依据连续潜变量噪声预测、采样器更新、固定上下文与末端 VAE 解码独立展开推理关系。符号区间不是实际推理步数，不计算噪声、采样方程、CFG 或图像；非 Show-o 离散掩码替换。"
+      }
+    },
+    {
+      "id": "denoise-process",
+      "parentId": "stage",
+      "title": "Continuous latent trajectory",
+      "role": "component",
+      "x": 20,
+      "y": 180,
+      "width": 792,
+      "height": 250,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "denoise-context",
+      "parentId": "stage",
+      "title": "Fixed conditioning",
+      "role": "component",
+      "x": 20,
+      "y": 450,
+      "width": 792,
+      "height": 92,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "denoise-output",
+      "parentId": "stage",
+      "title": "Decode final latent",
+      "role": "component",
+      "x": 830,
+      "y": 180,
+      "width": 130,
+      "height": 362,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "colorIndex": 2,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-overview",
+      "parentId": "stage",
+      "title": "Position overview",
+      "role": "component",
+      "x": 20,
+      "y": 64,
+      "width": 530,
+      "height": 110,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "permission-detail",
+      "parentId": "stage",
+      "title": "Attention permission explanation",
+      "role": "component",
+      "x": 570,
+      "y": 64,
+      "width": 390,
+      "height": 110,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "title": "Transfusion · ICLR 2025 · §2.2 / Fig. 3 / §3",
+        "reference": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/12678c3948153f4bc391f51e2082bd6e-Abstract-Conference.html · 依据连续潜变量噪声预测、采样器更新、固定上下文与末端 VAE 解码独立展开推理关系。符号区间不是实际推理步数，不计算噪声、采样方程、CFG 或图像；非 Show-o 离散掩码替换。"
+      }
+    }
+  ],
+  "references": [],
+  "compositionPlans": [
+    {
+      "version": 1,
+      "runId": "f570dedc-9e94-4ca8-a4cf-416ad83be699",
+      "userGoal": "Combine an input-position overview, conceptual Boolean attention explanation, unrolled continuous sampling and conditioning without conflating discrete token refinement.",
+      "plan": {
+        "status": "ready",
+        "title": "Mixed attention and continuous denoising",
+        "goal": "Combine an input-position overview, conceptual Boolean attention explanation, unrolled continuous sampling and conditioning without conflating discrete token refinement.",
+        "readingOrder": "panels",
+        "layout": "Compact input strip and permission explanation above; wide latent mechanism below left, fixed condition underneath and final decode at right. One main mechanism, shared identities and colors.",
+        "style": {
+          "preset": "precise",
+          "paletteId": "figureforge-publication-soft",
+          "fontFamily": "Inter",
+          "surface": "transparent",
+          "usage": "Green denotes causal permission, blue extra same-image permission; white blocked. The matrix is explanation, not a source of latent values."
+        },
+        "sections": [
+          {
+            "id": "input-overview",
+            "title": "Position overview",
+            "purpose": "Identity-matched text and continuous image positions establish the input roles.",
+            "visual": "Identity-matched text and continuous image positions establish the input roles.",
+            "design": {
+              "role": "overview",
+              "structure": "tensor",
+              "rationale": "Identity-matched text and continuous image positions establish the input roles.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "input-overview",
+                "x": 0.018442622950819672,
+                "y": 0.1040268456375839,
+                "width": 0.5430327868852459,
+                "height": 0.18456375838926176
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "permission-detail",
+            "title": "Attention permission explanation",
+            "purpose": "A Boolean matrix explains allowed attention inside the predictor; it does not supply numeric attention values or latent data.",
+            "visual": "A Boolean matrix explains allowed attention inside the predictor; it does not supply numeric attention values or latent data.",
+            "design": {
+              "role": "detail",
+              "structure": "matrix",
+              "rationale": "A Boolean matrix explains allowed attention inside the predictor; it does not supply numeric attention values or latent data.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "permission-detail",
+                "x": 0.5819672131147541,
+                "y": 0.1040268456375839,
+                "width": 0.39959016393442626,
+                "height": 0.18456375838926176
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "denoise-process",
+            "title": "Continuous latent trajectory",
+            "purpose": "Separate latent states, shared noise prediction and sampler updates explain continuous inference.",
+            "visual": "Separate latent states, shared noise prediction and sampler updates explain continuous inference.",
+            "design": {
+              "role": "mechanism",
+              "structure": "network",
+              "rationale": "Separate latent states, shared noise prediction and sampler updates explain continuous inference.",
+              "emphasis": "primary",
+              "frame": {
+                "id": "denoise-process",
+                "x": 0.018442622950819672,
+                "y": 0.2986577181208054,
+                "width": 0.8114754098360656,
+                "height": 0.41946308724832215
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "denoise-context",
+            "title": "Fixed conditioning",
+            "purpose": "A fixed context fans out to every displayed noise predictor, not to model weights.",
+            "visual": "A fixed context fans out to every displayed noise predictor, not to model weights.",
+            "design": {
+              "role": "context",
+              "structure": "layered",
+              "rationale": "A fixed context fans out to every displayed noise predictor, not to model weights.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "denoise-context",
+                "x": 0.018442622950819672,
+                "y": 0.7516778523489933,
+                "width": 0.8114754098360656,
+                "height": 0.15436241610738255
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "denoise-output",
+            "title": "Decode final latent",
+            "purpose": "Only the final latent reaches VAE decoding.",
+            "visual": "Only the final latent reaches VAE decoding.",
+            "design": {
+              "role": "context",
+              "structure": "pipeline",
+              "rationale": "Only the final latent reaches VAE decoding.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "denoise-output",
+                "x": 0.8483606557377049,
+                "y": 0.2986577181208054,
+                "width": 0.13319672131147542,
+                "height": 0.6073825503355704
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          }
+        ],
+        "connections": [
+          {
+            "from": "input-overview",
+            "to": "denoise-process",
+            "kind": "membership",
+            "meaning": "Position roles explain the conditional predictor inputs, without an added scientific dataflow."
+          },
+          {
+            "from": "permission-detail",
+            "to": "denoise-process",
+            "kind": "membership",
+            "meaning": "Conceptual attention rule inside the shared predictor, not an actual enlarged snapshot or a matrix-valued model input."
+          },
+          {
+            "from": "denoise-context",
+            "to": "denoise-process",
+            "kind": "dataflow",
+            "meaning": "Fixed context c conditions each displayed shared noise predictor."
+          },
+          {
+            "from": "denoise-process",
+            "to": "denoise-output",
+            "kind": "dataflow",
+            "meaning": "Only the final continuous latent feeds VAE decoding."
+          }
+        ],
+        "checks": [
+          "Query rows and key columns preserve the same input order; permission is Boolean, not softmax.",
+          "The sampler combines state and predicted noise; epsilon is not itself the next state.",
+          "All shown intervals reuse theta and fixed context, with unspecified solver details.",
+          "No actual token counts, numerical latents or generated image is claimed."
+        ],
+        "questions": [],
+        "uncertainties": [
+          "Independently arranged program-built development example, not a model-planning quality result. Free native composition; the complete edited layout is not an atomic parametric recipe."
+        ]
+      },
+      "references": [],
+      "components": []
+    }
+  ]
+}

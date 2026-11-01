@@ -1,0 +1,252 @@
+{
+  "date": "2026-10-28",
+  "local_pptx": {
+    "source": "/home/gugumur/下载/模板合集20260627.pptx",
+    "sha256": "3c9313cad84c2d28701494edb2b7a01af3b66ae7cb3e8277079dd334f7c25e3d",
+    "slide_count": 29,
+    "slide_size_emu": {
+      "cx": "18000345",
+      "cy": "25199975"
+    },
+    "object_counts": {
+      "shape": 2007,
+      "connector": 1454,
+      "image": 26,
+      "group": 132
+    },
+    "preset_geometry_counts": {
+      "rect": 752,
+      "straightConnector1": 710,
+      "roundRect": 684,
+      "line": 541,
+      "ellipse": 193,
+      "cube": 131,
+      "bentConnector3": 105,
+      "bentConnector2": 84,
+      "parallelogram": 27,
+      "blockArc": 24,
+      "trapezoid": 24,
+      "downArrow": 21,
+      "arc": 19,
+      "rightArrow": 19,
+      "chevron": 16,
+      "bentConnector4": 13,
+      "curvedLeftArrow": 6,
+      "round1Rect": 4,
+      "rightBrace": 4,
+      "bentUpArrow": 4,
+      "notchedRightArrow": 3,
+      "flowChartManualOperation": 3,
+      "diagStripe": 2,
+      "bentArrow": 2,
+      "round2DiagRect": 1,
+      "quadArrow": 1,
+      "leftRightArrow": 1,
+      "swooshArrow": 1,
+      "homePlate": 1,
+      "triangle": 1,
+      "flowChartExtract": 1,
+      "horizontalScroll": 1,
+      "verticalScroll": 1,
+      "leftBracket": 1,
+      "bentConnector5": 1
+    },
+    "connector_bindings": {
+      "one": 304,
+      "none": 847,
+      "both": 303,
+      "both_resolved": 303
+    },
+    "coordinate_policy": "Raw DrawingML transforms; parent references retained. AlternateContent branches are counted separately, not as simultaneous visible shapes. No absolute-coordinate or semantic reconstruction claim.",
+    "kind": "user_provided_editable_reference",
+    "inspected_pages": {
+      "xml": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "visual": [
+        15
+      ]
+    },
+    "sample_objects": {
+      "15": [
+        {
+          "id": "47",
+          "name": "立方体 46",
+          "geometry": "cube"
+        },
+        {
+          "id": "50",
+          "name": "立方体 49",
+          "geometry": "cube"
+        },
+        {
+          "id": "51",
+          "name": "立方体 50",
+          "geometry": "cube"
+        },
+        {
+          "id": "52",
+          "name": "立方体 51",
+          "geometry": "cube"
+        },
+        {
+          "id": "53",
+          "name": "立方体 52",
+          "geometry": "cube"
+        }
+      ],
+      "18": [
+        {
+          "id": "143",
+          "name": "立方体 142",
+          "geometry": "cube"
+        },
+        {
+          "id": "144",
+          "name": "立方体 143",
+          "geometry": "cube"
+        },
+        {
+          "id": "145",
+          "name": "立方体 144",
+          "geometry": "cube"
+        },
+        {
+          "id": "146",
+          "name": "立方体 145",
+          "geometry": "cube"
+        },
+        {
+          "id": "147",
+          "name": "立方体 146",
+          "geometry": "cube"
+        }
+      ],
+      "22": [
+        {
+          "id": "342",
+          "name": "立方体 341",
+          "geometry": "cube"
+        },
+        {
+          "id": "343",
+          "name": "立方体 342",
+          "geometry": "cube"
+        },
+        {
+          "id": "344",
+          "name": "立方体 343",
+          "geometry": "cube"
+        },
+        {
+          "id": "345",
+          "name": "立方体 344",
+          "geometry": "cube"
+        },
+        {
+          "id": "401",
+          "name": "立方体 400",
+          "geometry": "cube"
+        }
+      ],
+      "24": [
+        {
+          "id": "295",
+          "name": "梯形 294",
+          "geometry": "trapezoid"
+        },
+        {
+          "id": "296",
+          "name": "梯形 295",
+          "geometry": "trapezoid"
+        },
+        {
+          "id": "297",
+          "name": "梯形 296",
+          "geometry": "trapezoid"
+        },
+        {
+          "id": "298",
+          "name": "梯形 297",
+          "geometry": "trapezoid"
+        },
+        {
+          "id": "299",
+          "name": "梯形 298",
+          "geometry": "trapezoid"
+        }
+      ],
+      "27": [
+        {
+          "id": "211",
+          "name": "立方体 210",
+          "geometry": "cube"
+        },
+        {
+          "id": "212",
+          "name": "立方体 211",
+          "geometry": "cube"
+        },
+        {
+          "id": "213",
+          "name": "立方体 212",
+          "geometry": "cube"
+        },
+        {
+          "id": "214",
+          "name": "立方体 213",
+          "geometry": "cube"
+        },
+        {
+          "id": "215",
+          "name": "立方体 214",
+          "geometry": "cube"
+        }
+      ]
+    },
+    "inspection_script": {
+      "path": "scripts/inspect-pptx.py",
+      "sha256": "05d5e5ebe450baaacaa90d4afcb97a9d2c2fd92c467e45d428d7f94bcacedfd8"
+    }
+  },
+  "google_slides": {
+    "url": "https://docs.google.com/presentation/d/11mR1nkIR9fbHegFkcFq8z9oDQ5sjv8E3JJp1LfLGKuk/edit?slide=id.g78327f1586_217_712#slide=id.g78327f1586_217_712",
+    "access": "Browser viewer, public link, read-only; no connected document session available.",
+    "slide_count_observed": 62,
+    "selected_slide_number_observed": 47,
+    "observed_content": [
+      "Deep neural networks",
+      "Understanding Precision & Recall"
+    ],
+    "inspection_limits": "Visual and accessibility inspection only. No native Google Slides object tree, connector bindings, editing behavior, export or import verified."
+  },
+  "implementation": "New primitives are normalized parameterized drawings inspired by the references, not a claim that the entire decks have been imported or converted."
+}

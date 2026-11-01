@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "reviewDate": "2026-10-31",
+  "resourceRoot": "~/FastPPT/packages/resources",
+  "inspectionPolicy": "Six representative original pages selected through metadata, source-object circle geometry and direct visual inspection of existing source PDFs. All original PPTX file hashes are compared with composition provenance. Count labels are not trusted as visual structure classification. No HTML anchor mapping is assumed; no source files were changed. A PDF render was inspected, not newly regenerated from Office. Object counts retain AlternateContent representations.",
+  "samples": [
+    {
+      "id": "34422534f8b5-0020",
+      "title": "多段内容页 - 互联网产品运营循环图：6+ 节点 + 大循环。",
+      "source": "references/GordenPPTSkill/templates/premium-corp/template.pptx",
+      "sourcePage": 20,
+      "sourceSha256": "502c871be80b930400e9815ef0581232610261a8c0389d1642b409b872bd0c28",
+      "slideXmlSha256": "5296ba6997b1ce36f4e40118672e17c89449a276ba176ae7f3d0f4b3edc445ef",
+      "sourceFileMatchesComposition": true,
+      "objectCount": 92,
+      "types": {
+        "shape": 82,
+        "connector": 1,
+        "group": 9
+      },
+      "geometry": {
+        "rect": 39,
+        "line": 1,
+        "ellipse": 14,
+        "round2SameRect": 1,
+        "homePlate": 3
+      },
+      "groupedObjects": 57
+    },
+    {
+      "id": "39f4aad07819-0013",
+      "title": "同心圆 + 职业圈层",
+      "source": "references/GordenPPTSkill/templates/red-teaching-models/template.pptx",
+      "sourcePage": 13,
+      "sourceSha256": "268d5c1cba9ff94b3ea6b03b8ad007110c4d839624bfc3f70b6cf42644f7edee",
+      "slideXmlSha256": "74fbdbca8ca1d9537aed17511de35f42caaa134128a4f0d8c2c7408c95dbaa49",
+      "sourceFileMatchesComposition": true,
+      "objectCount": 74,
+      "types": {
+        "group": 14,
+        "shape": 55,
+        "image": 5
+      },
+      "geometry": {
+        "roundRect": 11,
+        "teardrop": 2,
+        "rect": 18,
+        "arc": 2,
+        "ellipse": 18,
+        "donut": 1,
+        "pentagon": 1
+      },
+      "groupedObjects": 67
+    },
+    {
+      "id": "11ebacee969e-0002",
+      "title": "项目流程规划（6.1~8.15 时间段 + 任务节点）",
+      "source": "references/GordenPPTSkill/templates/architecture-deck/template.pptx",
+      "sourcePage": 2,
+      "sourceSha256": "03cdc0b85e2e26ea9a2f02e467c5fb79614299250514fb3399f6170485c9e06f",
+      "slideXmlSha256": "fad4a46617286118597ee289bde1f48bc78eb14c974358309a77e5e86a103306",
+      "sourceFileMatchesComposition": true,
+      "objectCount": 105,
+      "types": {
+        "shape": 91,
+        "connector": 2,
+        "group": 12
+      },
+      "geometry": {
+        "rect": 57,
+        "roundRect": 2,
+        "line": 2,
+        "ellipse": 8
+      },
+      "groupedObjects": 24
+    },
+    {
+      "id": "f753356251a9-0275",
+      "title": "The company is free to plan and operate a platform In the example",
+      "source": "references/pptset/【加赠】700页逻辑图形 (1).pptx",
+      "sourcePage": 275,
+      "sourceSha256": "05a29b9373ad4ecd773261e9a0493e2ba7231a79ecb68a6049a2dd0881d03343",
+      "slideXmlSha256": "964bb656da275048f6cf764546bf6e49b772b821996f5d4d19e776efdbbfec8d",
+      "sourceFileMatchesComposition": true,
+      "objectCount": 19,
+      "types": {
+        "group": 5,
+        "shape": 13,
+        "connector": 1
+      },
+      "geometry": {
+        "ellipse": 6,
+        "rect": 5,
+        "line": 1
+      },
+      "groupedObjects": 10
+    },
+    {
+      "id": "5eb4d31d8b16-0016",
+      "title": "杜绝任何工作上的随意性",
+      "source": "references/pptset/【天空蓝配色版】定制级工作型PPT设计灵感手册.pptx",
+      "sourcePage": 16,
+      "sourceSha256": "0295994f4578d83cca364c1526a7a6d3d617b90c4ae9640e8e51489790df3773",
+      "slideXmlSha256": "7997fb923a6a8d93851fe6dc6df997ce668b03c926d1f27c6e3099cf33a48910",
+      "sourceFileMatchesComposition": true,
+      "objectCount": 86,
+      "types": {
+        "shape": 80,
+        "group": 5,
+        "connector": 1
+      },
+      "geometry": {
+        "rect": 10,
+        "donut": 1,
+        "ellipse": 11,
+        "arc": 1,
+        "line": 1
+      },
+      "groupedObjects": 58
+    },
+    {
+      "id": "11ebacee969e-0004",
+      "title": "骑行类业务流程",
+      "source": "references/GordenPPTSkill/templates/architecture-deck/template.pptx",
+      "sourcePage": 4,
+      "sourceSha256": "03cdc0b85e2e26ea9a2f02e467c5fb79614299250514fb3399f6170485c9e06f",
+      "slideXmlSha256": "0bc338ceeb09b8f435915796cea561d3a3bc0e4bb7b8a49470b2fb372fd27f04",
+      "sourceFileMatchesComposition": true,
+      "objectCount": 92,
+      "types": {
+        "shape": 81,
+        "group": 2,
+        "connector": 9
+      },
+      "geometry": {
+        "roundRect": 13,
+        "line": 12,
+        "ellipse": 18,
+        "rect": 41,
+        "arc": 2,
+        "wedgeRoundRectCallout": 1
+      },
+      "groupedObjects": 31
+    }
+  ]
+}

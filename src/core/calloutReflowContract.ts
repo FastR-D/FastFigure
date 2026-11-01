@@ -1,0 +1,11 @@
+import {z} from 'zod'
+import {calloutSides} from './calloutContract.ts'
+import {pathBindingSchema} from './model.ts'
+const id=z.string().min(1).max(80),finite=z.number().finite()
+const bindings=z.object({start:pathBindingSchema,end:pathBindingSchema}).strict()
+export const calloutAnchorPolicies=['preserve','reselect'] as const
+const box=z.object({x:finite,y:finite,width:finite.positive(),height:finite.positive()}).strict(),points=z.array(z.object({x:finite,y:finite,c1:z.object({x:finite,y:finite}).optional(),c2:z.object({x:finite,y:finite}).optional(),move:z.boolean().optional(),close:z.boolean().optional()}).strict()).min(2).max(128)
+export const calloutReflowRequestsSchema=z.array(z.object({leaderId:id,labelId:id,mode:z.enum(['layout','route']).default('layout'),anchorPolicy:z.enum(calloutAnchorPolicies).default('preserve'),side:z.enum(calloutSides).default('auto'),reason:z.string().trim().min(1).max(240)}).strict().refine(r=>r.mode!=='route'||r.side==='auto','仅重排引线时保持文字位置，不指定侧向')).max(8).refine(rows=>new Set(rows.map(r=>r.leaderId)).size===rows.length&&new Set(rows.map(r=>r.labelId)).size===rows.length,'每轮每条引线和注释只能调整一次')
+export type CalloutReflowRequest=z.infer<typeof calloutReflowRequestsSchema>[number]
+export const calloutReflowReportSchema=z.object({leaderId:id,labelId:id,targetId:id,parentId:id,mode:z.enum(['layout','route']),anchorPolicy:z.enum(calloutAnchorPolicies),text:z.string().max(240),fontFamily:z.string().min(1).max(80),fontSize:finite.positive().max(256),reason:z.string().max(240),before:box,after:box,beforePoints:points,afterPoints:points,labelMoved:z.boolean(),leaderChanged:z.boolean(),changed:z.boolean(),bindingsChanged:z.boolean(),beforeBindings:bindings,afterBindings:bindings,beforeLength:finite.nonnegative(),afterLength:finite.nonnegative(),targetPreserved:z.literal(true),textPreserved:z.literal(true)}).strict().refine(r=>r.changed===(r.labelMoved||r.leaderChanged||r.bindingsChanged)&&!(r.mode==='route'&&r.labelMoved)&&!(r.anchorPolicy==='preserve'&&r.bindingsChanged)&&r.beforeBindings.start.nodeId===r.afterBindings.start.nodeId&&r.beforeBindings.end.nodeId===r.afterBindings.end.nodeId,'注释重排报告不一致')
+export type CalloutReflowReport=z.infer<typeof calloutReflowReportSchema>

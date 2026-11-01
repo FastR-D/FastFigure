@@ -1,0 +1,2259 @@
+{
+  "version": "0.2",
+  "title": "跨视图与逐视图交替注意力",
+  "canvas": {
+    "width": 1000,
+    "height": 620
+  },
+  "style": {
+    "preset": "precise",
+    "roughness": 0.8,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "figureforge-publication-soft"
+  },
+  "nodes": [
+    {
+      "id": "inputs-heading",
+      "kind": "text",
+      "label": "Views → DINO patches + camera tokens",
+      "parentId": "view-inputs",
+      "x": 26,
+      "y": 76,
+      "width": 370,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "alternation-heading",
+      "kind": "text",
+      "label": "Alternating blocks · × L",
+      "parentId": "alternating-blocks",
+      "x": 426,
+      "y": 76,
+      "width": 284,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "global-heading",
+      "kind": "text",
+      "label": "Global SA",
+      "parentId": "alternating-blocks",
+      "x": 434,
+      "y": 104,
+      "width": 110,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "frame-heading",
+      "kind": "text",
+      "label": "Frame SA",
+      "parentId": "alternating-blocks",
+      "x": 594,
+      "y": 104,
+      "width": 110,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "global-attention",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alternating-blocks",
+      "x": 434,
+      "y": 128,
+      "width": 110,
+      "height": 208,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#23445f",
+        "stroke": "#23445f",
+        "colorIndex": 3,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "updated-tokens",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "geometry-heads",
+      "x": 750,
+      "y": 128,
+      "width": 24,
+      "height": 208,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#718096",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "view-0",
+      "kind": "rectangle",
+      "label": "View 1",
+      "parentId": "view-inputs",
+      "x": 26,
+      "y": 136,
+      "width": 78,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#2c7d79",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#2c7d79",
+        "colorIndex": 0,
+        "radius": 2,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "dino-0",
+      "kind": "rectangle",
+      "label": "DINO\npatch tokens",
+      "parentId": "view-inputs",
+      "x": 134,
+      "y": 136,
+      "width": 102,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 0,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-tokens-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 274,
+      "y": 136,
+      "width": 104,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "frame-attention-0",
+      "kind": "rectangle",
+      "label": "View 1 SA",
+      "parentId": "alternating-blocks",
+      "x": 594,
+      "y": 136,
+      "width": 110,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 0,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "camera-token-0",
+      "kind": "ellipse",
+      "label": "c1",
+      "parentId": "view-inputs",
+      "x": 278,
+      "y": 144,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#2c7d79",
+        "stroke": "#2c7d79",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-0-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 310,
+      "y": 141,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#2c7d79",
+        "stroke": "#2c7d79",
+        "colorIndex": 0,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-0-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 328,
+      "y": 141,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#2c7d79",
+        "stroke": "#2c7d79",
+        "colorIndex": 0,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-0-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 346,
+      "y": 141,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#2c7d79",
+        "stroke": "#2c7d79",
+        "colorIndex": 0,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "global-row-0",
+      "kind": "rectangle",
+      "label": "c1, p1",
+      "parentId": "alternating-blocks",
+      "x": 444,
+      "y": 136,
+      "width": 90,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 2
+      }
+    },
+    {
+      "id": "updated-row-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "geometry-heads",
+      "x": 752,
+      "y": 136,
+      "width": 20,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#2c7d79",
+        "stroke": "#2c7d79",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patchify-0",
+      "kind": "path",
+      "label": "patchify-0",
+      "parentId": "view-inputs",
+      "x": 104,
+      "y": 156,
+      "width": 30,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "view-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "dino-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "add-camera-0",
+      "kind": "path",
+      "label": "add-camera-0",
+      "parentId": "view-inputs",
+      "x": 236,
+      "y": 156,
+      "width": 38,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "dino-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "input-tokens-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "global-in-0",
+      "kind": "path",
+      "label": "global-in-0",
+      "parentId": "stage",
+      "x": 378,
+      "y": 156,
+      "width": 56,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "input-tokens-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "global-attention",
+          "x": 0,
+          "y": 0.1346153846153846
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "global-to-frame-0",
+      "kind": "path",
+      "label": "global-to-frame-0",
+      "parentId": "alternating-blocks",
+      "x": 544,
+      "y": 156,
+      "width": 50,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "global-attention",
+          "x": 1,
+          "y": 0.1346153846153846
+        },
+        "end": {
+          "nodeId": "frame-attention-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "frame-output-0",
+      "kind": "path",
+      "label": "frame-output-0",
+      "parentId": "stage",
+      "x": 704,
+      "y": 156,
+      "width": 46,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "frame-attention-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "updated-tokens",
+          "x": 0,
+          "y": 0.1346153846153846
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "view-1",
+      "kind": "rectangle",
+      "label": "View 2",
+      "parentId": "view-inputs",
+      "x": 26,
+      "y": 210,
+      "width": 78,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#bc735b",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#bc735b",
+        "colorIndex": 1,
+        "radius": 2,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "dino-1",
+      "kind": "rectangle",
+      "label": "DINO\npatch tokens",
+      "parentId": "view-inputs",
+      "x": 134,
+      "y": 210,
+      "width": 102,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 1,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-tokens-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 274,
+      "y": 210,
+      "width": 104,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "frame-attention-1",
+      "kind": "rectangle",
+      "label": "View 2 SA",
+      "parentId": "alternating-blocks",
+      "x": 594,
+      "y": 210,
+      "width": 110,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 1,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "camera-token-1",
+      "kind": "ellipse",
+      "label": "c2",
+      "parentId": "view-inputs",
+      "x": 278,
+      "y": 218,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#bc735b",
+        "stroke": "#bc735b",
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 310,
+      "y": 215,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#bc735b",
+        "stroke": "#bc735b",
+        "colorIndex": 1,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-1-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 328,
+      "y": 215,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#bc735b",
+        "stroke": "#bc735b",
+        "colorIndex": 1,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-1-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 346,
+      "y": 215,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#bc735b",
+        "stroke": "#bc735b",
+        "colorIndex": 1,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "global-row-1",
+      "kind": "rectangle",
+      "label": "c2, p2",
+      "parentId": "alternating-blocks",
+      "x": 444,
+      "y": 210,
+      "width": 90,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 2
+      }
+    },
+    {
+      "id": "updated-row-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "geometry-heads",
+      "x": 752,
+      "y": 210,
+      "width": 20,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#bc735b",
+        "stroke": "#bc735b",
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patchify-1",
+      "kind": "path",
+      "label": "patchify-1",
+      "parentId": "view-inputs",
+      "x": 104,
+      "y": 230,
+      "width": 30,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "view-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "dino-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "add-camera-1",
+      "kind": "path",
+      "label": "add-camera-1",
+      "parentId": "view-inputs",
+      "x": 236,
+      "y": 230,
+      "width": 38,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "dino-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "input-tokens-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "global-in-1",
+      "kind": "path",
+      "label": "global-in-1",
+      "parentId": "stage",
+      "x": 378,
+      "y": 230,
+      "width": 56,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "input-tokens-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "global-attention",
+          "x": 0,
+          "y": 0.49038461538461536
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "global-to-frame-1",
+      "kind": "path",
+      "label": "global-to-frame-1",
+      "parentId": "alternating-blocks",
+      "x": 544,
+      "y": 230,
+      "width": 50,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "global-attention",
+          "x": 1,
+          "y": 0.49038461538461536
+        },
+        "end": {
+          "nodeId": "frame-attention-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "frame-output-1",
+      "kind": "path",
+      "label": "frame-output-1",
+      "parentId": "stage",
+      "x": 704,
+      "y": 230,
+      "width": 46,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "frame-attention-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "updated-tokens",
+          "x": 0,
+          "y": 0.49038461538461536
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "view-2",
+      "kind": "rectangle",
+      "label": "View 3",
+      "parentId": "view-inputs",
+      "x": 26,
+      "y": 284,
+      "width": 78,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#6e83a4",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#6e83a4",
+        "colorIndex": 2,
+        "radius": 2,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "dino-2",
+      "kind": "rectangle",
+      "label": "DINO\npatch tokens",
+      "parentId": "view-inputs",
+      "x": 134,
+      "y": 284,
+      "width": 102,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 2,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-tokens-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 274,
+      "y": 284,
+      "width": 104,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "frame-attention-2",
+      "kind": "rectangle",
+      "label": "View 3 SA",
+      "parentId": "alternating-blocks",
+      "x": 594,
+      "y": 284,
+      "width": 110,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 2,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "camera-token-2",
+      "kind": "ellipse",
+      "label": "c3",
+      "parentId": "view-inputs",
+      "x": 278,
+      "y": 292,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#6e83a4",
+        "stroke": "#6e83a4",
+        "colorIndex": 2,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-2-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 310,
+      "y": 289,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#6e83a4",
+        "stroke": "#6e83a4",
+        "colorIndex": 2,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-2-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 328,
+      "y": 289,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#6e83a4",
+        "stroke": "#6e83a4",
+        "colorIndex": 2,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patch-token-2-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "view-inputs",
+      "x": 346,
+      "y": 289,
+      "width": 14,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#6e83a4",
+        "stroke": "#6e83a4",
+        "colorIndex": 2,
+        "radius": 1,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "global-row-2",
+      "kind": "rectangle",
+      "label": "c3, p3",
+      "parentId": "alternating-blocks",
+      "x": 444,
+      "y": 284,
+      "width": 90,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 2
+      }
+    },
+    {
+      "id": "updated-row-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "geometry-heads",
+      "x": 752,
+      "y": 284,
+      "width": 20,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ffffff",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#6e83a4",
+        "stroke": "#6e83a4",
+        "colorIndex": 2,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "patchify-2",
+      "kind": "path",
+      "label": "patchify-2",
+      "parentId": "view-inputs",
+      "x": 104,
+      "y": 304,
+      "width": 30,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "view-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "dino-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "add-camera-2",
+      "kind": "path",
+      "label": "add-camera-2",
+      "parentId": "view-inputs",
+      "x": 236,
+      "y": 304,
+      "width": 38,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "dino-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "input-tokens-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "global-in-2",
+      "kind": "path",
+      "label": "global-in-2",
+      "parentId": "stage",
+      "x": 378,
+      "y": 304,
+      "width": 56,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "input-tokens-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "global-attention",
+          "x": 0,
+          "y": 0.8461538461538461
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "global-to-frame-2",
+      "kind": "path",
+      "label": "global-to-frame-2",
+      "parentId": "alternating-blocks",
+      "x": 544,
+      "y": 304,
+      "width": 50,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "global-attention",
+          "x": 1,
+          "y": 0.8461538461538461
+        },
+        "end": {
+          "nodeId": "frame-attention-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "frame-output-2",
+      "kind": "path",
+      "label": "frame-output-2",
+      "parentId": "stage",
+      "x": 704,
+      "y": 304,
+      "width": 46,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "frame-attention-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "updated-tokens",
+          "x": 0,
+          "y": 0.8461538461538461
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "scope-label",
+      "kind": "text",
+      "label": "Across views → within each view",
+      "parentId": "alternating-blocks",
+      "x": 428,
+      "y": 344,
+      "width": 280,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9545454545454546,
+      "id": "camera-head",
+      "kind": "projection",
+      "label": "Camera head",
+      "parentId": "geometry-heads",
+      "x": 818,
+      "y": 118,
+      "width": 142,
+      "height": 42,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#eef2f6",
+        "stroke": "#7c8d9d",
+        "colorIndex": 4,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.9545454545454546,
+      "id": "dense-heads",
+      "kind": "projection",
+      "label": "DPT heads",
+      "parentId": "geometry-heads",
+      "x": 818,
+      "y": 256,
+      "width": 142,
+      "height": 42,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#eef2f6",
+        "stroke": "#7c8d9d",
+        "colorIndex": 1,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "tracking-module",
+      "kind": "rectangle",
+      "label": "Tracking module",
+      "parentId": "geometry-heads",
+      "x": 818,
+      "y": 430,
+      "width": 142,
+      "height": 42,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 2,
+        "radius": 3,
+        "strokeWidth": 1.15,
+        "padding": 2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "query-points",
+      "kind": "rectangle",
+      "label": "Query points",
+      "parentId": "geometry-heads",
+      "x": 740,
+      "y": 520,
+      "width": 120,
+      "height": 32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#ba6a4f",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "camera-token-head",
+      "kind": "path",
+      "label": "camera-token-head",
+      "parentId": "geometry-heads",
+      "x": 774,
+      "y": 139,
+      "width": 44,
+      "height": 5,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0.5,
+            "y": 1
+          },
+          {
+            "x": 0.5,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "updated-tokens",
+          "x": 1,
+          "y": 0.07692307692307693
+        },
+        "end": {
+          "nodeId": "camera-head",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 4,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "patch-token-heads",
+      "kind": "path",
+      "label": "patch-token-heads",
+      "parentId": "geometry-heads",
+      "x": 774,
+      "y": 277,
+      "width": 44,
+      "height": 1,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0.5,
+            "y": 1
+          },
+          {
+            "x": 0.5,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "updated-tokens",
+          "x": 1,
+          "y": 0.7211538461538461
+        },
+        "end": {
+          "nodeId": "dense-heads",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "camera-output",
+      "kind": "text",
+      "label": "Cameras",
+      "parentId": "geometry-heads",
+      "x": 818,
+      "y": 170,
+      "width": 142,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "dense-output",
+      "kind": "text",
+      "label": "Depth · Points\nTracking features",
+      "parentId": "geometry-heads",
+      "x": 818,
+      "y": 310,
+      "width": 142,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "features-to-tracker",
+      "kind": "path",
+      "label": "features-to-tracker",
+      "parentId": "geometry-heads",
+      "x": 889,
+      "y": 298,
+      "width": 81,
+      "height": 153,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0.8765432098765432,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "dense-heads",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "tracking-module",
+          "x": 1,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "tracking-feature-label",
+      "kind": "text",
+      "label": "Track features",
+      "parentId": "geometry-heads",
+      "x": 818,
+      "y": 382,
+      "width": 142,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "tracking-query",
+      "kind": "path",
+      "label": "tracking-query",
+      "parentId": "geometry-heads",
+      "x": 800,
+      "y": 451,
+      "width": 18,
+      "height": 69,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "query-points",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "tracking-module",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 4,
+        "strokeWidth": 1.35,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "track-output",
+      "kind": "text",
+      "label": "Tracks",
+      "parentId": "geometry-heads",
+      "x": 818,
+      "y": 480,
+      "width": 142,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-title",
+      "kind": "text",
+      "label": "Shared and per-view attention",
+      "parentId": "stage",
+      "x": 16,
+      "y": 14,
+      "width": 948,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 18,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-note",
+      "kind": "text",
+      "label": "Schematic tokens · query-based tracking uses a separate module",
+      "parentId": "stage",
+      "x": 16,
+      "y": 570,
+      "width": 948,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "bold": false,
+        "color": "#657789",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-left",
+      "kind": "port",
+      "label": "Structure left",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-left",
+        "direction": "both",
+        "side": "left",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "structure-right",
+      "kind": "port",
+      "label": "Structure right",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-right",
+        "direction": "both",
+        "side": "right",
+        "position": 0.5
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "parametric": {
+        "version": 1,
+        "recipe": {
+          "id": "alternating-view-attention",
+          "version": 1,
+          "parameters": {
+            "views": 3
+          }
+        },
+        "revision": 0,
+        "objects": {
+          "stage": "stage",
+          "view-inputs": "view-inputs",
+          "alternating-blocks": "alternating-blocks",
+          "geometry-heads": "geometry-heads",
+          "inputs-heading": "inputs-heading",
+          "alternation-heading": "alternation-heading",
+          "global-heading": "global-heading",
+          "frame-heading": "frame-heading",
+          "global-attention": "global-attention",
+          "updated-tokens": "updated-tokens",
+          "view-0": "view-0",
+          "dino-0": "dino-0",
+          "input-tokens-0": "input-tokens-0",
+          "frame-attention-0": "frame-attention-0",
+          "camera-token-0": "camera-token-0",
+          "patch-token-0-0": "patch-token-0-0",
+          "patch-token-0-1": "patch-token-0-1",
+          "patch-token-0-2": "patch-token-0-2",
+          "global-row-0": "global-row-0",
+          "updated-row-0": "updated-row-0",
+          "patchify-0": "patchify-0",
+          "add-camera-0": "add-camera-0",
+          "global-in-0": "global-in-0",
+          "global-to-frame-0": "global-to-frame-0",
+          "frame-output-0": "frame-output-0",
+          "view-1": "view-1",
+          "dino-1": "dino-1",
+          "input-tokens-1": "input-tokens-1",
+          "frame-attention-1": "frame-attention-1",
+          "camera-token-1": "camera-token-1",
+          "patch-token-1-0": "patch-token-1-0",
+          "patch-token-1-1": "patch-token-1-1",
+          "patch-token-1-2": "patch-token-1-2",
+          "global-row-1": "global-row-1",
+          "updated-row-1": "updated-row-1",
+          "patchify-1": "patchify-1",
+          "add-camera-1": "add-camera-1",
+          "global-in-1": "global-in-1",
+          "global-to-frame-1": "global-to-frame-1",
+          "frame-output-1": "frame-output-1",
+          "view-2": "view-2",
+          "dino-2": "dino-2",
+          "input-tokens-2": "input-tokens-2",
+          "frame-attention-2": "frame-attention-2",
+          "camera-token-2": "camera-token-2",
+          "patch-token-2-0": "patch-token-2-0",
+          "patch-token-2-1": "patch-token-2-1",
+          "patch-token-2-2": "patch-token-2-2",
+          "global-row-2": "global-row-2",
+          "updated-row-2": "updated-row-2",
+          "patchify-2": "patchify-2",
+          "add-camera-2": "add-camera-2",
+          "global-in-2": "global-in-2",
+          "global-to-frame-2": "global-to-frame-2",
+          "frame-output-2": "frame-output-2",
+          "scope-label": "scope-label",
+          "camera-head": "camera-head",
+          "dense-heads": "dense-heads",
+          "tracking-module": "tracking-module",
+          "query-points": "query-points",
+          "camera-token-head": "camera-token-head",
+          "patch-token-heads": "patch-token-heads",
+          "camera-output": "camera-output",
+          "dense-output": "dense-output",
+          "features-to-tracker": "features-to-tracker",
+          "tracking-feature-label": "tracking-feature-label",
+          "tracking-query": "tracking-query",
+          "track-output": "track-output",
+          "structure-title": "structure-title",
+          "structure-note": "structure-note",
+          "structure-left": "structure-left",
+          "structure-right": "structure-right"
+        }
+      },
+      "id": "stage",
+      "parentId": null,
+      "title": "Multi-view attention composition",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "title": "VGGT: Visual Geometry Grounded Transformer · CVPR 2025 · Fig. 1–2 / §3.1–3.3",
+        "reference": "https://openaccess.thecvf.com/content/CVPR2025/html/Wang_VGGT_Visual_Geometry_Grounded_Transformer_CVPR_2025_paper.html · 独立抽象跨视图／逐视图注意力交替、相机 token 与稠密头的分工。跟踪特征须与查询点进入单独跟踪模块；视图、token 和 L 均非观测维度或层数。不复用照片、几何结果或原图作品。"
+      }
+    },
+    {
+      "id": "view-inputs",
+      "parentId": "stage",
+      "title": "Multi-view inputs",
+      "role": "component",
+      "x": 20,
+      "y": 64,
+      "width": 382,
+      "height": 490,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "alternating-blocks",
+      "parentId": "stage",
+      "title": "Alternating attention",
+      "role": "component",
+      "x": 420,
+      "y": 64,
+      "width": 296,
+      "height": 312,
+      "visual": {
+        "fill": "none",
+        "stroke": "#b6c3cf",
+        "strokeWidth": 1,
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "geometry-heads",
+      "parentId": "stage",
+      "title": "Typed geometric outputs",
+      "role": "component",
+      "x": 736,
+      "y": 64,
+      "width": 236,
+      "height": 490,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    }
+  ],
+  "references": [],
+  "compositionPlans": [
+    {
+      "version": 1,
+      "runId": "7914a580-5ad6-4cef-9b7c-0d60f7ff716b",
+      "userGoal": "Demonstrate an independently arranged native mechanism based on a verified accepted 2025 paper, without original artwork or measured results.",
+      "plan": {
+        "status": "ready",
+        "title": "Multi-view attention composition",
+        "goal": "Demonstrate an independently arranged native mechanism based on a verified accepted 2025 paper, without original artwork or measured results.",
+        "readingOrder": "left-to-right",
+        "layout": "Input rows at left; shared and per-view attention occupy the main central enclosure; typed outputs at right.",
+        "style": {
+          "preset": "precise",
+          "paletteId": "figureforge-publication-soft",
+          "fontFamily": "Inter",
+          "surface": "transparent",
+          "usage": "Stable colors encode state or view identity; native bound arrows show supplied data relationships only."
+        },
+        "sections": [
+          {
+            "id": "view-inputs",
+            "title": "Multi-view inputs",
+            "purpose": "One row per view retains input identity and camera-token membership.",
+            "visual": "One row per view retains input identity and camera-token membership.",
+            "design": {
+              "role": "context",
+              "structure": "tensor",
+              "rationale": "One row per view retains input identity and camera-token membership.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "view-inputs",
+                "x": 0.018442622950819672,
+                "y": 0.1040268456375839,
+                "width": 0.39139344262295084,
+                "height": 0.8221476510067114
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "alternating-blocks",
+            "title": "Alternating attention",
+            "purpose": "Global joint attention alternates with independent per-view blocks; L denotes symbolic repetition.",
+            "visual": "Global joint attention alternates with independent per-view blocks; L denotes symbolic repetition.",
+            "design": {
+              "role": "mechanism",
+              "structure": "alternating-attention",
+              "rationale": "Global joint attention alternates with independent per-view blocks; L denotes symbolic repetition.",
+              "emphasis": "primary",
+              "frame": {
+                "id": "alternating-blocks",
+                "x": 0.42827868852459017,
+                "y": 0.1040268456375839,
+                "width": 0.30327868852459017,
+                "height": 0.5234899328859061
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "geometry-heads",
+            "title": "Typed geometric outputs",
+            "purpose": "Camera and dense outputs have different inputs; query-based tracking is a separate module.",
+            "visual": "Camera and dense outputs have different inputs; query-based tracking is a separate module.",
+            "design": {
+              "role": "detail",
+              "structure": "hierarchy",
+              "rationale": "Camera and dense outputs have different inputs; query-based tracking is a separate module.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "geometry-heads",
+                "x": 0.7520491803278688,
+                "y": 0.1040268456375839,
+                "width": 0.24180327868852458,
+                "height": 0.8221476510067114
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          }
+        ],
+        "connections": [
+          {
+            "from": "view-inputs",
+            "to": "alternating-blocks",
+            "kind": "dataflow",
+            "meaning": "View-indexed tokens enter shared global self-attention."
+          },
+          {
+            "from": "alternating-blocks",
+            "to": "geometry-heads",
+            "kind": "dataflow",
+            "meaning": "Updated tokens feed typed prediction heads; tracking additionally requires query points."
+          }
+        ],
+        "checks": [
+          "Global SA spans all views; frame SA remains independent per view.",
+          "Camera-token and patch-token consumers remain distinct.",
+          "Tracks require a separate module and query points; no actual geometry is depicted."
+        ],
+        "questions": [],
+        "uncertainties": [
+          "Development example, not a real model-planning evaluation. Source architecture details are deliberately omitted as recorded in recipe semantics."
+        ]
+      },
+      "references": [],
+      "components": []
+    }
+  ]
+}

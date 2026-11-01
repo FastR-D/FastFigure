@@ -1,0 +1,2055 @@
+{
+  "version": "0.2",
+  "title": "掩码预训练与编码器迁移",
+  "canvas": {
+    "width": 1000,
+    "height": 620
+  },
+  "style": {
+    "preset": "precise",
+    "roughness": 0.8,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "figureforge-publication-soft"
+  },
+  "nodes": [
+    {
+      "id": "pretrain-heading",
+      "kind": "text",
+      "label": "Masked pretraining · train θ and φ",
+      "parentId": "mae-pretrain",
+      "x": 40,
+      "y": 76,
+      "width": 420,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 18,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "downstream-heading",
+      "kind": "text",
+      "label": "Downstream encoder use",
+      "parentId": "mae-downstream",
+      "x": 40,
+      "y": 432,
+      "width": 280,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 17,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "input-patch-heading",
+      "kind": "text",
+      "label": "Full patch set",
+      "parentId": "mae-pretrain",
+      "x": 40,
+      "y": 106,
+      "width": 112,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "output-patch-heading",
+      "kind": "text",
+      "label": "Decoder output",
+      "parentId": "mae-pretrain",
+      "x": 826,
+      "y": 100,
+      "width": 112,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "input-patch-0",
+      "kind": "rectangle",
+      "label": "p1",
+      "parentId": "mae-pretrain",
+      "x": 42,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "output-patch-0",
+      "kind": "rectangle",
+      "label": "r1",
+      "parentId": "mae-pretrain",
+      "x": 830,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-1",
+      "kind": "rectangle",
+      "label": "p2",
+      "parentId": "mae-pretrain",
+      "x": 68,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-1",
+      "kind": "rectangle",
+      "label": "r2",
+      "parentId": "mae-pretrain",
+      "x": 856,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-2",
+      "kind": "rectangle",
+      "label": "p3",
+      "parentId": "mae-pretrain",
+      "x": 94,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-2",
+      "kind": "rectangle",
+      "label": "r3",
+      "parentId": "mae-pretrain",
+      "x": 882,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-3",
+      "kind": "rectangle",
+      "label": "p4",
+      "parentId": "mae-pretrain",
+      "x": 120,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-3",
+      "kind": "rectangle",
+      "label": "r4",
+      "parentId": "mae-pretrain",
+      "x": 908,
+      "y": 124,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-4",
+      "kind": "rectangle",
+      "label": "p5",
+      "parentId": "mae-pretrain",
+      "x": 42,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-4",
+      "kind": "rectangle",
+      "label": "r5",
+      "parentId": "mae-pretrain",
+      "x": 830,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-5",
+      "kind": "rectangle",
+      "label": "p6",
+      "parentId": "mae-pretrain",
+      "x": 68,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "output-patch-5",
+      "kind": "rectangle",
+      "label": "r6",
+      "parentId": "mae-pretrain",
+      "x": 856,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-6",
+      "kind": "rectangle",
+      "label": "p7",
+      "parentId": "mae-pretrain",
+      "x": 94,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-6",
+      "kind": "rectangle",
+      "label": "r7",
+      "parentId": "mae-pretrain",
+      "x": 882,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-7",
+      "kind": "rectangle",
+      "label": "p8",
+      "parentId": "mae-pretrain",
+      "x": 120,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-7",
+      "kind": "rectangle",
+      "label": "r8",
+      "parentId": "mae-pretrain",
+      "x": 908,
+      "y": 150,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-8",
+      "kind": "rectangle",
+      "label": "p9",
+      "parentId": "mae-pretrain",
+      "x": 42,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-8",
+      "kind": "rectangle",
+      "label": "r9",
+      "parentId": "mae-pretrain",
+      "x": 830,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-9",
+      "kind": "rectangle",
+      "label": "p10",
+      "parentId": "mae-pretrain",
+      "x": 68,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-9",
+      "kind": "rectangle",
+      "label": "r10",
+      "parentId": "mae-pretrain",
+      "x": 856,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-10",
+      "kind": "rectangle",
+      "label": "p11",
+      "parentId": "mae-pretrain",
+      "x": 94,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "output-patch-10",
+      "kind": "rectangle",
+      "label": "r11",
+      "parentId": "mae-pretrain",
+      "x": 882,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-11",
+      "kind": "rectangle",
+      "label": "p12",
+      "parentId": "mae-pretrain",
+      "x": 120,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-11",
+      "kind": "rectangle",
+      "label": "r12",
+      "parentId": "mae-pretrain",
+      "x": 908,
+      "y": 176,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-12",
+      "kind": "rectangle",
+      "label": "p13",
+      "parentId": "mae-pretrain",
+      "x": 42,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-12",
+      "kind": "rectangle",
+      "label": "r13",
+      "parentId": "mae-pretrain",
+      "x": 830,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-13",
+      "kind": "rectangle",
+      "label": "p14",
+      "parentId": "mae-pretrain",
+      "x": 68,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-13",
+      "kind": "rectangle",
+      "label": "r14",
+      "parentId": "mae-pretrain",
+      "x": 856,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-14",
+      "kind": "rectangle",
+      "label": "p15",
+      "parentId": "mae-pretrain",
+      "x": 94,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "output-patch-14",
+      "kind": "rectangle",
+      "label": "r15",
+      "parentId": "mae-pretrain",
+      "x": 882,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "input-patch-15",
+      "kind": "rectangle",
+      "label": "p16",
+      "parentId": "mae-pretrain",
+      "x": 120,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "output-patch-15",
+      "kind": "rectangle",
+      "label": "r16",
+      "parentId": "mae-pretrain",
+      "x": 908,
+      "y": 202,
+      "width": 26,
+      "height": 26,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mae-input-frame",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "mae-pretrain",
+      "x": 42,
+      "y": 124,
+      "width": 104,
+      "height": 104,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#718096",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "mae-output-frame",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "mae-pretrain",
+      "x": 830,
+      "y": 124,
+      "width": 104,
+      "height": 104,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#718096",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "visible-select",
+      "kind": "rectangle",
+      "label": "Keep 4 visible",
+      "parentId": "mae-pretrain",
+      "x": 190,
+      "y": 144,
+      "width": 104,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mae-encoder",
+      "kind": "rectangle",
+      "label": "Encoder Eθ",
+      "parentId": "mae-pretrain",
+      "x": 340,
+      "y": 136,
+      "width": 120,
+      "height": 64,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "restore-tokens",
+      "kind": "rectangle",
+      "label": "Restore + pos",
+      "parentId": "mae-pretrain",
+      "x": 510,
+      "y": 144,
+      "width": 110,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mae-decoder",
+      "kind": "rectangle",
+      "label": "Decoder Dφ",
+      "parentId": "mae-pretrain",
+      "x": 670,
+      "y": 144,
+      "width": 104,
+      "height": 48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mask-token",
+      "kind": "rectangle",
+      "label": "[MASK]",
+      "parentId": "mae-pretrain",
+      "x": 510,
+      "y": 258,
+      "width": 110,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "masked-loss",
+      "kind": "rectangle",
+      "label": "Masked MSE",
+      "parentId": "mae-pretrain",
+      "x": 670,
+      "y": 296,
+      "width": 120,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "select-patches",
+      "kind": "path",
+      "label": "select-patches",
+      "parentId": "mae-pretrain",
+      "x": 146,
+      "y": 168,
+      "width": 44,
+      "height": 8,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mae-input-frame",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "visible-select",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "visible-to-encoder",
+      "kind": "path",
+      "label": "visible-to-encoder",
+      "parentId": "mae-pretrain",
+      "x": 294,
+      "y": 168,
+      "width": 46,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "visible-select",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "mae-encoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "encode-visible",
+      "kind": "path",
+      "label": "encode-visible",
+      "parentId": "mae-pretrain",
+      "x": 460,
+      "y": 168,
+      "width": 50,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mae-encoder",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "restore-tokens",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "decode-full-sequence",
+      "kind": "path",
+      "label": "decode-full-sequence",
+      "parentId": "mae-pretrain",
+      "x": 620,
+      "y": 168,
+      "width": 50,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "restore-tokens",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "mae-decoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "reconstruct-patches",
+      "kind": "path",
+      "label": "reconstruct-patches",
+      "parentId": "mae-pretrain",
+      "x": 774,
+      "y": 168,
+      "width": 56,
+      "height": 8,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mae-decoder",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "mae-output-frame",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "mask-after-encoder",
+      "kind": "path",
+      "label": "mask-after-encoder",
+      "parentId": "mae-pretrain",
+      "x": 565,
+      "y": 192,
+      "width": 0,
+      "height": 66,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mask-token",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "restore-tokens",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "visible-tile-0",
+      "kind": "rectangle",
+      "label": "p1",
+      "parentId": "mae-pretrain",
+      "x": 190,
+      "y": 218,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "visible-tile-1",
+      "kind": "rectangle",
+      "label": "p6",
+      "parentId": "mae-pretrain",
+      "x": 216,
+      "y": 218,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "visible-tile-2",
+      "kind": "rectangle",
+      "label": "p11",
+      "parentId": "mae-pretrain",
+      "x": 242,
+      "y": 218,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "visible-tile-3",
+      "kind": "rectangle",
+      "label": "p16",
+      "parentId": "mae-pretrain",
+      "x": 268,
+      "y": 218,
+      "width": 24,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "reconstruction-loss",
+      "kind": "path",
+      "label": "reconstruction-loss",
+      "parentId": "mae-pretrain",
+      "x": 790,
+      "y": 228,
+      "width": 92,
+      "height": 90,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mae-output-frame",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "masked-loss",
+          "x": 1,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "original-targets",
+      "kind": "path",
+      "label": "original-targets",
+      "parentId": "mae-pretrain",
+      "x": 94,
+      "y": 228,
+      "width": 576,
+      "height": 110,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0.9513888888888888,
+            "y": 1
+          },
+          {
+            "x": 0.9513888888888888,
+            "y": 0.8181818181818182
+          },
+          {
+            "x": 1,
+            "y": 0.8181818181818182
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mae-input-frame",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "masked-loss",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "target-label",
+      "kind": "text",
+      "label": "Original targets · masked positions only",
+      "parentId": "mae-pretrain",
+      "x": 140,
+      "y": 278,
+      "width": 240,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "masked-loss-note",
+      "kind": "text",
+      "label": "MSE only on masked positions",
+      "parentId": "mae-pretrain",
+      "x": 636,
+      "y": 354,
+      "width": 304,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "downstream-input",
+      "kind": "rectangle",
+      "label": "All patches",
+      "parentId": "mae-downstream",
+      "x": 60,
+      "y": 482,
+      "width": 150,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "downstream-encoder",
+      "kind": "rectangle",
+      "label": "Encoder Eθ",
+      "parentId": "mae-downstream",
+      "x": 340,
+      "y": 482,
+      "width": 120,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "downstream-head",
+      "kind": "rectangle",
+      "label": "Task head / features",
+      "parentId": "mae-downstream",
+      "x": 630,
+      "y": 482,
+      "width": 180,
+      "height": 44,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 2,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "downstream-input-link",
+      "kind": "path",
+      "label": "downstream-input-link",
+      "parentId": "mae-downstream",
+      "x": 210,
+      "y": 504,
+      "width": 130,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "downstream-input",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "downstream-encoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "downstream-output-link",
+      "kind": "path",
+      "label": "downstream-output-link",
+      "parentId": "mae-downstream",
+      "x": 460,
+      "y": 504,
+      "width": 170,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "downstream-encoder",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "downstream-head",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 2,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "encoder-checkpoint",
+      "kind": "path",
+      "label": "encoder-checkpoint",
+      "parentId": "stage",
+      "x": 400,
+      "y": 200,
+      "width": 0,
+      "height": 282,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mae-encoder",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "downstream-encoder",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 5,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          6,
+          4
+        ]
+      }
+    },
+    {
+      "id": "encoder-transfer-label",
+      "kind": "text",
+      "label": "Transfer θ only",
+      "parentId": "stage",
+      "x": 414,
+      "y": 396,
+      "width": 180,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-title",
+      "kind": "text",
+      "label": "Masked pretraining and encoder transfer",
+      "parentId": "stage",
+      "x": 16,
+      "y": 14,
+      "width": 948,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 20,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-note",
+      "kind": "text",
+      "label": "Grid, patch IDs and mask pattern are illustrative; no pixels, reconstruction values or target accuracy.",
+      "parentId": "stage",
+      "x": 16,
+      "y": 570,
+      "width": 948,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-left",
+      "kind": "port",
+      "label": "Structure left",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-left",
+        "direction": "both",
+        "side": "left",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "structure-right",
+      "kind": "port",
+      "label": "Structure right",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-right",
+        "direction": "both",
+        "side": "right",
+        "position": 0.5
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "parametric": {
+        "version": 1,
+        "recipe": {
+          "id": "masked-autoencoding",
+          "version": 1,
+          "parameters": {
+            "grid": 4,
+            "visible": "few"
+          }
+        },
+        "revision": 0,
+        "objects": {
+          "stage": "stage",
+          "mae-pretrain": "mae-pretrain",
+          "mae-downstream": "mae-downstream",
+          "pretrain-heading": "pretrain-heading",
+          "downstream-heading": "downstream-heading",
+          "input-patch-heading": "input-patch-heading",
+          "output-patch-heading": "output-patch-heading",
+          "input-patch-0": "input-patch-0",
+          "output-patch-0": "output-patch-0",
+          "input-patch-1": "input-patch-1",
+          "output-patch-1": "output-patch-1",
+          "input-patch-2": "input-patch-2",
+          "output-patch-2": "output-patch-2",
+          "input-patch-3": "input-patch-3",
+          "output-patch-3": "output-patch-3",
+          "input-patch-4": "input-patch-4",
+          "output-patch-4": "output-patch-4",
+          "input-patch-5": "input-patch-5",
+          "output-patch-5": "output-patch-5",
+          "input-patch-6": "input-patch-6",
+          "output-patch-6": "output-patch-6",
+          "input-patch-7": "input-patch-7",
+          "output-patch-7": "output-patch-7",
+          "input-patch-8": "input-patch-8",
+          "output-patch-8": "output-patch-8",
+          "input-patch-9": "input-patch-9",
+          "output-patch-9": "output-patch-9",
+          "input-patch-10": "input-patch-10",
+          "output-patch-10": "output-patch-10",
+          "input-patch-11": "input-patch-11",
+          "output-patch-11": "output-patch-11",
+          "input-patch-12": "input-patch-12",
+          "output-patch-12": "output-patch-12",
+          "input-patch-13": "input-patch-13",
+          "output-patch-13": "output-patch-13",
+          "input-patch-14": "input-patch-14",
+          "output-patch-14": "output-patch-14",
+          "input-patch-15": "input-patch-15",
+          "output-patch-15": "output-patch-15",
+          "mae-input-frame": "mae-input-frame",
+          "mae-output-frame": "mae-output-frame",
+          "visible-select": "visible-select",
+          "mae-encoder": "mae-encoder",
+          "restore-tokens": "restore-tokens",
+          "mae-decoder": "mae-decoder",
+          "mask-token": "mask-token",
+          "masked-loss": "masked-loss",
+          "select-patches": "select-patches",
+          "visible-to-encoder": "visible-to-encoder",
+          "encode-visible": "encode-visible",
+          "decode-full-sequence": "decode-full-sequence",
+          "reconstruct-patches": "reconstruct-patches",
+          "mask-after-encoder": "mask-after-encoder",
+          "visible-tile-0": "visible-tile-0",
+          "visible-tile-1": "visible-tile-1",
+          "visible-tile-2": "visible-tile-2",
+          "visible-tile-3": "visible-tile-3",
+          "reconstruction-loss": "reconstruction-loss",
+          "original-targets": "original-targets",
+          "target-label": "target-label",
+          "masked-loss-note": "masked-loss-note",
+          "downstream-input": "downstream-input",
+          "downstream-encoder": "downstream-encoder",
+          "downstream-head": "downstream-head",
+          "downstream-input-link": "downstream-input-link",
+          "downstream-output-link": "downstream-output-link",
+          "encoder-checkpoint": "encoder-checkpoint",
+          "encoder-transfer-label": "encoder-transfer-label",
+          "structure-title": "structure-title",
+          "structure-note": "structure-note",
+          "structure-left": "structure-left",
+          "structure-right": "structure-right"
+        }
+      },
+      "id": "stage",
+      "parentId": null,
+      "title": "Masked pretraining and encoder transfer",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "title": "Masked Autoencoders Are Scalable Vision Learners · Fig. 1 / §3",
+        "reference": "https://arxiv.org/abs/2111.06377 · 依据可见块编码、编码后加入 mask token／恢复顺序、仅掩码位置重建损失与编码器迁移独立构造。网格、块 ID 和固定图示模式不代表实际图像、采样比例或重建结果；下游不带预训练解码器。"
+      }
+    },
+    {
+      "id": "mae-pretrain",
+      "parentId": "stage",
+      "title": "Masked pretraining",
+      "role": "component",
+      "x": 20,
+      "y": 60,
+      "width": 940,
+      "height": 330,
+      "visual": {
+        "colorIndex": 1,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mae-downstream",
+      "parentId": "stage",
+      "title": "Downstream encoder use",
+      "role": "component",
+      "x": 20,
+      "y": 420,
+      "width": 940,
+      "height": 130,
+      "visual": {
+        "colorIndex": 2,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    }
+  ],
+  "references": [],
+  "compositionPlans": [
+    {
+      "version": 1,
+      "runId": "5b93ccf3-6ed6-41b0-9e96-e8ee4d1b0ef7",
+      "userGoal": "Explain visible-only encoding, post-encoder mask insertion, masked-position loss and downstream use of the encoder checkpoint without the decoder.",
+      "plan": {
+        "status": "ready",
+        "title": "Masked pretraining and encoder transfer",
+        "goal": "Explain visible-only encoding, post-encoder mask insertion, masked-position loss and downstream use of the encoder checkpoint without the decoder.",
+        "readingOrder": "top-to-bottom",
+        "layout": "Pretraining combines patch grids, a visible-token subset, asymmetric encoder/decoder and masked loss in the main upper region; the downstream encoder pipeline is below, with a separate checkpoint arrow.",
+        "style": {
+          "preset": "precise",
+          "paletteId": "figureforge-publication-soft",
+          "fontFamily": "Inter",
+          "surface": "transparent",
+          "usage": "Training and downstream phases have distinct boundaries. Data paths are solid, optimization is dotted, and checkpoint transfer uses a one-way dashed line with an explicit parameter label."
+        },
+        "sections": [
+          {
+            "id": "mae-pretrain",
+            "title": "Masked pretraining",
+            "purpose": "Grid membership, token selection and encoder/decoder paths jointly explain the masked pretraining mechanism.",
+            "visual": "Grid membership, token selection and encoder/decoder paths jointly explain the masked pretraining mechanism.",
+            "design": {
+              "role": "mechanism",
+              "structure": "encoder-decoder",
+              "rationale": "Grid membership, token selection and encoder/decoder paths jointly explain the masked pretraining mechanism.",
+              "emphasis": "primary",
+              "frame": {
+                "id": "mae-pretrain",
+                "x": 0.018442622950819672,
+                "y": 0.09731543624161074,
+                "width": 0.9631147540983607,
+                "height": 0.5536912751677853
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "mae-downstream",
+            "title": "Downstream encoder use",
+            "purpose": "Downstream use receives all patches and reuses the encoder initialization, without the pretraining decoder.",
+            "visual": "Downstream use receives all patches and reuses the encoder initialization, without the pretraining decoder.",
+            "design": {
+              "role": "context",
+              "structure": "pipeline",
+              "rationale": "Downstream use receives all patches and reuses the encoder initialization, without the pretraining decoder.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "mae-downstream",
+                "x": 0.018442622950819672,
+                "y": 0.7013422818791947,
+                "width": 0.9631147540983607,
+                "height": 0.2181208053691275
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          }
+        ],
+        "connections": [
+          {
+            "from": "mae-pretrain",
+            "to": "mae-downstream",
+            "kind": "parameter-transfer",
+            "meaning": "Initialize downstream encoder from theta; no decoder phi transfer or sample stream."
+          }
+        ],
+        "checks": [
+          "Only shown visible patch IDs enter E; mask tokens enter after E.",
+          "MSE uses masked positions only, with full original targets.",
+          "The downstream encoder uses all patches and excludes the decoder."
+        ],
+        "questions": [],
+        "uncertainties": [
+          "Program-built structural example, not an evaluated model-generated plan or a numeric learning result."
+        ]
+      },
+      "references": [],
+      "components": []
+    }
+  ]
+}

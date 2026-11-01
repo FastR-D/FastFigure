@@ -1,0 +1,2019 @@
+{
+  "version": "0.2",
+  "title": "Composition study · schematic",
+  "canvas": {
+    "width": 1000,
+    "height": 620
+  },
+  "style": {
+    "fontFamily": "Inter",
+    "preset": "precise",
+    "roughness": 0.8,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "figureforge-publication-soft"
+  },
+  "nodes": [
+    {
+      "id": "overview-0",
+      "kind": "rectangle",
+      "label": "Paired inputs",
+      "parentId": "overview-region",
+      "x": 52,
+      "y": 108,
+      "width": 190,
+      "height": 50,
+      "textStyle": {
+        "size": 15,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 8,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "overview-1",
+      "kind": "rectangle",
+      "label": "Independent encoders",
+      "parentId": "overview-region",
+      "x": 282,
+      "y": 108,
+      "width": 190,
+      "height": 50,
+      "textStyle": {
+        "size": 15,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 8,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "overview-2",
+      "kind": "rectangle",
+      "label": "Paired embeddings",
+      "parentId": "overview-region",
+      "x": 512,
+      "y": 108,
+      "width": 190,
+      "height": 50,
+      "textStyle": {
+        "size": 15,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 8,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "overview-3",
+      "kind": "rectangle",
+      "label": "Contrastive loss",
+      "parentId": "overview-region",
+      "x": 742,
+      "y": 108,
+      "width": 190,
+      "height": 50,
+      "textStyle": {
+        "size": 15,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 8,
+        "tone": "fill"
+      }
+    },
+    {
+      "id": "overview-caption",
+      "kind": "text",
+      "label": "(a) Overall training story · synthetic composition example",
+      "parentId": "overview-region",
+      "x": 52,
+      "y": 76,
+      "width": 860,
+      "height": 24,
+      "textStyle": {
+        "size": 14,
+        "bold": true
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-2",
+      "kind": "rectangle",
+      "label": "Images A",
+      "parentId": "alignment",
+      "x": 49.84,
+      "y": 307,
+      "width": 73.92,
+      "height": 34.32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 3.96,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-3",
+      "kind": "rectangle",
+      "label": "Encoder A",
+      "parentId": "alignment",
+      "x": 152.8,
+      "y": 307,
+      "width": 97.68,
+      "height": 34.32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 3.96,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-4",
+      "kind": "rectangle",
+      "label": "Aᵢ",
+      "parentId": "alignment",
+      "x": 288.76,
+      "y": 307,
+      "width": 44.88,
+      "height": 34.32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 3.96,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-5",
+      "kind": "path",
+      "label": "encode-a",
+      "parentId": "alignment",
+      "x": 123.76,
+      "y": 324.16,
+      "width": 29.040000000000006,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "alignment-object-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "alignment-object-3",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 0.8580000000000001,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-6",
+      "kind": "path",
+      "label": "embed-a",
+      "parentId": "alignment",
+      "x": 250.48000000000002,
+      "y": 324.16,
+      "width": 38.27999999999997,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "alignment-object-3",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "alignment-object-4",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 0.8580000000000001,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-7",
+      "kind": "rectangle",
+      "label": "Texts B",
+      "parentId": "alignment",
+      "x": 49.84,
+      "y": 468.04,
+      "width": 73.92,
+      "height": 34.32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 3.96,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-8",
+      "kind": "rectangle",
+      "label": "Encoder B",
+      "parentId": "alignment",
+      "x": 152.8,
+      "y": 468.04,
+      "width": 97.68,
+      "height": 34.32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 3.96,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-9",
+      "kind": "rectangle",
+      "label": "Bᵢ",
+      "parentId": "alignment",
+      "x": 288.76,
+      "y": 468.04,
+      "width": 44.88,
+      "height": 34.32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 3.96,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-10",
+      "kind": "path",
+      "label": "encode-b",
+      "parentId": "alignment",
+      "x": 123.76,
+      "y": 485.20000000000005,
+      "width": 29.040000000000006,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "alignment-object-7",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "alignment-object-8",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 0.8580000000000001,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-11",
+      "kind": "path",
+      "label": "embed-b",
+      "parentId": "alignment",
+      "x": 250.48000000000002,
+      "y": 485.20000000000005,
+      "width": 38.27999999999997,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "alignment-object-8",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "alignment-object-9",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 0.8580000000000001,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-12",
+      "kind": "text",
+      "label": "",
+      "parentId": "alignment",
+      "x": 399.64000000000004,
+      "y": 250.24,
+      "width": 224.4,
+      "height": 18.48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.88,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-13",
+      "kind": "text",
+      "label": "Bⱼ",
+      "parentId": "alignment",
+      "x": 440.56,
+      "y": 276.64,
+      "width": 105.60000000000001,
+      "height": 15.84,
+      "textStyle": {
+        "family": "Inter",
+        "size": 9.24,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-14",
+      "kind": "text",
+      "label": "A1",
+      "parentId": "alignment",
+      "x": 402.28000000000003,
+      "y": 307,
+      "width": 31.68,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-15",
+      "kind": "text",
+      "label": "1",
+      "parentId": "alignment",
+      "x": 440.56,
+      "y": 291.16,
+      "width": 26.400000000000002,
+      "height": 14.520000000000001,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-16",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 440.56,
+      "y": 307,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e0f2ea",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-17",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 466.96000000000004,
+      "y": 307,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-18",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 493.36,
+      "y": 307,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-19",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 519.76,
+      "y": 307,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-20",
+      "kind": "text",
+      "label": "A2",
+      "parentId": "alignment",
+      "x": 402.28000000000003,
+      "y": 333.4,
+      "width": 31.68,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-21",
+      "kind": "text",
+      "label": "2",
+      "parentId": "alignment",
+      "x": 466.96000000000004,
+      "y": 291.16,
+      "width": 26.400000000000002,
+      "height": 14.520000000000001,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-22",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 440.56,
+      "y": 333.4,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-23",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 466.96000000000004,
+      "y": 333.4,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e0f2ea",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-24",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 493.36,
+      "y": 333.4,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-25",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 519.76,
+      "y": 333.4,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-26",
+      "kind": "text",
+      "label": "A3",
+      "parentId": "alignment",
+      "x": 402.28000000000003,
+      "y": 359.8,
+      "width": 31.68,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-27",
+      "kind": "text",
+      "label": "3",
+      "parentId": "alignment",
+      "x": 493.36,
+      "y": 291.16,
+      "width": 26.400000000000002,
+      "height": 14.520000000000001,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-28",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 440.56,
+      "y": 359.8,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-29",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 466.96000000000004,
+      "y": 359.8,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-30",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 493.36,
+      "y": 359.8,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e0f2ea",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-31",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 519.76,
+      "y": 359.8,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-32",
+      "kind": "text",
+      "label": "A4",
+      "parentId": "alignment",
+      "x": 402.28000000000003,
+      "y": 386.20000000000005,
+      "width": 31.68,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-33",
+      "kind": "text",
+      "label": "4",
+      "parentId": "alignment",
+      "x": 519.76,
+      "y": 291.16,
+      "width": 26.400000000000002,
+      "height": 14.520000000000001,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-34",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 440.56,
+      "y": 386.20000000000005,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-35",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 466.96000000000004,
+      "y": 386.20000000000005,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-36",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 493.36,
+      "y": 386.20000000000005,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-37",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 519.76,
+      "y": 386.20000000000005,
+      "width": 26.400000000000002,
+      "height": 26.400000000000002,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e0f2ea",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-38",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "alignment",
+      "x": 440.56,
+      "y": 307,
+      "width": 105.60000000000001,
+      "height": 105.60000000000001,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#718096",
+        "strokeWidth": 0.66,
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-39",
+      "kind": "path",
+      "label": "align-a",
+      "parentId": "alignment",
+      "x": 333.64,
+      "y": 324.15999999999997,
+      "width": 106.92000000000002,
+      "height": 35.64000000000004,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1.5949331891360254e-15
+          },
+          {
+            "x": 0.39506172839506176,
+            "y": 0
+          },
+          {
+            "x": 0.39506172839506176,
+            "y": 0.9999999999999984
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "alignment-object-4",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "alignment-object-38",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 0.8580000000000001,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-40",
+      "kind": "path",
+      "label": "align-b",
+      "parentId": "alignment",
+      "x": 333.64,
+      "y": 412.6,
+      "width": 159.72000000000003,
+      "height": 72.60000000000002,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "alignment-object-9",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "alignment-object-38",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 0.8580000000000001,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-41",
+      "kind": "text",
+      "label": "Diagonal = matched pairs; cells are not scores.",
+      "parentId": "alignment",
+      "x": 390.40000000000003,
+      "y": 511.6,
+      "width": 256.08,
+      "height": 15.84,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.92,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-42",
+      "kind": "rectangle",
+      "label": "Row + column contrastive objective",
+      "parentId": "alignment",
+      "x": 399.64000000000004,
+      "y": 535.36,
+      "width": 244.20000000000002,
+      "height": 18.48,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.58,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 2,
+        "radius": 3.96,
+        "strokeWidth": 0.8580000000000001,
+        "padding": 2.64,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-43",
+      "kind": "path",
+      "label": "objective-link",
+      "parentId": "alignment",
+      "x": 546.16,
+      "y": 359.8,
+      "width": 102.96000000000004,
+      "height": 184.8,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0.948717948717949,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "alignment-object-38",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "alignment-object-42",
+          "x": 1,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 2,
+        "strokeWidth": 0.8580000000000001,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-44",
+      "kind": "text",
+      "label": "(b) Encoding and pair alignment",
+      "parentId": "alignment",
+      "x": 44.56,
+      "y": 217.24,
+      "width": 605.88,
+      "height": 19.8,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13.200000000000001,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "id": "alignment-object-45",
+      "kind": "text",
+      "label": "Illustrative pairs; no similarity values, training data or zero-shot classifier.",
+      "parentId": "alignment",
+      "x": 44.56,
+      "y": 557.8,
+      "width": 605.88,
+      "height": 13.200000000000001,
+      "textStyle": {
+        "family": "Inter",
+        "size": 7.260000000000001,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "id": "alignment-object-46",
+      "kind": "port",
+      "label": "Structure left",
+      "parentId": "alignment",
+      "x": 34,
+      "y": 208,
+      "width": 627,
+      "height": 369.6,
+      "interfaceFor": "alignment",
+      "socket": {
+        "key": "structure-left",
+        "direction": "both",
+        "side": "left",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "alignment-object-47",
+      "kind": "port",
+      "label": "Structure right",
+      "parentId": "alignment",
+      "x": 34,
+      "y": 208,
+      "width": 627,
+      "height": 369.6,
+      "interfaceFor": "alignment",
+      "socket": {
+        "key": "structure-right",
+        "direction": "both",
+        "side": "right",
+        "position": 0.5
+      }
+    },
+    {
+      "metricScale": 1.6500000000000001,
+      "id": "detail-1-copy-object-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "detail-1-copy",
+      "x": 774,
+      "y": 333.29999999999995,
+      "width": 66,
+      "height": 66,
+      "textStyle": {
+        "family": "Inter",
+        "size": 21.45,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e0f2ea",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 2.1450000000000005,
+        "padding": 6.6000000000000005,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 1.6500000000000001,
+      "id": "detail-1-copy-object-3",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "detail-1-copy",
+      "x": 840,
+      "y": 333.29999999999995,
+      "width": 66,
+      "height": 66,
+      "textStyle": {
+        "family": "Inter",
+        "size": 21.45,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 2.1450000000000005,
+        "padding": 6.6000000000000005,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 1.6500000000000001,
+      "id": "detail-1-copy-object-4",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "detail-1-copy",
+      "x": 774,
+      "y": 399.30000000000007,
+      "width": 66,
+      "height": 66,
+      "textStyle": {
+        "family": "Inter",
+        "size": 21.45,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f6f7fa",
+        "stroke": "#d4dae3",
+        "colorIndex": 4,
+        "radius": 0,
+        "strokeWidth": 2.1450000000000005,
+        "padding": 6.6000000000000005,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 1.6500000000000001,
+      "id": "detail-1-copy-object-5",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "detail-1-copy",
+      "x": 840,
+      "y": 399.30000000000007,
+      "width": 66,
+      "height": 66,
+      "textStyle": {
+        "family": "Inter",
+        "size": 21.45,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e0f2ea",
+        "colorIndex": 0,
+        "radius": 0,
+        "strokeWidth": 2.1450000000000005,
+        "padding": 6.6000000000000005,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "detail-1-source",
+      "kind": "rectangle",
+      "label": "",
+      "name": "原图选区（快照）",
+      "parentId": "stage",
+      "x": 492.04,
+      "y": 358.48,
+      "width": 55.44,
+      "height": 55.44,
+      "visual": {
+        "fill": "none",
+        "stroke": "#7867a6",
+        "strokeWidth": 1.2,
+        "handDrawn": false,
+        "dash": [
+          5,
+          3
+        ]
+      }
+    },
+    {
+      "id": "detail-1-frame",
+      "kind": "rectangle",
+      "label": "",
+      "name": "放大内容外框",
+      "parentId": "detail-1-group",
+      "x": 768.7,
+      "y": 328,
+      "width": 142.59999999999988,
+      "height": 142.60000000000002,
+      "visual": {
+        "fill": "none",
+        "stroke": "#7867a6",
+        "strokeWidth": 1.2,
+        "handDrawn": false,
+        "dash": [
+          5,
+          3
+        ]
+      }
+    },
+    {
+      "id": "detail-1-caption",
+      "kind": "text",
+      "label": "(c) Detail · ×2.5 快照",
+      "parentId": "detail-1-group",
+      "x": 758,
+      "y": 292,
+      "width": 164,
+      "height": 32,
+      "textStyle": {
+        "size": 14,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "detail-1-guide-0",
+      "kind": "path",
+      "label": "",
+      "name": "快照对应引线",
+      "parentId": "stage",
+      "x": 547.48,
+      "y": 328,
+      "width": 221.22000000000003,
+      "height": 30.480000000000018,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none",
+        "start": {
+          "nodeId": "detail-1-source",
+          "x": 1,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "detail-1-frame",
+          "x": 0,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#7867a6",
+        "strokeWidth": 1,
+        "handDrawn": false,
+        "dash": [
+          4,
+          3
+        ]
+      }
+    },
+    {
+      "id": "detail-1-guide-1",
+      "kind": "path",
+      "label": "",
+      "name": "快照对应引线",
+      "parentId": "stage",
+      "x": 547.48,
+      "y": 413.92,
+      "width": 221.22000000000003,
+      "height": 56.68000000000001,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "start": {
+          "nodeId": "detail-1-source",
+          "x": 1,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "detail-1-frame",
+          "x": 0,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#7867a6",
+        "strokeWidth": 1,
+        "handDrawn": false,
+        "dash": [
+          4,
+          3
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "overview-flow-0",
+      "source": "overview-0",
+      "target": "overview-1",
+      "sourcePort": "right",
+      "targetPort": "left"
+    },
+    {
+      "id": "overview-flow-1",
+      "source": "overview-1",
+      "target": "overview-2",
+      "sourcePort": "right",
+      "targetPort": "left"
+    },
+    {
+      "id": "overview-flow-2",
+      "source": "overview-2",
+      "target": "overview-3",
+      "sourcePort": "right",
+      "targetPort": "left"
+    }
+  ],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "Composition study · schematic",
+      "role": "stage",
+      "x": 16,
+      "y": 24,
+      "width": 968,
+      "height": 584
+    },
+    {
+      "id": "overview-region",
+      "parentId": "stage",
+      "title": "Overview",
+      "role": "component",
+      "x": 28,
+      "y": 72,
+      "width": 944,
+      "height": 108,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "mechanism-region",
+      "parentId": "stage",
+      "title": "Alignment mechanism",
+      "role": "component",
+      "x": 28,
+      "y": 202,
+      "width": 660,
+      "height": 394,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "metricScale": 0.66,
+      "parametric": {
+        "version": 1,
+        "recipe": {
+          "id": "dual-encoder-alignment",
+          "version": 1,
+          "parameters": {
+            "pairs": 4,
+            "objective": "symmetric"
+          }
+        },
+        "revision": 0,
+        "objects": {
+          "stage": "alignment",
+          "input-a": "alignment-object-2",
+          "encoder-a": "alignment-object-3",
+          "embedding-a": "alignment-object-4",
+          "encode-a": "alignment-object-5",
+          "embed-a": "alignment-object-6",
+          "input-b": "alignment-object-7",
+          "encoder-b": "alignment-object-8",
+          "embedding-b": "alignment-object-9",
+          "encode-b": "alignment-object-10",
+          "embed-b": "alignment-object-11",
+          "alignment-heading": "alignment-object-12",
+          "column-heading": "alignment-object-13",
+          "pair-row-0": "alignment-object-14",
+          "pair-column-0": "alignment-object-15",
+          "pair-0-0": "alignment-object-16",
+          "pair-0-1": "alignment-object-17",
+          "pair-0-2": "alignment-object-18",
+          "pair-0-3": "alignment-object-19",
+          "pair-row-1": "alignment-object-20",
+          "pair-column-1": "alignment-object-21",
+          "pair-1-0": "alignment-object-22",
+          "pair-1-1": "alignment-object-23",
+          "pair-1-2": "alignment-object-24",
+          "pair-1-3": "alignment-object-25",
+          "pair-row-2": "alignment-object-26",
+          "pair-column-2": "alignment-object-27",
+          "pair-2-0": "alignment-object-28",
+          "pair-2-1": "alignment-object-29",
+          "pair-2-2": "alignment-object-30",
+          "pair-2-3": "alignment-object-31",
+          "pair-row-3": "alignment-object-32",
+          "pair-column-3": "alignment-object-33",
+          "pair-3-0": "alignment-object-34",
+          "pair-3-1": "alignment-object-35",
+          "pair-3-2": "alignment-object-36",
+          "pair-3-3": "alignment-object-37",
+          "pairing-frame": "alignment-object-38",
+          "align-a": "alignment-object-39",
+          "align-b": "alignment-object-40",
+          "pairing-key": "alignment-object-41",
+          "objective": "alignment-object-42",
+          "objective-link": "alignment-object-43",
+          "structure-title": "alignment-object-44",
+          "structure-note": "alignment-object-45",
+          "structure-left": "alignment-object-46",
+          "structure-right": "alignment-object-47"
+        }
+      },
+      "id": "alignment",
+      "parentId": "mechanism-region",
+      "title": "双编码器配对对齐",
+      "role": "component",
+      "x": 34,
+      "y": 208,
+      "width": 627,
+      "height": 369.6,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 0.8580000000000001
+      },
+      "textStyle": {
+        "size": 9.9
+      },
+      "component": {
+        "assetId": "builtin-dual-encoder-alignment",
+        "name": "双编码器配对对齐",
+        "revision": "2026-10-31T00:00:00.000Z",
+        "recipe": {
+          "id": "dual-encoder-alignment",
+          "version": 1,
+          "parameters": {
+            "pairs": 4,
+            "objective": "symmetric"
+          }
+        },
+        "sources": [
+          {
+            "title": "Learning Transferable Visual Models From Natural Language Supervision · Fig. 1 / Fig. 3 / §2.2",
+            "reference": "https://proceedings.mlr.press/v139/radford21a.html · 独立抽象双编码器、配对矩阵与双向对比目标。不包含 Fig. 1 后续零样本分类阶段；高亮对角仅标注配对身份，无观测相似度或损失数值。"
+          }
+        ],
+        "lineage": []
+      }
+    },
+    {
+      "id": "detail-1-group",
+      "parentId": "stage",
+      "title": "(c) Detail",
+      "role": "component",
+      "x": 750,
+      "y": 286,
+      "width": 180,
+      "height": 190.60000000000002,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "nativeDetail": {
+          "version": 1,
+          "sourceTitle": "Composition study · schematic",
+          "capturedAt": "2026-10-31T06:37:06.025Z",
+          "requestedIds": [
+            "alignment-object-30",
+            "alignment-object-31",
+            "alignment-object-36",
+            "alignment-object-37"
+          ],
+          "objectIds": [
+            "alignment-object-30",
+            "alignment-object-31",
+            "alignment-object-36",
+            "alignment-object-37"
+          ],
+          "omittedEdgeIds": [],
+          "detachedEndpoints": [],
+          "scale": 2.5
+        },
+        "title": "局部快照 · Composition study · schematic",
+        "reference": "选中 4 项、展开 4 个源对象；按当前尺寸 ×2.5 复制。源图后续编辑不自动同步，区域和字号不是新观测。"
+      }
+    },
+    {
+      "metricScale": 1.6500000000000001,
+      "id": "detail-1-copy",
+      "parentId": "detail-1-group",
+      "title": "Selected detail",
+      "role": "component",
+      "x": 770.7,
+      "y": 330,
+      "width": 138.59999999999988,
+      "height": 138.60000000000002,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 3.25
+      },
+      "appearance": {
+        "fontFamily": "Inter",
+        "roughness": 0.8,
+        "preset": "precise",
+        "accent": "blue",
+        "paletteId": "figureforge-publication-soft",
+        "colorIndex": 0,
+        "colorMap": []
+      },
+      "textStyle": {
+        "size": 37.5
+      },
+      "component": {
+        "assetId": "asset-ff5e7fce-9d1b-49b7-b526-21be9463e32e",
+        "name": "Selected detail",
+        "revision": "2026-10-31T06:37:06.022Z",
+        "sources": [
+          {
+            "title": "Learning Transferable Visual Models From Natural Language Supervision · Fig. 1 / Fig. 3 / §2.2",
+            "reference": "https://proceedings.mlr.press/v139/radford21a.html · 独立抽象双编码器、配对矩阵与双向对比目标。不包含 Fig. 1 后续零样本分类阶段；高亮对角仅标注配对身份，无观测相似度或损失数值。"
+          },
+          {
+            "nativeDetail": {
+              "version": 1,
+              "sourceTitle": "Composition study · schematic",
+              "capturedAt": "2026-10-31T06:37:06.025Z",
+              "requestedIds": [
+                "alignment-object-30",
+                "alignment-object-31",
+                "alignment-object-36",
+                "alignment-object-37"
+              ],
+              "objectIds": [
+                "alignment-object-30",
+                "alignment-object-31",
+                "alignment-object-36",
+                "alignment-object-37"
+              ],
+              "omittedEdgeIds": [],
+              "detachedEndpoints": [],
+              "scale": 2.5
+            },
+            "title": "局部快照 · Composition study · schematic",
+            "reference": "选中 4 项、展开 4 个源对象；按当前尺寸 ×2.5 复制。源图后续编辑不自动同步，区域和字号不是新观测。"
+          }
+        ],
+        "lineage": [
+          {
+            "assetId": "builtin-dual-encoder-alignment",
+            "name": "双编码器配对对齐",
+            "revision": "2026-10-31T00:00:00.000Z",
+            "recipe": {
+              "id": "dual-encoder-alignment",
+              "version": 1,
+              "parameters": {
+                "pairs": 4,
+                "objective": "symmetric"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "references": [],
+  "compositionPlans": [
+    {
+      "version": 1,
+      "runId": "76cdf5af-57c5-48be-9215-2dde85195bd6",
+      "userGoal": "Demonstrate a coherent overview, dual-branch alignment mechanism and actual local snapshot. Synthetic content; not a claimed method or experimental result.",
+      "plan": {
+        "status": "ready",
+        "title": "Composition study · schematic",
+        "goal": "Demonstrate a coherent overview, dual-branch alignment mechanism and actual local snapshot. Synthetic content; not a claimed method or experimental result.",
+        "readingOrder": "panels",
+        "layout": "Overview above; primary alignment mechanism below left; corresponding enlarged pair identities on the right. Consistent color roles and open guide corridor.",
+        "style": {
+          "preset": "precise",
+          "paletteId": "figureforge-publication-soft",
+          "fontFamily": "Inter",
+          "usage": "A/B branches use distinct muted colors; matched pair identity uses green; purple dashed lines indicate snapshot correspondence."
+        },
+        "sections": [
+          {
+            "id": "overview",
+            "title": "overview",
+            "purpose": "A short stage sequence establishes the reading order.",
+            "visual": "A short stage sequence establishes the reading order.",
+            "design": {
+              "role": "overview",
+              "structure": "pipeline",
+              "rationale": "A short stage sequence establishes the reading order.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "overview-region",
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 0.20610687022900764
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "mechanism",
+            "title": "mechanism",
+            "purpose": "Independent encoding branches feed a pairing matrix; this is the main mechanism.",
+            "visual": "Independent encoding branches feed a pairing matrix; this is the main mechanism.",
+            "design": {
+              "role": "mechanism",
+              "structure": "matrix",
+              "rationale": "Independent encoding branches feed a pairing matrix; this is the main mechanism.",
+              "emphasis": "primary",
+              "frame": {
+                "id": "mechanism-region",
+                "x": 0,
+                "y": 0.2480916030534351,
+                "width": 0.6991525423728814,
+                "height": 0.7519083969465649
+              }
+            },
+            "components": [
+              {
+                "id": "alignment",
+                "key": "recipe:dual-encoder-alignment",
+                "parameters": {
+                  "pairs": 4,
+                  "objective": "symmetric"
+                }
+              }
+            ],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "detail",
+            "title": "detail",
+            "purpose": "An actual 2×2 native selection is enlarged to explain pair identity; the arrowless guides do not represent data flow.",
+            "visual": "An actual 2×2 native selection is enlarged to explain pair identity; the arrowless guides do not represent data flow.",
+            "design": {
+              "role": "detail",
+              "structure": "matrix",
+              "rationale": "An actual 2×2 native selection is enlarged to explain pair identity; the arrowless guides do not represent data flow.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "detail-1-group",
+                "x": 0.7648305084745762,
+                "y": 0.4083969465648855,
+                "width": 0.1906779661016949,
+                "height": 0.3637404580152672
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          }
+        ],
+        "connections": [
+          {
+            "from": "overview",
+            "to": "mechanism",
+            "kind": "membership",
+            "meaning": "The main mechanism explains the overall training story."
+          },
+          {
+            "from": "mechanism",
+            "to": "detail",
+            "kind": "detail",
+            "meaning": "Frozen selection of actual pairing cells; no similarity measurements."
+          }
+        ],
+        "checks": [
+          "Check pair identities and the unchanged original selection.",
+          "Confirm hierarchy, text size and guide visibility at intended publication size."
+        ],
+        "questions": [],
+        "uncertainties": [
+          "This is a program-built composition demonstration; it does not measure model planning quality."
+        ]
+      },
+      "references": [],
+      "components": [
+        {
+          "key": "recipe:dual-encoder-alignment",
+          "name": "双编码器配对对齐",
+          "revision": "2026-10-31T00:00:00.000Z",
+          "nodeCount": 46
+        }
+      ]
+    }
+  ]
+}

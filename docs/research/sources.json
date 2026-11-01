@@ -1,0 +1,1874 @@
+{
+  "title": "FastFigure primary source index",
+  "research_date": "2026-10-28",
+  "timezone": "Asia/Shanghai",
+  "scope": "论文绘图、既有插图重建、扫描件与 PDF、科学素材和实现组件",
+  "methodology": [
+    "以作者、厂商、官方文档和论文为一手来源。",
+    "能力描述、代码静态检查和独立实测是不同证据。",
+    "本次未开展付费产品试用、模型端到端复现或导出软件兼容性实测。",
+    "GitHub 快照记录的是 tree 对象哈希，不能误称为 commit SHA。",
+    "HTTP 获取失败的补充链接保留失败状态，不据此声称已经核验其内容。"
+  ],
+  "counts": {
+    "cited_primary_urls": 94,
+    "distinct_projects_including_publisher_guidance": 77,
+    "tools_and_research_projects_excluding_guidance": 76,
+    "repository_tree_snapshots": 12,
+    "categories": {
+      "authoring": 7,
+      "publisher_guidance": 1,
+      "editor_infrastructure": 6,
+      "ai_figure_products": 5,
+      "data_plotting": 8,
+      "reconstruction": 12,
+      "export_pdf_infrastructure": 6,
+      "research": 7,
+      "vectorization": 6,
+      "scan_pdf": 9,
+      "document_parsing": 6,
+      "scientific_assets": 4
+    }
+  },
+  "sources": [
+    {
+      "id": "S001",
+      "project": "diagrams.net",
+      "category": "authoring",
+      "title": "diagrams.net — draw.io SVG 导入说明",
+      "url": "https://www2.drawio.com/doc/faq/svg-insert",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S002",
+      "project": "diagrams.net",
+      "category": "authoring",
+      "title": "diagrams.net — 带图模型的 SVG 导出",
+      "url": "https://www.drawio.com/docs/manual/export/embed-svg/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S003",
+      "project": "Nature figure guidance",
+      "category": "publisher_guidance",
+      "title": "Nature figure guidance — Nature 图件规范",
+      "url": "https://research-figure-guide.nature.com/figures/preparing-figures-our-specifications/",
+      "source_type": "publisher_guidance",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S004",
+      "project": "BioRender",
+      "category": "authoring",
+      "title": "BioRender — BioRender",
+      "url": "https://help.biorender.com/hc/en-gb/articles/39961689934493-Use-BioRender-in-PowerPoint",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "2026-10-26 帮助页描述付费可编辑 PPT 导入与图像 graph 的区别。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S005",
+      "project": "Mind the Graph",
+      "category": "authoring",
+      "title": "Mind the Graph — Mind the Graph",
+      "url": "https://mindthegraph.com/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S006",
+      "project": "diagrams.net",
+      "category": "authoring",
+      "title": "diagrams.net — diagrams.net",
+      "url": "https://www.drawio.com/docs/manual/export/export-diagram/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S007",
+      "project": "Inkscape",
+      "category": "authoring",
+      "title": "Inkscape — Inkscape",
+      "url": "https://inkscape.org/learn/tutorials/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S008",
+      "project": "Adobe Illustrator",
+      "category": "authoring",
+      "title": "Adobe Illustrator — Adobe Illustrator",
+      "url": "https://helpx.adobe.com/illustrator/desktop/use-generative-ai/generate-vector-artwork-from-images.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S009",
+      "project": "PowerPoint",
+      "category": "authoring",
+      "title": "PowerPoint — PowerPoint",
+      "url": "https://support.microsoft.com/en-au/office/graphics-visuals/edit-svg-images-in-microsoft-365",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S010",
+      "project": "Excalidraw",
+      "category": "authoring",
+      "title": "Excalidraw — Excalidraw",
+      "url": "https://github.com/excalidraw/excalidraw",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S011",
+      "project": "SVGEdit",
+      "category": "editor_infrastructure",
+      "title": "SVGEdit — SVGEdit",
+      "url": "https://github.com/SVG-Edit/svgedit",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S012",
+      "project": "FigureLabs",
+      "category": "ai_figure_products",
+      "title": "FigureLabs — FigureLabs",
+      "url": "https://www.figurelabs.ai/",
+      "source_type": "vendor_product_description",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S013",
+      "project": "FigPad",
+      "category": "ai_figure_products",
+      "title": "FigPad — FigPad",
+      "url": "https://figpad.ai/",
+      "source_type": "vendor_product_description",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S014",
+      "project": "SciFig",
+      "category": "ai_figure_products",
+      "title": "SciFig — SciFig",
+      "url": "https://scifig.ai/",
+      "source_type": "vendor_product_description",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S015",
+      "project": "SciFigure",
+      "category": "ai_figure_products",
+      "title": "SciFigure — SciFigure 编辑导出工作台",
+      "url": "https://scifigure.org/editable-export",
+      "source_type": "vendor_product_description",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "官方导出页明确采用源图加可编辑叠加层。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S016",
+      "project": "Napkin",
+      "category": "ai_figure_products",
+      "title": "Napkin — Napkin",
+      "url": "https://help.napkin.ai/en/articles/15950437-exporting-your-presentation",
+      "source_type": "vendor_product_description",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S017",
+      "project": "Matplotlib",
+      "category": "data_plotting",
+      "title": "Matplotlib — Matplotlib",
+      "url": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S018",
+      "project": "ggplot2",
+      "category": "data_plotting",
+      "title": "ggplot2 — ggplot2",
+      "url": "https://ggplot2.tidyverse.org/reference/ggsave.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S019",
+      "project": "Plotly",
+      "category": "data_plotting",
+      "title": "Plotly — Plotly",
+      "url": "https://plotly.com/python/static-image-export/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S020",
+      "project": "GraphPad Prism",
+      "category": "data_plotting",
+      "title": "GraphPad Prism — GraphPad Prism",
+      "url": "https://www.graphpad.com/guides/prism/latest/user-guide/exporting_options.htm",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S021",
+      "project": "Origin",
+      "category": "data_plotting",
+      "title": "Origin — Origin",
+      "url": "https://docs.originlab.com/origin-help/expgraph-to-image/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S022",
+      "project": "Graphviz",
+      "category": "data_plotting",
+      "title": "Graphviz — Graphviz",
+      "url": "https://graphviz.org/docs/outputs/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S023",
+      "project": "TikZ and PGF",
+      "category": "data_plotting",
+      "title": "TikZ and PGF — TikZ 与 PGF",
+      "url": "https://tikz.dev/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S024",
+      "project": "WebPlotDigitizer",
+      "category": "data_plotting",
+      "title": "WebPlotDigitizer — WebPlotDigitizer",
+      "url": "https://automeris.io/docs/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S025",
+      "project": "drawio figure skill",
+      "category": "reconstruction",
+      "title": "drawio figure skill — ssmisya drawio figure skill",
+      "url": "https://github.com/ssmisya/drawio-figure-skill",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S026",
+      "project": "Lancelot img2pptx",
+      "category": "reconstruction",
+      "title": "Lancelot img2pptx — Lancelot Xie img2pptx",
+      "url": "https://github.com/Lancelot-Xie/img2pptx",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "区分语义 SVG 嵌入与 PowerPoint 实际原生转换。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S027",
+      "project": "BRCOO image2pptx",
+      "category": "reconstruction",
+      "title": "BRCOO image2pptx — BRCOO image2pptx",
+      "url": "https://github.com/BRCOO/image2pptx",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "静态检查 Windows COM 转换脚本；未运行 Office 转换。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S028",
+      "project": "svg to drawio",
+      "category": "reconstruction",
+      "title": "svg to drawio — svg to drawio",
+      "url": "https://github.com/V1rg1lee/svg-to-drawio",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S029",
+      "project": "IMG2XML",
+      "category": "reconstruction",
+      "title": "IMG2XML — IMG2XML",
+      "url": "https://github.com/lilin-1/IMG2XML",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "README 将箭头透明图像与标准向量形状分别处理。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S030",
+      "project": "radiukpavlo diagram2drawio",
+      "category": "reconstruction",
+      "title": "radiukpavlo diagram2drawio — radiukpavlo diagram2drawio",
+      "url": "https://github.com/radiukpavlo/diagram2drawio",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S031",
+      "project": "px image2pptx",
+      "category": "reconstruction",
+      "title": "px image2pptx — px image2pptx",
+      "url": "https://github.com/JadeLiu-tech/px-image2pptx",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "README 描述 OCR、背景修复与文字框叠加，主体并非完整矢量重建。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S032",
+      "project": "AIPPT",
+      "category": "reconstruction",
+      "title": "AIPPT — LRriver AIPPT",
+      "url": "https://github.com/LRriver/AIPPT",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S033",
+      "project": "Banana Slides",
+      "category": "reconstruction",
+      "title": "Banana Slides — Banana Slides",
+      "url": "https://github.com/Anionex/banana-slides",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S034",
+      "project": "Paper2Any",
+      "category": "reconstruction",
+      "title": "Paper2Any — Paper2Any",
+      "url": "https://github.com/OpenDCAI/Paper2Any",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "README 声明开源仓库是历史快照，活跃商业产品 Nexus Office 不包含在仓库内。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S035",
+      "project": "diagrams.net",
+      "category": "authoring",
+      "title": "diagrams.net — draw.io 文件格式",
+      "url": "https://github.com/jgraph/drawio/wiki/File-Format",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S036",
+      "project": "PyMuPDF",
+      "category": "export_pdf_infrastructure",
+      "title": "PyMuPDF — PyMuPDF 绘图提取说明",
+      "url": "https://pymupdf.readthedocs.io/en/latest/faq/index.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S037",
+      "project": "Next AI Draw.io",
+      "category": "reconstruction",
+      "title": "Next AI Draw.io — Next AI Draw.io",
+      "url": "https://github.com/DayuanJiang/next-ai-draw-io",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S038",
+      "project": "draw.io MCP",
+      "category": "editor_infrastructure",
+      "title": "draw.io MCP — 官方 draw.io MCP",
+      "url": "https://github.com/jgraph/drawio-mcp",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S039",
+      "project": "generic pixel svg rebuild",
+      "category": "reconstruction",
+      "title": "generic pixel svg rebuild — neverclover generic pixel svg rebuild",
+      "url": "https://github.com/neverclover/generic-pixel-svg-rebuild",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "方法手册与像素表示分析；作者误差指标未复现。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S040",
+      "project": "generic pixel svg rebuild",
+      "category": "reconstruction",
+      "title": "generic pixel svg rebuild — 重建手册",
+      "url": "https://raw.githubusercontent.com/neverclover/generic-pixel-svg-rebuild/main/pixel-svg-reconstruction-generic.md",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "方法手册与像素表示分析；作者误差指标未复现。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S041",
+      "project": "generic pixel svg rebuild",
+      "category": "reconstruction",
+      "title": "generic pixel svg rebuild — 仓库许可证",
+      "url": "https://github.com/neverclover/generic-pixel-svg-rebuild/blob/main/LICENSE",
+      "source_type": "author_repository_license",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "方法手册与像素表示分析；作者误差指标未复现。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S042",
+      "project": "PaperBanana and PaperVizAgent",
+      "category": "research",
+      "title": "PaperBanana and PaperVizAgent — PaperBanana",
+      "url": "https://arxiv.org/abs/2601.23265",
+      "source_type": "primary_research_paper",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S043",
+      "project": "PaperBanana and PaperVizAgent",
+      "category": "research",
+      "title": "PaperBanana and PaperVizAgent — 官方 PaperVizAgent",
+      "url": "https://github.com/google-research/papervizagent",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S044",
+      "project": "AutoFigure",
+      "category": "research",
+      "title": "AutoFigure — AutoFigure",
+      "url": "https://arxiv.org/abs/2602.03828",
+      "source_type": "primary_research_paper",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S045",
+      "project": "AutoFigure Edit",
+      "category": "research",
+      "title": "AutoFigure Edit — AutoFigure Edit",
+      "url": "https://arxiv.org/abs/2603.06674",
+      "source_type": "primary_research_paper",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "静态检查中发现图标 PNG 嵌入 SVG 的实现路径。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S046",
+      "project": "AutoFigure Edit",
+      "category": "research",
+      "title": "AutoFigure Edit — 代码",
+      "url": "https://github.com/ResearAI/AutoFigure-Edit",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "静态检查中发现图标 PNG 嵌入 SVG 的实现路径。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S047",
+      "project": "LiveFigure",
+      "category": "research",
+      "title": "LiveFigure — LiveFigure",
+      "url": "https://arxiv.org/abs/2605.23527",
+      "source_type": "primary_research_paper",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "静态检查 python-pptx 代码生成及 LibreOffice 渲染路径；未运行模型流水线。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S048",
+      "project": "LiveFigure",
+      "category": "research",
+      "title": "LiveFigure — 代码",
+      "url": "https://github.com/tsinghua-fib-lab/LiveFigure",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "静态检查 python-pptx 代码生成及 LibreOffice 渲染路径；未运行模型流水线。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S049",
+      "project": "FigTree",
+      "category": "research",
+      "title": "FigTree — FigTree",
+      "url": "https://arxiv.org/abs/2609.01006",
+      "source_type": "primary_research_paper",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "以论文摘要中的递归 SVG 与局部修复方法为依据，未声称已复现。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S050",
+      "project": "ReFigBench",
+      "category": "research",
+      "title": "ReFigBench — ReFigBench",
+      "url": "https://arxiv.org/abs/2609.18844",
+      "source_type": "primary_research_paper",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "读取论文摘要及正文，重点参考视觉、结构和可编辑性分开评价的设计。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S051",
+      "project": "GenAI DrawIO Creator",
+      "category": "research",
+      "title": "GenAI DrawIO Creator — GenAI DrawIO Creator",
+      "url": "https://arxiv.org/abs/2601.05162",
+      "source_type": "primary_research_paper",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S052",
+      "project": "StarVector",
+      "category": "vectorization",
+      "title": "StarVector — StarVector",
+      "url": "https://github.com/joanrod/star-vector",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S053",
+      "project": "OmniSVG",
+      "category": "vectorization",
+      "title": "OmniSVG — OmniSVG",
+      "url": "https://github.com/OmniSVG/OmniSVG",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "代码许可与数据集许可不同，不能互相替代。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S054",
+      "project": "VTracer",
+      "category": "vectorization",
+      "title": "VTracer — VTracer",
+      "url": "https://github.com/visioncortex/vtracer",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S055",
+      "project": "Potrace",
+      "category": "vectorization",
+      "title": "Potrace — Potrace",
+      "url": "https://potrace.sourceforge.net/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S056",
+      "project": "DiffVG",
+      "category": "vectorization",
+      "title": "DiffVG — DiffVG",
+      "url": "https://github.com/BachiLi/diffvg",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S057",
+      "project": "LIVE",
+      "category": "vectorization",
+      "title": "LIVE — LIVE",
+      "url": "https://github.com/Picsart-AI-Research/LIVE-Layerwise-Image-Vectorization",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S058",
+      "project": "img2pdf",
+      "category": "scan_pdf",
+      "title": "img2pdf — img2pdf",
+      "url": "https://pypi.org/project/img2pdf/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S059",
+      "project": "OCRmyPDF",
+      "category": "scan_pdf",
+      "title": "OCRmyPDF — OCRmyPDF",
+      "url": "https://ocrmypdf.readthedocs.io/en/stable/introduction.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S060",
+      "project": "NAPS2",
+      "category": "scan_pdf",
+      "title": "NAPS2 — NAPS2",
+      "url": "https://www.naps2.com/doc/ocr",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S061",
+      "project": "ScanTailor Advanced",
+      "category": "scan_pdf",
+      "title": "ScanTailor Advanced — ScanTailor Advanced",
+      "url": "https://github.com/ScanTailor-Advanced/scantailor-advanced",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S062",
+      "project": "unpaper",
+      "category": "scan_pdf",
+      "title": "unpaper — unpaper",
+      "url": "https://github.com/unpaper/unpaper",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S063",
+      "project": "Tesseract",
+      "category": "scan_pdf",
+      "title": "Tesseract — Tesseract",
+      "url": "https://github.com/tesseract-ocr/tesseract",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S064",
+      "project": "PaddleOCR",
+      "category": "document_parsing",
+      "title": "PaddleOCR — PaddleOCR",
+      "url": "https://github.com/PaddlePaddle/PaddleOCR",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "当前 README 列出 PP-OCRv6、PP-StructureV3 与 PaddleOCR-VL 等不同路径。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S065",
+      "project": "Docling",
+      "category": "document_parsing",
+      "title": "Docling — Docling",
+      "url": "https://github.com/docling-project/docling",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S066",
+      "project": "MinerU",
+      "category": "document_parsing",
+      "title": "MinerU — MinerU",
+      "url": "https://github.com/opendatalab/MinerU",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "当前 LICENSE 含 Apache-2.0 之外的附加条件；未沿用历史许可证结论。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S067",
+      "project": "Marker",
+      "category": "document_parsing",
+      "title": "Marker — Marker",
+      "url": "https://github.com/datalab-to/marker",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "代码与模型权重许可分别记录，未把作者基准当作独立复现。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S068",
+      "project": "olmOCR",
+      "category": "document_parsing",
+      "title": "olmOCR — olmOCR",
+      "url": "https://github.com/allenai/olmocr",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S069",
+      "project": "Adobe Acrobat",
+      "category": "scan_pdf",
+      "title": "Adobe Acrobat — Adobe Acrobat",
+      "url": "https://helpx.adobe.com/acrobat/desktop/create-documents/scan-documents-to-pdfs/edit-scans.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S070",
+      "project": "ABBYY FineReader",
+      "category": "scan_pdf",
+      "title": "ABBYY FineReader — ABBYY FineReader",
+      "url": "https://pdf.abbyy.com/learning-center/pdf-conversion/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S071",
+      "project": "Mathpix",
+      "category": "document_parsing",
+      "title": "Mathpix — Mathpix",
+      "url": "https://docs.mathpix.com/reference/supported-formats",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S072",
+      "project": "Stirling PDF",
+      "category": "scan_pdf",
+      "title": "Stirling PDF — Stirling PDF",
+      "url": "https://github.com/Stirling-Tools/Stirling-PDF",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "当前根许可证含多个子目录例外。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S073",
+      "project": "OCRmyPDF",
+      "category": "scan_pdf",
+      "title": "OCRmyPDF — OCRmyPDF cookbook",
+      "url": "https://ocrmypdf.readthedocs.io/en/stable/cookbook.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S074",
+      "project": "Bioicons",
+      "category": "scientific_assets",
+      "title": "Bioicons — Bioicons",
+      "url": "https://bioicons.com/extensions/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S075",
+      "project": "SciDraw",
+      "category": "scientific_assets",
+      "title": "SciDraw — SciDraw",
+      "url": "https://scidraw.io/search",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S076",
+      "project": "Servier Medical Art",
+      "category": "scientific_assets",
+      "title": "Servier Medical Art — Servier Medical Art",
+      "url": "https://smart.servier.com/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S077",
+      "project": "SciSVG",
+      "category": "scientific_assets",
+      "title": "SciSVG — SciSVG",
+      "url": "https://github.com/SaveenaSolanki/SciSVG",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S078",
+      "project": "diagrams.net",
+      "category": "authoring",
+      "title": "diagrams.net — draw.io embed",
+      "url": "https://www.drawio.com/docs/reference/embed-mode/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S079",
+      "project": "Fabric.js",
+      "category": "editor_infrastructure",
+      "title": "Fabric.js — Fabric.js",
+      "url": "https://github.com/fabricjs/fabric.js",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S080",
+      "project": "Konva",
+      "category": "editor_infrastructure",
+      "title": "Konva — Konva",
+      "url": "https://github.com/konvajs/konva",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S081",
+      "project": "React Flow",
+      "category": "editor_infrastructure",
+      "title": "React Flow — React Flow",
+      "url": "https://reactflow.dev/learn",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S082",
+      "project": "ELK.js",
+      "category": "editor_infrastructure",
+      "title": "ELK.js — ELK.js",
+      "url": "https://github.com/kieler/elkjs",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S083",
+      "project": "PptxGenJS",
+      "category": "export_pdf_infrastructure",
+      "title": "PptxGenJS — PptxGenJS",
+      "url": "https://gitbrent.github.io/PptxGenJS/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S084",
+      "project": "python pptx",
+      "category": "export_pdf_infrastructure",
+      "title": "python pptx — python pptx",
+      "url": "https://python-pptx.readthedocs.io/en/latest/",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md",
+        "docs/research/2026-10-28-fastfigure-proposal.md"
+      ]
+    },
+    {
+      "id": "S085",
+      "project": "PDF.js",
+      "category": "export_pdf_infrastructure",
+      "title": "PDF.js — PDF.js",
+      "url": "https://github.com/mozilla/pdf.js",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S086",
+      "project": "pypdfium2",
+      "category": "export_pdf_infrastructure",
+      "title": "pypdfium2 — pypdfium2",
+      "url": "https://github.com/pypdfium2-team/pypdfium2",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S087",
+      "project": "PyMuPDF",
+      "category": "export_pdf_infrastructure",
+      "title": "PyMuPDF — PyMuPDF",
+      "url": "https://pymupdf.readthedocs.io/en/latest/page.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S088",
+      "project": "resvg",
+      "category": "export_pdf_infrastructure",
+      "title": "resvg — resvg",
+      "url": "https://github.com/linebender/resvg",
+      "source_type": "author_repository",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S089",
+      "project": "drawio figure skill",
+      "category": "reconstruction",
+      "title": "drawio figure skill — MIT",
+      "url": "https://github.com/ssmisya/drawio-figure-skill/blob/main/LICENSE",
+      "source_type": "author_repository_license",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S090",
+      "project": "Lancelot img2pptx",
+      "category": "reconstruction",
+      "title": "Lancelot img2pptx — Apache-2.0",
+      "url": "https://github.com/Lancelot-Xie/img2pptx/blob/main/LICENSE",
+      "source_type": "author_repository_license",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "区分语义 SVG 嵌入与 PowerPoint 实际原生转换。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S091",
+      "project": "AutoFigure Edit",
+      "category": "research",
+      "title": "AutoFigure Edit — MIT",
+      "url": "https://github.com/ResearAI/AutoFigure-Edit/blob/main/LICENSE",
+      "source_type": "author_repository_license",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "静态检查中发现图标 PNG 嵌入 SVG 的实现路径。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S092",
+      "project": "MinerU",
+      "category": "document_parsing",
+      "title": "MinerU — Apache-2.0 加附加条款",
+      "url": "https://github.com/opendatalab/MinerU/blob/master/LICENSE.md",
+      "source_type": "author_repository_license",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "当前 LICENSE 含 Apache-2.0 之外的附加条件；未沿用历史许可证结论。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S093",
+      "project": "PyMuPDF",
+      "category": "export_pdf_infrastructure",
+      "title": "PyMuPDF — AGPL 与商业许可",
+      "url": "https://pymupdf.readthedocs.io/en/latest/about.html",
+      "source_type": "official_documentation",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    },
+    {
+      "id": "S094",
+      "project": "Stirling PDF",
+      "category": "scan_pdf",
+      "title": "Stirling PDF — 根许可",
+      "url": "https://github.com/Stirling-Tools/Stirling-PDF/blob/main/LICENSE",
+      "source_type": "author_repository_license",
+      "observed_on": "2026-10-28",
+      "evidence_scope": "Documentation or static source review; no independent end-to-end performance test.",
+      "notes": "当前根许可证含多个子目录例外。",
+      "cited_in": [
+        "docs/research/2026-10-28-landscape.md"
+      ]
+    }
+  ],
+  "repository_snapshots": [
+    {
+      "repository": "neverclover/generic-pixel-svg-rebuild",
+      "default_branch": "main",
+      "github_tree_sha": "741f1cfc1706df244faaf809ee273a9c1ae26739",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 3,
+      "github_reported_license": "GPL-3.0",
+      "files_retrieved": [
+        {
+          "path": "pixel-svg-reconstruction-generic.md",
+          "sha256": "5b81fec8e4f90248775f47a3bdf37640d06253fc3cf468ca4b76e91684ea477a",
+          "source_url": "https://raw.githubusercontent.com/neverclover/generic-pixel-svg-rebuild/741f1cfc1706df244faaf809ee273a9c1ae26739/pixel-svg-reconstruction-generic.md",
+          "reviewed_for_report": true
+        }
+      ]
+    },
+    {
+      "repository": "ssmisya/drawio-figure-skill",
+      "default_branch": "main",
+      "github_tree_sha": "4a34f9bd462eecfaf02d7130e4fdb91f8f70d9ab",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 17,
+      "github_reported_license": "MIT",
+      "files_retrieved": [
+        {
+          "path": "SKILL.md",
+          "sha256": "ea70861ce15b40f30bee77e342a1e298f17648ab0235be5372c0e6799fe2e353",
+          "source_url": "https://raw.githubusercontent.com/ssmisya/drawio-figure-skill/4a34f9bd462eecfaf02d7130e4fdb91f8f70d9ab/SKILL.md",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "scripts/make_minimal_examples.py",
+          "sha256": "6eeafb0aec8587a30aa7a985b94df2af34300511413a64cd0ade4a64c2b02226",
+          "source_url": "https://raw.githubusercontent.com/ssmisya/drawio-figure-skill/4a34f9bd462eecfaf02d7130e4fdb91f8f70d9ab/scripts/make_minimal_examples.py",
+          "reviewed_for_report": true
+        },
+        {
+          "path": "scripts/validate_artifacts.sh",
+          "sha256": "5d67e45ccc0a14c768cbff48d894319e58b314638c2922a4bb8c28522dcfef71",
+          "source_url": "https://raw.githubusercontent.com/ssmisya/drawio-figure-skill/4a34f9bd462eecfaf02d7130e4fdb91f8f70d9ab/scripts/validate_artifacts.sh",
+          "reviewed_for_report": false
+        }
+      ]
+    },
+    {
+      "repository": "Lancelot-Xie/img2pptx",
+      "default_branch": "main",
+      "github_tree_sha": "64d03238a463f8133e5b7a45462f27cad340a537",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 12,
+      "github_reported_license": "Apache-2.0",
+      "files_retrieved": [
+        {
+          "path": "skills/img2pptx/SKILL.md",
+          "sha256": "958a85a1152cc88cc81456f07043e40aadb376238322109d7f1f667a8ac2f391",
+          "source_url": "https://raw.githubusercontent.com/Lancelot-Xie/img2pptx/64d03238a463f8133e5b7a45462f27cad340a537/skills/img2pptx/SKILL.md",
+          "reviewed_for_report": false
+        }
+      ]
+    },
+    {
+      "repository": "BRCOO/image2pptx",
+      "default_branch": "main",
+      "github_tree_sha": "16994433ba0bd62248ab2284aabb226e6547ac5d",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 18,
+      "github_reported_license": null,
+      "files_retrieved": [
+        {
+          "path": "scripts/inspect-pptx-editability.ps1",
+          "sha256": "3c6a0844bc6ce78b50742711a172744152e602b983a140d29c5660eb819e96f0",
+          "source_url": "https://raw.githubusercontent.com/BRCOO/image2pptx/16994433ba0bd62248ab2284aabb226e6547ac5d/scripts/inspect-pptx-editability.ps1",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "scripts/svg-to-editable-ppt.ps1",
+          "sha256": "60dac4e342aa8d4fb1b4a7dc1ca57b8141a3442084425fe3cf43c1ee2d21efaf",
+          "source_url": "https://raw.githubusercontent.com/BRCOO/image2pptx/16994433ba0bd62248ab2284aabb226e6547ac5d/scripts/svg-to-editable-ppt.ps1",
+          "reviewed_for_report": true
+        }
+      ]
+    },
+    {
+      "repository": "ResearAI/AutoFigure-Edit",
+      "default_branch": "main",
+      "github_tree_sha": "16f3749e9d512bdf7b7b55c162307bc289750b7a",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 417,
+      "github_reported_license": "MIT",
+      "files_retrieved": [
+        {
+          "path": "README.md",
+          "sha256": "098aa99b5aaa5e7411cea525fb2e756a15a876496af4834ce1d5c02b628f7cae",
+          "source_url": "https://raw.githubusercontent.com/ResearAI/AutoFigure-Edit/16f3749e9d512bdf7b7b55c162307bc289750b7a/README.md",
+          "reviewed_for_report": true
+        },
+        {
+          "path": "autofigure2.py",
+          "sha256": "1286f865d7bb9e10614edfd78943f28a9b8693b21a870a1be552c3739806d3bc",
+          "source_url": "https://raw.githubusercontent.com/ResearAI/AutoFigure-Edit/16f3749e9d512bdf7b7b55c162307bc289750b7a/autofigure2.py",
+          "reviewed_for_report": true
+        },
+        {
+          "path": "requirements.txt",
+          "sha256": "cdcf155982bdadab8b8812a6fe02f6bfb46aa365d07d49fe6869e29e17c0cc25",
+          "source_url": "https://raw.githubusercontent.com/ResearAI/AutoFigure-Edit/16f3749e9d512bdf7b7b55c162307bc289750b7a/requirements.txt",
+          "reviewed_for_report": false
+        }
+      ]
+    },
+    {
+      "repository": "tsinghua-fib-lab/LiveFigure",
+      "default_branch": "main",
+      "github_tree_sha": "c6dedb79b0716b32a448f68b58fbe1d40a2e814b",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 31,
+      "github_reported_license": null,
+      "files_retrieved": [
+        {
+          "path": "App/__init__.py",
+          "sha256": "ab94c3a7ec87c2050e3ee6dbdf66d646f4f03f2315c50cfdb19076d9a1b99538",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/__init__.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/api_clients.py",
+          "sha256": "7783e592e396fa1d512a764001ae4f55abca16231cdfebe31f77f753f94f0136",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/api_clients.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/batch_runner.py",
+          "sha256": "5c0d8b9446e4125842e4411ebf5f185f1e251d6d20cfbaeb45141b3a47339b5b",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/batch_runner.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/coder.py",
+          "sha256": "c8084e6d2885c1e2738bf30fb7a0ebcac197a7233ad4b05495092b147169b08e",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/coder.py",
+          "reviewed_for_report": true
+        },
+        {
+          "path": "App/coder_prompts.py",
+          "sha256": "20ec4146b1cd7025dea858ccd2ef46d9e214b459052594cac6eca72ae8404805",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/coder_prompts.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/config.py",
+          "sha256": "b318859ecbd014bccae7f2f48a3bf2b0d240e338a4dac3a4da204aff6cb55eea",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/config.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/icon_factory.py",
+          "sha256": "e2c6d94a7b0d7b9340f7c8934c4410cf06e1916974dc1efceb633ac094e712e4",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/icon_factory.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/main.py",
+          "sha256": "9e40f97da74acf9cb8125e9b9e7469378ab8e681bacb3d81dd59ab6e9668405f",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/main.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/ppt_renderer.py",
+          "sha256": "140ca035c3e7287939723b0f11f86983e0b592edff5bf14b63aaca1c553b8504",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/ppt_renderer.py",
+          "reviewed_for_report": true
+        },
+        {
+          "path": "App/tools.py",
+          "sha256": "f1e892159f2b2d7538a30c085072bb3af7cd11f652fbab7a2fa3b860a21ffc2e",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/tools.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/visual_researcher.py",
+          "sha256": "78613a911f3d970fb8ab059b19fde2b2abb79d7ccaf4ed41a514c0c334a25d25",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/visual_researcher.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "App/workflow_manager.py",
+          "sha256": "a5547a10dee9a91ab528a82cb90e2cc4c37d2d4349f53fb448d826e3f695dfe1",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/App/workflow_manager.py",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "README.md",
+          "sha256": "057a3dcb0b62c0123f518b6649c69fb04185f2210765920010ba6b54391e1f92",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/README.md",
+          "reviewed_for_report": false
+        },
+        {
+          "path": "SETUP.md",
+          "sha256": "e9a9861d9999ad97b56707124ffab3400c0e43bf6e035ad0690e7a38f5fb06f2",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/SETUP.md",
+          "reviewed_for_report": true
+        },
+        {
+          "path": "requirements.txt",
+          "sha256": "ffb766715f6603c4529fb3c564f9744df5ddc9449e1c868a5e8dec706e1d0391",
+          "source_url": "https://raw.githubusercontent.com/tsinghua-fib-lab/LiveFigure/c6dedb79b0716b32a448f68b58fbe1d40a2e814b/requirements.txt",
+          "reviewed_for_report": true
+        }
+      ]
+    },
+    {
+      "repository": "google-research/papervizagent",
+      "default_branch": "main",
+      "github_tree_sha": "e088a8fff74cc363b6897c0843631fff76484908",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 37,
+      "github_reported_license": "Apache-2.0",
+      "files_retrieved": [
+        {
+          "path": "README.md",
+          "sha256": "090f4b0a4d88dd198afeea268c022cabee56a8578eddde840c2f2069a5463c0f",
+          "source_url": "https://raw.githubusercontent.com/google-research/papervizagent/e088a8fff74cc363b6897c0843631fff76484908/README.md",
+          "reviewed_for_report": true
+        }
+      ]
+    },
+    {
+      "repository": "V1rg1lee/svg-to-drawio",
+      "default_branch": "main",
+      "github_tree_sha": "38a771a8777bd9c444fd0dbf23f771c7f4f8c4f9",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 174,
+      "github_reported_license": "MIT",
+      "files_retrieved": []
+    },
+    {
+      "repository": "visioncortex/vtracer",
+      "default_branch": "master",
+      "github_tree_sha": "e71343fbcbf469b8a72a255030408a39939162eb",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 139,
+      "github_reported_license": "MIT",
+      "files_retrieved": []
+    },
+    {
+      "repository": "Stirling-Tools/Stirling-PDF",
+      "default_branch": "main",
+      "github_tree_sha": "91782e82fb047ad6938711717789c8d8185fb66d",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 8160,
+      "github_reported_license": "NOASSERTION",
+      "files_retrieved": [
+        {
+          "path": "README.md",
+          "sha256": "0539da44759af7d1c3da8d76b00b892d9ebda4c82f9e161f01658f188a66ed86",
+          "source_url": "https://raw.githubusercontent.com/Stirling-Tools/Stirling-PDF/91782e82fb047ad6938711717789c8d8185fb66d/README.md",
+          "reviewed_for_report": true
+        }
+      ]
+    },
+    {
+      "repository": "PaddlePaddle/PaddleOCR",
+      "default_branch": "main",
+      "github_tree_sha": "dab3fe35379033fdcb2d0e9572fac0b36c9a9ebf",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 2455,
+      "github_reported_license": "Apache-2.0",
+      "files_retrieved": []
+    },
+    {
+      "repository": "opendatalab/MinerU",
+      "default_branch": "master",
+      "github_tree_sha": "b7f3dd0c5f6e6d66a298239ffd02b328b873918e",
+      "tree_sha_is_not_commit_sha": true,
+      "files_in_tree": 1179,
+      "github_reported_license": "NOASSERTION",
+      "files_retrieved": [
+        {
+          "path": "LICENSE.md",
+          "sha256": "2d9aeb5d15159329a20dd804f251c64860ba954fbd26ec02f802220e6d71cf5c",
+          "source_url": "https://raw.githubusercontent.com/opendatalab/MinerU/b7f3dd0c5f6e6d66a298239ffd02b328b873918e/LICENSE.md",
+          "reviewed_for_report": true
+        },
+        {
+          "path": "README.md",
+          "sha256": "69c967e98536be101b5dc3420703d28cc1e0250eeca3b5bf156b060ac4ccfacb",
+          "source_url": "https://raw.githubusercontent.com/opendatalab/MinerU/b7f3dd0c5f6e6d66a298239ffd02b328b873918e/README.md",
+          "reviewed_for_report": true
+        }
+      ]
+    }
+  ],
+  "supplementary_retrieval_log": [
+    {
+      "name": "inkscape",
+      "url": "https://inkscape.org/learn/tutorials/",
+      "resolved_url": "https://inkscape.org/learn/tutorials/",
+      "status": "read",
+      "sha256": "7211965e5f2a631b969a6f7f16583e1eb67e8946f0acb7c5b668afeb722cb480",
+      "chars": 28196
+    },
+    {
+      "name": "illustrator",
+      "url": "https://helpx.adobe.com/illustrator/using/image-trace.html",
+      "status": "unavailable",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "matplotlib",
+      "url": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html",
+      "resolved_url": "https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html",
+      "status": "read",
+      "sha256": "ed7e6dfe8f33c9d82eccabef775ca8bc558af09c8fb461364bc66397b76cb2a7",
+      "chars": 209840
+    },
+    {
+      "name": "plotly",
+      "url": "https://plotly.com/python/static-image-export/",
+      "resolved_url": "https://plotly.com/python/static-image-export/",
+      "status": "read",
+      "sha256": "8c867d74a1d3028009d92794ecb89c2d5b6c63c27afde0f6f0a4b839c446c19b",
+      "chars": 135429
+    },
+    {
+      "name": "graphviz",
+      "url": "https://graphviz.org/docs/outputs/",
+      "resolved_url": "https://graphviz.org/docs/outputs/",
+      "status": "read",
+      "sha256": "1ae5c9361ebcc095df1ad869219e400ab3eabd9de74564be54f4e5e2894f86aa",
+      "chars": 115422
+    },
+    {
+      "name": "tikz",
+      "url": "https://tikz.dev/",
+      "resolved_url": "https://tikz.dev/",
+      "status": "read",
+      "sha256": "aaf25e6a861d11876b2c06e0bf0d84872a76e923ae97067cad2a626df0dabd9f",
+      "chars": 54458
+    },
+    {
+      "name": "svg-edit",
+      "url": "https://raw.githubusercontent.com/SVG-Edit/svgedit/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/SVG-Edit/svgedit/master/README.md",
+      "status": "read",
+      "sha256": "c05ae3d3b61731d5ff2b4944f987aa848c28aba24d450f4f2d5aad9959b05f94",
+      "chars": 6561
+    },
+    {
+      "name": "fabric",
+      "url": "https://raw.githubusercontent.com/fabricjs/fabric.js/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/fabricjs/fabric.js/master/README.md",
+      "status": "read",
+      "sha256": "8e1d2b833f4ec30e00361b712308e3576bccd32198c279ca2e16c0fa2c23e504",
+      "chars": 12321
+    },
+    {
+      "name": "konva",
+      "url": "https://raw.githubusercontent.com/konvajs/konva/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/konvajs/konva/master/README.md",
+      "status": "read",
+      "sha256": "d5a4c836de0d2f05f11ead52d0d41a2f7f8005c88f45a202bddc0c74ba5d121e",
+      "chars": 10015
+    },
+    {
+      "name": "elkjs",
+      "url": "https://raw.githubusercontent.com/kieler/elkjs/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/kieler/elkjs/master/README.md",
+      "status": "read",
+      "sha256": "b2d1f5d457f07b28356f400b6600ea62f5239f0d0db51b23933d4aa47711d95c",
+      "chars": 16148
+    },
+    {
+      "name": "resvg",
+      "url": "https://raw.githubusercontent.com/linebender/resvg/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/linebender/resvg/main/README.md",
+      "status": "read",
+      "sha256": "2e6b214593e6a0ff609a9fe5be3fb7f8c23d729b79d5b77a3081ba347a6e3e96",
+      "chars": 6318
+    },
+    {
+      "name": "pdfjs",
+      "url": "https://raw.githubusercontent.com/mozilla/pdf.js/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/mozilla/pdf.js/master/README.md",
+      "status": "read",
+      "sha256": "cf672f85411575de7e6996f11bf300f0c747749f0c6a288b0c931af0c324655c",
+      "chars": 9830
+    },
+    {
+      "name": "pypdfium2",
+      "url": "https://raw.githubusercontent.com/pypdfium2-team/pypdfium2/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/pypdfium2-team/pypdfium2/main/README.md",
+      "status": "read",
+      "sha256": "4895373717e3390a9765240a610dbba077ea955832b4215056c897d9c9de7726",
+      "chars": 60375
+    },
+    {
+      "name": "potrace",
+      "url": "https://potrace.sourceforge.net/",
+      "status": "unavailable",
+      "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1007)>"
+    },
+    {
+      "name": "diffvg",
+      "url": "https://raw.githubusercontent.com/BachiLi/diffvg/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/BachiLi/diffvg/master/README.md",
+      "status": "read",
+      "sha256": "23447a091c53dc57f77ac8e0eeba5d0ed90826d8c77ccec3c5816583aacecb6f",
+      "chars": 4203
+    },
+    {
+      "name": "live",
+      "url": "https://raw.githubusercontent.com/Picsart-AI-Research/LIVE-Layerwise-Image-Vectorization/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/Picsart-AI-Research/LIVE-Layerwise-Image-Vectorization/master/README.md",
+      "status": "read",
+      "sha256": "8f0f381883481de12e951ba91772a3f1ae1f6a99db249635510622926c37a578",
+      "chars": 4135
+    },
+    {
+      "name": "starvector",
+      "url": "https://raw.githubusercontent.com/joanrod/star-vector/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/joanrod/star-vector/main/README.md",
+      "status": "read",
+      "sha256": "81efb4e0312c5664de13f6c0af3e87049afa68bc4951fdbb42b734adce0846a1",
+      "chars": 19977
+    },
+    {
+      "name": "omnisvg",
+      "url": "https://raw.githubusercontent.com/OmniSVG/OmniSVG/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/OmniSVG/OmniSVG/main/README.md",
+      "status": "read",
+      "sha256": "e728e349adb726120af8c5b6732e906c97e20f8f9e055171f21182955c89aed6",
+      "chars": 11880
+    },
+    {
+      "name": "tesseract",
+      "url": "https://raw.githubusercontent.com/tesseract-ocr/tesseract/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/tesseract-ocr/tesseract/main/README.md",
+      "status": "read",
+      "sha256": "1a14c7cd54039ffb79e05aff12841f48d4d4da50f231ee98e7e9bb6138d03e7a",
+      "chars": 8159
+    },
+    {
+      "name": "unpaper",
+      "url": "https://raw.githubusercontent.com/unpaper/unpaper/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/unpaper/unpaper/main/README.md",
+      "status": "read",
+      "sha256": "0f7edf561ec3184aff0e2bfdb4ebd0e48140446dffec7b262216328c62529017",
+      "chars": 3261
+    },
+    {
+      "name": "img2pdf",
+      "url": "https://pypi.org/project/img2pdf/",
+      "resolved_url": "https://pypi.org/project/img2pdf/",
+      "status": "read",
+      "sha256": "32ed63159c77e21ee19ca1b9aa3213ccf0218eb59539560b132a8e68ef0e18ea",
+      "chars": 3036
+    },
+    {
+      "name": "naps2",
+      "url": "https://www.naps2.com/doc/ocr",
+      "resolved_url": "https://www.naps2.com/doc/ocr",
+      "status": "read",
+      "sha256": "96460711bdd4048f833fec9c6528a01a0bebac4fc5cf7334ab01ebdd08c53425",
+      "chars": 6666
+    },
+    {
+      "name": "ocrmypdf",
+      "url": "https://ocrmypdf.readthedocs.io/en/stable/introduction.html",
+      "resolved_url": "https://ocrmypdf.readthedocs.io/en/stable/introduction.html",
+      "status": "read",
+      "sha256": "f520d98be4ca0ed02ad34fdd4dfbec73e1e3bff8d307fb0cc229317f9a00287c",
+      "chars": 23953
+    },
+    {
+      "name": "tldraw-license",
+      "url": "https://tldraw.dev/legal/tldraw-license",
+      "status": "unavailable",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "name": "excalidraw",
+      "url": "https://raw.githubusercontent.com/excalidraw/excalidraw/master/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/excalidraw/excalidraw/master/README.md",
+      "status": "read",
+      "sha256": "011eea74cbbf38fd263ec93a221f379466c557dc7587acfe93797201193a7e7a",
+      "chars": 7694
+    },
+    {
+      "name": "radiuk-diagram2drawio",
+      "url": "https://raw.githubusercontent.com/radiukpavlo/diagram2drawio/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/radiukpavlo/diagram2drawio/main/README.md",
+      "status": "read",
+      "sha256": "713a8dae5379c844a8ba36960aa363dc1abbfe57e83851529cac438200a21ecc",
+      "chars": 11097
+    },
+    {
+      "name": "aippt",
+      "url": "https://raw.githubusercontent.com/LRriver/AIPPT/main/README.md",
+      "resolved_url": "https://raw.githubusercontent.com/LRriver/AIPPT/main/README.md",
+      "status": "read",
+      "sha256": "ec3c0781351108280a24ca37d1cd2c544ebbda243f813d44fcbd7938d5c455c7",
+      "chars": 10415
+    },
+    {
+      "name": "servier",
+      "url": "https://smart.servier.com/",
+      "resolved_url": "https://smart.servier.com/",
+      "status": "read",
+      "sha256": "9783f979e89f39cc3d551b106c66e1c6d47c0d938a80329881f528cdd27abe54",
+      "chars": 87522
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "purpose": "Live design opinion after manual revision; not aesthetic ground truth",
+  "source": "unet-mainfigure-after-review.json",
+  "mode": "main-figure-design-review",
+  "runId": "f849ad2c-e92c-4f0b-8dc6-734bdb4218b4",
+  "cli": "codex-cli 0.165.0",
+  "model": "CLI default",
+  "image": {
+    "width": 1600,
+    "height": 992,
+    "figureSha256": "0955bc982c8f57a33e6240c54dd831f9eb98ac5a052ce0f1a863ef9d8c463fd4",
+    "renderer": "fastfigure-browser-v1",
+    "fonts": [
+      "normal 700 15px Inter, Inter, MiSans, sans-serif",
+      "normal 400 17.3684px Inter, Inter, MiSans, sans-serif",
+      "normal 400 14px Inter, Inter, MiSans, sans-serif",
+      "normal 400 15px Inter, Inter, MiSans, sans-serif",
+      "normal 700 14px Inter, Inter, MiSans, sans-serif",
+      "normal 400 12px Inter, Inter, MiSans, sans-serif",
+      "normal 400 13px Inter, Inter, MiSans, sans-serif",
+      "italic 400 15px Inter, Inter, MiSans, sans-serif",
+      "normal 700 18px Inter, Inter, MiSans, sans-serif",
+      "normal 400 10px Inter, Inter, MiSans, sans-serif",
+      "normal 700 11px Inter, Inter, MiSans, sans-serif",
+      "normal 700 17px Inter, Inter, MiSans, sans-serif"
+    ],
+    "viewport": "canvas-1000x620",
+    "imageSha256": "1fb5b0b4d55e8a6c778b04c5cabad6251afda17f98e4973ca1b4e52687656efd",
+    "contextVersion": "design-aliases-v1"
+  },
+  "report": {
+    "message": "整体能支持“多尺度跳连与两路输入拼接”的解释：左侧 U 形结构交代全局，底部金色分支形成代表路径，右侧再拆解该路径。概览、机制与细节的分工清楚，值得保留现有结构搭配。主要可改进处是底部变尺度操作标注与线路的对应，以及少量重复解释文字；未看到足以判定模型拓扑错误的证据。",
+    "firstRead": "第一眼注意到左侧成对排列的青绿色层级，以及底部突出的金色拼接路径。随后沿顶部概览从 Image 读到输出，再进入主图，沿编码端向下到 B、沿解码端向上，并横向检查各层跳连；最后由金色 C 上方的“(c)”转向右侧细节。核心机制具有视觉重点，但底部操作名称需要稍作回看才能对应到具体线路。",
+    "keep": [
+      "主图用逐层内收的布局形成 U 形轮廓，横向跳连与纵向编解码路径容易区分，能同时表达层级与跨层联系。",
+      "只将最深层的一组输入、拼接节点和相关线路染成金色，其余层保持可比较，代表路径的选择有效。",
+      "右侧细节保留 E4、B、C、D4 身份，两路输入分别经过 Copy/crop 与 2×2 up-conv，直接服务拼接机制的解释；主图“(c)”提供了对应入口。",
+      "顶部概览采用浅色模块，主图与细节之间靠留白和短标题分组，没有重复的大外框争夺注意力。"
+    ],
+    "findings": [
+      {
+        "id": "f01",
+        "title": "底部两种变尺度操作的标注与线路对应偏弱",
+        "category": "correspondence",
+        "severity": "minor",
+        "observation": "主图底部，E4 到 B 的线向右下延伸，“2×2 pool”却位于 E4 左下方；B 到金色 C 的斜线被突出显示，但“2×2 up-conv”位于 D4 下方，与该斜线有一定距离。右侧细节将 up-conv 明确画在 B 路径上，因此局部解释比主图更容易对应操作。",
+        "impact": "读者追踪最重要的金色分支时，需要根据其他层或右侧细节反推操作所属线路，削弱了主图独立解释两路输入差异的能力。",
+        "suggestion": "将底部 pool 和 up-conv 文字分别靠近各自线路的空白侧，尤其让 up-conv 标注明确贴近 B→C 斜线。可用与金色路径一致的文字强调该操作，同时保持它与 D4 模块之间的间隔。",
+        "box": {
+          "x": 0.12,
+          "y": 0.735,
+          "width": 0.48,
+          "height": 0.155
+        },
+        "objectIds": [
+          "unet-object-56",
+          "unet-object-55",
+          "unet-object-58",
+          "unet-object-57",
+          "unet-object-40"
+        ]
+      },
+      {
+        "id": "f02",
+        "title": "拼接符号的重复定义占用了辅助文字空间",
+        "category": "density",
+        "severity": "minor",
+        "observation": "主图上沿的说明行已经写出“C = concatenation”，底部脚注又写“C denotes concatenation”。两处都在解释同一个符号，而右侧细节继续使用相同的 C 节点。",
+        "impact": "增加了一次无新增信息的阅读停顿，也让读者需要判断底部脚注是否包含额外限定。",
+        "suggestion": "将 C 的定义集中保留一处；底部脚注可只承担“示意性特征阶段”的说明。保留右侧细节中直接使用 C 的方式，让符号定义与应用形成清楚分工。",
+        "box": {
+          "x": 0.2,
+          "y": 0.325,
+          "width": 0.45,
+          "height": 0.625
+        },
+        "objectIds": [
+          "unet-object-59",
+          "unet-object-61"
+        ]
+      }
+    ],
+    "uncertainties": [
+      "未提供最终刊印尺寸，当前只能确认屏幕渲染中的相对层级；底部脚注、算子标注和细虚线在最终论文尺寸下的可读性仍需核对。",
+      "各层体块采用相近大小，能够表达阶段关系，但不能据此外推实际特征尺寸、通道数或裁剪比例；本次不据此判断科学含义有误。"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+<script setup lang="ts">
+import { fastfigureIconUrl } from './brand.js'
+import { Image } from './primitives'
+</script>
+
+<template>
+  <Image :src="fastfigureIconUrl" class="fp-brand-mark" width="28" height="28" alt="" aria-hidden="true" />
+</template>
+
+<style scoped>
+.fp-brand-mark {
+  display: block;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+</style>

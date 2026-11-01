@@ -1,0 +1,233 @@
+{
+  "date": "2026-10-31",
+  "sources": [
+    {
+      "id": "fpn",
+      "url": "https://arxiv.org/abs/1612.03144",
+      "pdfSha256": "3a33e7ad38c17037624defde57f380f49dee918c1c14abd5dbcad032bae91428",
+      "inspectedPages": [
+        2,
+        3
+      ],
+      "figures": [
+        "Figure 2: full top-down/lateral layout",
+        "Figure 3: upsample, lateral projection, addition"
+      ],
+      "artifactPolicy": "No original paper artwork bundled; independent native schematic"
+    },
+    {
+      "id": "clip",
+      "url": "https://proceedings.mlr.press/v139/radford21a.html",
+      "pdfSha256": "2a4952960f350e50a3a4a847371b80b8aaa09ba82d1c2a8f6b30450e392a1fe4",
+      "inspectedPages": [
+        2,
+        3
+      ],
+      "figures": [
+        "Figure 1: pre-training, classifier construction, prediction; only pre-training abstracted",
+        "Figure 3 / section 2.2: row and column contrastive objectives"
+      ],
+      "artifactPolicy": "No original paper artwork bundled; independent native schematic"
+    },
+    {
+      "id": "unet",
+      "url": "https://arxiv.org/abs/1505.04597",
+      "pdfSha256": "a3172b2124f38e260dc2c7ed968d87c31bc94dbc19a42a7ab3dcbd7534319c44",
+      "inspectedPages": [
+        2
+      ],
+      "figures": [
+        "Figure 1: contracting/expanding scales, copy/crop and concatenation"
+      ],
+      "textSections": [
+        "§2 Network Architecture (HTML text)"
+      ],
+      "artifactPolicy": "No original paper artwork bundled; independent native schematic"
+    },
+    {
+      "id": "resnet",
+      "url": "https://arxiv.org/abs/1512.03385",
+      "pdfSha256": "1e0651b6810ecba34a3dbc5b5b0209226f889004607c1f203540a48d64e5a93a",
+      "inspectedPages": [
+        2,
+        3,
+        6
+      ],
+      "figures": [
+        "Figure 2: post-activation residual addition",
+        "Figure 5: basic and bottleneck residual functions"
+      ],
+      "textSections": [
+        "§3.2 dimension matching / Eq. 1–2",
+        "§3.4 BN placement (PDF text)"
+      ],
+      "artifactPolicy": "No original paper artwork bundled; independent native schematic"
+    },
+    {
+      "id": "mpnn",
+      "url": "https://proceedings.mlr.press/v70/gilmer17a.html",
+      "pdfSha256": "292e7ad701d545daddda470ac02c2d076f1b23d85d95589f31e6ee9eb6a9fdd8",
+      "inspectedPages": [
+        2,
+        3
+      ],
+      "figures": [],
+      "textSections": [
+        "§2 / Eq. 1–2: local message sum and old-state update; no graph readout depicted"
+      ],
+      "artifactPolicy": "Independent native schematic; no paper artwork or measured values bundled"
+    },
+    {
+      "id": "switch",
+      "url": "https://www.jmlr.org/papers/v23/21-0998.html",
+      "pdfSha256": "8831edca732dd939854957b4b1a493fa553e7b43dd431a5d4fee15493bba6e3e",
+      "inspectedPages": [
+        4
+      ],
+      "figures": [
+        "Figure 2: data routing and separate router gate"
+      ],
+      "textSections": [
+        "§2.1: single-expert routing; capacity handling outside this abstraction"
+      ],
+      "artifactPolicy": "Independent native schematic; no paper artwork or measured values bundled"
+    },
+    {
+      "id": "distillation",
+      "url": "https://arxiv.org/abs/1503.02531",
+      "pdfSha256": "74e6689115c539db499f9d6153edecb364059926fd45402454f8210442444c5a",
+      "inspectedPages": [
+        2,
+        3
+      ],
+      "figures": [],
+      "textSections": [
+        "§2: equal-temperature soft targets, optional hard CE, T² scaling and student inference"
+      ],
+      "artifactPolicy": "Independent native schematic / composition strategy; no original paper artwork or measured results bundled"
+    },
+    {
+      "id": "mae",
+      "url": "https://arxiv.org/abs/2111.06377",
+      "pdfSha256": "1b490443925c72a2b7c770f90dd797e248729ae34a57e1abfe9ed36751c4cc5b",
+      "inspectedPages": [
+        1,
+        3
+      ],
+      "figures": [
+        "Figure 1: asymmetric masked pretraining"
+      ],
+      "textSections": [
+        "§3: visible-only encoder, masks after encoding; masked reconstruction loss and encoder transfer (PDF text)"
+      ],
+      "artifactPolicy": "Independent native schematic / composition strategy; no original paper artwork or measured results bundled"
+    },
+    {
+      "id": "sam2",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/45c1f6a8cbf2da59ebf2c802b4f742cd-Abstract-Conference.html",
+      "pdfSha256": "6c07c6ecf2f592e3f7f9833409b8ec63232e2193b4ab4edb7db575805f27c028",
+      "inspectedPages": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "figures": [
+        "Figure 1: task/model/data narrative",
+        "Figure 2: selection, propagation and correction",
+        "Figure 3: streaming-memory architecture"
+      ],
+      "textSections": [
+        "§4: memory encoder also consumes unconditional image features; bank, pointers and skips"
+      ],
+      "artifactPolicy": "Independent native schematic / composition strategy; no original paper artwork or measured results bundled",
+      "acceptedVenue": "ICLR 2025",
+      "acceptanceEvidence": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/45c1f6a8cbf2da59ebf2c802b4f742cd-Abstract-Conference.html",
+      "verified": "2026-10-31",
+      "integration": "Editable native recipe and planning strategy"
+    },
+    {
+      "id": "vggt",
+      "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Wang_VGGT_Visual_Geometry_Grounded_Transformer_CVPR_2025_paper.html",
+      "pdfSha256": "b2e33f1040badf274373ad810c6ac0c272597195427ac6a0f171d5933b639a0e",
+      "inspectedPages": [
+        1,
+        3
+      ],
+      "figures": [
+        "Figure 1: scene-centered task showcase",
+        "Figure 2: global/frame attention and typed heads"
+      ],
+      "textSections": [
+        "§3.1–3.3 (PDF text, pages 3–5): coordinate frame, alternating self-attention, camera/patch outputs and query-based tracking"
+      ],
+      "artifactPolicy": "Independent native schematic / composition strategy; no original paper artwork or measured results bundled",
+      "acceptedVenue": "CVPR 2025",
+      "acceptanceEvidence": "https://openaccess.thecvf.com/content/CVPR2025/html/Wang_VGGT_Visual_Geometry_Grounded_Transformer_CVPR_2025_paper.html",
+      "verified": "2026-10-31",
+      "integration": "Editable native recipe and planning strategy"
+    },
+    {
+      "id": "dust3r",
+      "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_DUSt3R_Geometric_3D_Vision_Made_Easy_CVPR_2024_paper.html",
+      "pdfSha256": "c02a82e83d20c649c9424ccec6a6cf760112da58d47965d02e8efebd916afbc8",
+      "inspectedPages": [
+        1
+      ],
+      "figures": [
+        "Figure 1: shared representation, asymmetric task tree and aligned qualitative examples"
+      ],
+      "textSections": [],
+      "artifactPolicy": "Independent native schematic / composition strategy; no original paper artwork or measured results bundled",
+      "acceptedVenue": "CVPR 2024",
+      "acceptanceEvidence": "https://openaccess.thecvf.com/content/CVPR2024/html/Wang_DUSt3R_Geometric_3D_Vision_Made_Easy_CVPR_2024_paper.html",
+      "verified": "2026-10-31",
+      "integration": "Planning strategy only"
+    },
+    {
+      "id": "transfusion",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/12678c3948153f4bc391f51e2082bd6e-Abstract-Conference.html",
+      "pdfSha256": "bfefe63e04bd8df51a56fdbe85f6e411d61b4ed4c80771ddb4cc4de4622e614a",
+      "inspectedPages": [
+        2,
+        4
+      ],
+      "figures": [
+        "Figure 1: mixed positions and modality-specific objectives",
+        "Figure 3: continuous latent representation",
+        "Figure 4: within-image full attention"
+      ],
+      "textSections": [
+        "§2.2 and §3 (PDF text): noise prediction, sampling updates, conditioning and final VAE decoding"
+      ],
+      "acceptedVenue": "ICLR 2025",
+      "acceptanceEvidence": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/12678c3948153f4bc391f51e2082bd6e-Abstract-Conference.html",
+      "verified": "2026-10-31",
+      "integration": "Native permission abstraction / continuous inference where applicable, plus optional planning strategy",
+      "artifactPolicy": "No original artwork or generated examples copied; independent native schematic"
+    },
+    {
+      "id": "showo",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/45f0d179ef7e10eb7366550cd4e574ae-Abstract-Conference.html",
+      "pdfSha256": "b34405a856467eb1e09a0ec639f4c1369254f958d621f7252b7caaa071d11cfc",
+      "inspectedPages": [
+        2,
+        4,
+        5
+      ],
+      "figures": [
+        "Figure 1: model-family comparison",
+        "Figure 2: shared-model task overview",
+        "Figure 4–5: prompting formats and attention permissions"
+      ],
+      "textSections": [
+        "§3.2 (PDF text): causal text, full within-image attention and discrete mask-token inference; this is not continuous noise prediction"
+      ],
+      "acceptedVenue": "ICLR 2025",
+      "acceptanceEvidence": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/45f0d179ef7e10eb7366550cd4e574ae-Abstract-Conference.html",
+      "verified": "2026-10-31",
+      "integration": "Native permission abstraction / continuous inference where applicable, plus optional planning strategy",
+      "artifactPolicy": "No original artwork or generated examples copied; independent native schematic"
+    }
+  ]
+}

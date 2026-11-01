@@ -1,0 +1,14 @@
+<script setup lang="ts">
+import {Box,Disclosure,DisclosureTrigger,Text,TextArea} from '../ui'
+import type {ComponentSource} from '../../core/model'
+defineProps<{source:ComponentSource}>()
+const reviews={none:'未记录处理状态',pending:'待审阅',applied:'已应用到画布',discarded:'已丢弃候选'}
+</script>
+<template>
+  <Box class="component-source-details">
+<Text>{{ source.title }}</Text><Text v-if="source.generated" class="muted-caption">AI 视觉草稿来源 · 非实验依据</Text><Text v-if="!source.collection" class="muted-caption">{{ source.reference }}</Text><Text v-if="source.image" class="muted-caption">原图区域 {{ Math.round(source.image.region.x*100) }}%, {{ Math.round(source.image.region.y*100) }}% · {{ Math.round(source.image.region.width*100) }}% × {{ Math.round(source.image.region.height*100) }}% · SHA-256 {{ source.image.sha256.slice(0,12) }}</Text>
+    <Text v-if="source.file?.page" class="muted-caption">draw.io 第 {{ source.file.page.index+1 }} 页 · {{ source.file.page.name }} · 页面 ID {{ source.file.page.id }}</Text><Text v-if="source.file?.objectId" class="muted-caption">源对象 ID · {{ source.file.objectId }}</Text>
+    <Disclosure v-if="source.nativeDetail"><DisclosureTrigger size="xs">局部快照 · ×{{ source.nativeDetail.scale }} · {{ source.nativeDetail.objectIds.length }} 个源对象</DisclosureTrigger><Text class="muted-caption">{{ source.nativeDetail.sourceTitle }} · {{ new Date(source.nativeDetail.capturedAt).toLocaleString() }}；原图后续编辑不自动同步。</Text><TextArea :value="source.nativeDetail.requestedIds.join('\n')" readonly rows="3" aria-label="局部快照源对象 ID" /><Text class="muted-caption">忽略 {{ source.nativeDetail.omittedEdgeIds.length }} 条外部边，解除 {{ source.nativeDetail.detachedEndpoints.length }} 个外部路径绑定。</Text></Disclosure>
+    <Disclosure v-if="source.collection"><DisclosureTrigger size="xs">采集记录 · {{ source.collection.kind==='candidate'?'候选图':'工程' }} · {{ source.collection.objectIds.length }} 个源对象</DisclosureTrigger><Text class="muted-caption">{{ source.collection.sourceTitle }} · {{ new Date(source.collection.capturedAt).toLocaleString() }}</Text><Text v-if="source.collection.runId" class="muted-caption">源运行 {{ source.collection.runId }} · {{ reviews[source.collection.review??'none'] }}</Text><Text class="muted-caption">{{ source.collection.scopeIds.length }} 个样式层 · 采集时 {{ source.collection.blockedEdgeIds.length }} 条连接待调整 · 忽略 {{ source.collection.omittedEdgeIds.length }} 条外部连接 · 解除 {{ source.collection.detachedEndpoints.length }} 个外部路径绑定</Text><Text class="reference-fingerprint">FigureIR SHA-256 · {{ source.collection.figureSha256 }}</Text><Text class="reference-fingerprint">选择 SHA-256 · {{ source.collection.selectionSha256 }}</Text><Text class="muted-caption">源对象 ID 属于采集时的工程快照；此记录不表示科学验收。</Text><TextArea :value="source.collection.objectIds.join('\n')" readonly rows="3" aria-label="采集源对象 ID" /></Disclosure>
+  </Box>
+</template>

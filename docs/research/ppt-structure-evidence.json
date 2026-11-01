@@ -1,0 +1,792 @@
+{
+  "version": 1,
+  "reviewDate": "2026-10-31",
+  "resourceRoot": "~/FastPPT/packages/resources",
+  "indexSha256": "3c7e92808429b55c40c1188ffa9a22d79cc3041a95a7673cd8839f97c9ad1eb4",
+  "catalogueEntries": 3497,
+  "catalogueSources": 31,
+  "catalogueKinds": {
+    "diagram": 1704,
+    "layout": 1793
+  },
+  "tagCounts": {
+    "process": 681,
+    "hierarchy": 638,
+    "metrics": 1311,
+    "pyramid": 59,
+    "matrix": 85,
+    "relationship": 342,
+    "chart": 512,
+    "image-text": 1838,
+    "cycle": 214,
+    "comparison": 195,
+    "content": 354,
+    "timeline": 157,
+    "table": 249,
+    "agenda": 68,
+    "diagram": 225,
+    "closing": 9,
+    "swot": 17,
+    "cover": 33
+  },
+  "countPolicy": "Tags are overlapping retrieval metadata, not independently verified visual labels. Source object counts retain AlternateContent representations; group transforms are not silently flattened. Only the nine listed pages were visually inspected using existing source PDFs. All six inspected PPTX file hashes match stored composition provenance. Three sample serialized slide hashes differ from the converter record despite identical PPTX files; no source-to-HTML anchor identity is relied on. PDF freshness is not certified by a source-file or XML hash.",
+  "originals": [
+    {
+      "sha256": "03cdc0b85e2e26ea9a2f02e467c5fb79614299250514fb3399f6170485c9e06f",
+      "slide_count": 37,
+      "slide_size_emu": {
+        "cx": "12192000",
+        "cy": "6858000"
+      },
+      "object_counts": {
+        "shape": 3160,
+        "group": 125,
+        "connector": 144,
+        "frame": 9,
+        "image": 2
+      },
+      "preset_geometry_counts": {
+        "rect": 1584,
+        "roundRect": 532,
+        "ellipse": 254,
+        "line": 110,
+        "straightConnector1": 35,
+        "triangle": 30,
+        "chevron": 24,
+        "rightArrow": 23,
+        "arc": 14,
+        "upArrow": 12,
+        "cube": 12,
+        "round2DiagRect": 9,
+        "wedgeRoundRectCallout": 8,
+        "bentConnector3": 5,
+        "flowChartMagneticDisk": 5,
+        "donut": 3,
+        "round2SameRect": 3,
+        "trapezoid": 3,
+        "parallelogram": 3,
+        "homePlate": 3,
+        "curvedRightArrow": 2,
+        "rightBracket": 2,
+        "downArrow": 2,
+        "mathPlus": 1,
+        "hexagon": 1
+      },
+      "connector_bindings": {
+        "none": 132,
+        "both": 8,
+        "one": 4,
+        "both_resolved": 8
+      },
+      "coordinate_policy": "Raw DrawingML transforms; parent references retained. AlternateContent branches are counted separately, not as simultaneous visible shapes. No absolute-coordinate or semantic reconstruction claim.",
+      "source": "references/GordenPPTSkill/templates/architecture-deck/template.pptx"
+    },
+    {
+      "sha256": "4318e0275748feb5bdea2bf81819312f99f97474fc37a88b25f62ca01b143b8c",
+      "slide_count": 37,
+      "slide_size_emu": {
+        "cx": "12192000",
+        "cy": "6858000"
+      },
+      "object_counts": {
+        "shape": 2749,
+        "connector": 172,
+        "group": 256,
+        "image": 16,
+        "frame": 8
+      },
+      "preset_geometry_counts": {
+        "rect": 1030,
+        "roundRect": 417,
+        "ellipse": 215,
+        "line": 164,
+        "triangle": 102,
+        "round2SameRect": 49,
+        "arc": 42,
+        "homePlate": 39,
+        "trapezoid": 35,
+        "chevron": 18,
+        "diagStripe": 12,
+        "leftBracket": 10,
+        "parallelogram": 10,
+        "straightConnector1": 8,
+        "diamond": 8,
+        "rightBrace": 7,
+        "swooshArrow": 7,
+        "hexagon": 6,
+        "pentagon": 5,
+        "can": 4,
+        "teardrop": 4,
+        "foldedCorner": 3,
+        "upArrow": 2,
+        "blockArc": 1
+      },
+      "connector_bindings": {
+        "none": 160,
+        "both": 9,
+        "both_resolved": 9,
+        "one": 3
+      },
+      "coordinate_policy": "Raw DrawingML transforms; parent references retained. AlternateContent branches are counted separately, not as simultaneous visible shapes. No absolute-coordinate or semantic reconstruction claim.",
+      "source": "references/GordenPPTSkill/templates/mckinsey-style/template.pptx"
+    },
+    {
+      "sha256": "fadca83953a2bc87de78dcdc1fe76515f334cd9014905b267d07edb36c4b27dd",
+      "slide_count": 32,
+      "slide_size_emu": {
+        "cx": "12192000",
+        "cy": "6858000"
+      },
+      "object_counts": {
+        "group": 119,
+        "shape": 689,
+        "image": 37,
+        "connector": 32,
+        "frame": 3
+      },
+      "preset_geometry_counts": {
+        "rect": 430,
+        "ellipse": 99,
+        "line": 30,
+        "roundRect": 15,
+        "hexagon": 11,
+        "diamond": 6,
+        "flowChartConnector": 4,
+        "straightConnector1": 4,
+        "flowChartOffpageConnector": 4,
+        "homePlate": 4,
+        "triangle": 2,
+        "frame": 2,
+        "quadArrow": 1
+      },
+      "connector_bindings": {
+        "none": 31,
+        "one": 1
+      },
+      "coordinate_policy": "Raw DrawingML transforms; parent references retained. AlternateContent branches are counted separately, not as simultaneous visible shapes. No absolute-coordinate or semantic reconstruction claim.",
+      "source": "references/GordenPPTSkill/templates/thesis-novice/template.pptx"
+    },
+    {
+      "sha256": "502c871be80b930400e9815ef0581232610261a8c0389d1642b409b872bd0c28",
+      "slide_count": 35,
+      "slide_size_emu": {
+        "cx": "12192000",
+        "cy": "6858000"
+      },
+      "object_counts": {
+        "shape": 2683,
+        "connector": 154,
+        "group": 296,
+        "image": 30,
+        "frame": 12
+      },
+      "preset_geometry_counts": {
+        "rect": 950,
+        "roundRect": 247,
+        "ellipse": 240,
+        "line": 150,
+        "triangle": 92,
+        "round2SameRect": 60,
+        "hexagon": 34,
+        "arc": 29,
+        "trapezoid": 21,
+        "chevron": 19,
+        "homePlate": 18,
+        "rightArrow": 11,
+        "straightConnector1": 8,
+        "rightBrace": 7,
+        "pentagon": 6,
+        "wedgeRectCallout": 4,
+        "upArrow": 2,
+        "stripedRightArrow": 1,
+        "blockArc": 1,
+        "can": 1
+      },
+      "connector_bindings": {
+        "none": 143,
+        "both": 10,
+        "both_resolved": 10,
+        "one": 1
+      },
+      "coordinate_policy": "Raw DrawingML transforms; parent references retained. AlternateContent branches are counted separately, not as simultaneous visible shapes. No absolute-coordinate or semantic reconstruction claim.",
+      "source": "references/GordenPPTSkill/templates/premium-corp/template.pptx"
+    },
+    {
+      "sha256": "0adeb3d7a1827620849095b43b18179f6caf10a660a7ae80152b36d4f5a0435e",
+      "slide_count": 216,
+      "slide_size_emu": {
+        "cx": "12192000",
+        "cy": "6858000"
+      },
+      "object_counts": {
+        "image": 373,
+        "shape": 14689,
+        "group": 1087,
+        "connector": 1471,
+        "frame": 190
+      },
+      "preset_geometry_counts": {
+        "rect": 8750,
+        "line": 1374,
+        "roundRect": 1291,
+        "ellipse": 911,
+        "triangle": 150,
+        "chevron": 131,
+        "straightConnector1": 111,
+        "arc": 108,
+        "homePlate": 105,
+        "rtTriangle": 57,
+        "teardrop": 36,
+        "trapezoid": 34,
+        "round2SameRect": 31,
+        "upArrow": 29,
+        "rightArrow": 22,
+        "donut": 15,
+        "pie": 14,
+        "parallelogram": 12,
+        "leftRightArrow": 9,
+        "rightBrace": 8,
+        "mathMultiply": 7,
+        "blockArc": 7,
+        "leftBrace": 7,
+        "downArrow": 7,
+        "cube": 6,
+        "can": 5,
+        "swooshArrow": 4,
+        "snipRoundRect": 4,
+        "diamond": 4,
+        "mathEqual": 3,
+        "bentConnector3": 3,
+        "hexagon": 3,
+        "flowChartDecision": 3,
+        "bentArrow": 2,
+        "mathPlus": 2,
+        "star5": 2,
+        "mathMinus": 1
+      },
+      "connector_bindings": {
+        "none": 1461,
+        "one": 8,
+        "both": 2,
+        "both_resolved": 2
+      },
+      "coordinate_policy": "Raw DrawingML transforms; parent references retained. AlternateContent branches are counted separately, not as simultaneous visible shapes. No absolute-coordinate or semantic reconstruction claim.",
+      "source": "references/pptset/【绿色版】200页逻辑框架汇报PPT模板.pptx"
+    },
+    {
+      "sha256": "23979d658f5c428482bd867168f4213ff39833e68146af33c15018e03453a256",
+      "slide_count": 69,
+      "slide_size_emu": {
+        "cx": "12192000",
+        "cy": "6858000"
+      },
+      "object_counts": {
+        "image": 124,
+        "shape": 3433,
+        "connector": 299,
+        "group": 238,
+        "frame": 44
+      },
+      "preset_geometry_counts": {
+        "rect": 1644,
+        "line": 296,
+        "roundRect": 288,
+        "ellipse": 91,
+        "homePlate": 68,
+        "triangle": 24,
+        "round2SameRect": 20,
+        "chevron": 16,
+        "trapezoid": 11,
+        "can": 11,
+        "arc": 10,
+        "cube": 7,
+        "mathMultiply": 5,
+        "swooshArrow": 4,
+        "straightConnector1": 3,
+        "hexagon": 2,
+        "upArrow": 2,
+        "snip2SameRect": 2,
+        "octagon": 2,
+        "donut": 2,
+        "mathEqual": 1
+      },
+      "connector_bindings": {
+        "none": 299
+      },
+      "coordinate_policy": "Raw DrawingML transforms; parent references retained. AlternateContent branches are counted separately, not as simultaneous visible shapes. No absolute-coordinate or semantic reconstruction claim.",
+      "source": "references/pptset/01-【红蓝】50页工作汇报专用PPT模板.pptx"
+    }
+  ],
+  "samples": [
+    {
+      "id": "11ebacee969e-0001",
+      "title": "项目管理全视图框架（5 大体系 + 中心管理与控制 + 流程 + 平台）",
+      "source": "references/GordenPPTSkill/templates/architecture-deck/template.pptx",
+      "sourcePage": 1,
+      "sourceSha256": "03cdc0b85e2e26ea9a2f02e467c5fb79614299250514fb3399f6170485c9e06f",
+      "slideXmlSha256": "623fad7a23b1242b418a4722b202b3a2831e80307cade7484569001b679b8d90",
+      "objects": 157,
+      "types": {
+        "shape": 135,
+        "group": 20,
+        "connector": 2
+      },
+      "geometry": {
+        "rect": 118,
+        "line": 2
+      },
+      "groups": 40,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "项目管理\n方法论",
+        "文化\n体系",
+        "项目管理文化",
+        "项目型组织",
+        "项目管理思维",
+        "PMO职责",
+        "客户交付项目",
+        "网络部署项目",
+        "管理服务项目",
+        "培训服务项目"
+      ],
+      "compositionStats": {
+        "sourceObjects": 157,
+        "sourceLeafObjects": 137,
+        "slots": 59,
+        "mappedSourceObjects": 59,
+        "unmappedSourceObjects": 98,
+        "htmlAnchors": 181,
+        "unmappedAnchors": 26,
+        "unknownBoxAnchors": 10,
+        "mappedAnchors": 79,
+        "ambiguousAnchors": 76,
+        "nativeAnchors": 92,
+        "fallbackAnchors": 10,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "29036b6411a6df61e6d9576c4ac50dfa612e51b15ed704e80c023b1589114cde",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": true
+    },
+    {
+      "id": "11ebacee969e-0013",
+      "title": "基于内生 AI 的移动算网架构（多层网络架构）",
+      "source": "references/GordenPPTSkill/templates/architecture-deck/template.pptx",
+      "sourcePage": 13,
+      "sourceSha256": "03cdc0b85e2e26ea9a2f02e467c5fb79614299250514fb3399f6170485c9e06f",
+      "slideXmlSha256": "997a7c0cbc5371e82493740d4bf0d1b4c0ec8e430b7bb640c92261ff3db95cf7",
+      "objects": 43,
+      "types": {
+        "shape": 43
+      },
+      "geometry": {
+        "rect": 29,
+        "roundRect": 13
+      },
+      "groups": 0,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "基于内生 AI 的移动算网架构",
+        "无线算网架构具体包括四层，异构资源层、网络功能层、智能决策层和服务应用层。",
+        "智能决策层",
+        "网络功能层",
+        "异构资源层",
+        "通信功能",
+        "感知功能",
+        "AI功能",
+        "数据功能",
+        "安全功能"
+      ],
+      "compositionStats": {
+        "sourceObjects": 43,
+        "sourceLeafObjects": 43,
+        "slots": 20,
+        "mappedSourceObjects": 20,
+        "unmappedSourceObjects": 23,
+        "htmlAnchors": 49,
+        "unmappedAnchors": 11,
+        "unknownBoxAnchors": 9,
+        "mappedAnchors": 23,
+        "ambiguousAnchors": 15,
+        "nativeAnchors": 17,
+        "fallbackAnchors": 9,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "3d037f606b3867689171938b120383f31e8bd190e617063c302e3f81536ce1f0",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": true
+    },
+    {
+      "id": "11ebacee969e-0003",
+      "title": "打造电商品牌扩展品类（多层级品牌矩阵）",
+      "source": "references/GordenPPTSkill/templates/architecture-deck/template.pptx",
+      "sourcePage": 3,
+      "sourceSha256": "03cdc0b85e2e26ea9a2f02e467c5fb79614299250514fb3399f6170485c9e06f",
+      "slideXmlSha256": "96f1b13fcc6c283e880265bfa50b9271129c06ff24a82cd36f74cb96caed9040",
+      "objects": 76,
+      "types": {
+        "shape": 61,
+        "connector": 8,
+        "group": 7
+      },
+      "geometry": {
+        "ellipse": 7,
+        "rect": 43,
+        "straightConnector1": 8,
+        "roundRect": 11
+      },
+      "groups": 19,
+      "boundConnectorEnds": 10,
+      "sourceTextSample": [
+        "打造电商品牌扩展品类",
+        "品牌形象打造",
+        "品牌调性/用户画像\n/品牌领域",
+        "品牌核心观念",
+        "品牌价值观/品牌\n理念",
+        "品牌价值\n持续提升",
+        "商品定位/商品销售\n目标",
+        "形象和价值理念高度统一",
+        "持续优化品牌形象，提升价值",
+        "核心观念、品牌价值协同提升"
+      ],
+      "compositionStats": {
+        "sourceObjects": 76,
+        "sourceLeafObjects": 69,
+        "slots": 35,
+        "mappedSourceObjects": 33,
+        "unmappedSourceObjects": 43,
+        "htmlAnchors": 160,
+        "unmappedAnchors": 46,
+        "unknownBoxAnchors": 21,
+        "mappedAnchors": 90,
+        "ambiguousAnchors": 24,
+        "nativeAnchors": 43,
+        "fallbackAnchors": 21,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "719b95ca9bb60fe95277909f7a6ebf2c558c09f63800236275a4b18b3b7605d2",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": true
+    },
+    {
+      "id": "5e206af1d674-0008",
+      "title": "多段内容页-互联网产品运营循环图",
+      "source": "references/GordenPPTSkill/templates/mckinsey-style/template.pptx",
+      "sourcePage": 8,
+      "sourceSha256": "4318e0275748feb5bdea2bf81819312f99f97474fc37a88b25f62ca01b143b8c",
+      "slideXmlSha256": "5a0361ead7203a020aaab79d3e4777c16d2a54d57d1acfeb884fcdf0796df21a",
+      "objects": 92,
+      "types": {
+        "shape": 82,
+        "connector": 1,
+        "group": 9
+      },
+      "geometry": {
+        "rect": 39,
+        "line": 1,
+        "ellipse": 14,
+        "round2SameRect": 1,
+        "homePlate": 3
+      },
+      "groups": 57,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "多段内容页-互联网产品运营循环图",
+        "明确季度运营目标（如用户活跃度提升 20%），拆解为月 / 周级关键任务，同步业务团队对齐优先级。",
+        "目标制定与拆解",
+        "1",
+        "通过用户调研（问卷星 / 面对面访谈）、后台行为日志（埋点数据）、第三方监测工具（Google Analytics/Mixpanel）多维度采集运营数据，覆盖用户注册、活跃、转化全链路。运用 Excel 数据透视表及 Python 脚本进行清洗，剔除重复值、修正格式错误、填补缺失数据，按用户分层（新客 / 活跃客 / ",
+        "数据采集与清洗",
+        "2",
+        "对比目标与实际数据，运用漏斗模型、用户分层等方法定位问题（如注册转化率下降 3%），输出关键影响因素清单。",
+        "深度分析与诊断",
+        "3"
+      ],
+      "compositionStats": {
+        "sourceObjects": 92,
+        "sourceLeafObjects": 83,
+        "slots": 36,
+        "mappedSourceObjects": 36,
+        "unmappedSourceObjects": 56,
+        "htmlAnchors": 177,
+        "unmappedAnchors": 35,
+        "unknownBoxAnchors": 8,
+        "mappedAnchors": 92,
+        "ambiguousAnchors": 50,
+        "nativeAnchors": 75,
+        "fallbackAnchors": 8,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "e12c9a468f70eb1b0af34c5d04eb42cb8d720e71ff55a9960484494e5ad8d9a7",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": false
+    },
+    {
+      "id": "4013c739f962-0001",
+      "title": "顶部研究标题 + 中央放射图：1 个中心奖杯图标 + 周围 6 个圆形子项（每项 = 图标 + 标题 + 多行说明）。",
+      "source": "references/GordenPPTSkill/templates/thesis-novice/template.pptx",
+      "sourcePage": 1,
+      "sourceSha256": "fadca83953a2bc87de78dcdc1fe76515f334cd9014905b267d07edb36c4b27dd",
+      "slideXmlSha256": "87c8b813b9c960986130f2fc01e97972b7592865b3bea5863d6acfda77e7bcba",
+      "objects": 37,
+      "types": {
+        "group": 2,
+        "shape": 29,
+        "image": 6
+      },
+      "geometry": {
+        "ellipse": 7,
+        "rect": 21
+      },
+      "groups": 4,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "鲁棒性测试",
+        "测试模型对恶意样本混淆、加壳等对抗性技术的抵抗能力",
+        "模型训练",
+        "训练并优化GNN/CNN模型，对比其在准确率、召回率、F1分数等指标上与传统方法的性能差异",
+        "数据集构建",
+        "收集和处理包含多个已知和未知变异家族的恶意样本库",
+        "研究内容",
+        "本选题旨在应对恶意软件的快速变种和对抗攻击。内容包括：设计一种提取恶意代码行为特征图谱的方法；构建卷积神经网络深度学习模型",
+        "深度学习理论",
+        "采用GNN模型，利用图结构优势捕捉恶意程序家族间的结构相似性"
+      ],
+      "compositionStats": {
+        "sourceObjects": 37,
+        "sourceLeafObjects": 35,
+        "slots": 19,
+        "mappedSourceObjects": 13,
+        "unmappedSourceObjects": 24,
+        "htmlAnchors": 63,
+        "unmappedAnchors": 15,
+        "unknownBoxAnchors": 6,
+        "mappedAnchors": 32,
+        "ambiguousAnchors": 16,
+        "nativeAnchors": 25,
+        "fallbackAnchors": 6,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "748beacd41924b8943caf161b8ef3f582720fa84c97e5371dd6e3cea04203267",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": true
+    },
+    {
+      "id": "34422534f8b5-0035",
+      "title": "五段内容页 - 金字塔图：5 层金字塔 (战略目标→年度→季度→月度→日常) + 5 阶段说明。",
+      "source": "references/GordenPPTSkill/templates/premium-corp/template.pptx",
+      "sourcePage": 35,
+      "sourceSha256": "502c871be80b930400e9815ef0581232610261a8c0389d1642b409b872bd0c28",
+      "slideXmlSha256": "71ab9498e025f4c0ef5cb55bc9acf182385347fdd21e18d2552eea5cce023b35",
+      "objects": 89,
+      "types": {
+        "group": 15,
+        "shape": 70,
+        "connector": 4
+      },
+      "geometry": {
+        "rect": 49,
+        "line": 4,
+        "round2SameRect": 11
+      },
+      "groups": 53,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "日常",
+        "周度",
+        "月度",
+        "季度",
+        "年度",
+        "五段内容页-金字塔图",
+        "工作\n内容",
+        "工作事项",
+        "执行任务",
+        "推进目标"
+      ],
+      "compositionStats": {
+        "sourceObjects": 89,
+        "sourceLeafObjects": 74,
+        "slots": 44,
+        "mappedSourceObjects": 44,
+        "unmappedSourceObjects": 45,
+        "htmlAnchors": 128,
+        "unmappedAnchors": 41,
+        "unknownBoxAnchors": 5,
+        "mappedAnchors": 73,
+        "ambiguousAnchors": 14,
+        "nativeAnchors": 49,
+        "fallbackAnchors": 5,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "cd45be04a9e791b02632de0dbf0a61e8510640a7b7534c135a738074072329c4",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": true
+    },
+    {
+      "id": "5e206af1d674-0026",
+      "title": "漏斗模型-项目进度与任务筛选",
+      "source": "references/GordenPPTSkill/templates/mckinsey-style/template.pptx",
+      "sourcePage": 26,
+      "sourceSha256": "4318e0275748feb5bdea2bf81819312f99f97474fc37a88b25f62ca01b143b8c",
+      "slideXmlSha256": "3da69ac5ba44554c5305e65b864384834bf90937caebab81d85258a0136ca997",
+      "objects": 130,
+      "types": {
+        "shape": 122,
+        "connector": 1,
+        "group": 7
+      },
+      "geometry": {
+        "rect": 18,
+        "line": 1,
+        "round2SameRect": 1,
+        "roundRect": 28,
+        "ellipse": 5
+      },
+      "groups": 57,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "漏斗模型-项目进度与任务筛选",
+        "初期概览",
+        "漏斗筛选",
+        "进度把控",
+        "团队积极展开头脑风暴，与各方相关者深入沟通，收集想法与待办事项。",
+        "启动初期",
+        "初期分析",
+        "从项目框架搭建到细节功能雕琢，初步勾勒出项目的宏大蓝图。",
+        "系统规划",
+        "这些任务繁杂，若全部推进，资源与时间将难以承受，因此筛选工作迫在眉睫。"
+      ],
+      "compositionStats": {
+        "sourceObjects": 130,
+        "sourceLeafObjects": 123,
+        "slots": 44,
+        "mappedSourceObjects": 44,
+        "unmappedSourceObjects": 86,
+        "htmlAnchors": 513,
+        "unmappedAnchors": 318,
+        "unknownBoxAnchors": 29,
+        "mappedAnchors": 88,
+        "ambiguousAnchors": 107,
+        "nativeAnchors": 396,
+        "fallbackAnchors": 29,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "81916ea7929ab50594e8eb3eb8a6457dd268387ffa2a8a746899886a981a07c9",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": false
+    },
+    {
+      "id": "a05afce176e0-0022",
+      "title": "部门KPI拆解/团队组织架构",
+      "source": "references/pptset/【绿色版】200页逻辑框架汇报PPT模板.pptx",
+      "sourcePage": 22,
+      "sourceSha256": "0adeb3d7a1827620849095b43b18179f6caf10a660a7ae80152b36d4f5a0435e",
+      "slideXmlSha256": "17175fdd57fa7d0fd8105d716096e8b86cff49fde740e22a5ec66f437c982bed",
+      "objects": 62,
+      "types": {
+        "shape": 54,
+        "connector": 7,
+        "image": 1
+      },
+      "geometry": {
+        "rect": 43,
+        "line": 7,
+        "rightBrace": 2,
+        "roundRect": 5
+      },
+      "groups": 0,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "部门KPI拆解/团队组织架构",
+        "企业运营团队",
+        "内容运营部",
+        "电商运营部",
+        "用户增长部",
+        "产品技术部",
+        "商业化部",
+        "组织架构",
+        "需要具备优秀文案写作能力、设计能力以及对小红书平台规则的熟悉度",
+        "负责与KOL和素人沟通合作，以及推广文案的输出和把控"
+      ],
+      "compositionStats": {
+        "sourceObjects": 62,
+        "sourceLeafObjects": 62,
+        "slots": 48,
+        "mappedSourceObjects": 47,
+        "unmappedSourceObjects": 15,
+        "htmlAnchors": 122,
+        "unmappedAnchors": 26,
+        "unknownBoxAnchors": 0,
+        "mappedAnchors": 70,
+        "ambiguousAnchors": 26,
+        "nativeAnchors": 32,
+        "fallbackAnchors": 0,
+        "unclassifiedPaintAnchors": 0
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "7ead3d625590d4eff9865ec74c27feb8444c0c2207150c60ff176b6dd280a853",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": true
+    },
+    {
+      "id": "e48d83706172-0018",
+      "title": "年度目标   每个模块贯彻年度目标，实现增长",
+      "source": "references/pptset/01-【红蓝】50页工作汇报专用PPT模板.pptx",
+      "sourcePage": 18,
+      "sourceSha256": "23979d658f5c428482bd867168f4213ff39833e68146af33c15018e03453a256",
+      "slideXmlSha256": "906a77d4e5c88ad825403b9defddeed7ebcd1eed9d0ba2eca1963de2d4d77a9a",
+      "objects": 68,
+      "types": {
+        "shape": 46,
+        "connector": 17,
+        "group": 4,
+        "image": 1
+      },
+      "geometry": {
+        "rect": 40,
+        "line": 17,
+        "ellipse": 7
+      },
+      "groups": 10,
+      "boundConnectorEnds": 0,
+      "sourceTextSample": [
+        "年度目标   每个模块贯彻年度目标，实现增长",
+        "年 度 目 标",
+        "业 务 支 撑",
+        "OKR 1",
+        "OKR 2",
+        "OKR 3",
+        "整合多平台资源\n提升品牌影响力",
+        "打造具有特色的\n原创内容 IP",
+        "提高用户增长与\n活跃度",
+        "营销策略"
+      ],
+      "compositionStats": {
+        "sourceObjects": 68,
+        "sourceLeafObjects": 64,
+        "slots": 42,
+        "mappedSourceObjects": 41,
+        "unmappedSourceObjects": 27,
+        "htmlAnchors": 125,
+        "unmappedAnchors": 70,
+        "unknownBoxAnchors": 60,
+        "mappedAnchors": 49,
+        "ambiguousAnchors": 6,
+        "nativeAnchors": 16,
+        "fallbackAnchors": 32,
+        "unclassifiedPaintAnchors": 28
+      },
+      "warnings": [],
+      "serializedSlideXmlSha256": "6eb721fe9e4e421ec9018a84f30ee6283d20e0a7304b59c8f58af614a2b6ca03",
+      "sourceFileMatchesComposition": true,
+      "serializedXmlMatchesComposition": false
+    }
+  ]
+}

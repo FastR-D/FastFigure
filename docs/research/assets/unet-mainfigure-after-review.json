@@ -1,0 +1,2799 @@
+{
+  "version": "0.2",
+  "title": "Architecture and skip fusion · schematic",
+  "canvas": {
+    "width": 1000,
+    "height": 620
+  },
+  "style": {
+    "fontFamily": "Inter",
+    "preset": "precise",
+    "roughness": 0.8,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "figureforge-publication-soft"
+  },
+  "nodes": [
+    {
+      "metricScale": 0.8636363636363636,
+      "id": "overview-0",
+      "kind": "volume",
+      "label": "Image",
+      "parentId": "overview-region",
+      "x": 104,
+      "y": 98,
+      "width": 112,
+      "height": 38,
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "radius": 3
+      }
+    },
+    {
+      "metricScale": 1,
+      "id": "overview-1",
+      "kind": "rectangle",
+      "label": "Encoder–decoder",
+      "parentId": "overview-region",
+      "x": 386,
+      "y": 98,
+      "width": 236,
+      "height": 38,
+      "textStyle": {
+        "size": 14,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "radius": 3,
+        "strokeWidth": 1
+      }
+    },
+    {
+      "metricScale": 1,
+      "id": "overview-2",
+      "kind": "text",
+      "label": "Mask type",
+      "parentId": "overview-region",
+      "x": 780,
+      "y": 98,
+      "width": 120,
+      "height": 38,
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 3
+      }
+    },
+    {
+      "id": "overview-caption",
+      "kind": "text",
+      "label": "(a) Task and architecture",
+      "parentId": "overview-region",
+      "x": 52,
+      "y": 74,
+      "width": 860,
+      "height": 20,
+      "textStyle": {
+        "size": 14,
+        "bold": true
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-2",
+      "kind": "rectangle",
+      "label": "Input tile",
+      "parentId": "unet",
+      "x": 68.4,
+      "y": 199.88,
+      "width": 110.08,
+      "height": 24.08,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10.32,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 0,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-3",
+      "kind": "rectangle",
+      "label": "1×1 output",
+      "parentId": "unet",
+      "x": 532.8,
+      "y": 199.88,
+      "width": 110.08,
+      "height": 24.08,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10.32,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 2,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-4",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 73.56,
+      "y": 239.44,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 0,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-5",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 537.96,
+      "y": 239.44,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 2,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-6",
+      "kind": "volume",
+      "label": "E1 · Conv ×2",
+      "parentId": "unet",
+      "x": 68.4,
+      "y": 244.6,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 0,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-7",
+      "kind": "volume",
+      "label": "D1 · Conv ×2",
+      "parentId": "unet",
+      "x": 532.8,
+      "y": 244.6,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 2,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-8",
+      "kind": "rectangle",
+      "label": "Copy/crop",
+      "parentId": "unet",
+      "x": 396.92,
+      "y": 251.48000000000002,
+      "width": 73.96,
+      "height": 27.52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#87968d",
+        "colorIndex": 4,
+        "radius": 1.72,
+        "strokeWidth": 0.6880000000000001,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3.44,
+          2.58
+        ]
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-9",
+      "kind": "ellipse",
+      "label": "C",
+      "parentId": "unet",
+      "x": 494.96,
+      "y": 253.2,
+      "width": 24.08,
+      "height": 24.08,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#fff4e2",
+        "stroke": "#c18b3f",
+        "colorIndex": 1,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-10",
+      "kind": "path",
+      "label": "copy-0",
+      "parentId": "unet",
+      "x": 178.48000000000002,
+      "y": 265.24,
+      "width": 218.44,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-6",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-8",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#6e9992",
+        "colorIndex": 4,
+        "strokeWidth": 0.903,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-11",
+      "kind": "path",
+      "label": "crop-concat-0",
+      "parentId": "unet",
+      "x": 470.88,
+      "y": 265.24,
+      "width": 24.079999999999984,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-8",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-9",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-12",
+      "kind": "path",
+      "label": "decode-0",
+      "parentId": "unet",
+      "x": 519.04,
+      "y": 265.24,
+      "width": 13.759999999999991,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-9",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-7",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-13",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 99.36,
+      "y": 304.8,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 0,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-14",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 512.16,
+      "y": 304.8,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 2,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-15",
+      "kind": "volume",
+      "label": "E2 · Conv ×2",
+      "parentId": "unet",
+      "x": 94.19999999999999,
+      "y": 309.96000000000004,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 0,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-16",
+      "kind": "volume",
+      "label": "D2 · Conv ×2",
+      "parentId": "unet",
+      "x": 507,
+      "y": 309.96000000000004,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 2,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-17",
+      "kind": "rectangle",
+      "label": "Copy/crop",
+      "parentId": "unet",
+      "x": 371.12,
+      "y": 316.84000000000003,
+      "width": 73.96,
+      "height": 27.52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#87968d",
+        "colorIndex": 4,
+        "radius": 1.72,
+        "strokeWidth": 0.6880000000000001,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3.44,
+          2.58
+        ]
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-18",
+      "kind": "ellipse",
+      "label": "C",
+      "parentId": "unet",
+      "x": 469.15999999999997,
+      "y": 318.56,
+      "width": 24.08,
+      "height": 24.08,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#fff4e2",
+        "stroke": "#c18b3f",
+        "colorIndex": 1,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-19",
+      "kind": "path",
+      "label": "copy-1",
+      "parentId": "unet",
+      "x": 204.27999999999997,
+      "y": 330.6,
+      "width": 166.84000000000003,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-15",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-17",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#6e9992",
+        "colorIndex": 4,
+        "strokeWidth": 0.903,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-20",
+      "kind": "path",
+      "label": "crop-concat-1",
+      "parentId": "unet",
+      "x": 445.08,
+      "y": 330.6,
+      "width": 24.079999999999984,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-17",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-18",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-21",
+      "kind": "path",
+      "label": "decode-1",
+      "parentId": "unet",
+      "x": 493.23999999999995,
+      "y": 330.6,
+      "width": 13.760000000000048,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-18",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-16",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-22",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 125.16,
+      "y": 370.15999999999997,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 0,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-23",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 486.36,
+      "y": 370.15999999999997,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 2,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-24",
+      "kind": "volume",
+      "label": "E3 · Conv ×2",
+      "parentId": "unet",
+      "x": 120,
+      "y": 375.32,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 0,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-25",
+      "kind": "volume",
+      "label": "D3 · Conv ×2",
+      "parentId": "unet",
+      "x": 481.2,
+      "y": 375.32,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 2,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-26",
+      "kind": "rectangle",
+      "label": "Copy/crop",
+      "parentId": "unet",
+      "x": 345.32,
+      "y": 382.2,
+      "width": 73.96,
+      "height": 27.52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#87968d",
+        "colorIndex": 4,
+        "radius": 1.72,
+        "strokeWidth": 0.6880000000000001,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3.44,
+          2.58
+        ]
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-27",
+      "kind": "ellipse",
+      "label": "C",
+      "parentId": "unet",
+      "x": 443.36,
+      "y": 383.91999999999996,
+      "width": 24.08,
+      "height": 24.08,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#fff4e2",
+        "stroke": "#c18b3f",
+        "colorIndex": 1,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-28",
+      "kind": "path",
+      "label": "copy-2",
+      "parentId": "unet",
+      "x": 230.07999999999998,
+      "y": 395.96,
+      "width": 115.24000000000001,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-24",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-26",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#6e9992",
+        "colorIndex": 4,
+        "strokeWidth": 0.903,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-29",
+      "kind": "path",
+      "label": "crop-concat-2",
+      "parentId": "unet",
+      "x": 419.28,
+      "y": 395.96,
+      "width": 24.08000000000004,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-26",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-27",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 1,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-30",
+      "kind": "path",
+      "label": "decode-2",
+      "parentId": "unet",
+      "x": 467.44,
+      "y": 395.96,
+      "width": 13.759999999999991,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-27",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-25",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-31",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 150.95999999999998,
+      "y": 435.52,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 0,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-32",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "unet",
+      "x": 460.56,
+      "y": 435.52,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f5f9f8",
+        "stroke": "#cadbd7",
+        "colorIndex": 2,
+        "radius": 5.16,
+        "strokeWidth": 0.6880000000000001,
+        "fillOpacity": 1,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-33",
+      "kind": "volume",
+      "label": "E4 · Conv ×2",
+      "parentId": "unet",
+      "x": 145.8,
+      "y": 440.68,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 0,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-34",
+      "kind": "volume",
+      "label": "D4 · Conv ×2",
+      "parentId": "unet",
+      "x": 455.4,
+      "y": 440.68,
+      "width": 110.08,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "italic": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e2f0ed",
+        "stroke": "#277c78",
+        "colorIndex": 2,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-35",
+      "kind": "rectangle",
+      "label": "Copy/crop",
+      "parentId": "unet",
+      "x": 319.52,
+      "y": 447.56,
+      "width": 73.96,
+      "height": 27.52,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#a36e23",
+        "colorIndex": 4,
+        "radius": 1.72,
+        "strokeWidth": 1.15,
+        "padding": 3.44,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3.44,
+          2.58
+        ]
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-36",
+      "kind": "ellipse",
+      "label": "C",
+      "parentId": "unet",
+      "x": 417.56,
+      "y": 449.28,
+      "width": 24.08,
+      "height": 24.08,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12.9,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e5b56b",
+        "stroke": "#a36e23",
+        "colorIndex": 1,
+        "radius": 2.58,
+        "strokeWidth": 1.5,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-37",
+      "kind": "path",
+      "label": "copy-3",
+      "parentId": "unet",
+      "x": 255.88,
+      "y": 461.32,
+      "width": 63.639999999999986,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-33",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-35",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "colorIndex": 4,
+        "strokeWidth": 1.8,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-38",
+      "kind": "path",
+      "label": "crop-concat-3",
+      "parentId": "unet",
+      "x": 393.47999999999996,
+      "y": 461.32,
+      "width": 24.08000000000004,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-35",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-36",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "colorIndex": 1,
+        "strokeWidth": 1.8,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-39",
+      "kind": "path",
+      "label": "decode-3",
+      "parentId": "unet",
+      "x": 441.64,
+      "y": 461.32,
+      "width": 13.759999999999991,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-36",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "unet-object-34",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "colorIndex": 2,
+        "strokeWidth": 1.8,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-40",
+      "kind": "rectangle",
+      "label": "B · Conv ×2",
+      "parentId": "unet",
+      "x": 298.88,
+      "y": 506.04,
+      "width": 123.84,
+      "height": 41.28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 10.32,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "colorIndex": 1,
+        "radius": 2.58,
+        "strokeWidth": 0.9889999999999999,
+        "padding": 1.72,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-41",
+      "kind": "path",
+      "label": "unet-input",
+      "parentId": "unet",
+      "x": 123.44,
+      "y": 223.95999999999998,
+      "width": 0,
+      "height": 20.640000000000015,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-2",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "unet-object-6",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-42",
+      "kind": "path",
+      "label": "unet-output",
+      "parentId": "unet",
+      "x": 587.8399999999999,
+      "y": 223.95999999999998,
+      "width": 0,
+      "height": 20.640000000000015,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-7",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "unet-object-3",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-43",
+      "kind": "path",
+      "label": "pool-0",
+      "parentId": "unet",
+      "x": 123.44,
+      "y": 285.88,
+      "width": 25.799999999999983,
+      "height": 24.08000000000004,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-6",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "unet-object-15",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-44",
+      "kind": "path",
+      "label": "up-0",
+      "parentId": "unet",
+      "x": 507,
+      "y": 277.28,
+      "width": 55.039999999999964,
+      "height": 32.680000000000064,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-16",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "unet-object-9",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-45",
+      "kind": "text",
+      "label": "2×2 pool",
+      "parentId": "unet",
+      "x": 149.24,
+      "y": 287.6,
+      "width": 89.44,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-46",
+      "kind": "text",
+      "label": "2×2 up-conv",
+      "parentId": "unet",
+      "x": 575.8,
+      "y": 286.74,
+      "width": 94.6,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-47",
+      "kind": "path",
+      "label": "pool-1",
+      "parentId": "unet",
+      "x": 149.23999999999998,
+      "y": 351.24,
+      "width": 25.80000000000001,
+      "height": 24.079999999999984,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-15",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "unet-object-24",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-48",
+      "kind": "path",
+      "label": "up-1",
+      "parentId": "unet",
+      "x": 481.2,
+      "y": 342.64,
+      "width": 55.04000000000002,
+      "height": 32.68000000000001,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-25",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "unet-object-18",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-49",
+      "kind": "text",
+      "label": "2×2 pool",
+      "parentId": "unet",
+      "x": 175.04,
+      "y": 352.96000000000004,
+      "width": 89.44,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-50",
+      "kind": "text",
+      "label": "2×2 up-conv",
+      "parentId": "unet",
+      "x": 550,
+      "y": 352.1,
+      "width": 94.6,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-51",
+      "kind": "path",
+      "label": "pool-2",
+      "parentId": "unet",
+      "x": 175.04,
+      "y": 416.6,
+      "width": 25.80000000000001,
+      "height": 24.079999999999984,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-24",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "unet-object-33",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-52",
+      "kind": "path",
+      "label": "up-2",
+      "parentId": "unet",
+      "x": 455.40000000000003,
+      "y": 407.99999999999994,
+      "width": 55.039999999999964,
+      "height": 32.680000000000064,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-34",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "unet-object-27",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 2,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-53",
+      "kind": "text",
+      "label": "2×2 pool",
+      "parentId": "unet",
+      "x": 200.84,
+      "y": 418.32,
+      "width": 89.44,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-54",
+      "kind": "text",
+      "label": "2×2 up-conv",
+      "parentId": "unet",
+      "x": 524.2,
+      "y": 417.46,
+      "width": 94.6,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-55",
+      "kind": "path",
+      "label": "pool-3",
+      "parentId": "unet",
+      "x": 200.84,
+      "y": 481.96000000000004,
+      "width": 159.96,
+      "height": 24.079999999999984,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-33",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "unet-object-40",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#263b50",
+        "colorIndex": 0,
+        "strokeWidth": 1.161,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-56",
+      "kind": "path",
+      "label": "up-3",
+      "parentId": "unet",
+      "x": 360.8,
+      "y": 473.35999999999996,
+      "width": 68.80000000000001,
+      "height": 32.680000000000064,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "unet-object-40",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "unet-object-36",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "colorIndex": 2,
+        "strokeWidth": 1.8,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-57",
+      "kind": "text",
+      "label": "2×2 pool",
+      "parentId": "unet",
+      "x": 109.67999999999999,
+      "y": 483.68,
+      "width": 89.44,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-58",
+      "kind": "text",
+      "label": "2×2 up-conv",
+      "parentId": "unet",
+      "x": 445.08,
+      "y": 482.82,
+      "width": 94.6,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-59",
+      "kind": "text",
+      "label": "Conv ×2 = two 3×3 conv + ReLU; C = concatenation",
+      "parentId": "unet",
+      "x": 197.4,
+      "y": 203.32,
+      "width": 309.6,
+      "height": 20.64,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11.18,
+        "bold": false,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-60",
+      "kind": "text",
+      "label": "(b) Multi-scale encoding and decoding",
+      "parentId": "unet",
+      "x": 47.76,
+      "y": 162.04,
+      "width": 626.08,
+      "height": 25.8,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15.48,
+        "bold": true,
+        "color": "#263b50",
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "id": "unet-object-61",
+      "kind": "text",
+      "label": "Schematic feature stages · C denotes concatenation",
+      "parentId": "unet",
+      "x": 47.76,
+      "y": 567.96,
+      "width": 626.08,
+      "height": 17.2,
+      "textStyle": {
+        "family": "Inter",
+        "size": 8.6,
+        "bold": false,
+        "color": "#657789",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118,
+        "padding": 0
+      }
+    },
+    {
+      "id": "unet-object-62",
+      "kind": "port",
+      "label": "Structure left",
+      "parentId": "unet",
+      "x": 34,
+      "y": 150,
+      "width": 653.6,
+      "height": 443.76,
+      "interfaceFor": "unet",
+      "socket": {
+        "key": "structure-left",
+        "direction": "both",
+        "side": "left",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "unet-object-63",
+      "kind": "port",
+      "label": "Structure right",
+      "parentId": "unet",
+      "x": 34,
+      "y": 150,
+      "width": 653.6,
+      "height": 443.76,
+      "interfaceFor": "unet",
+      "socket": {
+        "key": "structure-right",
+        "direction": "both",
+        "side": "right",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "fusion-detail-marker",
+      "kind": "text",
+      "label": "(c)",
+      "parentId": "mechanism-region",
+      "x": 413.56,
+      "y": 430.28,
+      "width": 32.08,
+      "height": 16,
+      "textStyle": {
+        "size": 11,
+        "bold": true,
+        "color": "#8a5b1e",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "fusion-heading",
+      "kind": "text",
+      "label": "(c) Fusion at one scale",
+      "parentId": "fusion-explanation",
+      "x": 742,
+      "y": 310,
+      "width": 222,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 15,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 2,
+        "strokeWidth": 1,
+        "padding": 0
+      }
+    },
+    {
+      "id": "fusion-encoder",
+      "kind": "text",
+      "label": "E4",
+      "parentId": "fusion-explanation",
+      "x": 742,
+      "y": 360,
+      "width": 24,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 2,
+        "strokeWidth": 1,
+        "padding": 0
+      }
+    },
+    {
+      "id": "fusion-crop",
+      "kind": "rectangle",
+      "label": "Copy/crop",
+      "parentId": "fusion-explanation",
+      "x": 786,
+      "y": 360,
+      "width": 94,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#ffffff",
+        "stroke": "#a36e23",
+        "colorIndex": 4,
+        "radius": 1.72,
+        "strokeWidth": 1.15,
+        "padding": 0,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          3.44,
+          2.58
+        ]
+      }
+    },
+    {
+      "id": "fusion-lower",
+      "kind": "text",
+      "label": "B",
+      "parentId": "fusion-explanation",
+      "x": 742,
+      "y": 444,
+      "width": 24,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 2,
+        "strokeWidth": 1,
+        "padding": 0
+      }
+    },
+    {
+      "id": "fusion-up",
+      "kind": "rectangle",
+      "label": "2×2 up-conv",
+      "parentId": "fusion-explanation",
+      "x": 782,
+      "y": 444,
+      "width": 106,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f0f4f7",
+        "stroke": "#9cabb9",
+        "radius": 2,
+        "strokeWidth": 1,
+        "padding": 0
+      }
+    },
+    {
+      "id": "fusion-concat",
+      "kind": "ellipse",
+      "label": "C",
+      "parentId": "fusion-explanation",
+      "x": 910,
+      "y": 400,
+      "width": 32,
+      "height": 32,
+      "textStyle": {
+        "family": "Inter",
+        "size": 17,
+        "bold": true,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#e5b56b",
+        "stroke": "#a36e23",
+        "colorIndex": 1,
+        "radius": 2.58,
+        "strokeWidth": 1.5,
+        "padding": 0,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "fusion-output",
+      "kind": "text",
+      "label": "D4",
+      "parentId": "fusion-explanation",
+      "x": 900,
+      "y": 492,
+      "width": 52,
+      "height": 28,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "color": "#263b50",
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 2,
+        "strokeWidth": 1,
+        "padding": 0
+      }
+    },
+    {
+      "id": "fusion-encoder-crop",
+      "kind": "path",
+      "label": "",
+      "parentId": "fusion-explanation",
+      "x": 766,
+      "y": 374,
+      "width": 20,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "fusion-encoder",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "fusion-crop",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "strokeWidth": 1.5,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "fusion-crop-concat",
+      "kind": "path",
+      "label": "",
+      "parentId": "fusion-explanation",
+      "x": 880,
+      "y": 374,
+      "width": 32.144000000000005,
+      "height": 34,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0.6844201095072174,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "fusion-crop",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "fusion-concat",
+          "x": 0.067,
+          "y": 0.25
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "strokeWidth": 1.5,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "fusion-lower-up",
+      "kind": "path",
+      "label": "",
+      "parentId": "fusion-explanation",
+      "x": 766,
+      "y": 458,
+      "width": 16,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "fusion-lower",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "fusion-up",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "strokeWidth": 1.5,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "fusion-up-concat",
+      "kind": "path",
+      "label": "",
+      "parentId": "fusion-explanation",
+      "x": 888,
+      "y": 424,
+      "width": 24.144000000000005,
+      "height": 34,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0.5798542080848242,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "fusion-up",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "fusion-concat",
+          "x": 0.067,
+          "y": 0.75
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "strokeWidth": 1.5,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "fusion-concat-output",
+      "kind": "path",
+      "label": "",
+      "parentId": "fusion-explanation",
+      "x": 926,
+      "y": 432,
+      "width": 0,
+      "height": 60,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "fusion-concat",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "fusion-output",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#b27b2f",
+        "strokeWidth": 1.5,
+        "handDrawn": false
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "overview-flow-0",
+      "source": "overview-0",
+      "target": "overview-1",
+      "sourcePort": "right",
+      "targetPort": "left"
+    },
+    {
+      "id": "overview-flow-1",
+      "source": "overview-1",
+      "target": "overview-2",
+      "sourcePort": "right",
+      "targetPort": "left"
+    }
+  ],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "Architecture and skip fusion · schematic",
+      "role": "stage",
+      "x": 16,
+      "y": 24,
+      "width": 968,
+      "height": 584,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "overview-region",
+      "parentId": "stage",
+      "title": "Overview",
+      "role": "component",
+      "x": 28,
+      "y": 72,
+      "width": 944,
+      "height": 68,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "id": "mechanism-region",
+      "parentId": "stage",
+      "title": "Multi-scale mechanism",
+      "role": "component",
+      "x": 28,
+      "y": 148,
+      "width": 704,
+      "height": 448,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    },
+    {
+      "metricScale": 0.86,
+      "parametric": {
+        "version": 1,
+        "recipe": {
+          "id": "unet-encoder-decoder",
+          "version": 1,
+          "parameters": {
+            "levels": 5
+          }
+        },
+        "revision": 0,
+        "objects": {
+          "stage": "unet",
+          "input-tile": "unet-object-2",
+          "output-head": "unet-object-3",
+          "encoder-back-0": "unet-object-4",
+          "decoder-back-0": "unet-object-5",
+          "encoder-0": "unet-object-6",
+          "decoder-0": "unet-object-7",
+          "crop-0": "unet-object-8",
+          "concat-0": "unet-object-9",
+          "copy-0": "unet-object-10",
+          "crop-concat-0": "unet-object-11",
+          "decode-0": "unet-object-12",
+          "encoder-back-1": "unet-object-13",
+          "decoder-back-1": "unet-object-14",
+          "encoder-1": "unet-object-15",
+          "decoder-1": "unet-object-16",
+          "crop-1": "unet-object-17",
+          "concat-1": "unet-object-18",
+          "copy-1": "unet-object-19",
+          "crop-concat-1": "unet-object-20",
+          "decode-1": "unet-object-21",
+          "encoder-back-2": "unet-object-22",
+          "decoder-back-2": "unet-object-23",
+          "encoder-2": "unet-object-24",
+          "decoder-2": "unet-object-25",
+          "crop-2": "unet-object-26",
+          "concat-2": "unet-object-27",
+          "copy-2": "unet-object-28",
+          "crop-concat-2": "unet-object-29",
+          "decode-2": "unet-object-30",
+          "encoder-back-3": "unet-object-31",
+          "decoder-back-3": "unet-object-32",
+          "encoder-3": "unet-object-33",
+          "decoder-3": "unet-object-34",
+          "crop-3": "unet-object-35",
+          "concat-3": "unet-object-36",
+          "copy-3": "unet-object-37",
+          "crop-concat-3": "unet-object-38",
+          "decode-3": "unet-object-39",
+          "bottleneck": "unet-object-40",
+          "unet-input": "unet-object-41",
+          "unet-output": "unet-object-42",
+          "pool-0": "unet-object-43",
+          "up-0": "unet-object-44",
+          "pool-label-0": "unet-object-45",
+          "up-label-0": "unet-object-46",
+          "pool-1": "unet-object-47",
+          "up-1": "unet-object-48",
+          "pool-label-1": "unet-object-49",
+          "up-label-1": "unet-object-50",
+          "pool-2": "unet-object-51",
+          "up-2": "unet-object-52",
+          "pool-label-2": "unet-object-53",
+          "up-label-2": "unet-object-54",
+          "pool-3": "unet-object-55",
+          "up-3": "unet-object-56",
+          "pool-label-3": "unet-object-57",
+          "up-label-3": "unet-object-58",
+          "unet-key": "unet-object-59",
+          "structure-title": "unet-object-60",
+          "structure-note": "unet-object-61",
+          "structure-left": "unet-object-62",
+          "structure-right": "unet-object-63"
+        }
+      },
+      "id": "unet",
+      "parentId": "mechanism-region",
+      "title": "U 形编解码与拼接跳连",
+      "role": "component",
+      "x": 34,
+      "y": 150,
+      "width": 653.6,
+      "height": 443.76,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.118
+      },
+      "textStyle": {
+        "size": 12.9
+      },
+      "component": {
+        "assetId": "builtin-unet-encoder-decoder",
+        "name": "U 形编解码与拼接跳连",
+        "revision": "2026-10-31T00:00:00.000Z",
+        "recipe": {
+          "id": "unet-encoder-decoder",
+          "version": 1,
+          "parameters": {
+            "levels": 5
+          }
+        },
+        "sources": [
+          {
+            "title": "U-Net: Convolutional Networks for Biomedical Image Segmentation · Fig. 1 / §2",
+            "reference": "https://arxiv.org/abs/1505.04597 · 依据收缩／扩展、2×2 池化／上卷积、copy/crop→拼接和 1×1 输出独立构造。各阶段合并表示两次 3×3 conv+ReLU；尺度数可变，不复刻原图或填造尺寸、通道、分割结果。"
+          }
+        ],
+        "lineage": []
+      }
+    },
+    {
+      "id": "fusion-explanation",
+      "parentId": "stage",
+      "title": "One-scale fusion explanation",
+      "role": "component",
+      "x": 738,
+      "y": 306,
+      "width": 230,
+      "height": 232,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "title": "Independent one-scale fusion explanation",
+        "reference": "Explains the existing E4 / B / C / D4 branch using the same labels; re-arranged native schematic, not a magnified snapshot or a new computation."
+      }
+    }
+  ],
+  "references": [],
+  "compositionPlans": [
+    {
+      "version": 1,
+      "runId": "c0646db4-e70e-43c6-bdf9-30b28a7c5b08",
+      "userGoal": "Explain a U-Net-style multi-scale architecture with two different inputs to concatenation. A selected deepest-scale branch is explained using E4 / B / C / D4 identities. Synthetic structural demonstration with no image data, dimensions or results.",
+      "plan": {
+        "status": "ready",
+        "title": "Architecture and skip fusion · schematic",
+        "goal": "Explain a U-Net-style multi-scale architecture with two different inputs to concatenation. A selected deepest-scale branch is explained using E4 / B / C / D4 identities. Synthetic structural demonstration with no image data, dimensions or results.",
+        "readingOrder": "panels",
+        "layout": "A light task overview above; the U-shaped architecture is the main visual below left; a compact two-input fusion schematic at right explains the marked (c) branch. This is a re-arranged explanation, not a zoomed snapshot.",
+        "style": {
+          "preset": "precise",
+          "paletteId": "figureforge-publication-soft",
+          "fontFamily": "Inter",
+          "surface": "transparent",
+          "usage": "Feature representations stay teal. Warm emphasis identifies the representative concatenation and its two actual input paths; overview and bottleneck do not dominate. Repeated names and (c) establish correspondence without a dataflow arrow between panels."
+        },
+        "sections": [
+          {
+            "id": "overview",
+            "title": "overview",
+            "purpose": "Establish the task with a light overview.",
+            "visual": "Establish the task with a light overview.",
+            "design": {
+              "role": "overview",
+              "structure": "pipeline",
+              "rationale": "Establish the task with a light overview.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "overview-region",
+                "x": 0,
+                "y": 0,
+                "width": 1,
+                "height": 0.1297709923664122
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "mechanism",
+            "title": "mechanism",
+            "purpose": "U-shaped scales and crop/concat skips explain the whole architecture; the marked deepest-scale fusion gives a focal example.",
+            "visual": "U-shaped scales and crop/concat skips explain the whole architecture; the marked deepest-scale fusion gives a focal example.",
+            "design": {
+              "role": "mechanism",
+              "structure": "encoder-decoder",
+              "rationale": "U-shaped scales and crop/concat skips explain the whole architecture; the marked deepest-scale fusion gives a focal example.",
+              "emphasis": "primary",
+              "frame": {
+                "id": "mechanism-region",
+                "x": 0,
+                "y": 0.1450381679389313,
+                "width": 0.7457627118644068,
+                "height": 0.8549618320610687
+              }
+            },
+            "components": [
+              {
+                "id": "unet",
+                "key": "recipe:unet-encoder-decoder",
+                "parameters": {
+                  "levels": 5
+                }
+              }
+            ],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "detail",
+            "title": "detail",
+            "purpose": "E4 passes through copy/crop and B through 2×2 up-conv before C; output enters D4. This is a conceptual re-arrangement with original stage names, not an actual enlarged snapshot.",
+            "visual": "E4 passes through copy/crop and B through 2×2 up-conv before C; output enters D4. This is a conceptual re-arrangement with original stage names, not an actual enlarged snapshot.",
+            "design": {
+              "role": "detail",
+              "structure": "network",
+              "rationale": "E4 passes through copy/crop and B through 2×2 up-conv before C; output enters D4. This is a conceptual re-arrangement with original stage names, not an actual enlarged snapshot.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "fusion-explanation",
+                "x": 0.7521186440677966,
+                "y": 0.44656488549618323,
+                "width": 0.24364406779661016,
+                "height": 0.44274809160305345
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          }
+        ],
+        "connections": [
+          {
+            "from": "overview",
+            "to": "mechanism",
+            "kind": "membership",
+            "meaning": "The mechanism explains the central architecture stage."
+          },
+          {
+            "from": "mechanism",
+            "to": "detail",
+            "kind": "membership",
+            "meaning": "The re-arranged one-scale explanation uses E4 / B / C / D4 identities and the (c) marker. No cross-panel dataflow or actual magnification is claimed."
+          }
+        ],
+        "checks": [
+          "C means concatenation after copy/crop and up-convolution, not addition.",
+          "The main architecture retains original pool, up-conv and bottleneck topology.",
+          "The local explanation uses the same two actual source stages and destination stage as the main branch.",
+          "Check glyphs and the representative branch at the intended publication size."
+        ],
+        "questions": [],
+        "uncertainties": [
+          "Program-built development example; not an evaluated model-generated plan or segmentation result. The right panel independently explains existing relations rather than preserving literal source geometry."
+        ]
+      },
+      "references": [],
+      "components": [
+        {
+          "key": "recipe:unet-encoder-decoder",
+          "name": "U 形编解码与拼接跳连",
+          "revision": "2026-10-31T00:00:00.000Z",
+          "nodeCount": 62
+        }
+      ]
+    }
+  ]
+}

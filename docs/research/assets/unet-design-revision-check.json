@@ -1,0 +1,41 @@
+{
+  "sourceSnapshot": "before-review fingerprint verified",
+  "originalRecipeObjects": "all geometry, content and bindings unchanged",
+  "explanation": "same E4/B/D4 identities and same up-convolution operation",
+  "connections": "five bound paths verified against original branch",
+  "crossings": "no explanatory path intersects unrelated node",
+  "scope": "Geometric and semantic checks, not an aesthetic score",
+  "glyphCheck": {
+    "reports": [
+      {
+        "id": "unet",
+        "glyphBounds": "passed"
+      }
+    ]
+  },
+  "desktop": {
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "seconds": 57.687,
+    "reports": [
+      {
+        "name": "editor",
+        "status": "passed"
+      },
+      {
+        "name": "data",
+        "status": "passed"
+      },
+      {
+        "name": "assistant",
+        "status": "passed"
+      },
+      {
+        "name": "reconstruction",
+        "status": "passed"
+      }
+    ]
+  }
+}

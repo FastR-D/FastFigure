@@ -1,0 +1,1244 @@
+{
+  "version": "0.2",
+  "title": "时序记忆读取与后续写入",
+  "canvas": {
+    "width": 1000,
+    "height": 620
+  },
+  "style": {
+    "preset": "precise",
+    "roughness": 0.8,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "figureforge-publication-soft"
+  },
+  "nodes": [
+    {
+      "id": "history-heading",
+      "kind": "text",
+      "label": "History < t",
+      "parentId": "stream-history",
+      "x": 292,
+      "y": 70,
+      "width": 168,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "history-frame",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stream-history",
+      "x": 292,
+      "y": 98,
+      "width": 168,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#718096",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "id": "past-memory-0",
+      "kind": "rectangle",
+      "label": "m1",
+      "parentId": "stream-history",
+      "x": 296,
+      "y": 101,
+      "width": 49.333333333333336,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "past-memory-1",
+      "kind": "rectangle",
+      "label": "m2",
+      "parentId": "stream-history",
+      "x": 349.3333333333333,
+      "y": 101,
+      "width": 49.333333333333336,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "past-memory-2",
+      "kind": "rectangle",
+      "label": "m3",
+      "parentId": "stream-history",
+      "x": 402.6666666666667,
+      "y": 101,
+      "width": 49.333333333333336,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 1,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "current-heading",
+      "kind": "text",
+      "label": "Current frame t",
+      "parentId": "stream-current",
+      "x": 38,
+      "y": 168,
+      "width": 240,
+      "height": 24,
+      "textStyle": {
+        "family": "Inter",
+        "size": 17,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "frame-input",
+      "kind": "rectangle",
+      "label": "Frame t",
+      "parentId": "stream-current",
+      "x": 36,
+      "y": 232,
+      "width": 90,
+      "height": 56,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "image-encoder",
+      "kind": "rectangle",
+      "label": "Image\nencoder",
+      "parentId": "stream-current",
+      "x": 154,
+      "y": 232,
+      "width": 118,
+      "height": 56,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 0,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "memory-attention",
+      "kind": "rectangle",
+      "label": "Memory\nattention",
+      "parentId": "stream-current",
+      "x": 328,
+      "y": 232,
+      "width": 132,
+      "height": 56,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mask-decoder",
+      "kind": "rectangle",
+      "label": "Mask decoder",
+      "parentId": "stream-current",
+      "x": 512,
+      "y": 232,
+      "width": 128,
+      "height": 56,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "current-mask",
+      "kind": "rectangle",
+      "label": "Mask t",
+      "parentId": "stream-current",
+      "x": 696,
+      "y": 232,
+      "width": 104,
+      "height": 56,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 1,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "memory-encoder",
+      "kind": "rectangle",
+      "label": "Memory\nencoder",
+      "parentId": "stream-current",
+      "x": 834,
+      "y": 232,
+      "width": 110,
+      "height": 56,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "frame-encoding",
+      "kind": "path",
+      "label": "frame-encoding",
+      "parentId": "stream-current",
+      "x": 126,
+      "y": 260,
+      "width": 28,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "frame-input",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "image-encoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "current-features",
+      "kind": "path",
+      "label": "current-features",
+      "parentId": "stream-current",
+      "x": 272,
+      "y": 260,
+      "width": 56,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "image-encoder",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "memory-attention",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "conditioned-features",
+      "kind": "path",
+      "label": "conditioned-features",
+      "parentId": "stream-current",
+      "x": 460,
+      "y": 260,
+      "width": 52,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "memory-attention",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "mask-decoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 3,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "mask-prediction",
+      "kind": "path",
+      "label": "mask-prediction",
+      "parentId": "stream-current",
+      "x": 640,
+      "y": 260,
+      "width": 56,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mask-decoder",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "current-mask",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "mask-to-memory",
+      "kind": "path",
+      "label": "mask-to-memory",
+      "parentId": "stream-current",
+      "x": 800,
+      "y": 260,
+      "width": 34,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "current-mask",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "memory-encoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 1,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "history-read",
+      "kind": "path",
+      "label": "history-read",
+      "parentId": "stage",
+      "x": 284,
+      "y": 128,
+      "width": 110,
+      "height": 104,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0.8846153846153846
+          },
+          {
+            "x": 1,
+            "y": 0.8846153846153846
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "history-frame",
+          "x": 0.6071428571428571,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "memory-attention",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 3,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "history-read-label",
+      "kind": "text",
+      "label": "Read",
+      "parentId": "stage",
+      "x": 226,
+      "y": 138,
+      "width": 58,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "image-to-memory",
+      "kind": "path",
+      "label": "image-to-memory",
+      "parentId": "stream-current",
+      "x": 213,
+      "y": 274,
+      "width": 621,
+      "height": 128,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0.109375
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0.9710144927536232,
+            "y": 1
+          },
+          {
+            "x": 0.9710144927536232,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "image-encoder",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "memory-encoder",
+          "x": 0,
+          "y": 0.75
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 0,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "unconditional-feature-label",
+      "kind": "text",
+      "label": "Unconditional image features",
+      "parentId": "stream-current",
+      "x": 284,
+      "y": 374,
+      "width": 268,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "prompt-input",
+      "kind": "rectangle",
+      "label": "Points / box / mask",
+      "parentId": "stream-current",
+      "x": 294,
+      "y": 174,
+      "width": 174,
+      "height": 36,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "prompt-encoder",
+      "kind": "rectangle",
+      "label": "Prompt encoder",
+      "parentId": "stream-current",
+      "x": 512,
+      "y": 174,
+      "width": 128,
+      "height": 36,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 4,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "prompt-encoding",
+      "kind": "path",
+      "label": "prompt-encoding",
+      "parentId": "stream-current",
+      "x": 468,
+      "y": 192,
+      "width": 44,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "prompt-input",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "prompt-encoder",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "prompt-conditioning",
+      "kind": "path",
+      "label": "prompt-conditioning",
+      "parentId": "stream-current",
+      "x": 576,
+      "y": 210,
+      "width": 0,
+      "height": 22,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "prompt-encoder",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "mask-decoder",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 4,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "future-heading",
+      "kind": "text",
+      "label": "Next frame context · t+1",
+      "parentId": "stream-future",
+      "x": 314,
+      "y": 450,
+      "width": 304,
+      "height": 22,
+      "textStyle": {
+        "family": "Inter",
+        "size": 14,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "updated-bank",
+      "kind": "rectangle",
+      "label": "Updated bank ≤ t",
+      "parentId": "stream-future",
+      "x": 718,
+      "y": 464,
+      "width": 226,
+      "height": 62,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "future-attention",
+      "kind": "rectangle",
+      "label": "Read at t+1",
+      "parentId": "stream-future",
+      "x": 328,
+      "y": 480,
+      "width": 132,
+      "height": 40,
+      "textStyle": {
+        "family": "Inter",
+        "size": 13,
+        "align": "center"
+      },
+      "visual": {
+        "colorIndex": 3,
+        "radius": 6,
+        "strokeWidth": 1.3,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "memory-write",
+      "kind": "path",
+      "label": "memory-write",
+      "parentId": "stage",
+      "x": 889,
+      "y": 288,
+      "width": 0,
+      "height": 176,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "memory-encoder",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "updated-bank",
+          "x": 0.7566371681415929,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 3,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "memory-write-label",
+      "kind": "text",
+      "label": "Write for later",
+      "parentId": "stage",
+      "x": 734,
+      "y": 424,
+      "width": 140,
+      "height": 18,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "next-memory-read",
+      "kind": "path",
+      "label": "next-memory-read",
+      "parentId": "stream-future",
+      "x": 460,
+      "y": 495,
+      "width": 258,
+      "height": 5,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0.12403100775193798,
+            "y": 0
+          },
+          {
+            "x": 0.12403100775193798,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "updated-bank",
+          "x": 0,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "future-attention",
+          "x": 1,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "colorIndex": 3,
+        "strokeWidth": 1.3,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "structure-title",
+      "kind": "text",
+      "label": "Prompted streaming with explicit memory state",
+      "parentId": "stage",
+      "x": 16,
+      "y": 14,
+      "width": 948,
+      "height": 30,
+      "textStyle": {
+        "family": "Inter",
+        "size": 20,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-note",
+      "kind": "text",
+      "label": "Schematic bank slots; forward streaming only. Memory selection, object pointers and decoder skips are omitted.",
+      "parentId": "stage",
+      "x": 16,
+      "y": 570,
+      "width": 948,
+      "height": 20,
+      "textStyle": {
+        "family": "Inter",
+        "size": 11,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "structure-left",
+      "kind": "port",
+      "label": "Structure left",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-left",
+        "direction": "both",
+        "side": "left",
+        "position": 0.5
+      }
+    },
+    {
+      "id": "structure-right",
+      "kind": "port",
+      "label": "Structure right",
+      "parentId": "stage",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "interfaceFor": "stage",
+      "socket": {
+        "key": "structure-right",
+        "direction": "both",
+        "side": "right",
+        "position": 0.5
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "parametric": {
+        "version": 1,
+        "recipe": {
+          "id": "streaming-memory",
+          "version": 1,
+          "parameters": {
+            "memories": 3,
+            "prompt": "show"
+          }
+        },
+        "revision": 0,
+        "objects": {
+          "stage": "stage",
+          "stream-history": "stream-history",
+          "stream-current": "stream-current",
+          "stream-future": "stream-future",
+          "history-heading": "history-heading",
+          "history-frame": "history-frame",
+          "past-memory-0": "past-memory-0",
+          "past-memory-1": "past-memory-1",
+          "past-memory-2": "past-memory-2",
+          "current-heading": "current-heading",
+          "frame-input": "frame-input",
+          "image-encoder": "image-encoder",
+          "memory-attention": "memory-attention",
+          "mask-decoder": "mask-decoder",
+          "current-mask": "current-mask",
+          "memory-encoder": "memory-encoder",
+          "frame-encoding": "frame-encoding",
+          "current-features": "current-features",
+          "conditioned-features": "conditioned-features",
+          "mask-prediction": "mask-prediction",
+          "mask-to-memory": "mask-to-memory",
+          "history-read": "history-read",
+          "history-read-label": "history-read-label",
+          "image-to-memory": "image-to-memory",
+          "unconditional-feature-label": "unconditional-feature-label",
+          "prompt-input": "prompt-input",
+          "prompt-encoder": "prompt-encoder",
+          "prompt-encoding": "prompt-encoding",
+          "prompt-conditioning": "prompt-conditioning",
+          "future-heading": "future-heading",
+          "updated-bank": "updated-bank",
+          "future-attention": "future-attention",
+          "memory-write": "memory-write",
+          "memory-write-label": "memory-write-label",
+          "next-memory-read": "next-memory-read",
+          "structure-title": "structure-title",
+          "structure-note": "structure-note",
+          "structure-left": "structure-left",
+          "structure-right": "structure-right"
+        }
+      },
+      "id": "stage",
+      "parentId": null,
+      "title": "Streaming memory composition",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 980,
+      "height": 600,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "evidence": {
+        "title": "SAM 2: Segment Anything in Images and Videos · ICLR 2025 · Fig. 1–3 / §4",
+        "reference": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/45c1f6a8cbf2da59ebf2c802b4f742cd-Abstract-Conference.html · 独立抽象当前帧、可选提示、历史读取与后续状态写入。补出 Fig. 3 图注说明的无条件图像特征到记忆编码器输入；非完整 SAM 2，省略对象指针、高分辨率跳连、消歧与缓存策略。槽位数量仅示意。"
+      }
+    },
+    {
+      "id": "stream-history",
+      "parentId": "stage",
+      "title": "Previously observed state",
+      "role": "component",
+      "x": 282,
+      "y": 64,
+      "width": 188,
+      "height": 74,
+      "visual": {
+        "colorIndex": 3,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "stream-current",
+      "parentId": "stage",
+      "title": "Current frame t",
+      "role": "component",
+      "x": 20,
+      "y": 154,
+      "width": 940,
+      "height": 266,
+      "visual": {
+        "colorIndex": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "stream-future",
+      "parentId": "stage",
+      "title": "Subsequent frame context",
+      "role": "component",
+      "x": 300,
+      "y": 444,
+      "width": 660,
+      "height": 100,
+      "visual": {
+        "colorIndex": 2,
+        "strokeWidth": 1,
+        "handDrawn": false
+      }
+    }
+  ],
+  "references": [],
+  "compositionPlans": [
+    {
+      "version": 1,
+      "runId": "d5d5e68b-18d4-48c8-ac0b-c2f9db57b851",
+      "userGoal": "Demonstrate an independently arranged native mechanism based on a verified accepted 2025 paper, without original artwork or measured results.",
+      "plan": {
+        "status": "ready",
+        "title": "Streaming memory composition",
+        "goal": "Demonstrate an independently arranged native mechanism based on a verified accepted 2025 paper, without original artwork or measured results.",
+        "readingOrder": "top-to-bottom",
+        "layout": "Past state above; wide current-frame mechanism central; subsequent state below. Shared memory color identifies state, with a separate prompt branch.",
+        "style": {
+          "preset": "precise",
+          "paletteId": "figureforge-publication-soft",
+          "fontFamily": "Inter",
+          "surface": "transparent",
+          "usage": "Stable colors encode state or view identity; native bound arrows show supplied data relationships only."
+        },
+        "sections": [
+          {
+            "id": "stream-history",
+            "title": "Previously observed state",
+            "purpose": "Earlier memory state establishes what is read, not what is produced this frame.",
+            "visual": "Earlier memory state establishes what is read, not what is produced this frame.",
+            "design": {
+              "role": "context",
+              "structure": "tensor",
+              "rationale": "Earlier memory state establishes what is read, not what is produced this frame.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "stream-history",
+                "x": 0.28688524590163933,
+                "y": 0.1040268456375839,
+                "width": 0.19262295081967212,
+                "height": 0.12416107382550336
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "stream-current",
+            "title": "Current frame t",
+            "purpose": "Prompt conditioning and two memory-encoder inputs explain the current frame; the write goes to a later state.",
+            "visual": "Prompt conditioning and two memory-encoder inputs explain the current frame; the write goes to a later state.",
+            "design": {
+              "role": "mechanism",
+              "structure": "temporal-memory",
+              "rationale": "Prompt conditioning and two memory-encoder inputs explain the current frame; the write goes to a later state.",
+              "emphasis": "primary",
+              "frame": {
+                "id": "stream-current",
+                "x": 0.018442622950819672,
+                "y": 0.2550335570469799,
+                "width": 0.9631147540983607,
+                "height": 0.4463087248322148
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          },
+          {
+            "id": "stream-future",
+            "title": "Subsequent frame context",
+            "purpose": "The updated bank is read at a subsequent time, avoiding an instantaneous computation cycle.",
+            "visual": "The updated bank is read at a subsequent time, avoiding an instantaneous computation cycle.",
+            "design": {
+              "role": "context",
+              "structure": "temporal-memory",
+              "rationale": "The updated bank is read at a subsequent time, avoiding an instantaneous computation cycle.",
+              "emphasis": "supporting",
+              "frame": {
+                "id": "stream-future",
+                "x": 0.305327868852459,
+                "y": 0.7416107382550335,
+                "width": 0.6762295081967213,
+                "height": 0.16778523489932887
+              }
+            },
+            "components": [],
+            "referenceImages": [],
+            "annotations": []
+          }
+        ],
+        "connections": [
+          {
+            "from": "stream-history",
+            "to": "stream-current",
+            "kind": "dataflow",
+            "meaning": "Read previously observed memory to condition current features."
+          },
+          {
+            "from": "stream-current",
+            "to": "stream-future",
+            "kind": "dataflow",
+            "meaning": "Write encoded current mask and unconditional image features to the subsequent memory state."
+          }
+        ],
+        "checks": [
+          "Past and updated banks have distinct temporal meanings.",
+          "Both mask and unconditional image features feed the memory encoder.",
+          "The prompt branch is optional; memory count is a schematic display."
+        ],
+        "questions": [],
+        "uncertainties": [
+          "Development example, not a real model-planning evaluation. Source architecture details are deliberately omitted as recorded in recipe semantics."
+        ]
+      },
+      "references": [],
+      "components": []
+    }
+  ]
+}
