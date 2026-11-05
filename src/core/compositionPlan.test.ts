@@ -94,6 +94,7 @@ describe('reviewable composition planning',()=>{
   it('rejects unknown semantic sources, duplicate maps, conflicting modes and scientific chart remapping atomically',()=>{
     const catalogue=entries(),p=plan(),map:ColorMapping={sourcePaletteId:'figureforge-tableau10',sourceIndex:0,targetPaletteId:p.style.paletteId,targetIndex:2,role:'Processing'};p.sections[0]!.components[0]!.colorMap=[map]
     expect(()=>parse(response(p),catalogue)).toThrow('不存在');expect(()=>colorMapSchema.parse([map,map])).toThrow('重复');expect(()=>colorMapSchema.parse([{...map,targetIndex:11}])).toThrow('色槽')
+    const legacyEntry=catalogue[0]!;if(legacyEntry.kind==='asset')delete legacyEntry.asset.figure.style.paletteId
     map.sourcePaletteId='legacy:blue';expect(parse(response(p),catalogue).compositionRecord.plan.sections[0]!.components[0]!.colorMap).toHaveLength(1)
     p.sections[0]!.components[0]!.colorIndex=2;expect(()=>parse(response(p),catalogue)).toThrow('不能混用');delete p.sections[0]!.components[0]!.colorIndex
     p.sections[0]!.components[0]!.colorMap![0]!.targetPaletteId='figureforge-tableau10';expect(()=>parse(response(p),catalogue)).toThrow('方案目标配色')

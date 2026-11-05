@@ -4,7 +4,7 @@ import { Header, Box, Text, BrandMark, Button, Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 const editor = useEditor()
 defineEmits<{ export: []; project: [] }>()
-const saveLabel = computed(() => editor.saved.value ? '已保存到本地' : '有未保存的更改')
+const saveLabel = computed(() => editor.storageError.value || (editor.saved.value ? '已保存到本地' : '有未保存的更改'))
 </script>
 
 <template>

@@ -39,7 +39,7 @@ describe('Research component retrieval and deterministic composition', () => {
   })
 
   it('marks omitted colour-use annotations as unspecified while keeping palette, slot and value validation strict',()=>{
-    const base=createBlank(),sources:CatalogueEntry[]=[{kind:'recipe',id:'scaled-attention'}],mapping={sourcePaletteId:'figureforge-publication-soft',sourceIndex:0,targetPaletteId:'figureforge-publication-soft',targetIndex:1},instance={id:'attention',componentKey:'recipe:scaled-attention',parentId:'stage',x:80,y:160,fit:{width:800,height:400},colorMap:[mapping]},response={message:'Mapped native attention',figure:base,instances:[instance]},saved=clone(sources)
+    const base=createBlank(),sources:CatalogueEntry[]=[{kind:'recipe',id:'scaled-attention'}],mapping={sourcePaletteId:'paper-reference',sourceIndex:0,targetPaletteId:'figureforge-publication-soft',targetIndex:1},instance={id:'attention',componentKey:'recipe:scaled-attention',parentId:'stage',x:80,y:160,fit:{width:800,height:400},colorMap:[mapping]},response={message:'Mapped native attention',figure:base,instances:[instance]},saved=clone(sources)
     const result=parseHarnessResponse(JSON.stringify(response),base,sources);expect(result.used[0]!.colorMap![0]!.role).toBe('用途未注明');expect(result.figure!.containers.find(c=>c.id==='attention')!.appearance!.colorMap![0]!.role).toBe('用途未注明');expect(sources).toEqual(saved)
     for(const invalid of [{...mapping,sourcePaletteId:'invented'},{...mapping,targetIndex:12},{...mapping,role:2}])expect(()=>parseHarnessResponse(JSON.stringify({...response,instances:[{...instance,colorMap:[invalid]}]}),base,sources)).toThrow()
   })

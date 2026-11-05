@@ -166,12 +166,14 @@ export function routeEdge(doc: FigureDocument, edge: FigureEdge, fixed?:{source:
   // internal geometry so another interface on the same boundary is not a false obstacle.
   const owners=new Set([source.interfaceFor,target.interfaceFor].filter((id):id is string=>!!id))
   const endpointId=(node:typeof source)=>node.interfaceFor?`interface:${node.interfaceFor}`:`node:${node.id}`
-  // Inset labels and divider paths belong to a terminal's visible body. Their
+  // Inset labels and divider strokes belong to a terminal's visible body. Their
   // clearance must not block departure from that body's boundary. Keep partial
   // overlaps and annotations in other groups as real obstacles.
   const insetDecoration=(node:typeof source)=>[source,target].some(endpoint=>
     !endpoint.interfaceFor&&!['text','path','port'].includes(endpoint.kind)
-    &&(node.kind==='text'||node.kind==='path')&&node.parentId===endpoint.parentId
+    &&(node.kind==='text'||node.kind==='path'||node.kind==='rectangle'&&!node.label&&!node.description&&!node.structure
+      &&!doc.edges.some(e=>e.source===node.id||e.target===node.id)
+      &&(node.height<=2*(node.metricScale??1)&&node.width>=endpoint.width*.8||node.width<=2*(node.metricScale??1)&&node.height>=endpoint.height*.8))&&node.parentId===endpoint.parentId
     &&node.x>=endpoint.x-epsilon&&node.y>=endpoint.y-epsilon
     &&node.x+node.width<=endpoint.x+endpoint.width+epsilon
     &&node.y+node.height<=endpoint.y+endpoint.height+epsilon)

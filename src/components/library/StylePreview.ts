@@ -11,7 +11,7 @@ export default defineComponent({
   setup(props) {
     return () => {
       if(props.theme){
-        const theme=props.theme,doc=createBlank();doc.style={...doc.style,preset:theme.preset,sketchStyle:theme.sketchStyle,roughness:theme.roughness??1,paletteId:theme.paletteId,fontFamily:theme.fontFamily}
+        const theme=props.theme,doc=createBlank();doc.style={...doc.style,designSystem:theme.designSystem??'legacy',fontRoles:theme.fontRoles,preset:theme.preset,sketchStyle:theme.sketchStyle,roughness:theme.roughness??1,paletteId:theme.paletteId,fontFamily:theme.fontFamily}
         Object.assign(doc.containers[0]!,{role:'component',x:7,y:6,width:118,height:64,visual:{tone:theme.surface==='hatch'?'hatch':'fill'}})
         doc.nodes=[{id:'preview-box',parentId:'stage',kind:'rectangle',label:'Abc',x:18,y:21,width:43,height:32,textStyle:{size:16}},{id:'preview-circle',parentId:'stage',kind:'ellipse',label:'x',x:85,y:23,width:30,height:30,textStyle:{size:16},visual:{colorIndex:1}}]
         doc.edges=[{id:'preview-link',source:'preview-box',target:'preview-circle',sourcePort:'right',targetPort:'left'}]

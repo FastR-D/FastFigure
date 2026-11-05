@@ -1,4 +1,5 @@
 [
+  {"id":"paper-reference","title":"Paper · 柔和论文插图","family":"paper","kind":"qualitative","colors":["#e7e6e6","#bad9c8","#e4dbea","#fff7df","#4477cc","#4f8139"],"source":"FastFigure","sourceUrl":"","license":"Original palette","tags":["默认","论文","语义","柔和"]},
   {"id":"theme-comic","title":"Comic · 柔和彩色","family":"handdrawn","kind":"qualitative","colors":["#80b1d3","#b3de69","#fdb462","#bc80bd","#fb8072","#8dd3c7"],"source":"FastFigure","sourceUrl":"","license":"Original palette","tags":["主题","手绘","comic"]},
   {"id":"theme-xkcd","title":"XKCD · 黑白手稿","family":"handdrawn","kind":"qualitative","colors":["#202020"],"source":"FastFigure","sourceUrl":"","license":"Original palette","tags":["主题","黑白","xkcd"]},
   {"id":"theme-excalidraw","title":"Excalidraw · 淡彩白板","family":"handdrawn","kind":"qualitative","colors":["#1971c2","#2f9e44","#e03131","#f08c00","#7048e8","#0c8599"],"source":"FastFigure","sourceUrl":"https://excalidraw.com/","license":"Original palette selection","tags":["主题","白板","excalidraw"]},

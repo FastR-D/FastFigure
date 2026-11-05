@@ -280,7 +280,7 @@ describe('hierarchy, selection and constrained geometry', () => {
     doc.containers[2]!.appearance = { preset: 'header', accent: 'inherit' }
     expect(resolveStyle(doc, 'g2')).toMatchObject({ preset: 'header', accent: 'rose' })
     expect(resolveStyle(doc, 'a')).toMatchObject({ preset: 'header', accent: 'rose' })
-    expect(resolveStyle(doc, 'c')).toMatchObject({ preset: 'soft', accent: 'blue' })
+    expect(resolveStyle(doc, 'c')).toMatchObject({ preset: doc.style.preset, accent: 'blue' })
     expect(exportSvg(doc)).toContain('#714d68')
     expect(exportDrawio(doc)).toContain('strokeColor=#714d68')
     expect(doc.nodes).toEqual(before)

@@ -1,3 +1,4 @@
+import {paperNode,paperContainer} from './paperStyle.ts'
 import {ancestors,commonContainer,resolveStyle} from './geometry.ts'
 import {canColorContainer} from './containerColor.ts'
 import {colorMapSchema,colorMapKey,colorSlotKey,sourceColorSlot,sourceSlotColor,type ColorMapping} from './colorMappingContract.ts'
@@ -16,10 +17,10 @@ export function colorSlotInventory(doc:FigureDocument,containerId='stage'){
     if(group.examples.length<5)group.examples.push(label||id)
     const color=figurePaint(style,index).color;if(!group.currentColors.includes(color))group.currentColors.push(color)
   }
-  for(const c of doc.containers)if(scope.has(c.id)&&!(c.role==='component'&&c.visual?.fill==='none'&&c.visual?.stroke==='none'))add(c.id,c.id,c.visual?.colorIndex,c.title)
-  for(const n of doc.nodes)if(scope.has(n.id)&&n.kind!=='port'){
+  for(const c of doc.containers)if(scope.has(c.id)&&!(c.role==='component'&&c.visual?.fill==='none'&&c.visual?.stroke==='none'))add(c.id,c.id,paperContainer(c,resolveStyle(doc,c.id)).visual?.colorIndex,c.title)
+  for(const n of doc.nodes)if(scope.has(n.id)&&n.kind!=='port'&&n.kind!=='image'){
     const paintText=!!n.visual?.textTone&&(!n.textStyle?.color||!!n.description&&!n.descriptionStyle?.color),paintShape=n.kind==='path'?n.visual?.stroke===undefined||n.visual?.fill===undefined&&!!n.visual?.tone:n.kind==='icon'?n.visual?.stroke===undefined:n.kind!=='text'&&(n.visual?.fill===undefined||n.visual?.stroke===undefined||!!n.structure)
-    if(paintText||paintShape)add(n.id,n.parentId,n.visual?.colorIndex,n.label||n.name||n.kind)
+    if(paintText||paintShape)add(n.id,n.parentId,paperNode(n,resolveStyle(doc,n.parentId)).visual?.colorIndex,n.label||n.name||n.kind)
   }
   for(const edge of doc.edges)if(scope.has(edge.source)&&scope.has(edge.target))add(edge.id,commonContainer(doc,edge.source,edge.target),undefined,'内部连接',true)
   return [...groups.values()].sort((a,b)=>colorSlotKey(a).localeCompare(colorSlotKey(b)))

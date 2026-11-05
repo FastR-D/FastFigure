@@ -10,9 +10,9 @@ export type ScaledAttentionParameters=z.infer<typeof scaledAttentionParametersSc
 export function scaledAttentionFigure(input:ScaledAttentionParameters){
   const p=scaledAttentionParametersSchema.parse(input),figure=createBlank(),root=figure.containers[0]!,offset=p.mask==='causal'?100:0,cy=230
   Object.assign(root,{role:'component',width:880+offset,height:510,visual:{fill:'none',stroke:'none'}})
-  figure.style={...figure.style,preset:'precise',paletteId:'figureforge-publication-soft'}
+  figure.style={...figure.style,preset:'precise'}
   function text(id:string,label:string,x:number,y:number,width:number,height:number,size=14,parentId='stage'){
-    const node:FigureNode={id,kind:'text',label,parentId,x,y,width,height,textStyle:{family:'Inter',size,align:'center'},visual:{padding:0,fill:'none',stroke:'none'}};figure.nodes.push(node);return node
+    const node:FigureNode={id,kind:'text',label,parentId,x,y,width,height,textRole:id==='attention-label'?'heading':id==='attention-formula'?'math':size<12?'caption':'body',textStyle:{size,align:'center'},visual:{padding:0,fill:'none',stroke:'none'}};figure.nodes.push(node);return node
   }
   function path(id:string,points:PathPoint[],parentId='stage',colorIndex=0){
     const node:FigureNode={id,kind:'path',label:'',parentId,x:0,y:0,width:0,height:0,path:{points:[{x:0,y:0},{x:1,y:1}],arrow:'none'},visual:{fill:'none',colorIndex,strokeWidth:.8,strokeOpacity:.55,handDrawn:false}};setPathPoints(node,points);figure.nodes.push(node);return node
@@ -27,7 +27,7 @@ export function scaledAttentionFigure(input:ScaledAttentionParameters){
     if(p.details==='show')text(`${id}-dimensions`,dimensions,x-2,y+height+(below?30:7),width+4,18,11,parentId)
     return frame
   }
-  function operation(id:string,label:string,x:number,width:number,round=false){const node:FigureNode={id,kind:round?'ellipse':'rectangle',label,parentId:'stage',x,y:cy-23,width,height:46,textStyle:{family:'Inter',size:round?25:16,align:'center'},visual:{radius:round?23:8,tone:'fill',padding:2,strokeWidth:1.3}};figure.nodes.push(node);return node}
+  function operation(id:string,label:string,x:number,width:number,round=false){const node:FigureNode={id,kind:round?'ellipse':'rectangle',label,parentId:'stage',x,y:cy-23,width,height:46,textStyle:{size:round?25:16,align:'center'},visual:{radius:round?23:8,tone:'fill',padding:2,strokeWidth:1.3}};figure.nodes.push(node);return node}
   function edge(id:string,source:FigureNode,target:FigureNode,sourcePort:Port='right',targetPort:Port='left'){
     figure.edges.push({id,source:source.id,target:target.id,sourcePort,targetPort,routing:sourcePort==='right'&&targetPort==='left'?'straight':'orthogonal'})
   }

@@ -73,11 +73,16 @@ describe('shared obstacle-aware orthogonal routing', () => {
       {id:'input-value',parentId:'stage',kind:'text',label:'x₂',x:112,y:298,width:96,height:30},
       {id:'input-divider',parentId:'stage',kind:'path',label:'',x:110,y:305,width:100,height:0,path:{points:[{x:0,y:0},{x:1,y:0}],arrow:'none'}},
       {id:'output-value',parentId:'stage',kind:'text',label:'y₁',x:772,y:298,width:96,height:30},
+      {id:'output-divider',parentId:'stage',kind:'rectangle',label:'',x:770.75,y:314.25,width:98.5,height:1.5,visual:{fill:'#202020',stroke:'none'}},
     )
     parseDocument(doc)
     const before=clone(doc),route=routeEdge(doc,doc.edges[0]!)
     expect(route).toEqual({status:'clear',points:[{x:210,y:315},{x:770,y:315}]})
     expect(exportSvg(doc)).not.toContain('data-routing-status="blocked"');expect(doc).toEqual(before)
+    // A substantial shape is not inferred to be a divider just because it is inset.
+    doc.nodes.find(n=>n.id==='output-divider')!.height=3
+    expect(routeEdge(doc,doc.edges[0]!).status).toBe('blocked')
+    doc.nodes.find(n=>n.id==='output-divider')!.height=1.5
     // Text that protrudes beyond the body still prevents a falsely clear route.
     doc.nodes.find(n=>n.id==='input-value')!.width=104
     expect(routeEdge(doc,doc.edges[0]!).status).toBe('blocked')

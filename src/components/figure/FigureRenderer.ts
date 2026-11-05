@@ -1,6 +1,8 @@
+import {isPaperStyle} from '../../core/paperStyle'
+import {outputFrame} from '../../core/outputFrame'
 import {edgeWaypointPoints} from '../../core/edgeWaypoints'
 import { fontStack } from '../../data/materials'
-import { computed, defineComponent, h, type PropType, type VNode } from 'vue'
+import { computed, defineComponent, h,ref,onMounted,onBeforeUnmount, type PropType, type VNode } from 'vue'
 import { createScene, type SvgElement } from '../../core/svg'
 import { findObject, type Rect } from '../../core/geometry'
 import { anchor, type FigureDocument } from '../../core/model'
@@ -45,6 +47,8 @@ export default defineComponent({
     pathPointRemove:(_id:string,_index:number)=>true,
   },
   setup(props, { emit }) {
+    const fontEpoch=ref(0),fontsLoaded=()=>fontEpoch.value++
+    onMounted(()=>document.fonts?.addEventListener('loadingdone',fontsLoaded));onBeforeUnmount(()=>document.fonts?.removeEventListener('loadingdone',fontsLoaded))
     const routes = computed(() => props.routes ?? routeFigure(props.figure))
     function render(item: SvgElement | string): VNode | string {
       if(typeof item==='string')return item
@@ -53,6 +57,7 @@ export default defineComponent({
       return h(item.tag,attrs,(item.children??[]).map(render))
     }
     return () => {
+      void fontEpoch.value
       const doc = props.figure, overlay: VNode[] = []
       if (props.highlightedId) {
         const object = findObject(doc, props.highlightedId)
@@ -138,13 +143,14 @@ export default defineComponent({
         if (props.selectionRect) overlay.push(h('rect', { ...props.selectionRect, fill: '#2f8af5', 'fill-opacity': 0.08,
           stroke: '#2f8af5', 'stroke-width': 1, 'stroke-dasharray': '4 3', 'pointer-events': 'none', 'data-selection-region': '' }))
       }
-      const scene=createScene(doc,props.showDocumentTitle??doc.publication?.showTitle??true,routes.value)
+      if(props.interactive&&doc.canvas.frame)overlay.push(h('rect',{...doc.canvas.frame,fill:'none',stroke:'#8895a3','stroke-width':1,'stroke-dasharray':'5 5','pointer-events':'none','data-output-frame':''}))
+      const scene=createScene(doc,props.showDocumentTitle??doc.publication?.showTitle??!isPaperStyle(doc.style),routes.value)
       const hits=props.interactive?figureHitLayers(scene,doc,{
         down:(id,event)=>{if(props.selectionOnly)emit('select',id,event.shiftKey||event.ctrlKey||event.metaKey);else emit('objectDown',id,event)},
         select:(id,additive)=>emit('select',id,additive),
         edit:(id,field)=>emit('edit',id,field as TextEditField),
       },{selectionOnly:props.selectionOnly,connectMode:props.connectMode,selectedIds:props.selectedIds}):[]
-      const viewport = props.viewport ?? { x: 0, y: 0, width: doc.canvas.width, height: doc.canvas.height }
+      const viewport = props.viewport ?? (props.interactive?{x:0,y:0,width:doc.canvas.width,height:doc.canvas.height}:outputFrame(doc))
       return h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: `${viewport.x} ${viewport.y} ${viewport.width} ${viewport.height}`,
         width: '100%', height: '100%', role: 'img', 'aria-label': doc.title, 'data-testid': props.interactive ? props.selectionOnly?'capture-canvas':'figure-canvas' : undefined,
         style: `display:block;touch-action:none;font-synthesis:weight style;font-family:${fontStack(props.figure.style.fontFamily)}`,

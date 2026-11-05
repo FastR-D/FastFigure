@@ -1,0 +1,2606 @@
+{
+  "version": "0.2",
+  "title": "Internalizer · 详细机制标杆",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 416
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "fontFamily": "Comic Neue",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "state-band",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 6,
+      "y": 7,
+      "width": 988,
+      "height": 78,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "band",
+        "fill": "#f5f9f5"
+      }
+    },
+    {
+      "id": "interaction-band",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 6,
+      "y": 93,
+      "width": 988,
+      "height": 129,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "band"
+      }
+    },
+    {
+      "id": "memory-band",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 6,
+      "y": 228,
+      "width": 988,
+      "height": 180,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "band",
+        "fill": "#f7f4fa"
+      }
+    },
+    {
+      "id": "internalizer-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 23,
+      "y": 29,
+      "width": 314,
+      "height": 45,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17,
+        "align": "left"
+      },
+      "visual": {
+        "role": "primary",
+        "padding": 16
+      }
+    },
+    {
+      "id": "state-title-1",
+      "kind": "text",
+      "label": "Internalizer t = 1",
+      "parentId": "stage",
+      "x": 39,
+      "y": 39,
+      "width": 141,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 16
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "shape-1",
+      "kind": "text",
+      "label": "ℝLₜ×d → ℝK×d",
+      "parentId": "stage",
+      "x": 180,
+      "y": 39,
+      "width": 141,
+      "height": 25,
+      "textRuns": [
+        {
+          "text": "ℝ",
+          "family": "Noto Serif SC"
+        },
+        {
+          "text": "Lₜ×d",
+          "italic": true,
+          "script": "super"
+        },
+        {
+          "text": " → ℝ",
+          "family": "Noto Serif SC"
+        },
+        {
+          "text": "K×d",
+          "italic": true,
+          "script": "super"
+        }
+      ],
+      "textRole": "math",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "update-internalizer",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 374,
+      "y": 29,
+      "width": 201,
+      "height": 45,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17
+      },
+      "visual": {
+        "role": "primary",
+        "fill": "#e0ebd9"
+      }
+    },
+    {
+      "id": "update-title",
+      "kind": "text",
+      "label": "Update Internalizer",
+      "parentId": "stage",
+      "x": 382,
+      "y": 39,
+      "width": 185,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 16
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:refresh"
+    },
+    {
+      "id": "internalizer-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 618,
+      "y": 29,
+      "width": 355,
+      "height": 45,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17,
+        "align": "left"
+      },
+      "visual": {
+        "role": "primary",
+        "padding": 34
+      }
+    },
+    {
+      "id": "state-title-2",
+      "kind": "text",
+      "label": "Internalizer t = 2",
+      "parentId": "stage",
+      "x": 634,
+      "y": 39,
+      "width": 161.5,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 16
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "shape-2",
+      "kind": "text",
+      "label": "ℝLₜ×d → ℝK×d",
+      "parentId": "stage",
+      "x": 795.5,
+      "y": 39,
+      "width": 161.5,
+      "height": 25,
+      "textRuns": [
+        {
+          "text": "ℝ",
+          "family": "Noto Serif SC"
+        },
+        {
+          "text": "Lₜ×d",
+          "italic": true,
+          "script": "super"
+        },
+        {
+          "text": " → ℝ",
+          "family": "Noto Serif SC"
+        },
+        {
+          "text": "K×d",
+          "italic": true,
+          "script": "super"
+        }
+      ],
+      "textRole": "math",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "advance-1",
+      "kind": "path",
+      "label": "advance-1",
+      "parentId": "stage",
+      "x": 337,
+      "y": 51.5,
+      "width": 37,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "advance-2",
+      "kind": "path",
+      "label": "advance-2",
+      "parentId": "stage",
+      "x": 575,
+      "y": 51.5,
+      "width": 43,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "query",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 21,
+      "y": 110,
+      "width": 151,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "query-title",
+      "kind": "text",
+      "label": "‹query›",
+      "parentId": "stage",
+      "x": 27,
+      "y": 114,
+      "width": 139,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:chat"
+    },
+    {
+      "id": "query-body",
+      "kind": "text",
+      "label": "Help me understand\nthis codebase.",
+      "parentId": "stage",
+      "x": 30,
+      "y": 140,
+      "width": 133,
+      "height": 37,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14.5
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "input-token-card",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 177,
+      "y": 110,
+      "width": 143,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens"
+      }
+    },
+    {
+      "id": "input-token-title",
+      "kind": "text",
+      "label": "‹internalize tokens›",
+      "parentId": "stage",
+      "x": 179,
+      "y": 112,
+      "width": 139,
+      "height": 24,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "input-token-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 184,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "input-token-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 206,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "input-token-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 228,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "input-token-3",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 250,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "input-token-4",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 272,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "input-token-5",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 294,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "target-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 327,
+      "y": 103,
+      "width": 321,
+      "height": 109,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "target"
+      }
+    },
+    {
+      "id": "target-1-label",
+      "kind": "text",
+      "label": "target₁",
+      "parentId": "stage",
+      "x": 437.5,
+      "y": 183,
+      "width": 100,
+      "height": 25,
+      "textRole": "math",
+      "textStyle": {
+        "size": 21,
+        "bold": true,
+        "color": "#4477cc"
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "think",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 336,
+      "y": 110,
+      "width": 149,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "think-title",
+      "kind": "text",
+      "label": "‹think›",
+      "parentId": "stage",
+      "x": 342,
+      "y": 114,
+      "width": 137,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:thought"
+    },
+    {
+      "id": "think-body",
+      "kind": "text",
+      "label": "First, I need to find\nthe entrance code.",
+      "parentId": "stage",
+      "x": 345,
+      "y": 140,
+      "width": 131,
+      "height": 37,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14.5
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "tool",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 492,
+      "y": 110,
+      "width": 150,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "tool-title",
+      "kind": "text",
+      "label": "‹tool call›",
+      "parentId": "stage",
+      "x": 498,
+      "y": 114,
+      "width": 138,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:tool"
+    },
+    {
+      "id": "tool-body",
+      "kind": "text",
+      "label": "› read model.py\n› grep generate()",
+      "parentId": "stage",
+      "x": 501,
+      "y": 140,
+      "width": 132,
+      "height": 37,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14.5
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "observe",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 654,
+      "y": 110,
+      "width": 140,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "observe-title",
+      "kind": "text",
+      "label": "‹observe›",
+      "parentId": "stage",
+      "x": 660,
+      "y": 114,
+      "width": 128,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:search"
+    },
+    {
+      "id": "observe-body",
+      "kind": "text",
+      "label": "def generate(…):\n  return output",
+      "parentId": "stage",
+      "x": 663,
+      "y": 140,
+      "width": 122,
+      "height": 37,
+      "textRuns": [
+        {
+          "text": "def ",
+          "color": "#b929c2",
+          "italic": true
+        },
+        {
+          "text": "generate(…)",
+          "color": "#477cff",
+          "italic": true
+        },
+        {
+          "text": ":\n  return output"
+        }
+      ],
+      "textRole": "body",
+      "textStyle": {
+        "size": 14.5,
+        "align": "left"
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "output-token-card",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 800,
+      "y": 110,
+      "width": 73,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "tokens"
+      }
+    },
+    {
+      "id": "output-token-title",
+      "kind": "text",
+      "label": "‹tokens›",
+      "parentId": "stage",
+      "x": 802,
+      "y": 112,
+      "width": 69,
+      "height": 24,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "output-token-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 805,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "output-token-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 827,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "output-token-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 849,
+      "y": 148,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "tokens",
+        "fill": "#ffecae",
+        "stroke": "#ffbd00",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "target-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 880,
+      "y": 103,
+      "width": 103,
+      "height": 109,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "target"
+      }
+    },
+    {
+      "id": "think-next",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 890,
+      "y": 110,
+      "width": 83,
+      "height": 33,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "think-next-title",
+      "kind": "text",
+      "label": "‹think›",
+      "parentId": "stage",
+      "x": 896,
+      "y": 115,
+      "width": 71,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:thought"
+    },
+    {
+      "id": "tool-next",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 890,
+      "y": 151,
+      "width": 83,
+      "height": 30,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "tool-next-title",
+      "kind": "text",
+      "label": "‹tool›",
+      "parentId": "stage",
+      "x": 896,
+      "y": 154.5,
+      "width": 71,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:tool"
+    },
+    {
+      "id": "target-2-label",
+      "kind": "text",
+      "label": "target₂",
+      "parentId": "stage",
+      "x": 888,
+      "y": 183,
+      "width": 87,
+      "height": 25,
+      "textRole": "math",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "color": "#4477cc"
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "query-state",
+      "kind": "path",
+      "label": "query-state",
+      "parentId": "stage",
+      "x": 96.5,
+      "y": 74,
+      "width": 0,
+      "height": 36,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "state-tokens",
+      "kind": "path",
+      "label": "state-tokens",
+      "parentId": "stage",
+      "x": 248.5,
+      "y": 74,
+      "width": 0,
+      "height": 36,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "think-update",
+      "kind": "path",
+      "label": "think-update",
+      "parentId": "stage",
+      "x": 474.5,
+      "y": 74,
+      "width": 0,
+      "height": 29,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "target-state",
+      "kind": "path",
+      "label": "target-state",
+      "parentId": "stage",
+      "x": 634,
+      "y": 74,
+      "width": 0,
+      "height": 29,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "observe-state",
+      "kind": "path",
+      "label": "observe-state",
+      "parentId": "stage",
+      "x": 724,
+      "y": 74,
+      "width": 0,
+      "height": 36,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "state-output",
+      "kind": "path",
+      "label": "state-output",
+      "parentId": "stage",
+      "x": 836.5,
+      "y": 74,
+      "width": 0,
+      "height": 36,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "entry",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 21,
+      "y": 239,
+      "width": 314,
+      "height": 157,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "radius": 24
+      }
+    },
+    {
+      "id": "entry-heading",
+      "kind": "text",
+      "label": "Internalizer Entry",
+      "parentId": "stage",
+      "x": 37,
+      "y": 247,
+      "width": 282,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "lora-tile",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 34,
+      "y": 276,
+      "width": 82,
+      "height": 87,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "fill": "#f6f2f9",
+        "stroke": "none",
+        "radius": 13
+      }
+    },
+    {
+      "id": "lora-left",
+      "kind": "path",
+      "label": "lora-left",
+      "parentId": "stage",
+      "x": 48,
+      "y": 290,
+      "width": 26,
+      "height": 55,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0.2
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0.7636363636363637
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "lora-right",
+      "kind": "path",
+      "label": "lora-right",
+      "parentId": "stage",
+      "x": 78,
+      "y": 290,
+      "width": 25,
+      "height": 55,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0.2
+          },
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0.7636363636363637
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "lora-label",
+      "kind": "text",
+      "label": "LoRA",
+      "parentId": "stage",
+      "x": 34,
+      "y": 365,
+      "width": 82,
+      "height": 27,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "lora-trainable",
+      "kind": "icon",
+      "label": "",
+      "parentId": "stage",
+      "x": 30,
+      "y": 265,
+      "width": 25,
+      "height": 25,
+      "visual": {
+        "stroke": "#ff7020"
+      },
+      "iconId": "paper:fire"
+    },
+    {
+      "id": "network-0-0",
+      "kind": "path",
+      "label": "network-0-0",
+      "parentId": "stage",
+      "x": 151,
+      "y": 294,
+      "width": 22,
+      "height": 7,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-0-1",
+      "kind": "path",
+      "label": "network-0-1",
+      "parentId": "stage",
+      "x": 151,
+      "y": 294,
+      "width": 22,
+      "height": 24,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-0-2",
+      "kind": "path",
+      "label": "network-0-2",
+      "parentId": "stage",
+      "x": 151,
+      "y": 294,
+      "width": 22,
+      "height": 41,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-1-0",
+      "kind": "path",
+      "label": "network-1-0",
+      "parentId": "stage",
+      "x": 151,
+      "y": 301,
+      "width": 22,
+      "height": 10,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-1-1",
+      "kind": "path",
+      "label": "network-1-1",
+      "parentId": "stage",
+      "x": 151,
+      "y": 311,
+      "width": 22,
+      "height": 7,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-1-2",
+      "kind": "path",
+      "label": "network-1-2",
+      "parentId": "stage",
+      "x": 151,
+      "y": 311,
+      "width": 22,
+      "height": 24,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-2-0",
+      "kind": "path",
+      "label": "network-2-0",
+      "parentId": "stage",
+      "x": 151,
+      "y": 301,
+      "width": 22,
+      "height": 27,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-2-1",
+      "kind": "path",
+      "label": "network-2-1",
+      "parentId": "stage",
+      "x": 151,
+      "y": 318,
+      "width": 22,
+      "height": 10,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-2-2",
+      "kind": "path",
+      "label": "network-2-2",
+      "parentId": "stage",
+      "x": 151,
+      "y": 328,
+      "width": 22,
+      "height": 7,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "network-a-0",
+      "kind": "ellipse",
+      "label": "",
+      "parentId": "stage",
+      "x": 146,
+      "y": 289,
+      "width": 10,
+      "height": 10,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "stroke": "#9879ac"
+      }
+    },
+    {
+      "id": "network-b-0",
+      "kind": "ellipse",
+      "label": "",
+      "parentId": "stage",
+      "x": 168,
+      "y": 296,
+      "width": 10,
+      "height": 10,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "stroke": "#9879ac"
+      }
+    },
+    {
+      "id": "network-a-1",
+      "kind": "ellipse",
+      "label": "",
+      "parentId": "stage",
+      "x": 146,
+      "y": 306,
+      "width": 10,
+      "height": 10,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "stroke": "#9879ac"
+      }
+    },
+    {
+      "id": "network-b-1",
+      "kind": "ellipse",
+      "label": "",
+      "parentId": "stage",
+      "x": 168,
+      "y": 313,
+      "width": 10,
+      "height": 10,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "stroke": "#9879ac"
+      }
+    },
+    {
+      "id": "network-a-2",
+      "kind": "ellipse",
+      "label": "",
+      "parentId": "stage",
+      "x": 146,
+      "y": 323,
+      "width": 10,
+      "height": 10,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "stroke": "#9879ac"
+      }
+    },
+    {
+      "id": "network-b-2",
+      "kind": "ellipse",
+      "label": "",
+      "parentId": "stage",
+      "x": 168,
+      "y": 330,
+      "width": 10,
+      "height": 10,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "stroke": "#9879ac"
+      }
+    },
+    {
+      "id": "network-label",
+      "kind": "text",
+      "label": "index space",
+      "parentId": "stage",
+      "x": 122,
+      "y": 365,
+      "width": 80,
+      "height": 27,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "memory-query-1-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 212,
+      "y": 281,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-1-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 234,
+      "y": 281,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-1-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 256,
+      "y": 281,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-1-3",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 278,
+      "y": 281,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-1-4",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 300,
+      "y": 281,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-2-0",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 212,
+      "y": 339,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-2-1",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 234,
+      "y": 339,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-2-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 256,
+      "y": 339,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-2-3",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 278,
+      "y": 339,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-2-4",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 300,
+      "y": 339,
+      "width": 19,
+      "height": 20,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#e4dbea",
+        "stroke": "#9879ac",
+        "radius": 5,
+        "strokeWidth": 0.9
+      }
+    },
+    {
+      "id": "memory-query-ellipsis",
+      "kind": "text",
+      "label": "⋮",
+      "parentId": "stage",
+      "x": 250.5,
+      "y": 307,
+      "width": 30,
+      "height": 27,
+      "textRole": "body",
+      "textStyle": {
+        "size": 22
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "memory-query-label",
+      "kind": "text",
+      "label": "memory queries",
+      "parentId": "stage",
+      "x": 210,
+      "y": 365,
+      "width": 111,
+      "height": 27,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "queries-trainable",
+      "kind": "icon",
+      "label": "",
+      "parentId": "stage",
+      "x": 201,
+      "y": 265,
+      "width": 25,
+      "height": 25,
+      "visual": {
+        "stroke": "#ff7020"
+      },
+      "iconId": "paper:fire"
+    },
+    {
+      "id": "bank-body",
+      "kind": "path",
+      "label": "bank-body",
+      "parentId": "stage",
+      "x": 355,
+      "y": 258,
+      "width": 239,
+      "height": 144,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0.8263888888888888
+          },
+          {
+            "x": 1,
+            "y": 0.8263888888888888,
+            "c1": {
+              "x": 0,
+              "y": 1
+            },
+            "c2": {
+              "x": 1,
+              "y": 1
+            }
+          },
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "close": true
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "#f0e9f3",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "bank-top",
+      "kind": "ellipse",
+      "label": "",
+      "parentId": "stage",
+      "x": 355,
+      "y": 239,
+      "width": 239,
+      "height": 38,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "memory",
+        "fill": "#f7f4fa",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8
+      }
+    },
+    {
+      "id": "bank-title",
+      "kind": "text",
+      "label": "Internalizer Bank",
+      "parentId": "stage",
+      "x": 379.5,
+      "y": 245.5,
+      "width": 190,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 16,
+        "color": "#9879ac"
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "bank-1",
+      "kind": "rectangle",
+      "label": "𝒥₁",
+      "parentId": "stage",
+      "x": 365,
+      "y": 291,
+      "width": 104,
+      "height": 40,
+      "textRole": "math",
+      "textStyle": {
+        "size": 22
+      },
+      "visual": {
+        "role": "memory",
+        "radius": 16
+      }
+    },
+    {
+      "id": "bank-2",
+      "kind": "rectangle",
+      "label": "𝒥₂",
+      "parentId": "stage",
+      "x": 480,
+      "y": 291,
+      "width": 104,
+      "height": 40,
+      "textRole": "math",
+      "textStyle": {
+        "size": 22
+      },
+      "visual": {
+        "role": "memory",
+        "radius": 16
+      }
+    },
+    {
+      "id": "bank-more",
+      "kind": "rectangle",
+      "label": "…",
+      "parentId": "stage",
+      "x": 365,
+      "y": 338,
+      "width": 104,
+      "height": 40,
+      "textRole": "math",
+      "textStyle": {
+        "size": 22
+      },
+      "visual": {
+        "role": "memory",
+        "radius": 16
+      }
+    },
+    {
+      "id": "bank-n",
+      "kind": "rectangle",
+      "label": "𝒥ₙ",
+      "parentId": "stage",
+      "x": 480,
+      "y": 338,
+      "width": 104,
+      "height": 40,
+      "textRole": "math",
+      "textStyle": {
+        "size": 22
+      },
+      "visual": {
+        "role": "memory",
+        "radius": 16
+      }
+    },
+    {
+      "id": "entry-bank-top",
+      "kind": "path",
+      "label": "entry-bank-top",
+      "parentId": "stage",
+      "x": 335,
+      "y": 251,
+      "width": 19,
+      "height": 26,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false,
+        "dash": [
+          7,
+          5
+        ]
+      }
+    },
+    {
+      "id": "entry-bank-bottom",
+      "kind": "path",
+      "label": "entry-bank-bottom",
+      "parentId": "stage",
+      "x": 335,
+      "y": 358,
+      "width": 19,
+      "height": 25,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#9879ac",
+        "strokeWidth": 1.8,
+        "handDrawn": false,
+        "dash": [
+          7,
+          5
+        ]
+      }
+    },
+    {
+      "id": "updated",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 654,
+      "y": 239,
+      "width": 268,
+      "height": 71,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17
+      },
+      "visual": {
+        "role": "primary"
+      }
+    },
+    {
+      "id": "updated-title",
+      "kind": "text",
+      "label": "Updated Internalizer",
+      "parentId": "stage",
+      "x": 670,
+      "y": 248,
+      "width": 236,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "updated-formula",
+      "kind": "text",
+      "label": "ℝLₜ×d → ℝK×d",
+      "parentId": "stage",
+      "x": 701,
+      "y": 278,
+      "width": 174,
+      "height": 24,
+      "textRuns": [
+        {
+          "text": "ℝ",
+          "family": "Noto Serif SC"
+        },
+        {
+          "text": "Lₜ×d",
+          "italic": true,
+          "script": "super"
+        },
+        {
+          "text": " → ℝ",
+          "family": "Noto Serif SC"
+        },
+        {
+          "text": "K×d",
+          "italic": true,
+          "script": "super"
+        }
+      ],
+      "textRole": "math",
+      "textStyle": {
+        "size": 15
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "saved-query",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 654,
+      "y": 319,
+      "width": 145,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "saved-query-title",
+      "kind": "text",
+      "label": "‹query›",
+      "parentId": "stage",
+      "x": 660,
+      "y": 323,
+      "width": 133,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:chat"
+    },
+    {
+      "id": "saved-query-body",
+      "kind": "text",
+      "label": "Help me understand\nthis codebase.",
+      "parentId": "stage",
+      "x": 663,
+      "y": 349,
+      "width": 127,
+      "height": 37,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14.5
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "answer",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 807,
+      "y": 319,
+      "width": 115,
+      "height": 71,
+      "textRole": "body",
+      "textStyle": {
+        "size": 20
+      },
+      "visual": {
+        "role": "neutral"
+      }
+    },
+    {
+      "id": "answer-title",
+      "kind": "text",
+      "label": "‹answer›",
+      "parentId": "stage",
+      "x": 813,
+      "y": 323,
+      "width": 103,
+      "height": 23,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": true
+      },
+      "visual": {
+        "role": "plain"
+      },
+      "iconId": "paper:chat"
+    },
+    {
+      "id": "answer-body",
+      "kind": "text",
+      "label": "The entrance\ncode is …",
+      "parentId": "stage",
+      "x": 816,
+      "y": 349,
+      "width": 97,
+      "height": 37,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14.5
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "save-internalizer",
+      "kind": "path",
+      "label": "save-internalizer",
+      "parentId": "stage",
+      "x": 594,
+      "y": 274.5,
+      "width": 60,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "save-internalizer-label",
+      "kind": "text",
+      "label": "save",
+      "parentId": "stage",
+      "x": 600,
+      "y": 251,
+      "width": 48,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "save-query",
+      "kind": "path",
+      "label": "save-query",
+      "parentId": "stage",
+      "x": 594,
+      "y": 354.5,
+      "width": 60,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "save-query-label",
+      "kind": "text",
+      "label": "save",
+      "parentId": "stage",
+      "x": 600,
+      "y": 327,
+      "width": 48,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "retrieve",
+      "kind": "path",
+      "label": "retrieve",
+      "parentId": "stage",
+      "x": 96.5,
+      "y": 181,
+      "width": 0,
+      "height": 58,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "retrieve-label",
+      "kind": "text",
+      "label": "retrieve",
+      "parentId": "stage",
+      "x": 106,
+      "y": 195,
+      "width": 80,
+      "height": 25,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17
+      },
+      "visual": {
+        "role": "plain"
+      }
+    },
+    {
+      "id": "update-result",
+      "kind": "path",
+      "label": "update-result",
+      "parentId": "stage",
+      "x": 922,
+      "y": 212,
+      "width": 32,
+      "height": 62.5,
+      "path": {
+        "points": [
+          {
+            "x": 0.296875,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "answer-result",
+      "kind": "path",
+      "label": "answer-result",
+      "parentId": "stage",
+      "x": 922,
+      "y": 274.5,
+      "width": 32,
+      "height": 80,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "arrowSize": 8
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#202020",
+        "strokeWidth": 1.8,
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "continuation",
+      "kind": "text",
+      "label": "⋮",
+      "parentId": "stage",
+      "x": 947,
+      "y": 285,
+      "width": 25,
+      "height": 30,
+      "textRole": "body",
+      "textStyle": {
+        "size": 22
+      },
+      "visual": {
+        "role": "plain"
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "Internalizer · 详细机制标杆",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 416,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      }
+    }
+  ],
+  "references": []
+}

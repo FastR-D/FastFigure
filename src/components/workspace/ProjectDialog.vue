@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue'
 import { Modal, Header, Heading, Text, ModalBody, Footer, Button, Field, TextField, Box, Icon } from '../ui'
 import IconButton from '../ui/IconButton.vue'
+import {maxProjectBytes} from '../../core/model'
 import { useEditor } from '../../composables/useEditor'
 import { downloadFile } from '../../core/export'
 const props = defineProps<{ open: boolean }>()
@@ -16,9 +17,9 @@ async function importFile(e: Event) {
   const input = e.target as HTMLInputElement, file = input.files?.[0]
   if (!file) return
   try {
-    if (file.size > 2_000_000) throw new Error('工程文件不能超过 2 MB')
+    if (file.size > maxProjectBytes) throw new Error('工程文件不能超过 8 MB')
     editor.importProject(await file.text()); title.value = editor.figure.value.title; error.value = ''; emit('close')
-  } catch { error.value = '无法导入。请选择有效的 FastFigure JSON 工程（不超过 2 MB）。当前画布未改变。' }
+  } catch { error.value = '无法导入。请选择有效的 FastFigure JSON 工程（不超过 8 MB）。当前画布未改变。' }
   input.value = ''
 }
 </script>

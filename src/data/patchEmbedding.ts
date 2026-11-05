@@ -9,10 +9,10 @@ export type PatchEmbeddingParameters=z.infer<typeof patchEmbeddingParametersSche
 export function patchEmbeddingFigure(input:PatchEmbeddingParameters){
   const p=patchEmbeddingParametersSchema.parse(input),figure=createBlank(),root=figure.containers[0]!,count=p.grid*p.grid,cls=p.classToken==='show',sequenceRows=count+(cls?1:0),sequenceHeight=sequenceRows*18+(sequenceRows-1)*3,cy=Math.max(250,110+sequenceHeight/2)
   Object.assign(root,{role:'component',width:940,height:Math.max(cy+182,cy+sequenceHeight/2+100),visual:{fill:'none',stroke:'none'}})
-  figure.style={...figure.style,preset:'precise',paletteId:'figureforge-publication-soft'}
+  figure.style={...figure.style,preset:'precise'}
   function group(id:string,title:string,x:number,y:number,width:number,height:number){figure.containers.push({id,title,parentId:'stage',role:'component',x,y,width,height,visual:{fill:'none',stroke:'none'}})}
-  function text(id:string,label:string,x:number,y:number,width:number,height:number,size=13,parentId='stage',bold=false){const node:FigureNode={id,kind:'text',label,parentId,x,y,width,height,textStyle:{family:'Inter',size,align:'center',bold},visual:{padding:0,fill:'none',stroke:'none'}};figure.nodes.push(node);return node}
-  function rect(id:string,name:string,x:number,y:number,width:number,height:number,parentId:string,colorIndex=0,label='',visible=true){const node:FigureNode={id,name,kind:'rectangle',label,parentId,x,y,width,height,textStyle:{family:'Inter',size:11,align:'center'},visual:visible?{colorIndex,tone:'fill',radius:2,strokeWidth:1,padding:1,handDrawn:false}:{fill:'none',stroke:'none'}};figure.nodes.push(node);return node}
+  function text(id:string,label:string,x:number,y:number,width:number,height:number,size=13,parentId='stage',bold=false){const node:FigureNode={id,kind:'text',label,parentId,x,y,width,height,textRole:bold?'heading':id.includes('formula')?'math':size<12?'caption':'body',textStyle:{size,align:'center',bold},visual:{padding:0,fill:'none',stroke:'none'}};figure.nodes.push(node);return node}
+  function rect(id:string,name:string,x:number,y:number,width:number,height:number,parentId:string,colorIndex=0,label='',visible=true){const node:FigureNode={id,name,kind:'rectangle',label,parentId,x,y,width,height,textStyle:{size:11,align:'center'},visual:visible?{role:'detail',colorIndex,tone:'fill',radius:2,strokeWidth:1,padding:1,handDrawn:false}:{fill:'none',stroke:'none'}};figure.nodes.push(node);return node}
   function path(id:string,points:PathPoint[],parentId:string,colorIndex=0){const node:FigureNode={id,kind:'path',label:'',parentId,x:0,y:0,width:0,height:0,path:{points:[{x:0,y:0},{x:1,y:1}],arrow:'none'},visual:{fill:'none',colorIndex,strokeWidth:.7,strokeOpacity:.45,handDrawn:false}};setPathPoints(node,points);figure.nodes.push(node);return node}
   function separator(id:string,frame:FigureNode,u:number,v?:number){
     const line=v===undefined?path(id,[{x:frame.x+frame.width*u,y:frame.y},{x:frame.x+frame.width*u,y:frame.y+frame.height}],frame.parentId,frame.visual?.colorIndex):path(id,[{x:frame.x,y:frame.y+frame.height*v},{x:frame.x+frame.width,y:frame.y+frame.height*v}],frame.parentId,frame.visual?.colorIndex)
@@ -55,7 +55,7 @@ export function patchEmbeddingFigure(input:PatchEmbeddingParameters){
   if(p.position==='learned'){
     group('position-group','Learned position embedding',670,50,160,130)
     text('position-caption',`Learned E_pos${p.details==='show'?`\n${cls?'(N + 1)':'N'} × D`:''}`,674,54,152,48,13,'position-group',true)
-    const position=matrix('position-matrix','Learned position embedding E_pos',697,116,104,60,'position-group',5),sum:FigureNode={id:'add-position',kind:'ellipse',label:'+',parentId:'stage',x:734,y:cy-15,width:30,height:30,textStyle:{family:'Inter',size:22,align:'center'},visual:{tone:'fill',colorIndex:5,padding:0,strokeWidth:1}};figure.nodes.push(sum)
+    const position=matrix('position-matrix','Learned position embedding E_pos',697,116,104,60,'position-group',5),sum:FigureNode={id:'add-position',kind:'ellipse',label:'+',parentId:'stage',x:734,y:cy-15,width:30,height:30,textStyle:{size:22,align:'center'},visual:{tone:'fill',colorIndex:5,padding:0,strokeWidth:1}};figure.nodes.push(sum)
     edge('sequence-to-add',sequence,sum);edge('position-to-add',position,sum,true);edge('add-to-output',sum,output)
   }else edge('sequence-to-output',sequence,output)
   if(p.details==='show')text('patch-formula',`z₀ = ${cls?'concat(x_class, X_p E)':'X_p E'}${p.position==='learned'?' + E_pos':''};  N = HW/P²  (H, W divisible by P)`,24,root.height-50,892,24,13)

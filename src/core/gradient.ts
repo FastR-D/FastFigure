@@ -12,7 +12,7 @@ export const linearGradientSchema=z.object({
   interpolation:z.enum(['sRGB','linearRGB']).default('sRGB'),
 }).strict()
 export type LinearGradient=z.infer<typeof linearGradientSchema>
-export const supportsGradient=(kind:string)=>!['text','icon','port'].includes(kind)
+export const supportsGradient=(kind:string)=>!['text','icon','image','port'].includes(kind)
 type Box=Pick<FigureNode,'x'|'y'|'width'|'height'>
 const size=(box:Box)=>({w:box.width||box.height,h:box.height||box.width})
 export function gradientFromSource(vector:[number,number,number],matrix:Affine,box:Box):[number,number,number]{

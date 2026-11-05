@@ -1,3 +1,4 @@
+import {paperPrimitives,paperRobot} from '../data/paperExamples.ts'
 import {recipeCompositionUse} from '../data/recipeComposition.ts'
 import { z } from 'zod'
 import { componentAssetSchema, instantiateComponentAt, scaleComponent, parseAsset, type ComponentAsset } from './assets.ts'
@@ -53,7 +54,7 @@ export function catalogueAsset(entry: CatalogueEntry, parameters?: Record<string
   builtins.set(key, asset); return clone(asset)
 }
 export function createCatalogue(assets: ComponentAsset[]): CatalogueEntry[] {
-  return [...componentRecipes.map(r => ({ kind: 'recipe' as const, id: r.id })), ...componentSeeds.map(s => ({ kind: 'seed' as const, id: s.id })), ...assets.map(asset => ({ kind: 'asset' as const, asset }))]
+  return [...componentRecipes.map(r => ({ kind: 'recipe' as const, id: r.id })), ...componentSeeds.map(s => ({ kind: 'seed' as const, id: s.id })), ...[...paperPrimitives(),paperRobot(),...assets].map(asset => ({ kind: 'asset' as const, asset }))]
 }
 export interface CatalogueItem { entry: CatalogueEntry; key: string; asset: ComponentAsset; score: number }
 function tokens(value: string): string[] {
@@ -71,7 +72,7 @@ export function searchCatalogue(entries: CatalogueEntry[], query: string): Catal
 }
 export function recommendCatalogue(entries: CatalogueEntry[], query: string): CatalogueItem[] {
   const ranked=[...new Map(searchCatalogue(entries,query).map(item=>[item.key,item])).values()]
-  const recent = ranked.filter(item => item.entry.kind === 'asset').sort((a, b) => b.asset.updatedAt.localeCompare(a.asset.updatedAt)).slice(0, 2)
+  const recent = ranked.filter(item => item.entry.kind === 'asset'&&!item.asset.id.startsWith('paper-')).sort((a, b) => b.asset.updatedAt.localeCompare(a.asset.updatedAt)).slice(0, 2)
   const positive=ranked.filter(item=>item.score>0),composite=/主图|复合|多种结构|概览.*(?:机制|细节)|整体.*局部|main\s*figure|overview.*(?:mechanism|detail)/i.test(query)
   if(!composite)return [...new Map([...positive,...recent,...ranked.filter(item=>item.entry.kind==='recipe'),...ranked].map(item=>[item.key,item])).values()].slice(0,6)
   const family=(item:CatalogueItem)=>item.entry.kind==='recipe'?recipeCompositionUse(item.entry.id)?.family??item.key:item.entry.kind==='seed'?`seed:${item.asset.figure.nodes[0]?.structure?.type??item.asset.figure.nodes[0]?.kind??item.key}`:item.key,selected:CatalogueItem[]=[],counts=new Map<string,number>(),pending=[...positive]

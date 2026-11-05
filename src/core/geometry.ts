@@ -1,3 +1,4 @@
+import {paperNode} from './paperStyle.ts'
 import {edgeRouteContainer,edgeWaypointPoints,snapshotEdgeWaypoints,reframeEdgeWaypoints} from './edgeWaypoints.ts'
 import { isPrimitive, type FigureDocument, type FigureNode, type FigureContainer } from './model.ts'
 import { syncBindings,bindingPoint } from './paths.ts'
@@ -25,17 +26,19 @@ export function resolveStyle(doc: FigureDocument, id: string): FigureDocument['s
   const style = { ...doc.style }
   for (const objectId of [...ancestors(doc, id).reverse(), id]) {
     const c = doc.containers.find(c => c.id === objectId)
-    if (c?.appearance?.preset && c.appearance.preset !== 'inherit') style.preset = c.appearance.preset
+    if (c?.appearance?.preset && c.appearance.preset !== 'inherit') {style.preset=c.appearance.preset;if(!c.appearance.designSystem)style.designSystem='legacy'}
     if (c?.appearance?.accent && c.appearance.accent !== 'inherit') { style.accent = c.appearance.accent; delete style.paletteId }
     if (c?.appearance?.paletteId && c.appearance.paletteId !== 'inherit') style.paletteId = c.appearance.paletteId
     if (c?.appearance?.colorIndex !== undefined) style.colorIndex = c.appearance.colorIndex
     if(c?.appearance?.colorMap!==undefined)style.colorMap=c.appearance.colorMap
+    if(c?.appearance?.designSystem)style.designSystem=c.appearance.designSystem
+    if(c?.appearance?.fontRoles)style.fontRoles=c.appearance.fontRoles
     if(c?.appearance?.fontFamily)style.fontFamily=c.appearance.fontFamily
     if(c?.appearance?.sketchStyle)style.sketchStyle=c.appearance.sketchStyle
     if(c?.appearance?.roughness!==undefined)style.roughness=c.appearance.roughness
   }
   if(style.colorIndex!==undefined)style.colorIndex%=paletteById.get(style.paletteId??defaultPaletteId)!.colors.length
-  if([...ancestors(doc,id),id].some(objectId=>doc.containers.find(c=>c.id===objectId)?.dataChart))delete style.colorMap
+  if([...ancestors(doc,id),id].some(objectId=>{const c=doc.containers.find(c=>c.id===objectId);return c?.dataChart||c?.sharedLegend||c?.sharedColorbar})){delete style.colorMap;style.designSystem='legacy'}
   return style
 }
 export const commonContainer=edgeRouteContainer
@@ -198,11 +201,11 @@ export function ungroupObject(doc: FigureDocument, id: string) {
     if(local)for(const child of children) {
       const theme=resolveStyle(doc,child.id)
       if('kind' in child){
-        const paint=figurePaint(theme,child.visual?.colorIndex),text=nodeTextStyle(child,false,theme)
-        child.textStyle={family:theme.fontFamily,...child.textStyle};if(child.description)child.descriptionStyle={family:theme.fontFamily,...child.descriptionStyle}
-        child.visual={...child.visual,fill:child.visual?.fill??(['text','path','icon','port'].includes(child.kind)?'none':child.visual?.tone==='hatch'?paint.hatch:paint.fill),stroke:child.visual?.stroke??paint.ink}
+        const resolved=paperNode(child,theme),paint=figurePaint(theme,resolved.visual?.colorIndex),text=nodeTextStyle(resolved,false,theme)
+        child.textStyle={...text,...child.textStyle};if(child.description)child.descriptionStyle={family:theme.fontFamily,...child.descriptionStyle}
+        child.visual={...resolved.visual,fill:resolved.visual?.fill??(['text','path','icon','image','port'].includes(child.kind)?'none':child.visual?.tone==='hatch'?paint.hatch:paint.fill),stroke:resolved.visual?.stroke??paint.ink}
         if(child.visual.textTone&&!child.textStyle?.color)child.textStyle={...child.textStyle,color:text.color}
-      }else child.appearance={fontFamily:theme.fontFamily,sketchStyle:theme.sketchStyle,roughness:theme.roughness,preset:theme.preset,accent:theme.accent,...(theme.paletteId?{paletteId:theme.paletteId}:{}),...(theme.colorIndex!==undefined?{colorIndex:theme.colorIndex}:{}),...(theme.colorMap?{colorMap:theme.colorMap}:{})}
+      }else child.appearance={designSystem:theme.designSystem,fontRoles:theme.fontRoles,fontFamily:theme.fontFamily,sketchStyle:theme.sketchStyle,roughness:theme.roughness,preset:theme.preset,accent:theme.accent,...(theme.paletteId?{paletteId:theme.paletteId}:{}),...(theme.colorIndex!==undefined?{colorIndex:theme.colorIndex}:{}),...(theme.colorMap?{colorMap:theme.colorMap}:{})}
     }
     const paint=figurePaint(style,group.visual?.colorIndex)
     const visual={...group.visual,handDrawn:false,...(local?{fill:group.visual?.fill??paint.fill,stroke:group.visual?.stroke??paint.ink}:{})}

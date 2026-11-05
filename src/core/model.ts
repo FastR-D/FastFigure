@@ -1,3 +1,7 @@
+import {textRunsSchema} from './richTextContract.ts'
+import {embeddedImageSchema} from './imageAssetContract.ts'
+import {outputFrameSchema} from './outputFrame.ts'
+import {defaultFigureStyle,visualRoles,textRoles,fontRolesSchema} from './paperStyle.ts'
 import {edgeAppearanceSchema} from './lineStyleContract.ts'
 import {nativeDetailSourceSchema} from './detailInsetContract.ts'
 export {edgeAppearanceSchema} from './lineStyleContract.ts'
@@ -11,7 +15,7 @@ import {linearGradientSchema,supportsGradient} from './gradient.ts'
 import {colorMapSchema} from './colorMappingContract.ts'
 import { referenceUseSchema,referencePurposeSchema } from './referenceInputs.ts'
 import {sketchStyleIds} from './sketchStyle.ts'
-import {fontFamilies, defaultPaletteId, iconById, paletteById } from '../data/materials.ts'
+import {fontFamilies, iconById, paletteById } from '../data/materials.ts'
 import { structureSchema } from './structures.ts'
 import { syncBindings,isClosedPathTarget } from './paths.ts'
 import { reconstructionRecordSchema, reconstructionTraceSchema,reconstructionReuseRecordSchema } from './reconstructionContract.ts'
@@ -24,12 +28,13 @@ import {imageDraftOriginSchema} from './imageDraftContract.ts'
 
 export {styleIds} from './styleIds.ts'
 export type StyleId = typeof styleIds[number]
+export const maxProjectBytes=8_000_000
 export const accentIds = ['blue', 'slate', 'teal', 'sand', 'rose'] as const
 export type AccentId = typeof accentIds[number]
-export const nodeKinds = ['module', 'tokens', 'tensor', 'queue', 'neuron', 'operator', 'volume', 'projection', 'rectangle', 'ellipse', 'diamond', 'text', 'icon', 'path', 'port'] as const
+export const nodeKinds = ['module', 'tokens', 'tensor', 'queue', 'neuron', 'operator', 'volume', 'projection', 'rectangle', 'ellipse', 'diamond', 'text', 'icon', 'image', 'path', 'port'] as const
 export type NodeKind = typeof nodeKinds[number]
-export const nodeKindLabels: Record<NodeKind, string> = { module: '通用模块', tokens: 'Token 序列', tensor: '矩阵 / 张量', queue: '队列', neuron: '神经元', operator: '融合算子', volume: '特征体', projection: '投影层', rectangle: '矩形', ellipse: '圆 / 椭圆', diamond: '菱形', text: '无框文字 / 注释', icon: '矢量图标', path:'路径 / 连线',port:'外部接口' }
-export const primitiveKinds = ['rectangle','ellipse','diamond','text','icon','path','port'] as const
+export const nodeKindLabels: Record<NodeKind, string> = { module: '通用模块', tokens: 'Token 序列', tensor: '矩阵 / 张量', queue: '队列', neuron: '神经元', operator: '融合算子', volume: '特征体', projection: '投影层', rectangle: '矩形', ellipse: '圆 / 椭圆', diamond: '菱形', text: '无框文字 / 注释', icon: '矢量图标', image:'图片插画',path:'路径 / 连线',port:'外部接口' }
+export const primitiveKinds = ['rectangle','ellipse','diamond','text','icon','image','path','port'] as const
 export const isPrimitive = (kind: NodeKind) => (primitiveKinds as readonly string[]).includes(kind)
 export const textStyleSchema = z.object({ family: z.string().max(80).regex(/^[\p{L}\p{N} _.-]+$/u).optional(), size: z.number().min(1).max(256).optional(), bold: z.boolean().optional(),weight:z.number().int().min(1).max(1000).optional(), italic: z.boolean().optional(),letterSpacing:z.number().min(-32).max(128).optional(), color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(), align: z.enum(['left','center','right']).optional() })
 export type TextStyle = z.infer<typeof textStyleSchema>
@@ -37,7 +42,7 @@ export const chartMarkSchema=z.object({role:z.enum(['series','axis','grid','stat
 const paletteIdSchema = z.string().max(120).refine(id => paletteById.has(id), '未知配色方案')
 const linearSchema=z.tuple([z.number().finite().min(-128).max(128),z.number().finite().min(-128).max(128),z.number().finite().min(-128).max(128),z.number().finite().min(-128).max(128)]).refine(m=>Math.abs(m[0]*m[3]-m[1]*m[2])>1e-8,'变换矩阵不能退化')
 const metricScaleSchema=z.number().finite().min(.05).max(16)
-const visualSchema = z.object({ fillGradient:linearGradientSchema.nullable().optional(),strokeGradient:linearGradientSchema.nullable().optional(),fill: z.string().regex(/^(#[0-9a-fA-F]{6}|none)$/).optional(), stroke: z.string().regex(/^(#[0-9a-fA-F]{6}|none)$/).optional(), colorIndex: z.number().int().min(0).max(11).optional(), radius: z.number().min(0).max(310).optional(),strokeWidth:z.number().min(.01).max(64).optional(),opacity:z.number().min(0).max(1).optional(),fillOpacity:z.number().min(0).max(1).optional(),strokeOpacity:z.number().min(0).max(1).optional(),padding:z.number().min(0).max(384).optional(),tone:z.enum(['fill','hatch']).optional(),textTone:z.enum(['ink','deep']).optional(),handDrawn:z.boolean().optional(),lineCap:z.enum(['butt','round','square']).optional(),lineJoin:z.enum(['miter','round','bevel']).optional(),dash:z.array(z.number().min(0).max(2000)).max(16).optional(),dashOffset:z.number().min(-2000).max(2000).optional(),miterLimit:z.number().min(1).max(1000).optional(),strokeMatrix:linearSchema.optional() })
+const visualSchema = z.object({ role:z.enum(visualRoles).optional(), fillGradient:linearGradientSchema.nullable().optional(),strokeGradient:linearGradientSchema.nullable().optional(),fill: z.string().regex(/^(#[0-9a-fA-F]{6}|none)$/).optional(), stroke: z.string().regex(/^(#[0-9a-fA-F]{6}|none)$/).optional(), colorIndex: z.number().int().min(0).max(11).optional(), radius: z.number().min(0).max(310).optional(),strokeWidth:z.number().min(.01).max(64).optional(),opacity:z.number().min(0).max(1).optional(),fillOpacity:z.number().min(0).max(1).optional(),strokeOpacity:z.number().min(0).max(1).optional(),padding:z.number().min(0).max(384).optional(),tone:z.enum(['fill','hatch']).optional(),textTone:z.enum(['ink','deep']).optional(),handDrawn:z.boolean().optional(),lineCap:z.enum(['butt','round','square']).optional(),lineJoin:z.enum(['miter','round','bevel']).optional(),dash:z.array(z.number().min(0).max(2000)).max(16).optional(),dashOffset:z.number().min(-2000).max(2000).optional(),miterLimit:z.number().min(1).max(1000).optional(),strokeMatrix:linearSchema.optional() })
 const id = z.string().min(1).max(80).regex(/^[a-zA-Z0-9_-]+$/)
 const fraction=z.number().finite().min(0).max(1),coordinatePoint=z.object({x:fraction,y:fraction})
 const pathPoint=coordinatePoint.extend({c1:coordinatePoint.optional(),c2:coordinatePoint.optional(),move:z.boolean().optional(),close:z.boolean().optional()})
@@ -89,9 +94,9 @@ export const nodeSchema = z.object({
   id, kind: z.enum(nodeKinds), label: z.string().max(240),name:z.string().max(100).optional(), description: z.string().max(240).optional(),
   parentId: id,
   x: coord, y: coord, width: z.number().min(0).max(1000), height: z.number().min(0).max(620),
-  path:pathSchema.optional(),interfaceFor:id.optional(),socket:componentPortSchema.optional(),
+  textRuns:textRunsSchema.optional(),image:embeddedImageSchema.optional(),path:pathSchema.optional(),interfaceFor:id.optional(),socket:componentPortSchema.optional(),
   textLayout:z.object({x:fraction,y:fraction,matrix:linearSchema,baseline:z.enum(['auto','alphabetic','middle','central','hanging','text-before-edge','text-after-edge','ideographic']).optional()}).optional(),
-  textStyle: textStyleSchema.optional(), descriptionStyle: textStyleSchema.optional(), structure: structureSchema.optional(), visual: visualSchema.optional(), iconId: z.string().refine(id => id === 'none' || iconById.has(id), '未知图标').optional(),
+  textRole:z.enum(textRoles).optional(), textStyle: textStyleSchema.optional(), descriptionStyle: textStyleSchema.optional(), structure: structureSchema.optional(), visual: visualSchema.optional(), iconId: z.string().refine(id => id === 'none' || iconById.has(id), '未知图标').optional(),
   evidence: componentSourceSchema.optional(),
 })
 export type FigureNode = z.infer<typeof nodeSchema>
@@ -114,7 +119,7 @@ const containerSchema = z.object({sharedColorbar:sharedColorbarRecordSchema.opti
   x: coord, y: coord, width: z.number().min(.05).max(1000), height: z.number().min(.05).max(620),
   visual:visualSchema.optional(),structureOrigin:structureSchema.optional(),
   opacity:z.number().min(0).max(1).optional(),
-  appearance: z.object({ fontFamily:z.enum(fontFamilies).optional(),sketchStyle:z.enum(sketchStyleIds).optional(),roughness:z.number().min(0).max(2).optional(),preset: z.enum([...styleIds, 'inherit']).default('inherit'), accent: z.enum([...accentIds, 'inherit']).default('inherit'), paletteId: z.union([z.literal('inherit'),paletteIdSchema]).optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }).optional(),
+  appearance: z.object({ designSystem:z.enum(['paper','legacy']).optional(),fontRoles:fontRolesSchema.optional(),fontFamily:z.enum(fontFamilies).optional(),sketchStyle:z.enum(sketchStyleIds).optional(),roughness:z.number().min(0).max(2).optional(),preset: z.enum([...styleIds, 'inherit']).default('inherit'), accent: z.enum([...accentIds, 'inherit']).default('inherit'), paletteId: z.union([z.literal('inherit'),paletteIdSchema]).optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }).optional(),
   textStyle: textStyleSchema.optional(),
   component: componentOriginSchema.optional(),
   evidence: componentSourceSchema.optional(),
@@ -123,8 +128,8 @@ export type FigureContainer = z.infer<typeof containerSchema>
 export const figureDocumentSchema = z.object({
   publication:publicationSettingsSchema.optional(),
   version: z.literal('0.2'), title: z.string().min(1).max(100),
-  canvas: z.object({ width: z.literal(1000), height: z.literal(620) }),
-  style: z.object({ fontFamily:z.enum(fontFamilies).optional(),sketchStyle:z.enum(sketchStyleIds).optional(),preset: z.enum(styleIds), roughness: z.number().min(0).max(2), seed: z.number().int().min(1).max(2147483647), accent: z.enum(accentIds), paletteId: paletteIdSchema.optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }),
+  canvas: z.object({ width: z.literal(1000), height: z.literal(620),frame:outputFrameSchema.optional() }),
+  style: z.object({ designSystem:z.enum(['paper','legacy']).optional(),fontRoles:fontRolesSchema.optional(),fontFamily:z.enum(fontFamilies).optional(),sketchStyle:z.enum(sketchStyleIds).optional(),preset: z.enum(styleIds), roughness: z.number().min(0).max(2), seed: z.number().int().min(1).max(2147483647), accent: z.enum(accentIds), paletteId: paletteIdSchema.optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }),
   nodes: z.array(nodeSchema).max(240), edges: z.array(edgeSchema).max(120),
   containers: z.array(containerSchema).min(1).max(21),
   references: z.array(referenceImageSchema).max(3).default([]),referenceUses:z.array(referenceUseSchema.refine(r=>r.decision==='use','图件只保存已采用的参考来源')).max(12).optional(),
@@ -132,6 +137,7 @@ export const figureDocumentSchema = z.object({
   styleUses:z.array(styleUseSchema).max(8).optional(),
   imageDrafts:z.array(imageDraftOriginSchema).max(8).optional(),
 }).superRefine((doc, ctx) => {
+  if(new TextEncoder().encode(JSON.stringify(doc)).length>maxProjectBytes)ctx.addIssue({code:'custom',message:'工程总容量最多 8 MB，请精简图片或来源记录'})
   for(const node of doc.nodes)if((node.visual?.fillGradient||node.visual?.strokeGradient)&&!supportsGradient(node.kind))ctx.addIssue({code:'custom',message:'渐变暂用于形状和路径，文字、图标与接口不支持'})
   for(const container of doc.containers)if(container.visual?.fillGradient||container.visual?.strokeGradient)ctx.addIssue({code:'custom',message:'容器渐变暂不支持，请使用独立形状作为背景'})
   if(doc.imageDrafts&&new Set(doc.imageDrafts.map(d=>d.runId)).size!==doc.imageDrafts.length)ctx.addIssue({code:'custom',message:'AI 草稿来源不能重复'})
@@ -142,6 +148,7 @@ export const figureDocumentSchema = z.object({
     ctx.addIssue({ code: 'custom', message: '参考图不能重复' })
   if (doc.references.reduce((sum, r) => sum + r.dataUrl.length, 0) > 1_200_000)
     ctx.addIssue({ code: 'custom', message: '参考图总容量超过工程限制，请先移除其他参考图' })
+  if(doc.nodes.reduce((sum,n)=>sum+(n.image?.dataUrl.length??0),0)>3_600_000)ctx.addIssue({code:'custom',message:'成图图片合计最多 3.6 MB，请减少或压缩插画'})
   const ids = new Set<string>()
   if(doc.nodes.filter(n=>!isPrimitive(n.kind)).length>60) ctx.addIssue({code:'custom',message:'科研节点最多 60 个；原生图元总数最多 240 个'})
   if(doc.nodes.reduce((sum,n)=>sum+(n.path?.points.reduce((s,p)=>s+1+Number(!!p.c1)+Number(!!p.c2),0)??0),0)>4096)ctx.addIssue({code:'custom',message:'路径锚点与控制点合计最多 4096 个'})
@@ -159,6 +166,9 @@ export const figureDocumentSchema = z.object({
       if(node.path.points.some(p=>p.move||p.close)&&(node.path.start||node.path.end))ctx.addIssue({code:'custom',message:'闭合或复合路径不能绑定开放端点'})
       if(node.chart?.key&&(node.path.start||node.path.end))ctx.addIssue({code:'custom',message:'数据图表路径不能用作附着引线，请使用独立注释路径'})
     }
+    if(node.textRuns&&(node.kind!=='text'||node.textLayout||node.textRuns.map(run=>run.text).join('')!==node.label))ctx.addIssue({code:'custom',message:'混合文字仅用于无变换的独立文字，片段须与完整标签一致'})
+    if((node.kind==='image')!==!!node.image)ctx.addIssue({code:'custom',message:'图片节点须包含有效图片，其他图元不能携带图片'})
+    if(node.kind==='image'&&(node.label||node.description||node.iconId))ctx.addIssue({code:'custom',message:'图片内的文字请使用独立文字图元'})
     if(node.kind!=='path'&&node.path) ctx.addIssue({code:'custom',message:'路径数据只能用于路径节点'})
     if(node.textLayout&&node.kind!=='text')ctx.addIssue({code:'custom',message:'文字变换只能用于文字节点'})
     if (node.kind === 'icon' && (!node.iconId || node.iconId === 'none')) ctx.addIssue({ code: 'custom', message: '图标节点须选择图标' })
@@ -235,21 +245,26 @@ export function createBlank(): FigureDocument {
   return parseDocument({
     version: '0.2', title: '未命名图件', canvas: { width: 1000, height: 620 },
     containers: [{ id: 'stage', parentId: null, role: 'stage', title: 'Method overview', x: 40, y: 90, width: 920, height: 490 }],
-    style: { preset: 'soft', roughness: 0.8, seed: 38191, accent: 'blue' }, nodes: [], edges: [],
+    style: defaultFigureStyle(), nodes: [], edges: [],
   })
 }
 
 export function createExample(): FigureDocument {
+  // Derive the example from shared columns and a common flow axis, rather than
+  // independent offsets. Center the complete branch in the stage content area.
+  const gap=60,widths=[136,140,150,150],total=widths.reduce((sum,w)=>sum+w,0)+gap*3
+  const xs=[(1000-total)/2];for(let i=1;i<widths.length;i++)xs.push(xs[i-1]!+widths[i-1]!+gap)
+  const branchGap=72,branchTop=375-(130+branchGap+66)/2,axisY=branchTop+130+branchGap/2
   return parseDocument({
     version: '0.2', title: '检索增强生成架构', canvas: { width: 1000, height: 620 },
     containers: [{ id: 'stage', parentId: null, role: 'stage', title: 'Retrieval-augmented generation', x: 68, y: 112, width: 864, height: 490 }],
-    style: { preset: 'soft', roughness: 0.8, seed: 38191, accent: 'blue', paletteId:defaultPaletteId },
+    style: defaultFigureStyle(),
     nodes: [
-      { id: 'input', parentId: 'stage', kind: 'tokens', label: 'Input tokens', x: 105, y: 275, width: 136, height: 66 },
-      { id: 'encoder', parentId: 'stage', kind: 'module', label: 'Encoder', description:'Hidden states', structure:{type:'encoder',repeats:6},visual:{colorIndex:1}, x: 290, y: 243, width: 140, height: 130 },
-      { id: 'retriever', parentId: 'stage', kind: 'module', label: 'Retriever',description:'Top-k neighbors',structure:{type:'retriever'},visual:{colorIndex:2}, x: 490, y: 164, width: 150, height: 130 },
-      { id: 'context', parentId: 'stage', kind: 'tensor', label: 'Context',description:'Relevant evidence',visual:{colorIndex:2}, x: 490, y: 366, width: 150, height: 66 },
-      { id: 'fusion', parentId: 'stage', kind: 'module', label: 'Fusion',description:'Fused features',structure:{type:'fusion'},visual:{colorIndex:3}, x: 735, y: 243, width: 150, height: 130 },
+      { id: 'input', parentId: 'stage', kind: 'tokens', label: 'Input tokens', x: xs[0]!, y: axisY-33, width: 136, height: 66 },
+      { id: 'encoder', parentId: 'stage', kind: 'module', label: 'Encoder', description:'Hidden states', structure:{type:'encoder',repeats:6},visual:{role:'primary'}, x: xs[1]!, y: axisY-65, width: 140, height: 130 },
+      { id: 'retriever', parentId: 'stage', kind: 'module', label: 'Retriever',description:'Top-k neighbors',structure:{type:'retriever'},visual:{role:'memory'}, x: xs[2]!, y: branchTop, width: 150, height: 130 },
+      { id: 'context', parentId: 'stage', kind: 'tensor', label: 'Context',description:'Relevant evidence',visual:{colorIndex:2}, x: xs[2]!, y: branchTop+130+branchGap, width: 150, height: 66 },
+      { id: 'fusion', parentId: 'stage', kind: 'module', label: 'Fusion',description:'Fused features',structure:{type:'fusion'},visual:{role:'primary'}, x: xs[3]!, y: axisY-65, width: 150, height: 130 },
     ],
     edges: [
       { id: 'e1', source: 'input', target: 'encoder', sourcePort: 'right', targetPort: 'left' },

@@ -1,3 +1,4 @@
+import {isPaperStyle,paperColors} from './paperStyle.ts'
 import { paletteById } from '../data/materials.ts'
 import type { FigureDocument,FigureNode } from './model.ts'
 import {sourceColorSlot,sourceSlotColor,colorSlotKey} from './colorMappingContract.ts'
@@ -11,6 +12,7 @@ export function foreground(color: string) {
 export function figurePaint(style: FigureDocument['style'], index = style.colorIndex??0) {
   const slot=sourceColorSlot(style,index),mapping=style.colorMap?.find(row=>colorSlotKey(row)===colorSlotKey(slot))
   const color=mapping?paletteById.get(mapping.targetPaletteId)!.colors[mapping.targetIndex]!:sourceSlotColor(slot)
+  if(isPaperStyle(style))return{ink:paperColors.ink,fill:color,hatch:mixColor(color,'#ffffff',.35),color}
   if(style.preset==='sketch'&&style.sketchStyle==='xkcd')return{ink:color,fill:'#ffffff',hatch:'#dddddd',color}
   if(style.preset==='sketch'&&style.sketchStyle==='comic')return{ink:'#303030',fill:mixColor(color,'#ffffff',.68),hatch:mixColor(color,'#ffffff',.45),color}
   return { ink: mixColor(color, '#182235', 0.45), fill: mixColor(color, '#ffffff', 0.88), hatch: mixColor(color, '#ffffff', 0.65), color }

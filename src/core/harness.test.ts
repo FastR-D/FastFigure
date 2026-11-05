@@ -81,7 +81,8 @@ describe('Harness response validation and figure review', () => {
     const figure=createExample(),before=clone(figure),request={kind:'center',objectIds:['encoder'],axis:'both'},payload={message:'Author-selected presentation change',figure:null,materialEdits:[request]},result=parseHarnessResponse(JSON.stringify(payload),figure)
     expect(result.figure).not.toBeNull();expect(result.figure!.nodes.find(n=>n.id==='encoder')!.x).not.toBe(figure.nodes.find(n=>n.id==='encoder')!.x);expect(result.figure!.edges).toEqual(figure.edges);expect(result.message).toContain('相对父容器水平、垂直居中');expect(figure).toEqual(before)
     expect(parseHarnessResponse(JSON.stringify(payload),result.figure!).figure).toBeNull()
-    const pinned=parseHarnessResponse(JSON.stringify({message:'Pin a native connection',figure:null,materialEdits:[{kind:'edge-route',edgeId:'e1',points:[{x:265,y:308}],direction:'horizontal'}]}),figure)
+    const input=figure.nodes.find(n=>n.id==='input')!,encoder=figure.nodes.find(n=>n.id==='encoder')!
+    const pinned=parseHarnessResponse(JSON.stringify({message:'Pin a native connection',figure:null,materialEdits:[{kind:'edge-route',edgeId:'e1',points:[{x:(input.x+input.width+encoder.x)/2,y:input.y+input.height/2}],direction:'horizontal'}]}),figure)
     expect(pinned.figure!.edges[0]!.routing).toBe('manual');expect(pinned.figure!.edges[0]!.source).toBe('input');expect(pinned.figure!.nodes).toEqual(figure.nodes);expect(pinned.message).toContain('节点与端口绑定保持')
     const drawn=parseHarnessResponse(JSON.stringify({message:'Given author waypoints',figure:null,materialEdits:[{kind:'arrow',parentId:'stage',points:[{x:100,y:180},{x:300,y:260}],direction:'horizontal',arrow:'filled'}]}),figure)
     const path=drawn.figure!.nodes.at(-1)!;expect(pathPoints(drawn.figure!,path)).toEqual([{x:100,y:180},{x:300,y:180},{x:300,y:260}]);expect(drawn.figure!.nodes.slice(0,-1)).toEqual(figure.nodes)

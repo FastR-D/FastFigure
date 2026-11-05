@@ -1,3 +1,4 @@
+import {paperIcons} from './paperIcons.ts'
 import themePalettes from './materials/theme-palettes.json' with {type:'json'}
 import paletteData from './materials/palettes.json' with { type: 'json' }
 import iconData from './materials/icons.json' with { type: 'json' }
@@ -9,7 +10,7 @@ export interface MaterialIcon { id: string; name: string; category: string; tags
 export const colorPalettes: ColorPalette[] = [...paletteData.entries,...figureforgePalettes,...themePalettes]
 export const paletteById = new Map(colorPalettes.map(p => [p.id, p]))
 export const defaultPaletteId = 'plotly-plotly-39871828'
-export const materialIcons: MaterialIcon[] = iconData
+export const materialIcons: MaterialIcon[] = [...paperIcons,...iconData]
 export const iconById = new Map(materialIcons.map(i => [i.id, i]))
 export const fontFamilies = ['Inter', 'MiSans', 'Noto Serif SC', 'JetBrains Mono', 'Comic Sans MS', 'Comic Neue', 'Patrick Hand', 'Excalifont'] as const
 export const fontOptions = [{ value: 'Inter', label: 'Inter · 现代无衬线' }, { value: 'MiSans', label: 'MiSans · 小米黑体' }, { value: 'Noto Serif SC', label: '思源宋体 · 衬线' }, { value: 'JetBrains Mono', label: 'JetBrains Mono · 代码' },{value:'Comic Sans MS',label:'Comic Sans MS · 系统 / Comic Neue 回退'},{value:'Comic Neue',label:'Comic Neue · 漫画'},{value:'Patrick Hand',label:'Patrick Hand · 手稿'},{value:'Excalifont',label:'Excalifont · 白板'}]

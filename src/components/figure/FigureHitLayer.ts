@@ -24,6 +24,7 @@ function hitGraphic(item:SvgElement|string,wide:boolean,parent:Paint=defaults):V
   if(item.tag==='defs'||hidden(item))return null
   const attrs={...item.attrs},paint={...parent}
   for(const [key,field] of [['fill','fill'],['stroke','stroke'],['fill-opacity','fillOpacity'],['stroke-opacity','strokeOpacity']] as const)if(attrs[key]!==undefined)paint[field]=attrs[key]!
+  if(item.tag==='image')return h('rect',{x:attrs.x,y:attrs.y,width:attrs.width,height:attrs.height,transform:attrs.transform,fill:'transparent','pointer-events':'all'})
   if(shapes.has(item.tag)){
     attrs.fill=paint.fill==='none'||Number(paint.fillOpacity)===0?'none':'transparent'
     attrs.stroke=paint.stroke==='none'||Number(paint.strokeOpacity)===0?'none':'transparent'

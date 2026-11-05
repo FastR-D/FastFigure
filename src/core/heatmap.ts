@@ -51,7 +51,7 @@ export function buildHeatmap(input:DataChartSpec):ComponentAsset{
   if(spec.kind!=='heatmap')throw new Error('热图编译器只接受热图数据')
   const figure=createBlank(),root=rootContainer(figure)
   Object.assign(root,{x:0,y:0,width:760,height:460,role:'component',title:spec.title,visual:{fill:'none',stroke:'none'},dataChart:{spec:clone(spec),revision:1}})
-  figure.title=spec.title;figure.style={...figure.style,preset:'precise',roughness:0}
+  figure.title=spec.title;figure.style={...figure.style,designSystem:'legacy',fontFamily:spec.fontFamily??'Inter',fontRoles:undefined,preset:'precise',roughness:0}
   const add:ChartAdd=(key,node,role,series,channels=[])=>{const full:FigureNode={...node,id:key,parentId:'stage',chart:{key,role,channels,...(series!==undefined?{series}:{})}};figure.nodes.push(full);return full}
   const typography=chartTypography(spec,add),{label,width:textWidth,size}=typography,{scale,rows,columns,footer,scaleTitle,ticks,cell,x0,x1,top,y1,angled,angle,labelDepth}=heatmapPlotLayout(spec,typography)
   const rectangle=(key:string,x:number,y:number,width:number,height:number,fill:string,stroke='none',role:'heat'|'frame'='heat')=>add(key,{kind:'rectangle',label:'',x,y,width,height,visual:{fill,stroke,...(stroke!=='none'?{strokeWidth:.8}:{}),radius:0,handDrawn:false}},role)

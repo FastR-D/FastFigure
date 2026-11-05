@@ -1,5 +1,5 @@
 :root {
-  --workspace-width: 1920px;
+  --workspace-width: 100%;
   color-scheme: light;
   --color-canvas: #f6f6f9;
   --color-panel: #ffffff;

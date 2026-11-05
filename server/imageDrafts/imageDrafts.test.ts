@@ -37,6 +37,7 @@ it('compiles complete plan geometry, module identity, parameters and distinct re
   expect(design.sections.flatMap(s=>s.modules)).toEqual([{id:'encoder',key:'recipe:encoder',parameters:{repeats:2},colorIndex:2,name:'Encoder'}])
   expect(design.connections.map(({relation:_,...link})=>link)).toEqual(request.composition!.plan.connections)
   expect(design.originalRequest).toBe(before.composition!.userGoal);expect(design.uncertainties).toEqual(before.composition!.plan.uncertainties);expect(request).toEqual(before)
+  expect(()=>imageDraftInputSchema.parse({...request,outputKind:'illustration'})).toThrow('整图方案');
   const prompt=imageDraftPrompt(request,[]);expect(prompt).toContain(JSON.stringify(design));expect(prompt).not.toContain('data:image')
   for(const mutate of [(r:ImageDraftInput)=>{r.content='Add a discriminator'},(r:ImageDraftInput)=>{r.style.paletteId='figureforge-tableau10'},(r:ImageDraftInput)=>{r.composition!.plan.status='needs-input';r.composition!.plan.questions=['What does the block do?']},(r:ImageDraftInput)=>{delete r.composition!.plan.sections[0]!.design}]){const changed=clone(request);mutate(changed);expect(imageDraftInputSchema.safeParse(changed).success).toBe(false)}
 })
@@ -54,8 +55,8 @@ it('binds plan reference bytes, remaps omitted reference indices, freezes the su
   expect(()=>s.start(oversized)).toThrow('提示容量');expect(s.list()).toHaveLength(2)
 })
 it('deduplicates image submissions, reads actual native output, freezes the brief and requires explicit review',async()=>{
-  const s=service(),request=input(),run=s.start(request),again=s.start(clone(request));expect(again).toBe(run);expect(()=>s.start({...request,content:'Changed duplicate'})).toThrow('标识');expect(()=>s.start({...input()})).toThrow('正在生成')
-  request.content='Changed after submission';await run.done;expect(run.info.status).toBe('completed');expect(run.info.review).toBe('pending');expect(run.info.origin!.content).toContain('Tokens');expect(run.info.origin!.inputVerification).toBe('verified');expect(run.info.origin!.sha256).toBe(createHash('sha256').update(s.image(run.info.id).bytes).digest('hex'));expect(s.start({...request,content:run.info.content})).toBe(run)
+  const s=service(),request={...input(),outputKind:'illustration' as const},run=s.start(request),again=s.start(clone(request));expect(again).toBe(run);expect(()=>s.start({...request,content:'Changed duplicate'})).toThrow('标识');expect(()=>s.start({...input()})).toThrow('正在生成')
+  request.content='Changed after submission';await run.done;expect(run.info.outputKind).toBe('illustration');expect(run.info.origin?.outputKind).toBe('illustration');expect(run.info.origin?.submittedPrompt).toContain('透明背景（alpha）');expect(run.info.status).toBe('completed');expect(run.info.review).toBe('pending');expect(run.info.origin!.content).toContain('Tokens');expect(run.info.origin!.inputVerification).toBe('verified');expect(run.info.origin!.sha256).toBe(createHash('sha256').update(s.image(run.info.id).bytes).digest('hex'));expect(s.start({...request,content:run.info.content})).toBe(run)
   expect(s.review(run.info.id,'imported').review).toBe('imported');expect(()=>s.review(run.info.id,'discarded')).toThrow('已经处理')
 })
 it('keeps AI origin and content specification through reconstruction, material capture, scaling and native SVG, without model forgery',async()=>{

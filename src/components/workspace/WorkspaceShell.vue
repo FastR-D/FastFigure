@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
-import { Box, Main, Text, Button, Icon, Footer, Heading } from '../ui'
+import { Box, Main, Text, Button, Icon, Heading } from '../ui'
 import { createEditor, editorKey } from '../../composables/useEditor'
 import WorkspaceHeader from './WorkspaceHeader.vue'
 import ActivityRail from './ActivityRail.vue'
@@ -69,7 +69,6 @@ onBeforeUnmount(() => { window.removeEventListener('keydown', keyboard); window.
       </Main>
       <InspectorPanel />
     </Box>
-    <Footer class="workspace-status"><Box><Icon name="check" /><Text>{{ editor.storageError.value || '本地工作空间' }}</Text><Text class="status-separator">/</Text><Text>{{ editor.nodeCount.value }} 个组件 · {{ editor.figure.value.containers.length }} 个容器 · {{ editor.figure.value.edges.length }} 条连接</Text></Box><Text>FastFigure 0.2 <Text class="status-shortcut">· Ctrl / ⌘ S 保存</Text></Text></Footer>
     <Box v-if="editor.notice.value && !exportOpen && !projectOpen && !editor.publicationOpen.value && !editor.assetDialog.value&&!editor.componentCapture.value && !editor.layoutDialogOpen.value&&!editor.structureExpandId.value&&!editor.vectorImportOpen.value&&!editor.chartDataImportOpen.value&&!editor.chartDialog.value" class="workspace-toast" role="status" aria-live="polite"><Icon name="info" /><Text>{{ editor.notice.value }}</Text></Box>
     <ExportDialog :open="exportOpen" @close="exportOpen = false" />
     <ProjectDialog :open="projectOpen" @close="projectOpen = false" />

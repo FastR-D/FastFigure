@@ -40,10 +40,10 @@ export function harnessHttp(service: HarnessService) {
       const historyPath = /^\/api\/harness\/sessions\/([a-f0-9-]+)\/history$/.exec(path)
       if (historyPath && request.method === 'GET') { json(response, service.history(historyPath[1]!)); return }
       if (request.method === 'POST' && path === '/api/harness/runs') {
-        const run = service.start(await readJson(request)); json(response, { id: run.id, sessionId: run.sessionId,summary:service.summary(run.id) }, 202); return
+        const run = service.start(await readJson(request,24_000_000)); json(response, { id: run.id, sessionId: run.sessionId,summary:service.summary(run.id) }, 202); return
       }
       if(request.method==='POST'&&path==='/api/harness/visual-audits'){const run=service.startAudit(await readJson(request));json(response,{id:run.id,sessionId:run.sessionId,summary:service.summary(run.id)},202);return}
-      if(request.method==='POST'&&path==='/api/harness/repair-plans'){const plan=service.startPlan(await readJson(request,4_000_000));json(response,service.planSnapshot(plan.state.id),202);return}
+      if(request.method==='POST'&&path==='/api/harness/repair-plans'){const plan=service.startPlan(await readJson(request,16_000_000));json(response,service.planSnapshot(plan.state.id),202);return}
       const planPath=/^\/api\/harness\/repair-plans\/([a-f0-9-]+)(?:\/(cancel))?$/.exec(path)
       if(planPath){
         if(request.method==='GET'&&!planPath[2]){json(response,service.planSnapshot(planPath[1]!));return}

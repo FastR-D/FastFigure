@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-05",
+  "references": {
+    "paper-reference-comparison.png": "4286eda2d9b9ff4c709eac28f11c39130e3387306122a408bd2c105d6b1a71b8",
+    "paper-reference-mechanism.png": "44210efdd1a3b2c1537789616059ae46912aaf5746034c5e3a69eedc46133367"
+  },
+  "nativeExamples": [
+    {
+      "id": "memory-comparison",
+      "nodes": 25,
+      "browserTextIssues": []
+    },
+    {
+      "id": "internalizer-mechanism",
+      "nodes": 115,
+      "browserTextIssues": []
+    }
+  ],
+  "verification": {
+    "coreAndServiceTests": 616,
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "ui": {
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "seconds": 62.403,
+      "reports": [
+        {
+          "name": "editor",
+          "status": "passed"
+        },
+        {
+          "name": "data",
+          "status": "passed"
+        },
+        {
+          "name": "assistant",
+          "status": "passed"
+        },
+        {
+          "name": "reconstruction",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "liveCall": {
+    "runId": "550c65be-ca63-40a0-93ad-0ea674954b9e",
+    "calls": 1,
+    "seconds": 77.975,
+    "modelIdentity": "not reported",
+    "review": "pending",
+    "appliedToUserProject": false,
+    "originalBlockedConnections": 1,
+    "renderRevisionBlockedConnections": 0,
+    "graphChanged": false,
+    "newCallsForRevision": 0
+  },
+  "limitations": [
+    "Development examples, not independent scientific or aesthetic validation.",
+    "SVG text needs the declared fonts in external readers.",
+    "Rich text supports spans and superscripts/subscripts, not a complete TeX engine.",
+    "The editing canvas remains fixed; output frames control cropping."
+  ],
+  "alignmentRevision": {
+    "defaultExample": "Shared flow axis, aligned branch column, equal 60-unit column gaps, complete content centered in the parent content area.",
+    "paperText": "Center by default; explicit alignment and managed/positioned text preserved.",
+    "iconLabels": "Icon and label centered together using loaded font metrics.",
+    "browserChecks": {
+      "defaultExample": [],
+      "blockedConnections": 0
+    },
+    "newModelCalls": 0,
+    "verification": {
+      "coreAndServiceTests": 616,
+      "lint": "passed",
+      "buildAndTypecheck": "passed",
+      "uiFlows": 4,
+      "uiSeconds": 62.403,
+      "browserIconLabelAndRichTextCentering": "passed"
+    }
+  }
+}

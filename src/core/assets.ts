@@ -18,6 +18,7 @@ export const componentAssetSchema = z.object({
   sources: z.array(componentSourceSchema).max(12), lineage: z.array(componentAncestorSchema).max(16),
   recipe: componentRecipeSchema.optional(), figure: figureDocumentSchema,
 }).superRefine((asset, ctx) => {
+  if(new TextEncoder().encode(JSON.stringify(asset)).length>2_000_000)ctx.addIssue({code:'custom',message:'组件文件最多 2 MB，请拆分图片或图示'})
   const root = rootContainer(asset.figure)
   if (root.x !== 0 || root.y !== 0 || root.appearance || root.component)
     ctx.addIssue({ code: 'custom', message: '组件根必须位于原点并使用组件主题' })
@@ -63,6 +64,7 @@ export function captureComponent(doc: FigureDocument, containerId: string, name:
   const figure = clone(doc),pins=snapshotEdgeWaypoints(doc)
   syncBindings(figure)
   figure.references = []
+  if(doc.canvas.frame&&(['x','y','width','height'] as const).every(k=>Math.abs(doc.canvas.frame![k]-container[k])<.001))figure.canvas.frame={x:0,y:0,width:container.width,height:container.height};else delete figure.canvas.frame
   delete figure.publication
   figure.title = name.trim(); figure.style = resolveStyle(doc, containerId)
   figure.containers = figure.containers.filter(c => ids.has(c.id))
@@ -148,6 +150,7 @@ export function componentDocument(input: ComponentAsset, keepAppearance = true, 
   const x = (candidate.canvas.width - root.width) / 2
   const y = root.height <= candidate.canvas.height - 90 ? 90 : (candidate.canvas.height - root.height) / 2
   transplant(candidate, asset, { x, y }, null, keepAppearance, () => `c-${crypto.randomUUID()}`)
+  if(asset.figure.canvas.frame)candidate.canvas.frame={x,y,width:root.width,height:root.height}
   return parseDocument(candidate)
 }
 
@@ -168,7 +171,7 @@ function transplant(candidate: FigureDocument, asset: ComponentAsset, position: 
   })
   const root = containers.find(c => c.id === map.get('stage'))!
   root.role = parentId === null ? root.role==='component'?'component':'stage' : root.role === 'stage' ? 'group' : root.role
-  if (keepAppearance && parentId !== null) root.appearance = { fontFamily:source.style.fontFamily,sketchStyle:source.style.sketchStyle,roughness:source.style.roughness,preset: source.style.preset, accent: source.style.accent, ...(source.style.paletteId ? {paletteId:source.style.paletteId} : {}),colorIndex:source.style.colorIndex??0,colorMap:clone(source.style.colorMap??[]) }
+  if (keepAppearance && parentId !== null) root.appearance = { designSystem:source.style.designSystem,fontRoles:source.style.fontRoles?clone(source.style.fontRoles):undefined,fontFamily:source.style.fontFamily,sketchStyle:source.style.sketchStyle,roughness:source.style.roughness,preset: source.style.preset, accent: source.style.accent, ...(source.style.paletteId ? {paletteId:source.style.paletteId} : {}),colorIndex:source.style.colorIndex??0,colorMap:clone(source.style.colorMap??[]) }
   root.component = { assetId: asset.id, name: asset.name, revision: asset.updatedAt, sources: clone(asset.sources), lineage: clone(asset.lineage), ...(asset.recipe ? { recipe: clone(asset.recipe) } : {}) }
   candidate.containers.push(...containers)
   candidate.nodes.push(...source.nodes.map(n => {

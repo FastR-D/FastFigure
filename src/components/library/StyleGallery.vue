@@ -3,12 +3,13 @@ import { Box, Button, Text, Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { styles } from '../../core/model'
 import StylePreview from './StylePreview'
-import {figureThemes} from '../../core/figureThemes'
+import {figureThemes,paperTheme} from '../../core/figureThemes'
 const editor = useEditor()
 </script>
 
 <template>
   <Box class="style-theme-gallery">
+    <Text class="style-section-label">默认论文风格</Text><Button class="style-card theme-card" variant="quiet" :aria-pressed="editor.activeStyle.value.designSystem==='paper'" aria-label="应用论文插图主题" @click="editor.applySavedStyle(paperTheme,true)"><StylePreview :theme="paperTheme" /><Text>论文插图</Text><Text class="theme-card-detail">规整轮廓 · 手写正文 · 柔和语义色</Text></Button>
     <Text class="style-section-label">手绘主题</Text>
     <Text class="muted-caption">一并设置初始字体、配色和笔触，之后可在画板工具栏自由改字体。</Text>
     <Box class="style-gallery" aria-label="手绘主题">

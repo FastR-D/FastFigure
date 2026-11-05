@@ -1,3 +1,5 @@
+import {measureTextEvidence} from './textGeometry.ts'
+import {paperTextStyle} from './paperStyle.ts'
 import { fontStack } from '../data/materials.ts'
 import type { FigureContainer, FigureDocument, FigureNode, TextStyle } from './model.ts'
 import { nodeStructure } from './structures.ts'
@@ -13,9 +15,10 @@ export function nodeTextStyle(node: FigureNode, description=false,theme?:FigureD
   const structured=!!nodeStructure(node)
   const ink=node.visual?.stroke&&node.visual.stroke!=='none'?node.visual.stroke:theme?figurePaint(theme,node.visual?.colorIndex).ink:'#243247'
   const color=node.visual?.textTone==='ink'?ink:node.visual?.textTone==='deep'?mixColor(ink,'#182235',.2):undefined
-  return resolvedTextStyle(description?{family:theme?.fontFamily,size:11,align:structured?'center':'left',...node.descriptionStyle}:{
+  const paper=theme&&!node.chart&&!node.reconstruction&&!node.textLayout?paperTextStyle(theme,description?'caption':node.textRole??(structured||node.kind==='module'?'heading':'body')):{}
+  return resolvedTextStyle(description?{family:theme?.fontFamily,align:structured?'center':'left',...paper,size:11,...node.descriptionStyle}:{
     family:theme?.fontFamily,size:node.kind==='operator'&&node.label.length<3?25:node.kind==='icon'?12:16,
-    align:structured?'center':node.iconId&&node.iconId!=='none'&&node.kind!=='icon'||node.kind==='text'||node.description?'left':'center',...(color?{color}:{}),...node.textStyle,
+    align:structured?'center':node.iconId&&node.iconId!=='none'&&node.kind!=='icon'||node.kind==='text'||node.description?'left':'center',...paper,...(color?{color}:{}),...node.textStyle,
   })
 }
 /** Canvas units: a missing style scales with the drawing basis; an explicit style uses actual units. */
@@ -25,18 +28,18 @@ export function canvasNodeTextStyle(node:FigureNode,description=false,theme?:Fig
   return style
 }
 export function canvasContainerTextStyle(container:FigureContainer,theme?:FigureDocument['style']){
-  const style=resolvedTextStyle({family:theme?.fontFamily,...container.textStyle},true)
+  const style=resolvedTextStyle({family:theme?.fontFamily,...(theme?paperTextStyle(theme,'heading'):{}),...container.textStyle},true)
   if(!container.textStyle)style.size*=container.metricScale??1
   return style
 }
 export const estimatedTextWidth=(value:string,size:number)=>[...value].reduce((n,char)=>n+size*(char.codePointAt(0)!>255?1:/[ilI.,:;!' ]/.test(char)?0.3:/[MW@]/.test(char)?0.85:0.57),0)
 export interface WrappedTextLayout{lines:string[];requiredLines:number;maxLines:number;truncated:boolean;overwide:boolean}
 /** The renderer and diagnostics share this deterministic estimate; it is not browser glyph measurement. */
-export function layoutWrappedText(value: string, width: number, size: number, maxLines = 20):WrappedTextLayout {
+export function layoutWrappedText(value: string, width: number, size: number, maxLines = 20,style?:TextStyle):WrappedTextLayout {
   const lines: string[] = []
   for (const paragraph of value.split('\n')) {
     let line = '', used = 0
-    const measure = (token: string) => estimatedTextWidth(token,size)
+    const measure = (token: string) => style?measureTextEvidence(token,{...style,size}).width:estimatedTextWidth(token,size)
     for (const token of paragraph.match(/[\u3400-\u9fff]|[^\s\u3400-\u9fff]+|[ \t]+/gu) ?? []) {
       const advance = measure(token)
       if (advance <= Math.max(size,width)) {
@@ -52,7 +55,7 @@ export function layoutWrappedText(value: string, width: number, size: number, ma
     lines.push(line.trim())
   }
   const limit=Math.max(1,Math.floor(maxLines)),truncated=lines.length>limit,visible=truncated?[...lines.slice(0,limit-1),`${lines[limit-1]?.slice(0,-1)??''}…`]:lines
-  return{lines:visible,requiredLines:lines.length,maxLines:limit,truncated,overwide:visible.some(line=>estimatedTextWidth(line,size)>Math.max(0,width)+1e-6)}
+  return{lines:visible,requiredLines:lines.length,maxLines:limit,truncated,overwide:visible.some(line=>(style?measureTextEvidence(line,{...style,size}).width:estimatedTextWidth(line,size))>Math.max(0,width)+1e-6)}
 }
 /** Explicit font sizes stay intact. Bound text by lines instead of shrinking a caption to unreadable pixels. */
 export const wrapText=(value:string,width:number,size:number,maxLines=20)=>layoutWrappedText(value,width,size,maxLines).lines

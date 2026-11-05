@@ -22,7 +22,7 @@ function logicalKey(object:RecipeObject,figure:FigureDocument,recipeId:string,pa
   return object.id
 }
 function preserveEdits(next:FigureNode|FigureContainer,old:FigureNode|FigureContainer,baseline:FigureNode|FigureContainer){
-  const fields='kind'in next?['label','name','description','iconId','textStyle','descriptionStyle','visual','structure','socket']:['title','textStyle','visual','appearance','opacity']
+  const fields='kind'in next?['label','name','description','iconId','textStyle','descriptionStyle','visual','textRole','textRuns','image','structure','socket']:['title','textStyle','visual','appearance','opacity']
   let edits=0
   const target=next as unknown as Record<string,unknown>,current=old as unknown as Record<string,unknown>,base=baseline as unknown as Record<string,unknown>
   for(const key of fields)if(stable(current[key])!==stable(base[key])){

@@ -5,7 +5,7 @@ import type {SketchStyle} from '../core/sketchStyle'
 import type {ComponentCaptureOrigin} from '../core/componentCaptureContract'
 import {publicationSettingsSchema,type PublicationSettings} from '../core/publicationContract'
 import { computed, inject, ref, shallowRef, watch, type InjectionKey } from 'vue'
-import { clone, createBlank, createExample, isPrimitive, parseDocument, rootContainer, type AccentId, type EvidenceRegion, type FigureDocument, type FigureNode, type NodeKind, type ReferenceImage, type StyleId } from '../core/model'
+import { clone, maxProjectBytes,createBlank, createExample, isPrimitive, parseDocument, rootContainer, type AccentId, type EvidenceRegion, type FigureDocument, type FigureNode, type NodeKind, type ReferenceImage, type StyleId } from '../core/model'
 import { alignObjects, allObjects, arrangeObjects, childrenOf, contains, descendants, findObject, fitTransparentAncestors, groupObjects, moveObjects, parentOf, resizeObject, resolveStyle, topLevelSelection, ungroupObject, type AlignMode, type Rect } from '../core/geometry'
 import { componentDocument, instantiateComponent, type ComponentAsset } from '../core/assets'
 import type {RecipeUpdateResult} from '../core/recipeUpdate'
@@ -191,19 +191,19 @@ export function createEditor() {
       }
     })
   }
-  function setStyle(preset: StyleId) { update(doc=>{const c=doc.containers.find(c=>c.id===currentContainer.value.id)!;if(c.id==='stage'){doc.style.preset=preset;delete doc.style.sketchStyle}else{c.appearance??={preset:'inherit',accent:'inherit'};c.appearance.preset=preset;delete c.appearance.sketchStyle}}) }
+  function setStyle(preset: StyleId) { update(doc=>{const c=doc.containers.find(c=>c.id===currentContainer.value.id)!;if(c.id==='stage'){doc.style.preset=preset;doc.style.designSystem='legacy';delete doc.style.sketchStyle}else{c.appearance??={preset:'inherit',accent:'inherit'};c.appearance.preset=preset;c.appearance.designSystem='legacy';delete c.appearance.sketchStyle}}) }
   function applyTheme(id:SketchStyle){try{const result=applyFigureTheme(figure.value,id,currentContainer.value.id);if(update(doc=>Object.assign(doc,result.figure)))notice.value=`已应用 ${result.use.asset.name}，初始字体 ${result.use.asset.fontFamily}；可在画板工具栏修改${result.use.skippedTextNodes?'，图表与定位字形保留原格式':''}`}catch(error){notice.value=(error as Error).message}}
   function setAccent(accent: AccentId) { setAppearance('accent', accent) }
   function inheritAppearance() { update(doc => { const c = doc.containers.find(c => c.id === currentContainer.value.id); if (c) delete c.appearance }) }
   function setLabel(value: string) {
     update(doc => {
       const object = findObject(doc, selectedId.value)
-      if (object) { if ('label' in object) {const structure=nodeStructure(object);if(structure&&!object.structure)object.structure=clone(structure);object.label = value;reflowText(object);fitTransparentAncestors(doc,object.id)} else object.title = value }
+      if (object) { if ('label' in object) {const structure=nodeStructure(object);if(structure&&!object.structure)object.structure=clone(structure);if(object.label!==value)delete object.textRuns;object.label = value;reflowText(object);fitTransparentAncestors(doc,object.id)} else object.title = value }
     })
   }
   function beginTextEdit(id: string, field: TextEditField = 'label') {
     const object = findObject(figure.value, id)
-    if (!object||'kind' in object&&['path','port'].includes(object.kind)) return
+    if (!object||'kind' in object&&['path','port','image'].includes(object.kind)) return
     selectedId.value = id; textTarget.value = field==='description'?'description':'label'; textEdit.value = { id, field:'kind' in object?field:'label' }
     connectMode.value = false; connectionSource.value = null
   }
@@ -219,7 +219,7 @@ export function createEditor() {
           const structure=nodeStructure(object), index=Number(edit.field.slice(10))
           if(!structure || !Number.isInteger(index) || index<0 || index>=structureLabels(structure).length) throw new Error('结构标签已不存在')
           const labels=structureLabels(structure);labels[index]=value;object.structure={...structure,labels}
-        } else if (edit.field === 'description') object.description = value; else {object.label = value;reflowText(object);fitTransparentAncestors(doc,object.id)}
+        } else if (edit.field === 'description') object.description = value; else {if(object.label!==value)delete object.textRuns;object.label = value;reflowText(object);fitTransparentAncestors(doc,object.id)}
       }
       else object.title = value
     })
@@ -393,7 +393,7 @@ export function createEditor() {
     catch { storageError.value = '本地保存失败，请导出工程文件保存。'; notice.value = storageError.value }
   }
   function importProject(text: string) {
-    if (text.length > 2_000_000) throw new Error('工程文件过大，限制为 2 MB')
+    if (new TextEncoder().encode(text).length > maxProjectBytes) throw new Error('工程文件过大，限制为 8 MB')
     const imported = parseDocument(JSON.parse(text)), before = clone(figure.value)
     figure.value = imported; imageDraftPlan.value=null; commit(before); selectedId.value = 'stage'; notice.value = '已导入工程'
   }

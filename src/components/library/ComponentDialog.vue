@@ -24,7 +24,7 @@ watch(context, value => {
   editingInfo.value=false;openingParent.value=false;parentEpoch++
   error.value = ''; draft.value = null; appearance.value = 'keep'; sourceName.value = ''; sourceReference.value = '';percent.value=100
   if (!value) return
-  if(value.mode==='template')percent.value=150
+  if(value.mode==='template')percent.value=(value.asset.id.startsWith('paper-')||value.asset.id.startsWith('image-'))?100:150
   if (value.mode === 'recipe') { parameters.value = { ...recipe.value!.defaults }; return }
   try {
     draft.value = value.mode === 'capture'

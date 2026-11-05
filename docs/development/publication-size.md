@@ -1,6 +1,6 @@
 # 论文尺寸与可读性
 
-画布工具栏的尺子按钮和导出弹窗进入“论文尺寸与可读性”。工作台仍固定为 1920px；这里的宽度是整张图放入论文时的毫米数，与窗口适配无关。
+画布工具栏的尺子按钮和导出弹窗进入“论文尺寸与可读性”。工作台占满浏览器可用宽度；这里的宽度是整张图放入论文时的毫米数，与窗口适配无关。
 
 可以选择 IEEE 单栏 88.9mm、双栏 182mm 或自定义 20–420mm。两项尺寸来自 [IEEE 期刊作者指南](https://journals.ieeeauthorcenter.ieee.org/create-your-ieee-journal-article/create-graphics-for-your-article/resolution-and-size/)；默认 9pt 文字参考其[会议图件建议的约 9–10pt](https://conferences.ieeeauthorcenter.ieee.org/write-your-paper/improve-your-graphics/)。它们是可修改参考，不能代替目标刊会要求。0.25pt 描边为工具默认参考，并非引用的统一投稿标准。
 

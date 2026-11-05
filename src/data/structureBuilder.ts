@@ -5,12 +5,12 @@ import {setPathPoints,type PathPoint} from '../core/paths.ts'
 export function createStructureBuilder(){
   const figure=createBlank(),root=figure.containers[0]!
   Object.assign(root,{x:0,y:0,role:'component',visual:{fill:'none',stroke:'none'}})
-  figure.style={...figure.style,preset:'precise',paletteId:'figureforge-publication-soft'}
+  figure.style={...figure.style,preset:'precise'}
   function text(id:string,label:string,x:number,y:number,width:number,height:number,size=14,parentId='stage',bold=false){
-    const node:FigureNode={id,kind:'text',label,parentId,x,y,width,height,textStyle:{family:'Inter',size,align:'center',bold},visual:{padding:0,fill:'none',stroke:'none'}};figure.nodes.push(node);return node
+    const node:FigureNode={id,kind:'text',label,parentId,x,y,width,height,textRole:bold?'heading':'body',textStyle:{size,align:'center',bold},visual:{padding:0,fill:'none',stroke:'none'}};figure.nodes.push(node);return node
   }
   function shape(id:string,label:string,x:number,y:number,width:number,height:number,colorIndex=0,parentId='stage',ellipse=false){
-    const node:FigureNode={id,kind:ellipse?'ellipse':'rectangle',label,parentId,x,y,width,height,textStyle:{family:'Inter',size:13,align:'center'},visual:{colorIndex,tone:'fill',padding:4,radius:ellipse?0:6,strokeWidth:1.3,handDrawn:false}};figure.nodes.push(node);return node
+    const node:FigureNode={id,kind:ellipse?'ellipse':'rectangle',label,parentId,x,y,width,height,textStyle:{size:13,align:'center'},visual:{colorIndex,tone:'fill',padding:4,stroke:'none',handDrawn:false}};figure.nodes.push(node);return node
   }
   function path(id:string,points:PathPoint[],arrow:'none'|'filled'='none',closed=false,colorIndex=0,parentId='stage'){
     const node:FigureNode={id,kind:'path',label:id,parentId,x:0,y:0,width:0,height:0,path:{points:[{x:0,y:0},{x:1,y:1}],arrow},visual:{...(closed?{tone:'fill' as const}:{fill:'none'}),colorIndex,strokeWidth:1.3,handDrawn:false,lineJoin:'round'}};setPathPoints(node,points);figure.nodes.push(node);return node

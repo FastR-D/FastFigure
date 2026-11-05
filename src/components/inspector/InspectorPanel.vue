@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import {visualRoleLabels,textRoleLabels,type visualRoles,type textRoles} from '../../core/paperStyle'
 import {snapshotEdgeWaypoints,reframeEdgeWaypoints} from '../../core/edgeWaypoints'
 import {containerSurface,containerSurfaceOptions,setContainerSurface,type ContainerSurface} from '../../core/containerSurface'
+import TextRunsEditor from './TextRunsEditor.vue'
 import GradientControls from './GradientControls.vue'
 import {supportsGradient} from '../../core/gradient'
 import ImageDraftOriginView from '../references/ImageDraftOriginView.vue'
@@ -34,13 +36,15 @@ const multiple = computed(() => editor.selectedIds.value.length > 1)
 const object = computed(() => !multiple.value ? findObject(editor.figure.value, editor.selectedId.value) : undefined)
 const localColor=computed(()=>editor.currentContainer.value.id==='stage'?editor.figure.value.style.colorIndex:editor.currentContainer.value.appearance?.colorIndex)
 const colorable=computed(()=>canColorContainer(editor.figure.value,editor.currentContainer.value.id))
+function changeVisualRole(role:string){editor.update(doc=>{const o=findObject(doc,editor.selectedId.value);if(!o)return;o.visual={...o.visual,role:(role||undefined) as typeof visualRoles[number]|undefined};for(const key of ['fill','stroke','fillGradient','strokeGradient','radius','padding','dash'] as const)delete o.visual[key]})}
+function changeTextRole(role:string){editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(!n)return;n.textRole=(role||undefined) as typeof textRoles[number]|undefined;if(n.textStyle)for(const key of ['family','bold','weight','color'] as const)delete n.textStyle[key]})}
 function changeContainerColor(index:number|undefined){editor.update(doc=>setContainerColor(doc,editor.currentContainer.value.id,index))}
 const selectedLabel = computed(() => node.value?.label ?? container.value?.title ?? '')
 const nodeOptions = computed(() => editor.figure.value.nodes.filter(n=>n.kind!=='path').map(n=>({value:n.id,label:n.socket?`${editor.figure.value.containers.find(c=>c.id===n.interfaceFor)?.title} · ${n.label}`:n.label||nodeKindLabels[n.kind]})))
 const portOptions = [{ value: 'left', label: '左侧' }, { value: 'right', label: '右侧' }, { value: 'top', label: '顶部' }, { value: 'bottom', label: '底部' }]
 const sourceFixed=computed(()=>!!editor.figure.value.nodes.find(n=>n.id===edge.value?.source)?.socket)
 const targetFixed=computed(()=>!!editor.figure.value.nodes.find(n=>n.id===edge.value?.target)?.socket)
-const kindOptions = nodeKinds.filter(kind=>!['path','port'].includes(kind)).map(kind => ({ value: kind, label: nodeKindLabels[kind] }))
+const kindOptions = nodeKinds.filter(kind=>!['path','port','image'].includes(kind)).map(kind => ({ value: kind, label: nodeKindLabels[kind] }))
 const points=computed(()=>node.value?.path?pathPoints(editor.figure.value,node.value):[])
 const pathColor=computed(()=>node.value?.visual?.stroke&&node.value.visual.stroke!=='none'?node.value.visual.stroke:figurePaint(resolveStyle(editor.figure.value,node.value?.parentId??'stage'),node.value?.visual?.colorIndex).ink)
 function pointChange(index:number,axis:'x'|'y',event:Event) {
@@ -93,11 +97,14 @@ function showEvidence() {
     <Box class="panel-title"><Heading>属性</Heading><Text class="type-badge">{{ multiple ? '多选' : node ? '组件' : edge ? '连接' : '容器' }}</Text></Box>
     <Box class="inspector-body">
       <Box class="selection-description"><Box class="selection-icon"><Icon :name="multiple ? 'group' : node ? 'diagram' : edge ? 'connect' : 'panel'" /></Box><Box><Text class="selection-title">{{ multiple ? `已选择 ${editor.selectedIds.value.length} 个对象` : node ? node.label : edge ? '节点连接' : container?.title }}</Text><Text class="muted-caption">{{ multiple ? '批量设置格式、排列图元或删除' : node ? '可独立编辑的科研组件' : edge ? '端口绑定随节点移动' : '移动容器时带动内部对象' }}</Text></Box></Box>
-      <Field v-if="!edge && !multiple && !node?.socket"><Text>{{ node?.kind==='path'?'线段名称':node ? '组件标签' : container?.role==='component'?'组合名称':'容器标题' }}</Text><TextField :key="editor.selectedId.value" :value="selectedLabel" :maxlength="node?.kind==='text'?240:100" aria-label="对象标签" @change="labelChange" /></Field>
-      <Button v-if="object && !multiple&&node?.kind!=='path'&&node?.kind!=='port'&&container?.role!=='component'" size="xs" @click="editor.beginTextEdit(object.id)">在画布中编辑文字</Button>
-      <Field v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'"><Text>简洁注释</Text><TextArea :value="node.description ?? ''" rows="2" maxlength="240" aria-label="对象注释" placeholder="补充输入输出、动作或关键约束…" @change="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n)n.description=($event.target as HTMLTextAreaElement).value})" /></Field>
-      <Box v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'" class="material-actions"><Button size="xs" @click="editor.activePanel.value='icons'">选择图示</Button><Button v-if="node.iconId && node.kind!=='icon'" size="xs" @click="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n)n.iconId='none'})">移除图示</Button></Box>
-      <Field v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'"><Text>组件类型</Text><Select :value="node.kind" :options="kindOptions" aria-label="组件类型" @change="setKind" /></Field>
+      <template v-if="object&&!multiple&&!node?.chart&&!container?.dataChart&&editor.activeStyle.value.designSystem==='paper'&&!['path','port','image'].includes(node?.kind??'')"><Field><Text>视觉角色</Text><Select :value="object.visual?.role??''" :options="[{value:'',label:'随主题与色槽'},...Object.entries(visualRoleLabels).map(([value,label])=>({value,label}))]" aria-label="视觉角色" @change="changeVisualRole" /></Field><Field v-if="node"><Text>文字角色</Text><Select :value="node.textRole??''" :options="[{value:'',label:'自动选择'},...Object.entries(textRoleLabels).map(([value,label])=>({value,label}))]" aria-label="文字角色" @change="changeTextRole" /></Field></template>
+      <Field v-if="!edge && !multiple && !node?.socket&&node?.kind!=='image'"><Text>{{ node?.kind==='path'?'线段名称':node ? '组件标签' : container?.role==='component'?'组合名称':'容器标题' }}</Text><TextField :key="editor.selectedId.value" :value="selectedLabel" :maxlength="node?.kind==='text'?240:100" aria-label="对象标签" @change="labelChange" /></Field>
+      <Box v-if="node?.image&&!multiple" class="structure-settings"><Text>{{ node.image.pixelWidth }} × {{ node.image.pixelHeight }} · 图片插画</Text><Field><Text>图片适配</Text><Select :value="node.image.fit" :options="[{value:'contain',label:'完整显示'},{value:'cover',label:'填满边框（居中裁切）'}]" aria-label="图片适配" @change="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n?.image)n.image.fit=$event as 'contain'|'cover'})" /></Field><Text v-if="node.image.source" class="muted-caption">{{ node.image.source.provider==='user'?'用户导入':'AI 生成' }} · {{ node.image.source.provider }}</Text></Box>
+      <TextRunsEditor v-if="node?.kind==='text'&&!node.textLayout&&!multiple" />
+      <Button v-if="object && !multiple&&node?.kind!=='path'&&node?.kind!=='port'&&node?.kind!=='image'&&container?.role!=='component'" size="xs" @click="editor.beginTextEdit(object.id)">在画布中编辑文字</Button>
+      <Field v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'&&node.kind!=='image'"><Text>简洁注释</Text><TextArea :value="node.description ?? ''" rows="2" maxlength="240" aria-label="对象注释" placeholder="补充输入输出、动作或关键约束…" @change="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n)n.description=($event.target as HTMLTextAreaElement).value})" /></Field>
+      <Box v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'&&node.kind!=='image'" class="material-actions"><Button size="xs" @click="editor.activePanel.value='icons'">选择图示</Button><Button v-if="node.iconId && node.kind!=='icon'" size="xs" @click="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n)n.iconId='none'})">移除图示</Button></Box>
+      <Field v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'&&node.kind!=='image'"><Text>组件类型</Text><Select :value="node.kind" :options="kindOptions" aria-label="组件类型" @change="setKind" /></Field>
       <Box v-if="node?.path&&!multiple" class="structure-settings path-settings">
         <Heading>路径编辑</Heading><Text class="muted-caption">拖动蓝色端点或折点；方向键精调，Shift 加速。移动绑定的图元时端点随动；拖动端点会解除该端绑定；删除目标锚点也会解除相应附着，可撤销。</Text>
         <Field v-if="!node.path.points.some(p=>p.close)"><Text>终点箭头</Text><Select :value="node.path.arrow" :options="[{value:'none',label:'无箭头'},{value:'open',label:'开放箭头'},{value:'filled',label:'实心箭头'}]" aria-label="路径箭头" @change="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n?.path)n.path.arrow=$event as 'none'|'open'|'filled'})" /></Field>

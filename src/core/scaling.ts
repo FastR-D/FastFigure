@@ -1,3 +1,4 @@
+import {paperNode,paperContainer,isPaperStyle} from './paperStyle.ts'
 import { clone, parseDocument, type FigureContainer, type FigureDocument, type FigureNode, type TextStyle } from './model.ts'
 import { childrenOf, contentBounds, descendants, parentOf, resolveStyle } from './geometry.ts'
 import { nodeTextStyle, resolvedTextStyle } from './typography.ts'
@@ -7,18 +8,20 @@ export type ScaleAnchor='top-left'|'center'
 export function scaledTypography(style:TextStyle|undefined,size:number,factor:number):TextStyle {
   return {...style,size:size*factor,...(style?.letterSpacing!==undefined?{letterSpacing:style.letterSpacing*factor}:{})}
 }
-export function scaledVisual<T extends FigureNode['visual']>(visual:T,factor:number,stroke=1.3):NonNullable<T> {
-  return {...visual,strokeWidth:(visual?.strokeWidth??stroke)*factor,...(visual?.radius!==undefined?{radius:visual.radius*factor}:{}),...(visual?.padding!==undefined?{padding:visual.padding*factor}:{}),...(visual?.dash?{dash:visual.dash.map(n=>n*factor)}:{}),...(visual?.dashOffset!==undefined?{dashOffset:visual.dashOffset*factor}:{})} as NonNullable<T>
+export function scaledVisual<T extends FigureNode['visual']>(visual:T,factor:number,stroke=1.3,defaults?:FigureNode['visual'],units=1):NonNullable<T> {
+  const radius=visual?.radius??(defaults?.radius!==undefined?defaults.radius*units:undefined),padding=visual?.padding??(defaults?.padding!==undefined?defaults.padding*units:undefined),dash=visual?.dash??defaults?.dash?.map(n=>n*units)
+  return {...visual,strokeWidth:(visual?.strokeWidth??(defaults?.strokeWidth??stroke)*units)*factor,...(radius!==undefined?{radius:radius*factor}:{}),...(padding!==undefined?{padding:padding*factor}:{}),...(dash?{dash:dash.map(n=>n*factor)}:{}),...(visual?.dashOffset!==undefined?{dashOffset:visual.dashOffset*factor}:{})} as NonNullable<T>
 }
 /** Scale drawing metrics separately from world geometry; palette and opacity stay semantic. */
 export function scaleNodeMetrics(node:FigureNode,factor:number,doc:FigureDocument) {
   if(node.kind==='port')return
-  node.metricScale=(node.metricScale??1)*factor
+  const theme=resolveStyle(doc,node.parentId),units=node.metricScale??1,resolved=paperNode(node,theme),defaults=resolved===node?undefined:resolved.visual
+  node.metricScale=units*factor
   if(node.kind!=='path'){
     node.textStyle=scaledTypography(node.textStyle,nodeTextStyle(node,false,resolveStyle(doc,node.parentId)).size,factor)
     if(node.description)node.descriptionStyle=scaledTypography(node.descriptionStyle,nodeTextStyle(node,true).size,factor)
   }
-  node.visual=scaledVisual(node.visual,factor)
+  node.visual=scaledVisual(node.visual,factor,1.3,defaults,defaults?units:1)
   if(node.path?.arrowSize!==undefined)node.path.arrowSize*=factor
   for(const binding of [node.path?.start,node.path?.end])if(binding){if(binding.offsetX!==undefined)binding.offsetX*=factor;if(binding.offsetY!==undefined)binding.offsetY*=factor}
 }
@@ -47,7 +50,7 @@ export function scaleSubtree(input:FigureDocument,id:string,factor:number,anchor
   // Materialize all font/paint defaults before changing the object's geometry.
   for(const object of objects){
     if('kind' in object)scaleNodeMetrics(object,factor,doc)
-    else {object.metricScale=(object.metricScale??1)*factor;object.textStyle=scaledTypography(object.textStyle,resolvedTextStyle(object.textStyle,true).size,factor);object.visual=scaledVisual(object.visual,factor);if(object.reconstruction){const r=object.reconstruction;r.origin={x:x+(r.origin.x-x)*factor+dx,y:y+(r.origin.y-y)*factor+dy};r.scale*=factor}}
+    else {object.metricScale=(object.metricScale??1)*factor;object.textStyle=scaledTypography(object.textStyle,resolvedTextStyle(object.textStyle,true).size,factor);object.visual=scaledVisual(object.visual,factor,1.3,isPaperStyle(resolveStyle(doc,object.id))?paperContainer(object,resolveStyle(doc,object.id)).visual:undefined,isPaperStyle(resolveStyle(doc,object.id))?(object.metricScale??factor)/factor:1);if(object.reconstruction){const r=object.reconstruction;r.origin={x:x+(r.origin.x-x)*factor+dx,y:y+(r.origin.y-y)*factor+dy};r.scale*=factor}}
     object.x=x+(object.x-x)*factor+dx;object.y=y+(object.y-y)*factor+dy;object.width*=factor;object.height*=factor
   }
   for(const edge of doc.edges)if(ids.has(edge.source)&&ids.has(edge.target)){
@@ -58,6 +61,7 @@ export function scaleSubtree(input:FigureDocument,id:string,factor:number,anchor
   }
   for(const saved of externalFramePins.values())saved.points=saved.points.map(p=>({x:x+(p.x-x)*factor+dx,y:y+(p.y-y)*factor+dy}))
   reframeEdgeWaypoints(doc,externalFramePins)
+  if(id==='stage'&&doc.canvas.frame){const frame=doc.canvas.frame;frame.x=x+(frame.x-x)*factor+dx;frame.y=y+(frame.y-y)*factor+dy;frame.width*=factor;frame.height*=factor}
   const parent=parentOf(doc,id),area=parent?contentBounds(parent):{x:0,y:0,width:1000,height:620}
   if(root.x<area.x-1e-6||root.y<area.y-1e-6||root.x+root.width>area.x+area.width+1e-6||root.y+root.height>area.y+area.height+1e-6)throw new Error('缩放后的组合超出父容器或画布，请减小比例或调整基点')
   const overlaps=parent?childrenOf(doc,parent.id).filter(o=>o.id!==id&&!('interfaceFor' in o&&o.interfaceFor)&&root.x<o.x+o.width&&root.x+root.width>o.x&&root.y<o.y+o.height&&root.y+root.height>o.y).length:0

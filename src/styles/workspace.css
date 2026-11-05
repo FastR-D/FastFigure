@@ -1,8 +1,8 @@
-html, body, #app { width:var(--workspace-width); height:100%; }
+html, body, #app { width:100%; height:100%; min-width:0; overflow:hidden; }
 button, input { font-family: var(--font-sans); }
 svg { flex-shrink: 0; }
-/* The workbench is designed for a 1920px desktop. Keep panel widths stable. */
-.workspace-shell { width:var(--workspace-width); height:100dvh; display:grid; grid-template-rows:64px minmax(0,1fr) 30px; overflow:hidden; }
+/* Fill the available desktop viewport; panels keep their own widths and scrolling. */
+.workspace-shell { width:var(--workspace-width); height:100%; min-width:0; display:grid; grid-template-rows:64px minmax(0,1fr); overflow:hidden; }
 .workspace-header { display:flex; align-items:center; gap:22px; padding:0 22px; border-bottom:1px solid var(--color-border); background:var(--color-panel); z-index:10; }
 .brand { display:flex; align-items:center; gap:9px; color:var(--color-brand); white-space:nowrap; }
 .brand strong { font-size:18px; font-weight:700; letter-spacing:-.2px; }
@@ -200,13 +200,9 @@ svg { flex-shrink: 0; }
 .layer-list .child-layer { padding-left:24px; }
 .layer-type { margin-left:auto; font:9px var(--font-mono); color:var(--color-muted); }
 .layer-list .section-eyebrow { margin:16px 6px 5px; }
-.workspace-status { display:flex; align-items:center; justify-content:space-between; padding:0 15px; border-top:1px solid var(--color-border); background:var(--color-panel); color:var(--color-muted); font-size:10px; }
-.workspace-status > div { display:flex; align-items:center; gap:6px; min-width:0; }
-.workspace-status svg { width:12px; height:12px; color:var(--color-accent-strong); }
-.status-separator { color:var(--color-border-strong); margin:0 4px; }
 .panel-description { color:var(--color-muted); font-size:12px; line-height:1.8; }
 .empty-state { text-align:center; color:var(--color-muted); font-size:12px; padding:28px 5px; }
-.workspace-toast { position:fixed; left:calc(var(--workspace-width) / 2); bottom:50px; transform:translateX(-50%); max-width:960px; display:flex; align-items:center; gap:9px; padding:12px 18px; border:1px solid var(--color-border); border-radius:9px; background:var(--color-panel); color:var(--color-secondary); box-shadow:var(--shadow-popover); font-size:12px; z-index:1500; }
+.workspace-toast { position:fixed; left:calc(var(--workspace-width) / 2); bottom:20px; transform:translateX(-50%); max-width:960px; display:flex; align-items:center; gap:9px; padding:12px 18px; border:1px solid var(--color-border); border-radius:9px; background:var(--color-panel); color:var(--color-secondary); box-shadow:var(--shadow-popover); font-size:12px; z-index:1500; }
 .workspace-toast svg { width:16px; height:16px; color:var(--color-accent-strong); }
 .export-format.fp-button { justify-content:flex-start; border:1px solid var(--color-border); gap:14px; padding:16px; text-align:left; white-space:normal; }
 .export-format.fp-button[aria-pressed=true] { border-color:var(--color-accent); background:var(--color-selected); }

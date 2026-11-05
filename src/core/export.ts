@@ -9,6 +9,7 @@ import { ancestors, commonContainer, parentOf, resolveStyle } from './geometry'
 import { routeFigure } from './routing'
 import { nodeStructure, structureLabels } from './structures'
 import { structuredNodeLayout, structureParts } from './structureVisual'
+import {paperNode,paperContainer} from './paperStyle'
 import { bindingPoint, pathPoints } from './paths'
 
 export function exportDrawio(doc: FigureDocument): string {
@@ -23,11 +24,13 @@ export function exportDrawio(doc: FigureDocument): string {
   }
   function typeStyle(style: import('./model').TextStyle | undefined, title=false,family?:string) { const s=resolvedTextStyle({family,...style},title); return `fontFamily=${s.family};fontSize=${s.size};fontStyle=${(s.bold?1:0)+(s.italic?2:0)};fontColor=${s.color};align=${s.align};` }
   const nativePath=(n:FigureNode)=>n.kind==='path'&&n.path&&(!n.visual?.fill||n.visual.fill==='none')&&(!n.visual?.lineCap||n.visual.lineCap==='butt')&&(!n.visual?.lineJoin||n.visual.lineJoin==='miter')&&!n.visual?.dashOffset
-  const vectorPadding=(n:FigureNode)=>(n.kind!=='port'&&n.metricScale!==undefined&&n.metricScale!==1||n.textLayout||n.name!==undefined&&!nativePath(n)||n.visual?.strokeMatrix||n.visual?.fillGradient||n.visual?.strokeGradient||n.path?.points.some(p=>p.c1||p.move||p.close))?Math.max(4,(n.visual?.strokeWidth??1)*2):0
+  const vectorPadding=(n:FigureNode)=>(n.kind!=='port'&&n.metricScale!==undefined&&n.metricScale!==1||n.kind==='image'||n.textRuns||n.textLayout||n.name!==undefined&&!nativePath(n)||n.visual?.strokeMatrix||n.visual?.fillGradient||n.visual?.strokeGradient||n.path?.points.some(p=>p.c1||p.move||p.close))?Math.max(4,(n.visual?.strokeWidth??1)*2):0
   const cells = [
     `<mxCell id="${graphRoot}"/><mxCell id="${graphLayer}" parent="${graphRoot}"/>`,
   ]
-  for (const c of [...doc.containers].sort((a, b) => ancestors(doc, a.id).length - ancestors(doc, b.id).length)) {
+  for (let c of [...doc.containers].sort((a, b) => ancestors(doc, a.id).length - ancestors(doc, b.id).length)) {
+    const theme=resolveStyle(doc,c.id)
+    c=paperContainer(c,theme)
     const parent = parentOf(doc, c.id)
     const colors = paint(c.id)
     if(c.role==='component') {
@@ -37,7 +40,8 @@ export function exportDrawio(doc: FigureDocument): string {
     }
     cells.push(`<mxCell id="${c.id}" value="${escapeXml(c.title)}" style="swimlane;startSize=${46*(c.metricScale??1)};container=1;collapsible=0;horizontal=1;rounded=1;whiteSpace=wrap;html=0;fillColor=${c.visual?.fill??(containerSurface(c)==='hatch'?figurePaint(resolveStyle(doc,c.id)).hatch:resolveStyle(doc,c.id).preset==='soft'?colors.fill:'#ffffff')};strokeColor=${c.visual?.stroke??colors.ink};strokeWidth=${c.visual?.strokeWidth??1.4};${typeStyle(c.textStyle,true,resolveStyle(doc,c.id).fontFamily)}${colors.sketch}${colors.dashed}" vertex="1" parent="${c.parentId ?? graphLayer}"><mxGeometry x="${c.x - (parent?.x ?? 0)}" y="${c.y - (parent?.y ?? 0)}" width="${c.width}" height="${c.height}" as="geometry"/></mxCell>`)
   }
-  for (const n of doc.nodes) {
+  for (const rawNode of doc.nodes) {
+    const n=paperNode(rawNode,resolveStyle(doc,rawNode.parentId))
     const parent = parentOf(doc, n.id)!
     const colors = figurePaint(resolveStyle(doc,n.parentId),n.visual?.colorIndex)
     if(vectorPadding(n)) {
@@ -63,7 +67,8 @@ export function exportDrawio(doc: FigureDocument): string {
     const shape = n.kind === 'icon' && n.iconId ? `shape=image;image=data:image/svg+xml,${encodeURIComponent(exportIconSvg(n.iconId).replaceAll('currentColor',colors.ink))};verticalLabelPosition=bottom;verticalAlign=top;` : n.kind === 'text' ? 'shape=text;' : n.kind === 'diamond' ? 'rhombus;' : n.kind === 'rectangle' ? `rounded=${n.visual?.radius?1:0};` : n.kind === 'neuron' || n.kind === 'operator' || n.kind === 'ellipse' ? 'ellipse;perimeter=ellipsePerimeter;' : n.kind === 'volume' ? 'shape=cube;' : n.kind === 'projection' ? 'shape=trapezoid;perimeter=trapezoidPerimeter;' : 'rounded=1;'
     cells.push(`<mxCell id="${n.id}" value="${escapeXml(n.label)}" style="${shape}whiteSpace=wrap;html=0;fillColor=${n.kind==='text'?'none':n.visual?.fill??(n.visual?.tone==='hatch'?colors.hatch:colors.fill)};strokeColor=${n.kind==='text'?'none':n.visual?.stroke??colors.ink};strokeWidth=${n.visual?.strokeWidth??1.3};opacity=${(n.visual?.opacity??1)*100};spacing=${n.visual?.padding??0};${typeStyle(nodeTextStyle(n,false,resolveStyle(doc,n.parentId)))}${n.chart||n.reconstruction||n.visual?.handDrawn===false?'':paint(n.parentId).sketch}${n.description||nodeStructure(n)?'verticalAlign=top;spacingTop=8;':''}" vertex="1" parent="${n.parentId}"><mxGeometry x="${n.x - parent.x}" y="${n.y - parent.y}" width="${n.width}" height="${n.height}" as="geometry"/></mxCell>`)
   }
-  for (const n of doc.nodes) {
+  for (const rawNode of doc.nodes) {
+    const n=paperNode(rawNode,resolveStyle(doc,rawNode.parentId))
     const structure=nodeStructure(n)
     if (n.description) cells.push(`<mxCell id="${uniqueId(`${n.id}-annotation`)}" value="${escapeXml(n.description)}" style="shape=text;whiteSpace=wrap;html=0;strokeColor=none;fillColor=none;${typeStyle({...nodeTextStyle(n,true,resolveStyle(doc,n.parentId)),color:n.descriptionStyle?.color??'#667085'})}" vertex="1" parent="${n.id}"><mxGeometry x="10" y="${n.height-(structure?24:32)}" width="${n.width-20}" height="${structure?22:30}" as="geometry"/></mxCell>`)
     if (n.iconId && n.iconId!=='none' && n.kind!=='icon') cells.push(`<mxCell id="${uniqueId(`${n.id}-glyph`)}" value="" style="shape=image;image=data:image/svg+xml,${encodeURIComponent(exportIconSvg(n.iconId).replaceAll('currentColor',paint(n.parentId).ink))};" vertex="1" parent="${n.id}"><mxGeometry x="8" y="8" width="${structure?16:24}" height="${structure?16:24}" as="geometry"/></mxCell>`)
