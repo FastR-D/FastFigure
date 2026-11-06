@@ -1,3 +1,4 @@
+import {editableFigure} from '../core/editableFigure'
 import {canvasNodeTextStyle,canvasContainerTextStyle} from '../core/typography'
 import {moveEdgeWaypoint,removeEdgeWaypoint} from '../core/edgeWaypoints'
 import {applyFigureTheme} from '../core/figureThemes'
@@ -7,7 +8,10 @@ import {publicationSettingsSchema,type PublicationSettings} from '../core/public
 import { computed, inject, ref, shallowRef, watch, type InjectionKey } from 'vue'
 import { clone, maxProjectBytes,createBlank, createExample, isPrimitive, parseDocument, rootContainer, type AccentId, type EvidenceRegion, type FigureDocument, type FigureNode, type NodeKind, type ReferenceImage, type StyleId } from '../core/model'
 import { alignObjects, allObjects, arrangeObjects, childrenOf, contains, descendants, findObject, fitTransparentAncestors, groupObjects, moveObjects, parentOf, resizeObject, resolveStyle, topLevelSelection, ungroupObject, type AlignMode, type Rect } from '../core/geometry'
-import { componentDocument, instantiateComponent, type ComponentAsset } from '../core/assets'
+import { componentDocument, instantiateComponent,instantiateComponentAt, type ComponentAsset } from '../core/assets'
+import {libraryNodeSize,libraryPlacement,type CanvasPoint,type NodeExtras} from '../core/libraryPlacement'
+import {createLibraryDrag,type LibraryDragItem} from './useLibraryDrag'
+import {resizeCanvas} from '../core/canvasSize'
 import type {RecipeUpdateResult} from '../core/recipeUpdate'
 import { createComponentLibrary } from './useComponentLibrary'
 import {createComponentRepository} from './useComponentRepository'
@@ -40,7 +44,8 @@ type MaterialPanel = 'components' | 'layers' | 'styles' | 'references' | 'icons'
 
 const STORAGE_KEY = 'fastfigure.project.v2'
 export function createEditor() {
-  const figure = ref<FigureDocument>(createExample())
+  const libraryDrag=createLibraryDrag()
+  const figure = ref<FigureDocument>(editableFigure(createExample()))
   const root = computed(() => rootContainer(figure.value))
   const selectedIds = ref<string[]>(['stage'])
   const selectedId = computed({ get: () => selectedIds.value.at(-1) ?? 'stage', set: (id: string) => { selectedIds.value = [id] } })
@@ -74,7 +79,16 @@ export function createEditor() {
   const routes = computed(() => routeFigure(figure.value))
   const blockedRoutes = computed(() => [...routes.value].filter(([, route]) => route.status === 'blocked'))
   const connectMode = ref(false), connectionSource = ref<string | null>(null)
-  const zoom = ref(100), showGrid = ref(true), saved = ref(true)
+  const zoom = ref(100), viewReset=ref(0),textCheckOpen=ref(false),arrowDrawMode=ref(false),arrowEditId=ref<string|null>(null),arrowPointCount=ref(0),arrowFinishRequest=ref(0), showGrid = ref(true), saved = ref(true)
+  function setZoom(value:number){if(Number.isFinite(value))zoom.value=Math.max(25,Math.min(300,Math.round(value)))}
+  function fitCanvas(){zoom.value=100;viewReset.value++}
+  function setCanvasSize(axis:'width'|'height',value:number){
+    if(figure.value.canvas[axis]===value)return true
+    const changed=update(doc=>resizeCanvas(doc,axis==='width'?value:doc.canvas.width,axis==='height'?value:doc.canvas.height))
+    if(changed){fitCanvas();notice.value=`画布尺寸已更新为 ${figure.value.canvas.width} × ${figure.value.canvas.height}`}
+    return changed
+  }
+  function nudgeSelection(dx:number,dy:number){beginDrag();moveSelection(dx,dy);endDrag()}
   const storageError = ref(''), notice = ref('')
   const past = ref<FigureDocument[]>([]), future = ref<FigureDocument[]>([])
   const selectedNode = computed(() => figure.value.nodes.find(n => n.id === selectedId.value))
@@ -94,7 +108,7 @@ export function createEditor() {
   let dragBefore: FigureDocument | null = null
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) figure.value = parseDocument(JSON.parse(stored))
+    if (stored) figure.value = editableFigure(JSON.parse(stored))
   } catch { storageError.value = '本地工程未能读取，已打开示例。原存储尚未覆盖。' }
   watch(figure, () => { saved.value = false }, { deep: true, flush: 'sync' })
   function commit(before: FigureDocument) {
@@ -104,7 +118,7 @@ export function createEditor() {
   function update(action: (doc: FigureDocument) => void): boolean {
     const before = clone(figure.value), candidate = clone(figure.value)
     try {
-      action(candidate); figure.value = parseDocument(candidate); commit(before); return true
+      action(candidate); figure.value = editableFigure(candidate); commit(before); return true
     } catch (error) {
       notice.value = error instanceof Error ? ('issues' in error ? '操作超出容器或尺寸限制，请调整后重试' : error.message) : '操作未能完成'
       return false
@@ -144,11 +158,14 @@ export function createEditor() {
     if (!selectedIds.value.length) selectedId.value = 'stage'
   }
   function selectAll() { selectedIds.value = childrenOf(figure.value, 'stage').filter(o=>!('interfaceFor' in o&&o.interfaceFor)).map(o => o.id); if (!selectedIds.value.length) selectedId.value = 'stage' }
-  function addNode(kind: NodeKind, label: string, extras: Partial<Pick<FigureNode, 'iconId' | 'description' | 'textStyle' | 'visual' | 'structure'|'path'>> = {}) {
+  function addNode(kind: NodeKind, label: string, extras: NodeExtras = {},at?:CanvasPoint) {
     if (nodeCount.value >= 240||!isPrimitive(kind)&&figure.value.nodes.filter(n=>!isPrimitive(n.kind)).length>=60) { notice.value = '当前工程最多支持 60 个科研节点、240 个图元'; return }
-    const c = currentContainer.value
-    const round = ['neuron','operator','ellipse','icon','diamond'].includes(kind), width = extras.structure ? 184 : round ? 80 : kind === 'text' ? 180 : 140, height = extras.structure ? structurePreset(extras.structure.type).height :kind==='path'?0: round ? 80 : kind === 'text' ? 44 : 66
+    const {width,height}=libraryNodeSize(kind,extras)
+    let placement:ReturnType<typeof libraryPlacement>|undefined
+    if(at){try{placement=libraryPlacement(figure.value,at,{width,height})}catch(error){notice.value=(error as Error).message;return false}}
+    const c = placement?figure.value.containers.find(c=>c.id===placement.parentId)!:currentContainer.value
     let position: { x: number; y: number } | undefined
+    if(placement)position={x:placement.x,y:placement.y}
     for (let y = c.y + 58; y <= c.y + c.height - height - 12 && !position; y += 20) {
       for (let x = c.x + 30; x <= c.x + c.width - width - 12; x += 20) {
         const intersects = childrenOf(figure.value, c.id).some(n => x < n.x + n.width + 16 && x + width + 16 > n.x && y < n.y + n.height + 16 && y + height + 16 > n.y)
@@ -158,14 +175,34 @@ export function createEditor() {
     if(!position&&c.dataChart&&['text','icon'].includes(kind)&&c.width>=width+4&&c.height>=height+4)position={x:c.x+(c.width-width)/2,y:c.y+(c.height-height)/2}
     if (!position) { notice.value = '容器内没有足够空位，请先扩大容器或调整内部组件'; return }
     const node: FigureNode = { id: `n-${crypto.randomUUID()}`, parentId: c.id, kind, label, width, height, ...position, ...extras }
-    if (update(doc => doc.nodes.push(node))) { selectedId.value = node.id; notice.value = `已添加${label}，可拖动调整位置` }
+    if (update(doc => doc.nodes.push(node))) { selectedId.value = node.id; notice.value = `已添加${label}，可拖动调整位置`;return true }
+    return false
+  }
+  async function dropLibraryItem(item:LibraryDragItem,point:CanvasPoint){
+    try{
+      let inserted:boolean|undefined
+      if(item.kind==='node')inserted=addNode(item.nodeKind,item.label,item.extras,point)
+      else{
+        const before=figure.value,asyncSource=typeof item.asset==='function',baseKey=asyncSource?JSON.stringify(before):''
+        if(asyncSource)notice.value='正在读取拖拽的组件…'
+        const asset=typeof item.asset==='function'?await item.asset():item.asset
+        if(before!==figure.value||asyncSource&&JSON.stringify(figure.value)!==baseKey){notice.value='画布已变化，请重新拖入组件';return false}
+        const placement=libraryPlacement(figure.value,point,rootContainer(asset.figure))
+        const result=instantiateComponentAt(figure.value,asset,placement.parentId,placement,`c-${crypto.randomUUID().replaceAll('-','').slice(0,24)}`,true,new Set(childrenOf(figure.value,placement.parentId).map(o=>o.id)))
+        const candidate=editableFigure(result.document)
+        figure.value=candidate;commit(clone(before));selectedId.value=result.containerId
+        notice.value=`已插入${asset.name}，内部节点和连接可继续编辑`;inserted=true
+      }
+      if(inserted){connectMode.value=false;connectionSource.value=null;arrowDrawMode.value=false}
+      return!!inserted
+    }catch(error){notice.value=error instanceof Error&&!('issues'in error)?error.message:'插入失败：请检查容器层级与尺寸限制';return false}
   }
   function insertComponent(asset: ComponentAsset, keepAppearance = true, newCanvas = false): boolean {
     try {
       const inserted = newCanvas ? { document: componentDocument(asset, keepAppearance, activeStyle.value), containerId: 'stage' }
         : instantiateComponent(figure.value, asset, currentContainer.value.id, keepAppearance)
       const before = clone(figure.value)
-      figure.value = inserted.document; commit(before); selectedId.value = inserted.containerId
+      figure.value = editableFigure(inserted.document); commit(before); selectedId.value = inserted.containerId
       connectMode.value = false; connectionSource.value = null
       notice.value = `已插入${asset.name}，内部节点和连接可继续编辑`
       return true
@@ -174,7 +211,7 @@ export function createEditor() {
   function applyRecipePreview(result:RecipeUpdateResult){
     if(JSON.stringify(figure.value)!==result.baseKey){notice.value='画布已变化，请重新打开组合参数';return false}
     if(!result.changed)return false
-    try{const next=parseDocument(clone(result.document)),before=clone(figure.value);figure.value=next;commit(before);selectedId.value=result.containerId;recipeDialogId.value=null;notice.value='已更新组合参数，外部连接和另加对象保留，可单步撤销';return true}
+    try{const next=editableFigure(result.document),before=clone(figure.value);figure.value=next;commit(before);selectedId.value=result.containerId;recipeDialogId.value=null;notice.value='已更新组合参数，外部连接和另加对象保留，可单步撤销';return true}
     catch{notice.value='参数预览无效，当前画布保持';return false}
   }
   function setAppearance(field: 'preset' | 'accent', value: StyleId | AccentId) {
@@ -203,7 +240,7 @@ export function createEditor() {
   }
   function beginTextEdit(id: string, field: TextEditField = 'label') {
     const object = findObject(figure.value, id)
-    if (!object||'kind' in object&&['path','port','image'].includes(object.kind)) return
+    if (!object||!('kind' in object)||['path','port','image'].includes(object.kind)) return
     selectedId.value = id; textTarget.value = field==='description'?'description':'label'; textEdit.value = { id, field:'kind' in object?field:'label' }
     connectMode.value = false; connectionSource.value = null
   }
@@ -268,7 +305,7 @@ export function createEditor() {
   function expandSelectedStructure(id=selectedId.value) {
     try {
       const before=clone(figure.value),result=expandStructure(figure.value,id)
-      figure.value=result.document;commit(before);selectedId.value=result.containerId;structureExpandId.value=null
+      figure.value=editableFigure(result.document);commit(before);selectedId.value=result.containerId;structureExpandId.value=null
       connectMode.value=false;connectionSource.value=null;activePanel.value='layers'
       notice.value=`已转换为 ${result.nodeCount} 个可编辑图元（${result.paths} 条线段），外部连接保留`
       return true
@@ -324,13 +361,13 @@ export function createEditor() {
     if (!object || !Number.isFinite(value)) return
     update(doc => resizeObject(doc, object.id, axis === 'width' ? value : object.width, axis === 'height' ? value : object.height))
   }
-  function resize(width: number, height: number) { resizeObject(figure.value, selectedId.value, width, height) }
+  function resize(width: number, height: number, aspect?:Pick<Rect,'width'|'height'>) { resizeObject(figure.value, selectedId.value, width, height,aspect) }
   function alignSelection(mode: AlignMode) { update(doc => alignObjects(doc, selectedIds.value, mode)) }
   function arrangeSelection(direction: 'row' | 'column') { update(doc => arrangeObjects(doc, selectedIds.value, direction)) }
   function applyLayout(containerId: string, options: LayoutOptions): boolean {
     try {
       const result = layoutContainer(figure.value, containerId, options), before = clone(figure.value)
-      figure.value = result.document; commit(before); selectedId.value = containerId
+      figure.value = editableFigure(result.document); commit(before); selectedId.value = containerId
       notice.value = options.recursive ? `已整理 ${result.levels.length} 个容器、${result.count} 个对象${result.resized.length ? `，适配 ${result.resized.length} 个子容器尺寸` : ''}`
         : `已排列 ${result.count} 个同层对象${result.gap < options.gap ? `，间距已适配为 ${result.gap}` : ''}`
       return true
@@ -339,7 +376,7 @@ export function createEditor() {
   function applyScale(id:string,factor:number,anchor:ScaleAnchor) {
     try {
       const result=scaleSubtree(figure.value,id,factor,anchor),before=clone(figure.value)
-      figure.value=result.document;commit(before);selectedId.value=id
+      figure.value=editableFigure(result.document);commit(before);selectedId.value=id
       notice.value=`已将组合等比缩放至 ${Math.round(factor*100)}%${result.overlaps?'，请检查同层重叠':''}`
       return true
     }catch(error){notice.value=error instanceof Error?error.message:'缩放未能完成';return false}
@@ -347,7 +384,7 @@ export function createEditor() {
   function applyPanels(parentId:string,items:PanelItem[],options:PanelOptions) {
     try {
       const result=layoutPanels(figure.value,parentId,items,options),before=clone(figure.value)
-      figure.value=result.document;commit(before);selectedIds.value=result.panelIds
+      figure.value=editableFigure(result.document);commit(before);selectedIds.value=result.panelIds
       notice.value=`已编排 ${result.panelIds.length} 张子图，原生标号可继续编辑；可单步撤销`
       return true
     }catch(error){notice.value=error instanceof Error?error.message:'子图编排未能完成';return false}
@@ -394,10 +431,10 @@ export function createEditor() {
   }
   function importProject(text: string) {
     if (new TextEncoder().encode(text).length > maxProjectBytes) throw new Error('工程文件过大，限制为 8 MB')
-    const imported = parseDocument(JSON.parse(text)), before = clone(figure.value)
+    const imported = editableFigure(JSON.parse(text)), before = clone(figure.value)
     figure.value = imported; imageDraftPlan.value=null; commit(before); selectedId.value = 'stage'; notice.value = '已导入工程'
   }
-  function newProject(kind: 'blank' | 'example' = 'example') { const before = clone(figure.value); figure.value = kind === 'blank' ? createBlank() : createExample();imageDraftPlan.value=null; commit(before); selectedId.value = 'stage' }
+  function newProject(kind: 'blank' | 'example' = 'example') { const before = clone(figure.value); figure.value = editableFigure(kind === 'blank' ? createBlank() : createExample());imageDraftPlan.value=null; commit(before); selectedId.value = 'stage' }
   function toggleConnect() { connectMode.value = !connectMode.value; connectionSource.value = null }
   function openAssistant() {
     if (activePanel.value !== 'assistant') previousMaterialPanel = activePanel.value
@@ -442,8 +479,8 @@ export function createEditor() {
   }
   function clearEvidence() { update(doc => { const object = findObject(doc, selectedId.value); if (object) delete object.evidence }) }
   return { selectedEdgePoint,dragEdgePoint,setEdgePoint,removeEdgePoint,figure, root, currentContainer, activeStyle, selectedId, selectedIds, selectedNode, selectedEdge, selectedContainer, selectedObjects, canGroup, activePanel, library,repository,styleLibrary,styleDialog,assistantStyle,applySavedStyle,useSavedStyle, libraryTab, assetDialog,recipeDialogId,applyRecipePreview,componentCapture,openComponentCapture, chartDialog,chartDataImportOpen,assistantDataset,assistantAssetId,layoutDialogOpen, vectorImportOpen, routes, blockedRoutes,
-    connectMode, connectionSource, zoom, showGrid, saved, storageError, notice, past, future, nodeCount, select, selectAll, selectRegion,
-    addNode, insertComponent, setStyle,applyTheme, setAccent, inheritAppearance, setLabel, update, move, moveSelection, beginDrag, endDrag, cancelDrag, setPosition, setSize, resize, alignSelection,
+    connectMode, connectionSource, zoom, viewReset,textCheckOpen,arrowDrawMode,arrowEditId,arrowPointCount,arrowFinishRequest,setZoom,fitCanvas,nudgeSelection,showGrid, saved, storageError, notice, past, future, nodeCount, select, selectAll, selectRegion,
+    addNode, insertComponent,libraryDrag,dropLibraryItem,setCanvasSize, setStyle,applyTheme, setAccent, inheritAppearance, setLabel, update, move, moveSelection, beginDrag, endDrag, cancelDrag, setPosition, setSize, resize, alignSelection,
     arrangeSelection, applyLayout, materialEdit,calloutOpen,panelLayoutOpen,detailInsetOpen, applyPanels, publicationOpen, setPublication, scaleDialogId, applyScale, groupSelection, ungroupSelection, removeSelected, undo, redo, save, importProject, newProject, toggleConnect,
     referenceId, referenceMode, referenceOpacity, evidenceRegion, activeReference, addReference,addDraftReference, editReference, fitActiveReference, removeReference, bindEvidence, clearEvidence,
     openAssistant, closeAssistant, assistantSeed, assistantReferenceId, assistantTask, requestReconstruction, imageDraftPlan, requestImageDraft, textTarget, textEdit, beginTextEdit, finishTextEdit, formatText, paintSelection, addIcon, applyPalette, useMaterialPrompt, setNodeStructure, fitStructure,

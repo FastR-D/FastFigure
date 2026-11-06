@@ -14,7 +14,7 @@ const sha=bytes=>createHash('sha256').update(bytes).digest('hex')
 mkdirSync(join(directory,'sources'),{recursive:true});mkdirSync(join(directory,'images'),{recursive:true})
 try{
   const page=await browser.newPage({viewport:{width:1000,height:600},deviceScaleFactor:2});await page.goto(base);await page.getByTestId('figure-canvas').waitFor()
-  await page.evaluate(async()=>{await document.fonts.load('400 16px Inter');await document.fonts.load('600 16px Inter');await document.fonts.load('16px MiSans');document.querySelector('#app')?.remove();document.body.style.cssText='margin:0;background:white;overflow:hidden'})
+  await page.evaluate(async()=>{await document.fonts.load('400 16px MiSans');await document.fonts.load('600 16px MiSans');await document.fonts.load('16px MiSans');document.querySelector('#app')?.remove();document.body.style.cssText='margin:0;background:white;overflow:hidden'})
   for(const sample of cases){
     writeFileSync(join(directory,'sources',`${sample.id}.svg`),sample.svg)
     const objects=await page.evaluate(({svg,labels})=>{
@@ -28,9 +28,9 @@ try{
     const png=await page.locator('#benchmark-source').screenshot({path:join(directory,'images',`${sample.id}.png`),animations:'disabled'});previews.push({id:sample.id,png:png.toString('base64')})
     manifest.cases.push({id:sample.id,title:sample.title,split:sample.split,canvas:{width:1000,height:600},image:{path:`images/${sample.id}.png`,width:2000,height:1200,sha256:sha(png)},source:{path:`sources/${sample.id}.svg`,sha256:sha(sample.svg)},objects})
   }
-  manifest.fonts=['inter-variable.woff2','misans-regular.woff2'].map(name=>({name,sha256:sha(readFileSync(join(root,'public/fonts',name)))}))
+  manifest.fonts=['misans-regular.woff2','misans-semibold.woff2'].map(name=>({name,sha256:sha(readFileSync(join(root,'public/fonts',name)))}))
   writeFileSync(join(directory,'manifest.json'),JSON.stringify(manifest,null,2))
-  const sheet=await page.evaluate(async previews=>{const c=document.createElement('canvas');c.width=1500;c.height=688;const ctx=c.getContext('2d');ctx.fillStyle='#edf0f5';ctx.fillRect(0,0,c.width,c.height);ctx.font='17px Inter';for(let i=0;i<previews.length;i++){const img=new Image();img.src=`data:image/png;base64,${previews[i].png}`;await img.decode();const x=i%3*500,y=Math.floor(i/3)*344;ctx.fillStyle='#29435c';ctx.fillText(previews[i].id,x+12,y+27);ctx.drawImage(img,x,y+36,500,300)}return c.toDataURL('image/png').split(',')[1]},previews)
+  const sheet=await page.evaluate(async previews=>{const c=document.createElement('canvas');c.width=1500;c.height=688;const ctx=c.getContext('2d');ctx.fillStyle='#edf0f5';ctx.fillRect(0,0,c.width,c.height);ctx.font='17px MiSans';for(let i=0;i<previews.length;i++){const img=new Image();img.src=`data:image/png;base64,${previews[i].png}`;await img.decode();const x=i%3*500,y=Math.floor(i/3)*344;ctx.fillStyle='#29435c';ctx.fillText(previews[i].id,x+12,y+27);ctx.drawImage(img,x,y+36,500,300)}return c.toDataURL('image/png').split(',')[1]},previews)
   mkdirSync(join(root,'test-results'),{recursive:true});writeFileSync(join(root,'test-results','reconstruction-benchmark-contact.png'),Buffer.from(sheet,'base64'))
   console.log(JSON.stringify(manifest.cases.map(c=>({id:c.id,split:c.split,objects:c.objects.length,texts:c.objects.filter(o=>o.kind==='text').length,arrows:c.objects.filter(o=>o.arrow).length}))))
 }finally{await browser.close()}

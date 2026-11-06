@@ -1,3 +1,4 @@
+import {editableFigure} from './editableFigure'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { effectScope } from 'vue'
 import { clone, createBlank, createExample, parseDocument, type FigureDocument } from './model'
@@ -11,7 +12,6 @@ import { defaultPanelOptions, layoutPanels } from './panelLayout'
 import { buildDataChart, replaceDataChart } from './dataChart'
 import { chartExample } from './dataChartTable'
 import { exportSvg } from './svg'
-import { exportDrawio } from './export'
 
 function geometryFits(doc: FigureDocument, parentId: string) {
   const area = contentBounds(doc.containers.find(c => c.id === parentId)!), objects = childrenOf(doc, parentId)
@@ -46,11 +46,11 @@ describe('container flow and panel layout', () => {
     const spec=clone(chart.dataChart!.spec);spec.series[0]!.values[0]=70
     const revised=replaceDataChart(next,chart.id,spec).document;expect(revised.nodes.find(n=>n.id==='human-note')).toEqual(note);expect(revised.containers.find(c=>c.id===chart.id)!.parentId).toBe(next.containers.find(c=>c.id===chart.id)!.parentId)
     const captured=captureComponent(revised,'stage','Two panels');expect(captured.figure.containers.filter(c=>c.dataChart)).toHaveLength(2)
-    expect(exportSvg(next)).toContain('(a) Held-out');expect(exportSvg(next)).not.toContain('<image');expect(exportDrawio(next)).toContain('(b) Training')
+    expect(exportSvg(next)).toContain('(a) Held-out');expect(exportSvg(next)).not.toContain('<image');
     const storage=new Map<string,string>();vi.stubGlobal('localStorage',{getItem:(key:string)=>storage.get(key)??null,setItem:(key:string,value:string)=>storage.set(key,value)})
     const e=scope.run(createEditor)!;e.importProject(JSON.stringify(before));const past=e.past.value.length
-    expect(e.applyPanels('stage',items,options)).toBe(true);expect(e.past.value).toHaveLength(past+1);expect(e.figure.value).toEqual(next)
-    e.undo();expect(e.figure.value).toEqual(before);e.redo();expect(e.figure.value).toEqual(next);e.save();expect(scope.run(createEditor)!.figure.value).toEqual(next)
+    expect(e.applyPanels('stage',items,options)).toBe(true);expect(e.past.value).toHaveLength(past+1);const applied=clone(e.figure.value);expect(applied.containers.filter(c=>c.role==='panel').map(c=>c.title)).toEqual(next.containers.filter(c=>c.role==='panel').map(c=>c.title));expect(applied.nodes.filter(n=>n.titleBlock)).toHaveLength(2)
+    e.undo();expect(e.figure.value).toEqual(editableFigure(before));e.redo();expect(e.figure.value).toEqual(applied);e.save();expect(scope.run(createEditor)!.figure.value).toEqual(applied)
   })
   it('rejects panel collisions, unreadable captions, duplicate choices and insufficient space without committing changes',()=>{
     const doc=createBlank();Object.assign(doc.containers[0]!,{x:0,y:0,width:1000,height:620})
@@ -62,7 +62,7 @@ describe('container flow and panel layout', () => {
     expect(()=>layoutPanels(doc,'stage',items,{...defaultPanelOptions,columns:1,shrinkToFit:false})).toThrow('原尺寸')
     const crowded=clone(doc);crowded.nodes.push({id:'unselected',parentId:'stage',kind:'text',label:'Keep me',x:100,y:200,width:100,height:20})
     const e=scope.run(createEditor)!;e.importProject(JSON.stringify(crowded));const past=e.past.value.length
-    expect(e.applyPanels('stage',items,defaultPanelOptions)).toBe(false);expect(e.notice.value).toContain('重叠');expect(e.figure.value).toEqual(crowded);expect(e.past.value).toHaveLength(past)
+    expect(e.applyPanels('stage',items,defaultPanelOptions)).toBe(false);expect(e.notice.value).toContain('重叠');expect(e.figure.value).toEqual(editableFigure(crowded));expect(e.past.value).toHaveLength(past)
     expect(doc).toEqual(before)
   })
   it('retains internal leader bindings and rejects an internal path bound outside its panel instead of detaching it',()=>{
@@ -191,7 +191,7 @@ describe('layout history', () => {
     }
     const e=scope.run(createEditor)!;e.importProject(JSON.stringify(before));const history=e.past.value.length
     expect(e.applyLayout('stage',options)).toBe(true);expect(e.past.value).toHaveLength(history+1)
-    e.undo();expect(e.figure.value).toEqual(before);e.redo();expect(e.figure.value).toEqual(result.document)
+    const applied=clone(e.figure.value);e.undo();expect(e.figure.value).toEqual(editableFigure(before));e.redo();expect(e.figure.value).toEqual(applied)
     expect(before).toEqual(b.document)
   })
   it('retries the entire recursive tree when an outer container needs smaller inner spacing',()=>{

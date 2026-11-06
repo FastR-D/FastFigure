@@ -8,7 +8,6 @@ import { moveObjects, resizeObject, ungroupObject } from './geometry'
 import { routeFigure } from './routing'
 import { defaultLayoutOptions, layoutContainer } from './layout'
 import { diffFigures } from './figureDiff'
-import { exportDrawio } from './export'
 import { exportSvg } from './svg'
 import { harnessPrompt, parseHarnessResponse } from './harness'
 import { createEditor } from '../composables/useEditor'
@@ -79,9 +78,9 @@ describe('named component boundary interfaces',()=>{
     const edge=result.figure.edges[0]!,source=result.figure.nodes.find(n=>n.id===edge.source)!,target=result.figure.nodes.find(n=>n.id===edge.target)!;expect(source.socket!.key).toBe('features');expect(target.socket!.key).toBe('context');expect(edge).toMatchObject({sourcePort:'right',targetPort:'left'});expect(source.interfaceFor).toBe('enc');expect(target.interfaceFor).toBe('dec');expect(routeFigure(result.figure).get('wire')!.status).toBe('clear')
     expect(()=>composeCatalogue(createBlank(),[{kind:'asset',asset:a}],[{id:'enc',componentKey:`asset:${a.id}`,parentId:'stage',x:100,y:180,keepAppearance:true}],[{...link,target:{scope:'port',instanceId:'enc',port:'input',key:'features',index:0}}])).toThrow()
   })
-  it('retains interface metadata in SVG and exact side fractions in drawio edge constraints',()=>{
-    const {doc}=fixture();connect(doc);const svg=exportSvg(doc),xml=exportDrawio(doc)
-    expect(svg).toContain('&quot;socket&quot;');expect(svg).not.toContain('data-named-port');expect(xml).toContain('exitX=1;exitY=0.25;entryX=0;entryY=0.7;');expect(xml).toContain('exitPerimeter=0;entryPerimeter=0;')
+  it('retains interface metadata in SVG',()=>{
+    const {doc}=fixture();connect(doc);const svg=exportSvg(doc)
+    expect(svg).toContain('&quot;socket&quot;');expect(svg).not.toContain('data-named-port');
   })
   it('reports interface changes and preserves omitted metadata in a model revision',()=>{
     const {doc}=fixture(),after=clone(doc),port=after.nodes.find(n=>n.id==='out')!;port.socket!.position=.8

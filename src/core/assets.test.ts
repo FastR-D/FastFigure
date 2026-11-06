@@ -1,3 +1,4 @@
+import {editableFigure} from './editableFigure'
 import {createDetailInset} from './detailInset'
 import {applyMaterialEdits} from './materialEditing'
 import {componentContentJson} from './componentContent'
@@ -15,7 +16,6 @@ import { clone, createBlank, createExample, parseDocument, rootContainer } from 
 import { contentBounds, contains, groupObjects, moveObjects, resolveStyle } from './geometry'
 import { createComponentLibrary, LIBRARY_KEY } from '../composables/useComponentLibrary'
 import { createEditor } from '../composables/useEditor'
-import { exportDrawio } from './export'
 import { exportSvg } from './svg'
 import {nodeVisual} from './svg'
 import {catalogueAsset,composeCatalogue,describeCatalogue,componentInstanceSchema} from './catalogue'
@@ -369,7 +369,7 @@ describe('parameterized editable components', () => {
     const asset=buildRecipe('pipeline',{stages:2,direction:'row'}),before=clone(asset),copy=captureComponent(componentDocument(asset),'stage',asset.name)
     copy.name='Another index name';copy.description='Another catalogue description';copy.sources.push({title:'Different paper source',reference:'Authored source B'});copy.updatedAt='2026-10-30T09:00:00.000Z'
     expect(componentSnapshotJson(copy)).not.toBe(componentSnapshotJson(asset));expect(componentContentJson(copy)).toBe(componentContentJson(asset));expect(asset).toEqual(before)
-    for(const mutate of [(a:typeof asset)=>{a.figure.nodes[0]!.label='Changed visible label'},(a:typeof asset)=>{a.figure.edges[0]!.sourcePort='top'},(a:typeof asset)=>{a.figure.style.fontFamily='MiSans'},(a:typeof asset)=>{a.figure.nodes.reverse()}]){const changed=clone(asset);mutate(changed);expect(componentContentJson(changed)).not.toBe(componentContentJson(asset))}
+    for(const mutate of [(a:typeof asset)=>{a.figure.nodes[0]!.label='Changed visible label'},(a:typeof asset)=>{a.figure.edges[0]!.sourcePort='top'},(a:typeof asset)=>{a.figure.style.fontFamily='Patrick Hand'},(a:typeof asset)=>{a.figure.nodes.reverse()}]){const changed=clone(asset);mutate(changed);expect(componentContentJson(changed)).not.toBe(componentContentJson(asset))}
     const chart=buildDataChart(chartExample('line')),recaptured=captureComponent(componentDocument(chart),'stage',chart.name);expect(componentContentJson(recaptured)).toBe(componentContentJson(chart));recaptured.figure.containers[0]!.dataChart!.spec.series[0]!.values[0]!+=1e-9;expect(componentContentJson(recaptured)).not.toBe(componentContentJson(chart))
   })
   it('updates recipe roles with stable output bindings, hand edits and provenance through capture and reinsertion',()=>{
@@ -384,7 +384,7 @@ describe('parameterized editable components', () => {
     expect(rootContainer(captured.figure).parametric!.objects.stage).toBe('stage');expect(copyRoot.parametric!.objects.stage).toBe(copyRoot.id);expect(()=>updateRecipeInstance(copy,copyRoot.id,{hiddenLayers:1})).not.toThrow()
     const omitted=clone(next);delete omitted.containers.find(c=>c.id===owner.id)!.parametric;expect(parseHarnessResponse(JSON.stringify({message:'Move labels',figure:omitted}),next).figure!.containers.find(c=>c.id===owner.id)!.parametric).toEqual(updated.parametric)
     const forged=clone(next);forged.containers.find(c=>c.id===owner.id)!.parametric!.revision++;expect(()=>parseHarnessResponse(JSON.stringify({message:'Forged',figure:forged}),next)).toThrow('参数化图元')
-    const editor=scope.run(createEditor)!;editor.figure.value=clone(doc);editor.figure.value.title='Concurrent edit';expect(editor.applyRecipePreview(result)).toBe(false);expect(editor.past.value).toHaveLength(0);editor.figure.value=clone(doc);expect(editor.applyRecipePreview(result)).toBe(true);expect(editor.figure.value).toEqual(next);editor.undo();expect(editor.figure.value).toEqual(doc)
+    const editor=scope.run(createEditor)!;editor.figure.value=clone(doc);editor.figure.value.title='Concurrent edit';expect(editor.applyRecipePreview(result)).toBe(false);expect(editor.past.value).toHaveLength(0);editor.figure.value=clone(doc);expect(editor.applyRecipePreview(result)).toBe(true);expect(editor.figure.value).toEqual(editableFigure(next));editor.undo();expect(editor.figure.value).toEqual(doc)
   })
   it('refits native recipe geometry while retaining annotations, named ports, path targets and drawing order',()=>{
     const placed=instantiateComponent(createBlank(),scaleComponent(buildRecipe('tensor-stack',{layers:5,rows:4,columns:5,spacing:'normal',tilt:'steep',note:'show'}),.6),'stage'),doc=placed.document,owner=doc.containers.find(c=>c.id===placed.containerId)!,state=owner.parametric!,output=doc.nodes.find(n=>n.id===state.objects.output)!
@@ -426,7 +426,6 @@ describe('parameterized editable components', () => {
     await expect(captureObjectSelection(source,[source.nodes[0]!.id],draft,{kind:'project'})).rejects.toThrow('完整图表');expect(source).toEqual(chart.figure)
     const result=await captureObjectSelection(source,['stage'],draft,{kind:'project'});expect(rootContainer(result.asset.figure).dataChart).toEqual(rootContainer(source).dataChart);expect(result.asset.figure.nodes).toEqual(source.nodes);expect(result.report.internalEdges).toBe(source.edges.length)
   })
-
   it('builds editable patch tokenization with shared projection, explicit class/position branches and symbolic dimensions independent of shown counts',()=>{
     // Boundary layouts plus independent optional branches; avoid the full Cartesian product.
     const layouts = [[2,'show','learned','show'],[4,'show','learned','show'],[3,'hide','learned','hide'],[3,'show','none','hide'],[3,'hide','none','show'],[4,'hide','none','hide']] as const
@@ -485,7 +484,7 @@ describe('parameterized editable components', () => {
     expect(first).toBe(figurePaint(doc.style).hatch);expect(nodeVisual(face,doc)[0]!.attrs!.fill).toBe(first);expect(pathFill(doc.style,undefined)).toBe('none')
     face.visual!.stroke='#123456';const slot=colorSlotInventory(doc)[0]!;expect(slot.sourceIndex).toBe(1)
     setContainerColorMap(doc,'stage',[{sourcePaletteId:slot.sourcePaletteId,sourceIndex:slot.sourceIndex,targetPaletteId:slot.sourcePaletteId,targetIndex:0,role:'Features'}]);const mapped=pathFill(doc.style,face.visual);expect(mapped).not.toBe(first);expect(nodeVisual(face,doc)[0]!.attrs!.fill).toBe(mapped)
-    expect(doc.nodes.filter(n=>n.path).map(n=>n.path)).toEqual(before.filter(n=>n.path).map(n=>n.path));expect(exportSvg(doc)).toContain(`fill="${mapped}"`);expect(exportDrawio(doc)).toContain('data:image/svg+xml')
+    expect(doc.nodes.filter(n=>n.path).map(n=>n.path)).toEqual(before.filter(n=>n.path).map(n=>n.path));expect(exportSvg(doc)).toContain(`fill="${mapped}"`);
     face.visual!.fill='#abcdef';expect(pathFill(doc.style,face.visual)).toBe('#abcdef');expect(nodeVisual(face,doc)[0]!.attrs!.stroke).toBe('#123456')
     expect(describeCatalogue([{kind:'recipe',id:'tensor-stack'}])[0]!.illustrativeGeometry!.counts).toContain('not observations')
   })
@@ -541,8 +540,6 @@ describe('parameterized editable components', () => {
       expect(source.parentId).toBe(target.parentId)
       expect([first.containerId, second.containerId]).toContain(source.parentId)
     }
-    const xml = exportDrawio(second.document)
-    expect(xml.match(/edge="1"/g)).toHaveLength(2)
     expect(exportSvg(second.document)).toContain('builtin-pipeline') // Component provenance is embedded with the document.
   })
   it('captures nested geometry and local style, excludes boundary-crossing edges, and records derivation', () => {
@@ -642,7 +639,7 @@ describe('personal component persistence and editor history', () => {
     e.library.save(asset)
     expect(e.insertComponent(asset, true, true)).toBe(true)
     expect(e.past.value).toHaveLength(1)
-    expect(e.figure.value.nodes).toHaveLength(2)
+    expect(e.figure.value.nodes.filter(n=>!n.titleBlock)).toHaveLength(2)
     e.undo(); expect(e.figure.value).toEqual(original)
     e.redo(); e.save()
     const reopened = scope.run(createEditor)!

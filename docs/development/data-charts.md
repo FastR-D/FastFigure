@@ -70,4 +70,4 @@ Epoch,Baseline,Baseline_err,Ours,Ours_err
 
 PC 浏览器完成导入、错误预检、非均匀 X、旋转分类标签范围、独立编辑、手工注释更新保留、一次撤销 / 重做、刷新 / 配色恢复、保存并选择助手资产、候选保留原始输入。模态框覆盖 1280×800 / 1440×1000 / 1920×1080，原有完整浏览器回归继续通过；类型、Lint 和生产构建通过。原生工程与候选记录在 `test-results/data-chart-checkpoints.json`，截图为 `data-chart-dialog-*.png`、`data-chart-line-edited.png` 与 `data-chart-signed-bar.png`。
 
-第廿一批测试使用自制数据和 CLI 协议夹具，没有新增收费模型调用或真实论文统计结果验收。后续助手重绘及其实际模型验证单独记录在 [图表重绘工具](chart-tool.md)。PPTX 导出继续暂缓。
+第廿一批测试使用自制数据和 CLI 协议夹具，没有新增收费模型调用或真实论文统计结果验收。后续助手重绘及其实际模型验证单独记录在 [图表重绘工具](chart-tool.md)。

@@ -1,3 +1,4 @@
+import {editableFigure} from './editableFigure'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { effectScope } from 'vue'
 import { createEditor } from '../composables/useEditor'
@@ -7,7 +8,6 @@ import {reflowCallouts,existingCalloutTargets} from './calloutReflow'
 import {segmentHitsRect} from './routing'
 import {checkFigureText} from './figureTextCheck'
 import { alignObjects, arrangeObjects, contentBounds, contains, moveObjects, resizeObject, resolveStyle } from './geometry'
-import { exportDrawio } from './export'
 import { edgePath, exportSvg } from './svg'
 import {catalogueAsset} from './catalogue'
 import {componentDocument,captureComponent,scaleComponent} from './assets'
@@ -52,12 +52,12 @@ function boundNote():FigureDocument {
 
 describe('material editing',()=>{
   it('unifies typefaces without flattening size or weight hierarchy, including scaled defaults and separately controlled annotations',()=>{
-    const doc=createBlank();doc.nodes=[{id:'sample',kind:'rectangle',label:'Sample',parentId:'stage',x:100,y:200,width:120,height:80,textStyle:{family:'MiSans',size:24,bold:true,color:'#ff0000',align:'center'}},{id:'small',kind:'text',label:'Small',description:'Details',parentId:'stage',x:350,y:220,width:100,height:45,metricScale:.5},{id:'large',kind:'text',label:'Large',description:'Caption',parentId:'stage',x:550,y:220,width:160,height:70,textStyle:{family:'Inter',size:22,weight:650,italic:true,color:'#123456',align:'left'},descriptionStyle:{size:12,weight:400,color:'#456789'}}]
+    const doc=createBlank();doc.nodes=[{id:'sample',kind:'rectangle',label:'Sample',parentId:'stage',x:100,y:200,width:120,height:80,textStyle:{family:'MiSans',size:24,bold:true,color:'#ff0000',align:'center'}},{id:'small',kind:'text',label:'Small',description:'Details',parentId:'stage',x:350,y:220,width:100,height:45,metricScale:.5},{id:'large',kind:'text',label:'Large',description:'Caption',parentId:'stage',x:550,y:220,width:160,height:70,textStyle:{family:'MiSans',size:22,weight:650,italic:true,color:'#123456',align:'left'},descriptionStyle:{size:12,weight:400,color:'#456789'}}]
     const request={kind:'format' as const,sourceId:'sample',objectIds:['small','large'],channels:['typography' as const],includeDescendants:false,includeDescriptions:true},before=clone(doc),family=applyMaterialEdits(doc,[request]).figure
-    expect(family.nodes[1]!.textStyle).toEqual({family:'MiSans',size:8});expect(family.nodes[1]!.descriptionStyle).toEqual({family:'MiSans',size:5.5});expect(family.nodes[2]!.textStyle).toEqual({...doc.nodes[2]!.textStyle,family:'MiSans'});expect(family.nodes[2]!.descriptionStyle).toEqual({...doc.nodes[2]!.descriptionStyle,family:'MiSans'})
+    expect(family.nodes[1]!.textStyle).toEqual({family:'MiSans',size:8});expect(family.nodes[1]!.descriptionStyle).toEqual({family:'MiSans',size:6});expect(family.nodes[2]!.textStyle).toEqual({...doc.nodes[2]!.textStyle,family:'MiSans'});expect(family.nodes[2]!.descriptionStyle).toEqual({...doc.nodes[2]!.descriptionStyle,family:'MiSans'})
     const typeface=applyMaterialEdits(doc,[{...request,textPolicy:'typeface'}]).figure.nodes[2]!
     expect(typeface.textStyle).toMatchObject({size:22,bold:true,italic:false,color:'#123456',align:'left'});expect(typeface.textStyle!.weight).toBeUndefined();expect(typeface.descriptionStyle!.weight).toBe(400)
-    const e=editor();e.importProject(JSON.stringify(doc));e.select('small');expect(e.formatText({family:'MiSans'})).toBe(true);expect(canvasNodeTextStyle(e.figure.value.nodes[1]!)).toMatchObject({size:8,family:'MiSans'});e.textTarget.value='description';expect(e.formatText({bold:true})).toBe(true);expect(e.figure.value.nodes[1]!.descriptionStyle).toMatchObject({size:5.5,bold:true})
+    const e=editor();e.importProject(JSON.stringify(doc));e.select('small');expect(e.formatText({family:'MiSans'})).toBe(true);expect(canvasNodeTextStyle(e.figure.value.nodes[1]!)).toMatchObject({size:8,family:'MiSans'});e.textTarget.value='description';expect(e.formatText({bold:true})).toBe(true);expect(e.figure.value.nodes[1]!.descriptionStyle).toMatchObject({size:6,bold:true})
     const group={...doc.containers[0]!,metricScale:.5};expect(canvasContainerTextStyle(group).size).toBe(7.5);expect(doc).toEqual(before)
   })
   it('fits full labels and annotations by growing frames, preserves font settings and bindings, and keeps tight targets unchanged',()=>{
@@ -73,7 +73,7 @@ describe('material editing',()=>{
     const doc=createBlank();doc.containers.push({id:'tight-group',parentId:'stage',role:'component',title:'Tight',x:298,y:248,width:124,height:84,visual:{fill:'none',stroke:'none'}});doc.nodes=[{id:'caption',parentId:'tight-group',kind:'rectangle',label:'Keep target text',x:300,y:250,width:120,height:80,textStyle:{size:20}}]
     const request={kind:'fit-text' as const,objectIds:['tight-group'],includeDescendants:true,anchor:'top-left' as const,expandGroups:false},blocked=applyMaterialEdits(doc,[request]);expect(blocked.changed).toBe(false)
     const expanded=applyMaterialEdits(doc,[{...request,expandGroups:true}]);expect(expanded.reports[0]!.textFit![0]!.expandedGroups).toEqual(['tight-group']);expect(expanded.figure.nodes[0]!.x).toBe(300);expect(expanded.figure.nodes[0]!.y).toBe(250);expect(inspectTextFrame(expanded.figure,expanded.figure.nodes[0]!).fits).toBe(true)
-    const structured=createExample(),encoder=structured.nodes.find(n=>n.id==='encoder')!;encoder.label='Transformer encoder';encoder.textStyle={family:'Inter',size:24};const saved=clone(encoder.structure),result=applyMaterialEdits(structured,[{kind:'fit-text',objectIds:['encoder'],includeDescendants:false,anchor:'center',expandGroups:false}]),node=result.figure.nodes.find(n=>n.id==='encoder')!
+    const structured=createExample(),encoder=structured.nodes.find(n=>n.id==='encoder')!;encoder.label='Transformer encoder';encoder.textStyle={family:'MiSans',size:24};const saved=clone(encoder.structure),result=applyMaterialEdits(structured,[{kind:'fit-text',objectIds:['encoder'],includeDescendants:false,anchor:'center',expandGroups:false}]),node=result.figure.nodes.find(n=>n.id==='encoder')!
     expect(result.reports[0]!.textFit![0]!.status).toBe('fitted');expect(node.structure).toEqual(saved);expect(node.textStyle!.size).toBe(24);expect(inspectTextFrame(result.figure,node).fits).toBe(true);expect(result.figure.edges).toEqual(structured.edges)
   })
   it('matches frame dimensions exactly without scaling typography, clipping children or detaching linked paths',()=>{
@@ -107,7 +107,7 @@ describe('material editing',()=>{
   })
   it('copies selected format channels from a frozen sample, preserves structure, annotations and bindings, and leaves gradient channels independently editable',()=>{
     const doc=nested(),source=doc.nodes[0]!,target=doc.nodes[1]!,gradient={type:'linear' as const,vector:[1,0,0] as [number,number,number],stops:[{offset:0,color:'#112233',opacity:1},{offset:1,color:'#ddeeff',opacity:.7}],spread:'pad' as const,interpolation:'sRGB' as const}
-    source.textStyle={family:'MiSans',size:19,weight:650,italic:true,color:'#234567',align:'right'};source.visual={fill:'#abcdef',stroke:'#334455',strokeWidth:2.5,dash:[4,2],fillGradient:gradient};target.description='Human note';target.descriptionStyle={family:'Inter',size:11};target.structure={type:'encoder',repeats:3};target.visual={fill:'#fefefe',fillGradient:gradient,strokeGradient:gradient,radius:9}
+    source.textStyle={family:'MiSans',size:19,weight:650,italic:true,color:'#234567',align:'right'};source.visual={fill:'#abcdef',stroke:'#334455',strokeWidth:2.5,dash:[4,2],fillGradient:gradient};target.description='Human note';target.descriptionStyle={family:'MiSans',size:11};target.structure={type:'encoder',repeats:3};target.visual={fill:'#fefefe',fillGradient:gradient,strokeGradient:gradient,radius:9}
     const before=clone(doc),result=applyMaterialEdits(doc,[{kind:'format',sourceId:'a',objectIds:['g1'],channels:['typography','stroke'],includeDescendants:true,textPolicy:'match'}]),node=result.figure.nodes[1]!
     expect(node.textStyle).toMatchObject({family:'MiSans',size:19,weight:650,italic:true,color:'#234567',align:'right'});expect(node.visual).toMatchObject({fill:'#fefefe',fillGradient:gradient,stroke:'#334455',strokeGradient:null,strokeWidth:2.5,dash:[4,2],radius:9})
     expect({...node,textStyle:target.textStyle,visual:target.visual}).toEqual(target);expect(result.figure.nodes[0]).toEqual(source);expect(result.figure.nodes[2]).toEqual(doc.nodes[2]);expect(result.figure.edges).toEqual(doc.edges);expect(doc).toEqual(before)
@@ -164,7 +164,7 @@ describe('hierarchy, selection and constrained geometry', () => {
     moveObjects(after,[label.id],10,0);expect(pathPoints(after,leader).at(-1)!.x).toBeCloseTo(end.x+10)
     const captured=componentDocument(scaleComponent(captureComponent(created.figure,'stage','Annotated diagram'),.6)),copied=captured.nodes.find(n=>n.name===leader.name)!
     expect(pathPoints(captured,copied)[0]).toEqual(bindingPoint(captured,copied.path!.start!));expect(pathPoints(captured,copied).at(-1)).toEqual(bindingPoint(captured,copied.path!.end!))
-    const editor=createEditor();editor.importProject(JSON.stringify(before));expect(editor.update(figure=>Object.assign(figure,created.figure))).toBe(true);editor.undo();expect(editor.figure.value).toEqual(before);editor.redo();expect(editor.figure.value.nodes).toEqual(created.figure.nodes)
+    const editor=createEditor();editor.importProject(JSON.stringify(before));expect(editor.update(figure=>Object.assign(figure,created.figure))).toBe(true);editor.undo();expect(editor.figure.value).toEqual(editableFigure(before));editor.redo();expect(editor.figure.value.nodes).toEqual(editableFigure(created.figure).nodes)
   })
   it('uses real closed-path anchors and rejects missing targets, full layouts or mixed target declarations atomically',()=>{
     const doc=createBlank();Object.assign(doc.containers[0]!,{x:0,y:0,width:1000,height:620});doc.nodes=[{id:'face',parentId:'stage',kind:'path',label:'',x:200,y:230,width:120,height:80,path:{points:[{x:0,y:0},{x:1,y:0},{x:1,y:1},{x:0,y:1,close:true}],arrow:'none'},visual:{fill:'#eff5fc',stroke:'#243247'}}]
@@ -209,7 +209,7 @@ describe('hierarchy, selection and constrained geometry', () => {
     expect(e.figure.value.nodes[1]!.parentId).toBe(group.id)
     expect(e.figure.value.edges).toEqual(before.edges)
     before.nodes.forEach((n, i) => expect(e.figure.value.nodes[i]!.x).toBe(n.x))
-    e.ungroupSelection(); expect(e.figure.value).toEqual(before)
+    e.ungroupSelection(); expect({...e.figure.value,nodes:e.figure.value.nodes.filter(n=>n.id!==`${group.id}-title`)}).toEqual(before);expect(e.figure.value.nodes.find(n=>n.id===`${group.id}-title`)).toMatchObject({kind:'text',parentId:'stage',label:'新建分组'})
     e.undo(); expect(e.figure.value.containers).toHaveLength(2)
   })
   it('moves selected hierarchies once, including descendants, and updates derived edge paths', () => {
@@ -240,6 +240,31 @@ describe('hierarchy, selection and constrained geometry', () => {
     expect(contains(contentBounds(doc.containers[1]!), doc.containers[2]!)).toBe(true)
     expect(() => parseDocument(doc)).not.toThrow()
   })
+  it('shrinks neurons and fusion symbols below module minima and retains editable labels and attached paths',()=>{
+    const doc=boundNote();doc.nodes=doc.nodes.filter(n=>n.id!=='obstacle');const node=doc.nodes[0]!,leader=doc.nodes[2]!,binding=clone(leader.path!.start)
+    for(const kind of ['neuron','operator'] as const){
+      node.kind=kind;node.label=kind==='neuron'?'Neuron':'C';resizeObject(doc,node.id,12,12)
+      expect(node).toMatchObject({kind,width:12,height:12});expect(leader.path!.start).toEqual(binding);expect(pathPoints(doc,leader)[0]).toEqual(bindingPoint(doc,binding!));expect(()=>parseDocument(doc)).not.toThrow()
+      node.metricScale=.5;resizeObject(doc,node.id,-10,-10);expect(node.width).toBe(.5);expect(node.height).toBe(.5);expect(()=>parseDocument(doc)).not.toThrow()
+      node.width=.4;expect(()=>parseDocument(doc)).toThrow();node.width=80;node.height=80;delete node.metricScale
+    }
+    node.kind='module';resizeObject(doc,node.id,12,12);expect(node).toMatchObject({width:80,height:44})
+  })
+  it('resizes along a fixed original diagonal, preserving proportions at both bounds and after free resizing',()=>{
+    const doc=createBlank();doc.nodes=[{id:'shape',parentId:'stage',kind:'ellipse',label:'C',x:750,y:250,width:120,height:60}];const node=doc.nodes[0]!,aspect={width:120,height:60},area=contentBounds(doc.containers[0]!)
+    resizeObject(doc,node.id,180,60,aspect);expect(node.width).toBeCloseTo(168);expect(node.height).toBeCloseTo(84)
+    resizeObject(doc,node.id,10000,10000,aspect);expect(node.width).toBeCloseTo(area.x+area.width-node.x);expect(node.width/node.height).toBeCloseTo(2);expect(()=>parseDocument(doc)).not.toThrow()
+    resizeObject(doc,node.id,-100,-100,aspect);expect(node.width).toBeCloseTo(2);expect(node.height).toBeCloseTo(1);expect(()=>parseDocument(doc)).not.toThrow()
+    resizeObject(doc,node.id,90,35);expect(node).toMatchObject({width:90,height:35})
+    resizeObject(doc,node.id,180,60,aspect);expect(node.width/node.height).toBeCloseTo(2)
+    const grouped=nested(),group=grouped.containers[1]!,original={width:group.width,height:group.height};resizeObject(grouped,group.id,1,1,original)
+    expect(group.width/group.height).toBeCloseTo(original.width/original.height);expect(contains(contentBounds(group),grouped.containers[2]!)).toBe(true);expect(()=>parseDocument(grouped)).not.toThrow()
+  })
+  it('commits small circular resizes as one undoable edit and cancels a drag without leaving intermediate geometry',()=>{
+    const e=editor(),doc=createBlank();doc.nodes=[{id:'circle',parentId:'stage',kind:'operator',label:'+',x:200,y:250,width:80,height:80}];e.importProject(JSON.stringify(doc));e.select('circle');const before=clone(e.figure.value)
+    e.beginDrag();e.resize(40,65,{width:80,height:80});e.resize(20,20,{width:80,height:80});e.endDrag();expect(e.figure.value.nodes.find(n=>n.id==='circle')).toMatchObject({width:20,height:20});e.undo();expect(e.figure.value).toEqual(before)
+    e.beginDrag();e.resize(30,20);e.cancelDrag();expect(e.figure.value).toEqual(before)
+  })
   it('aligns and arranges siblings while retaining topology; refuses impossible layouts atomically', () => {
     const e = editor(), edges = clone(e.figure.value.edges)
     e.select('input'); e.select('encoder', true); e.alignSelection('top')
@@ -264,17 +289,11 @@ describe('hierarchy, selection and constrained geometry', () => {
     e.selectRegion({ x: 98, y: 168, width: 404, height: 284 })
     expect(e.selectedIds.value).toEqual(['g1'])
     e.removeSelected()
-    expect(e.figure.value.nodes.map(n => n.id)).toEqual(['c'])
+    expect(e.figure.value.nodes.filter(n=>!n.titleBlock).map(n => n.id)).toEqual(['c'])
     expect(e.figure.value.edges).toEqual([])
-    e.undo(); expect(e.figure.value).toEqual(nested())
+    e.undo(); expect(e.figure.value).toEqual(editableFigure(nested()))
   })
-  it('exports nested cells in parent-relative coordinates and edges under the least common container', () => {
-    const xml = exportDrawio(nested())
-    expect(xml).toContain('parent="g2"><mxGeometry x="30" y="70"')
-    expect(xml).toContain('id="ab" edge="1" parent="g1" source="a" target="b"')
-    expect(xml).toContain('id="bc" edge="1" parent="stage" source="b" target="c"')
-  })
-  it('inherits container appearance independently and applies local overrides in SVG and draw.io', () => {
+  it('inherits container appearance independently and applies local overrides in SVG', () => {
     const doc = nested(), before = clone(doc.nodes)
     doc.containers[1]!.appearance = { preset: 'sketch', accent: 'rose' }
     doc.containers[2]!.appearance = { preset: 'header', accent: 'inherit' }
@@ -282,7 +301,6 @@ describe('hierarchy, selection and constrained geometry', () => {
     expect(resolveStyle(doc, 'a')).toMatchObject({ preset: 'header', accent: 'rose' })
     expect(resolveStyle(doc, 'c')).toMatchObject({ preset: doc.style.preset, accent: 'blue' })
     expect(exportSvg(doc)).toContain('#714d68')
-    expect(exportDrawio(doc)).toContain('strokeColor=#714d68')
     expect(doc.nodes).toEqual(before)
     expect(() => parseDocument(doc)).not.toThrow()
   })

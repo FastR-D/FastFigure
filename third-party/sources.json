@@ -9,9 +9,11 @@
       "data/figures.json": "8949316de6703bc9d20ec8a60d81bb521b2b585c7dafc348fd89b62adfa062fb",
       "forge/reconstruction-core.mjs": "a320a3e0fe39549918e7aecb4718239e78f50fd13415f016af3fb969ff9d1435",
       "forge/reconstruction-pipeline.mjs": "331dd0b0ebf5b21bffcbceaf68753b4d93da2725500e5a638d5a3e01d6a02ed5",
-      "forge/editable-native.mjs": "5b8f529e8968ac44c32aff0c3a6a1ce499d034648884b4d8cf7447df9748070f",
-      "forge/editable-text-layout.mjs": "4baf51d3125b20e91c2cbbb286b9abb8ea479b345928c5a38728efa25c853223",
+      "forge/editable-native.mjs": "945c6b61bffe123b2f322cf5504b92f49aa62b2643627dd2ac886a24278cc50a",
       "forge/container-geometry.mjs": "5881e73390d562e4e563c1ecc425c2c588ab6c59c36c6dbcbe18802253138362"
+    },
+    "modifications": {
+      "forge/editable-native.mjs": "Retain reconstruction path geometry only; remove PPTX export, OOXML QA reader and the unused editable-text-layout module."
     }
   },
   "nature": {

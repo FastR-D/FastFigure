@@ -31,11 +31,11 @@ try{
   const crop=(figure,task)=>page.evaluate(async({figure,task})=>{const {prepareReconstructionImage}=await import('/src/core/reconstructionImage.ts');return prepareReconstructionImage(figure,task)},{figure,task})
   const storeRun=(run,label)=>{const snapshot={id:run.id,sessionId:run.sessionId,status:run.status,baseFigure:run.baseFigure,canvasBaseline:run.canvasBaseline,events:run.events,summary:service.summary(run.id)};save(`${label}.json`,snapshot);const image=service.getInputImage(run.id);writeFileSync(join(output,`${label}.${image.contentType.split('/')[1]}`),image.bytes);return snapshot}
   session=service.createSession(kind,'Authored multi-round real model check')
-  const task=taskFor(text.reconstruction.owner),first=service.start({sessionId:session.id,figure:damaged,content:'对照图片，只修正 Ecnoder 的文字错字为原图中的 Encoder。保留位置、字体与其他所有对象；右侧椭圆目前的颜色留给后续分区核对，本轮不要改动。',task,inputImage:await crop(damaged,task),selectedIds:[],catalogue:[],timeoutSeconds:180})
+  const task=taskFor(text.reconstruction.owner),first=service.start({sessionId:session.id,figure:damaged,content:'对照图片，只修正 Ecnoder 的文字错字为原图中的 Encoder。保留位置、字体与其他所有对象；右侧椭圆目前的颜色留给后续分区核对，本轮不要改动。',task,inputImage:await crop(damaged,task),selectedIds:[],catalogue:[]})
   console.log(JSON.stringify({phase:'initial-repair',runId:first.id,kind,version:status.version,budgetSeconds:180}));await first.done;storeRun(first,'initial-repair');assert.equal(first.status,'completed',service.summary(first.id).error)
   const candidate=first.events.findLast(e=>e.proposal)?.proposal;assert(candidate);assert.equal(candidate.nodes.find(n=>n.id===text.id).label,'Encoder');assert.equal(candidate.nodes.find(n=>n.id===ellipse.id).visual.fill,'#FF0000')
   const regions=[];for(const regionId of [ellipse.reconstruction.owner,text.reconstruction.owner])regions.push({regionId,image:await crop(candidate,taskFor(regionId))})
-  const plan=service.startPlan({sessionId:session.id,parentRunId:first.id,totalSeconds:360,perRunSeconds:180,regions,content:'逐区对照原图，只修复可确认的问题。右侧椭圆现在误填了鲜红色，请仅将其填充改成图片里的浅杏色，保留原轮廓和其他对象。Encoder 区域上一轮只修过错字，请复核文字；已正确就返回空补丁，保持几何、字体、蓝色曲线与背景，不做猜测性的润色。'})
+  const plan=service.startPlan({sessionId:session.id,parentRunId:first.id,regions,content:'逐区对照原图，只修复可确认的问题。右侧椭圆现在误填了鲜红色，请仅将其填充改成图片里的浅杏色，保留原轮廓和其他对象。Encoder 区域上一轮只修过错字，请复核文字；已正确就返回空补丁，保持几何、字体、蓝色曲线与背景，不做猜测性的润色。'})
   console.log(JSON.stringify({phase:'plan',planId:plan.state.id,activeRunId:plan.state.activeRunId,regions:regions.map(r=>r.regionId),budgetSeconds:360}));await plan.done
   const state=service.planSnapshot(plan.state.id);save('plan.json',state)
   for(const [i,step] of state.steps.entries())if(step.runId)storeRun(service.getRun(step.runId),`step-${i+1}`)

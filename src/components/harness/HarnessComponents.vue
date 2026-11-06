@@ -17,7 +17,7 @@ function reviewChange(harness:Harness,event:Event){harness.libraryReview.value=(
     <Field v-if="harness.catalogueMode.value==='auto'&&!harness.reconstructionTask.value" class="checkbox-field"><TextField :checked="harness.librarySearch.value" type="checkbox" :disabled="harness.locked.value" aria-label="自动检索本机素材库" @change="libraryChange(harness,$event)" /><Text>发送时自动检索本机素材库</Text></Field>
     <Text v-if="harness.catalogueMode.value==='auto'&&harness.librarySearch.value&&!harness.reconstructionTask.value" class="muted-caption">服务按本轮文字召回快照并合并至多 6 项，实际清单与命中词记录在本轮详情；不占浏览器名额。</Text>
     <Field v-if="harness.catalogueMode.value==='auto'&&harness.librarySearch.value&&!harness.reconstructionTask.value" class="checkbox-field"><TextField :checked="harness.libraryReview.value" type="checkbox" :disabled="harness.locked.value" aria-label="先由助手筛选素材" @change="reviewChange(harness,$event)" /><Text>先由助手筛选素材</Text></Field>
-    <Text v-if="harness.catalogueMode.value==='auto'&&harness.librarySearch.value&&harness.libraryReview.value&&!harness.reconstructionTask.value" class="muted-caption">增加一次模型调用，按文字要求与原生目录筛选至多 24 项，保留至多 6 项并说明否定 / 参数依据；与绘图共用本轮时限。筛选阶段不看参考图。</Text>
+    <Text v-if="harness.catalogueMode.value==='auto'&&harness.librarySearch.value&&harness.libraryReview.value&&!harness.reconstructionTask.value" class="muted-caption">增加一次模型调用，按文字要求与原生目录筛选至多 24 项，保留至多 6 项并说明否定 / 参数依据。筛选阶段不看参考图。</Text>
     <template v-if="harness.catalogueMode.value === 'selected'">
       <TextField :value="harness.catalogueQuery.value" aria-label="检索参考组件" placeholder="搜索配方、基础或我的组件" @input="queryChange(harness, $event)" />
       <Box class="harness-catalogue-options" role="group" aria-label="可选参考组件">

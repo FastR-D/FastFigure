@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { anchor, clone, createBlank, parseDocument, type FigureDocument, type FigureEdge, type Port } from './model'
 import { contentBounds, type Rect } from './geometry'
-import { routeEdge, routeFigure, type EdgeRoute, type Point } from './routing'
+import { routeEdge, routeFigure, routePath, type EdgeRoute, type Point } from './routing'
 import { exportSvg } from './svg'
-import { exportDrawio } from './export'
 import { buildRecipe } from '../data/recipes'
 
 const ports: Port[] = ['left', 'right', 'top', 'bottom']
@@ -117,7 +116,6 @@ describe('shared obstacle-aware orthogonal routing', () => {
     expect(blocked.status).toBe('blocked'); expect(blocked.reason).toContain('端口')
     expect(exportSvg(doc)).toContain('data-routing-status="blocked"')
     expect(exportSvg(doc)).toContain('stroke="#c54747"')
-    expect(exportDrawio(doc)).toContain('strokeColor=#c54747;dashed=1;')
   })
   it('finds a multi-bend corridor when alternating panels block both simple detours', () => {
     const doc = fixture(); doc.nodes[1]!.y = 285
@@ -131,13 +129,11 @@ describe('shared obstacle-aware orthogonal routing', () => {
     expect(route.points.length).toBeGreaterThanOrEqual(6)
     for (let i = 1; i < route.points.length; i++) for (const wall of doc.containers.slice(1)) expect(crosses(route.points[i - 1]!, route.points[i]!, wall)).toBe(false)
   })
-  it('serializes SVG and draw.io from the same points with parent-relative native waypoints', () => {
+  it('serializes SVG with the routed points independently of appearance', () => {
     const doc = fixture(); doc.nodes.push({ id: 'wall', parentId: 'stage', kind: 'module', label: 'Wall', x: 390, y: 245, width: 150, height: 140 })
-    const route = routeFigure(doc).get('wire')!, xml = exportDrawio(doc)
-    expect(xml).toContain('noEdgeStyle=1;')
-    expect(xml).toContain('source="a" target="b"')
-    const points = [...xml.matchAll(/<mxPoint x="([^"]+)" y="([^"]+)"\/>/g)].map(m => ({ x: Number(m[1]) + 40, y: Number(m[2]) + 90 }))
-    expect(points).toEqual(route.points.slice(1, -1))
+    const route = routeFigure(doc).get('wire')!, svg = exportSvg(doc)
+    const edge = svg.match(/<path[^>]*data-edge-id="wire"[^>]*>/)![0]
+    expect(edge.match(/ d="([^"]+)"/)![1]).toBe(routePath(route))
     const styled = clone(doc); styled.style.preset = 'sketch'; styled.style.accent = 'rose'
     expect(routeFigure(styled)).toEqual(routeFigure(doc))
   })

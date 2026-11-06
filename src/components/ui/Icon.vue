@@ -2,6 +2,7 @@
 import { Svg, SvgPath } from './primitives'
 defineProps<{ name: string }>()
 const paths: Record<string, string> = {
+  help:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM9 8a3 3 0 0 1 6 0c0 2-3 2-3 5M12 17h.01',
   creation:'m12 2 2.5 6.5L21 11l-6.5 2.5L12 20l-2.5-6.5L3 11l6.5-2.5L12 2ZM20 2v4M18 4h4',
   image: 'M3 3h18v18H3zM3 17l6-7 5 5 3-3 4 5M17 7h.01',
   moon: 'M20 15a9 9 0 0 1-11-11 9 9 0 1 0 11 11Z',

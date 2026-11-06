@@ -16,10 +16,10 @@ async function setup(scenario='proposal',sent?:(call:number)=>void){
   const service=new HarnessService(()=>{const adapter=new CodexAdapter({command:process.execPath,args:[fixture],env:{...process.env,FASTFIGURE_TEST_SCENARIO:instances++===0?scenario:'proposal'}});const wrapped:HarnessAdapter={kind:adapter.kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:async turn=>{calls++;const result=await adapter.send(turn);sent?.(calls);return result}};return wrapped});services.push(service);const session=service.createSession('codex','Plan test'),figure=createExample()
   figure.references=[{id:'source',title:'Authored fixture',citation:'Self-authored test',fileName:'test.png',sha256:'a'.repeat(64),pixelWidth:800,pixelHeight:400,dataUrl:'data:image/png;base64,iVBORw0KGgo=',placement:{x:100,y:100,width:800,height:400}}]
   const initial=service.start({sessionId:session.id,figure,content:'Reconstruct test',selectedIds:[],task:{kind:'reconstruct',referenceId:'source',region:{x:0,y:0,width:1,height:1},destination:'new',parentId:'stage'}});await initial.done;expect(initial.status).toBe('completed')
-  const candidate=initial.events.at(-1)!.proposal!,input={sessionId:session.id,parentRunId:initial.id,content:'Check selected regions',totalSeconds:180,perRunSeconds:60,regions:[image(candidate,'left'),image(candidate,'right')]}
+  const candidate=initial.events.at(-1)!.proposal!,input={sessionId:session.id,parentRunId:initial.id,content:'Check selected regions',regions:[image(candidate,'left'),image(candidate,'right')]}
   return{service,session,initial,candidate,input,calls:()=>calls}
 }
-describe('budgeted repair plans',()=>{
+describe('repair plans',()=>{
   it('keeps the current candidate and its true turn number across more than 50 no-op checks',async()=>{
     const {service,input,initial,session}=await setup()
     for(let i=0;i<52;i++){const plan=service.startPlan({...input,content:'RECONSTRUCTION_NO_CHANGE',regions:[input.regions[0]!]});await plan.done;expect(plan.state.reason).toBe('unchanged')}
@@ -40,13 +40,13 @@ describe('budgeted repair plans',()=>{
     expect(()=>service.review(initial.id,'applied')).toThrow('先停止')
     await job.done;const state=service.planSnapshot(job.state.id)
     expect(state.status).toBe('completed');expect(state.steps.map(s=>s.status)).toEqual(['changed','unchanged']);expect(state.latestCandidateRunId).toBe(state.steps[0]!.runId)
-    for(const step of state.steps){const run=service.getRun(step.runId!);expect(run.canvasBaseline).toEqual(initial.baseFigure);expect(service.summary(run.id)).toMatchObject({model:'test-model',timeoutSeconds:60,review:'pending'})}
+    for(const step of state.steps){const run=service.getRun(step.runId!);expect(run.canvasBaseline).toEqual(initial.baseFigure);expect(service.summary(run.id)).toMatchObject({model:'test-model',review:'pending'})}
     expect(JSON.stringify(candidate)).toBe(saved);expect(job.inputs).toHaveLength(0);expect(JSON.stringify(service.history(session.id))).not.toContain('base64');expect(service.listSessions()[0]).not.toHaveProperty('activePlanId')
     expect(service.history(session.id).repairPlan?.id).toBe(state.id);expect(service.review(state.latestCandidateRunId,'applied').review).toBe('applied')
   })
-  it('rejects invalid budgets, duplicates, foreign and handled parents, or malformed crops before calling the model',async()=>{
+  it('rejects invalid inputs, duplicates, foreign and handled parents, or malformed crops before calling the model',async()=>{
     const {service,input,initial,calls}=await setup(),other=service.createSession('codex','Other')
-    for(const invalid of [{...input,totalSeconds:59},{...input,totalSeconds:1201},{...input,perRunSeconds:601},{...input,regions:[]},{...input,regions:[input.regions[0],input.regions[0]]}])expect(()=>service.startPlan(invalid)).toThrow('请求无效')
+    for(const invalid of [{...input,regions:[]},{...input,regions:[input.regions[0],input.regions[0]]}])expect(()=>service.startPlan(invalid)).toThrow('请求无效')
     expect(()=>service.startPlan({...input,sessionId:other.id})).toThrow('本会话')
     expect(()=>service.startPlan({...input,regions:[{...input.regions[0]!,image:{...input.regions[0]!.image,width:1200}}]})).toThrow('实际尺寸')
     expect(()=>service.startPlan({...input,regions:[{...input.regions[0]!,regionId:'missing'}]})).toThrow('分区已变化')
@@ -63,11 +63,11 @@ describe('budgeted repair plans',()=>{
     expect(job.state.status).toBe('stopped');expect(job.state.reason).toBe('stale');expect(job.state.steps.map(s=>s.status)).toEqual(['cancelled','skipped']);expect(job.state.latestCandidateRunId).toBe(initial.id)
     const next=service.startPlan(input);await service.dispose();expect(next.state.status).toBe('stopped');expect(next.state.steps[1]!.status).toBe('skipped');expect(next.inputs).toHaveLength(0)
   })
-  it('does not start another model call when the remaining total budget is below 30 seconds',async()=>{
-    let now=Date.now();const {service,input,calls}=await setup('proposal',call=>{if(call===2)now+=40_000})
+  it('continues all selected regions regardless of elapsed wall-clock time',async()=>{
+    let now=Date.now();const {service,input,calls}=await setup('proposal',call=>{if(call===2)now+=7_200_000})
     vi.spyOn(Date,'now').mockImplementation(()=>now)
-    const job=service.startPlan({...input,totalSeconds:60});await job.done
-    expect(job.state.reason).toBe('budget');expect(job.state.steps.map(s=>s.status)).toEqual(['changed','skipped']);expect(calls()).toBe(2);expect(service.planSnapshot(job.state.id).remainingSeconds).toBe(20)
+    const job=service.startPlan(input);await job.done
+    expect(job.state.status).toBe('completed');expect(job.state.steps.map(s=>s.status)).toEqual(['changed','unchanged']);expect(calls()).toBe(3);expect(service.planSnapshot(job.state.id)).not.toHaveProperty('deadlineAt')
   })
   it('treats an empty pass as finished with no promoted candidate and exposes metadata-only HTTP recovery',async()=>{
     const {service,input,initial}=await setup(),handler=harnessHttp(service),server=createServer((req,res)=>{void handler(req,res)});servers.push(server);await new Promise<void>(resolve=>server.listen(0,'127.0.0.1',resolve));const base=`http://127.0.0.1:${(server.address() as {port:number}).port}/api/harness`

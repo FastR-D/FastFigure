@@ -1,6 +1,6 @@
 import {paperNode} from './paperStyle.ts'
 import {edgeRouteContainer,edgeWaypointPoints,snapshotEdgeWaypoints,reframeEdgeWaypoints} from './edgeWaypoints.ts'
-import { isPrimitive, type FigureDocument, type FigureNode, type FigureContainer } from './model.ts'
+import { isPrimitive,nodeSizeLimits, type FigureDocument, type FigureNode, type FigureContainer } from './model.ts'
 import { syncBindings,bindingPoint } from './paths.ts'
 import { figurePaint } from './paint.ts'
 import { nodeTextStyle } from './typography.ts'
@@ -32,13 +32,14 @@ export function resolveStyle(doc: FigureDocument, id: string): FigureDocument['s
     if (c?.appearance?.colorIndex !== undefined) style.colorIndex = c.appearance.colorIndex
     if(c?.appearance?.colorMap!==undefined)style.colorMap=c.appearance.colorMap
     if(c?.appearance?.designSystem)style.designSystem=c.appearance.designSystem
+    if(c?.appearance?.paperTheme)style.paperTheme=c.appearance.paperTheme
     if(c?.appearance?.fontRoles)style.fontRoles=c.appearance.fontRoles
     if(c?.appearance?.fontFamily)style.fontFamily=c.appearance.fontFamily
     if(c?.appearance?.sketchStyle)style.sketchStyle=c.appearance.sketchStyle
     if(c?.appearance?.roughness!==undefined)style.roughness=c.appearance.roughness
   }
   if(style.colorIndex!==undefined)style.colorIndex%=paletteById.get(style.paletteId??defaultPaletteId)!.colors.length
-  if([...ancestors(doc,id),id].some(objectId=>{const c=doc.containers.find(c=>c.id===objectId);return c?.dataChart||c?.sharedLegend||c?.sharedColorbar})){delete style.colorMap;style.designSystem='legacy'}
+  if([...ancestors(doc,id),id].some(objectId=>{const c=doc.containers.find(c=>c.id===objectId);return c?.dataChart||c?.sharedLegend||c?.sharedColorbar})){delete style.colorMap;delete style.paperTheme;style.designSystem='legacy'}
   return style
 }
 export const commonContainer=edgeRouteContainer
@@ -60,7 +61,17 @@ export function bounds(objects: Rect[]): Rect {
   const x = Math.min(...objects.map(o => o.x)), y = Math.min(...objects.map(o => o.y))
   return { x, y, width: Math.max(...objects.map(o => o.x + o.width)) - x, height: Math.max(...objects.map(o => o.y + o.height)) - y }
 }
-export const contentBounds = (container: Rect & {role?:string;metricScale?:number}): Rect => container.role==='component'?{x:container.x+2*(container.metricScale??1),y:container.y+2*(container.metricScale??1),width:container.width-4*(container.metricScale??1),height:container.height-4*(container.metricScale??1)}:{ x: container.x + 12*(container.metricScale??1), y: container.y + 48*(container.metricScale??1), width: container.width - 24*(container.metricScale??1), height: container.height - 60*(container.metricScale??1) }
+export const contentBounds = (container: Rect & {role?:string;metricScale?:number;titleDetached?:boolean}): Rect => {
+  const units=container.metricScale??1,inset=container.role==='component'?2:12,top=container.role==='component'?2:container.titleDetached?12:48
+  return{x:container.x+inset*units,y:container.y+top*units,width:container.width-inset*2*units,height:container.height-(top+inset)*units}
+}
+/** Automatic layouts reserve the space occupied by independently placed headings. */
+export function layoutContentBounds(doc:FigureDocument,container:FigureContainer):Rect{
+  const area=contentBounds(container),headings=doc.nodes.filter(n=>n.parentId===container.id&&n.titleBlock),middle=area.y+area.height/2,gap=4*(container.metricScale??1)
+  const top=Math.max(area.y,...headings.filter(n=>n.y+n.height/2<=middle).map(n=>n.y+n.height+gap))
+  const bottom=Math.min(area.y+area.height,...headings.filter(n=>n.y+n.height/2>middle).map(n=>n.y-gap))
+  return{...area,y:top,height:Math.max(0,bottom-top)}
+}
 export const contains = (outer: Rect, inner: Rect) => inner.x >= outer.x - 0.001 && inner.y >= outer.y - 0.001 && inner.x + inner.width <= outer.x + outer.width + 0.001 && inner.y + inner.height <= outer.y + outer.height + 0.001
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
 export function translateGeometry(object:FigureObject,dx:number,dy:number) {
@@ -105,22 +116,29 @@ export function moveObjects(doc: FigureDocument, ids: string[], dx: number, dy: 
   objects.forEach(o => translateSubtree(doc, o, dx, dy,false));reframeEdgeWaypoints(doc,pins,dx,dy)
   syncBindings(doc)
 }
-export function resizeObject(doc: FigureDocument, id: string, width: number, height: number) {
+export function resizeObject(doc: FigureDocument, id: string, width: number, height: number, aspect?:Pick<Rect,'width'|'height'>) {
   id=doc.nodes.find(n=>n.id===id)?.interfaceFor??id
   const object = findObject(doc, id)
   if (!object || !Number.isFinite(width) || !Number.isFinite(height)) return
   const isNode = 'kind' in object, parent = parentOf(doc, id)
-  const area = parent ? contentBounds(parent) : { x: 0, y: 0, width: 1000, height: 620 }
+  const area = parent ? contentBounds(parent) : { x: 0, y: 0, width: doc.canvas.width, height: doc.canvas.height }
   const children = childrenOf(doc, id).filter(o=>!('interfaceFor' in o&&o.interfaceFor===id))
   const units=object.metricScale??1
-  const simple = isNode && isPrimitive(object.kind), component=!isNode&&object.role==='component',inset=(component?2:12)*units
+  const limits=isNode?nodeSizeLimits(object.kind,units):undefined,component=!isNode&&object.role==='component',inset=(component?2:12)*units
   const pins=doc.edges.filter(e=>e.manualRoute?.containerId===id).flatMap(e=>edgeWaypointPoints(doc,e))
-  const minWidth = isNode ? simple ? object.kind==='path'?0:units : 80*units : Math.max(component?5*units:200*units, ...children.map(c => c.x + c.width - object.x + inset),...pins.map(p=>p.x-object.x+inset))
-  const minHeight = isNode ? simple ? object.kind==='path'?0:units : 44*units : Math.max(component?5*units:120*units, ...children.map(c => c.y + c.height - object.y + inset),...pins.map(p=>p.y-object.y+inset))
+  const minWidth = limits?.minWidth ?? Math.max(component?5*units:200*units, ...children.map(c => c.x + c.width - object.x + inset),...pins.map(p=>p.x-object.x+inset))
+  const minHeight = limits?.minHeight ?? Math.max(component?5*units:120*units, ...children.map(c => c.y + c.height - object.y + inset),...pins.map(p=>p.y-object.y+inset))
+  const maxWidth=Math.min(limits?.maxWidth??doc.canvas.width,area.x+area.width-object.x),maxHeight=Math.min(limits?.maxHeight??doc.canvas.height,area.y+area.height-object.y)
+  if(aspect&&Number.isFinite(aspect.width)&&Number.isFinite(aspect.height)&&aspect.width>=0&&aspect.height>=0&&aspect.width+aspect.height>0){
+    // Project the pointer onto the original diagonal; constrain one shared factor so limits cannot distort the shape.
+    const w=aspect.width,h=aspect.height,minScale=Math.max(w?minWidth/w:0,h?minHeight/h:0),maxScale=Math.min(w?maxWidth/w:Infinity,h?maxHeight/h:Infinity)
+    const scale=clamp((width*w+height*h)/(w*w+h*h),minScale,maxScale)
+    width=w*scale;height=h*scale
+  }
   if('path' in object&&object.path) {delete object.path.start;delete object.path.end}
   const oldWidth=object.width,oldHeight=object.height
-  object.width = clamp(width, minWidth, Math.min(isNode&&!simple ? 360*units : 1000, area.x + area.width - object.x))
-  object.height = clamp(height, minHeight, Math.min(isNode&&!simple ? 180*units : 620, area.y + area.height - object.y))
+  object.width = clamp(width, minWidth, maxWidth)
+  object.height = clamp(height, minHeight, maxHeight)
   if('textLayout' in object&&object.textLayout){const sx=object.width/oldWidth,sy=object.height/oldHeight,m=object.textLayout.matrix;object.textLayout.matrix=[m[0]*sx,m[1]*sy,m[2]*sx,m[3]*sy]}
   syncBindings(doc)
 }
@@ -205,7 +223,7 @@ export function ungroupObject(doc: FigureDocument, id: string) {
         child.textStyle={...text,...child.textStyle};if(child.description)child.descriptionStyle={family:theme.fontFamily,...child.descriptionStyle}
         child.visual={...resolved.visual,fill:resolved.visual?.fill??(['text','path','icon','image','port'].includes(child.kind)?'none':child.visual?.tone==='hatch'?paint.hatch:paint.fill),stroke:resolved.visual?.stroke??paint.ink}
         if(child.visual.textTone&&!child.textStyle?.color)child.textStyle={...child.textStyle,color:text.color}
-      }else child.appearance={designSystem:theme.designSystem,fontRoles:theme.fontRoles,fontFamily:theme.fontFamily,sketchStyle:theme.sketchStyle,roughness:theme.roughness,preset:theme.preset,accent:theme.accent,...(theme.paletteId?{paletteId:theme.paletteId}:{}),...(theme.colorIndex!==undefined?{colorIndex:theme.colorIndex}:{}),...(theme.colorMap?{colorMap:theme.colorMap}:{})}
+      }else child.appearance={designSystem:theme.designSystem,paperTheme:theme.paperTheme?{...theme.paperTheme}:undefined,fontRoles:theme.fontRoles,fontFamily:theme.fontFamily,sketchStyle:theme.sketchStyle,roughness:theme.roughness,preset:theme.preset,accent:theme.accent,...(theme.paletteId?{paletteId:theme.paletteId}:{}),...(theme.colorIndex!==undefined?{colorIndex:theme.colorIndex}:{}),...(theme.colorMap?{colorMap:theme.colorMap}:{})}
     }
     const paint=figurePaint(style,group.visual?.colorIndex)
     const visual={...group.visual,handDrawn:false,...(local?{fill:group.visual?.fill??paint.fill,stroke:group.visual?.stroke??paint.ink}:{})}

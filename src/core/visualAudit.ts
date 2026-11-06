@@ -7,7 +7,7 @@ import { editableNodeBounds } from '../vendor/topconf/reconstruction-core.mjs'
 const id=z.string().min(1).max(160).regex(/^[a-zA-Z0-9_-]+$/),sha=z.string().regex(/^[a-f\d]{64}$/)
 export const candidateRasterInfoSchema=z.object({width:z.number().int().min(3).max(2000),height:z.number().int().min(3).max(2000),figureSha256:sha,renderer:z.literal('fastfigure-browser-v1'),fonts:z.array(z.string().max(300)).max(600)}).strict()
 export const candidateRasterSchema=candidateRasterInfoSchema.extend({dataUrl:z.string().max(1_000_000).regex(/^data:image\/(png|webp);base64,[A-Za-z0-9+/]+={0,2}$/)}).strict()
-export const visualAuditInputSchema=z.object({sessionId:z.uuid(),parentRunId:z.uuid(),regionId:id,content:z.string().trim().min(1).max(12000),model:z.string().trim().max(100).optional(),timeoutSeconds:z.number().int().min(30).max(600).optional(),sourceImage:reconstructionImageSchema,candidateImage:candidateRasterSchema}).strict()
+export const visualAuditInputSchema=z.object({sessionId:z.uuid(),parentRunId:z.uuid(),regionId:id,content:z.string().trim().min(1).max(12000),model:z.string().trim().max(100).optional(),sourceImage:reconstructionImageSchema,candidateImage:candidateRasterSchema}).strict()
 export type VisualAuditInput=z.infer<typeof visualAuditInputSchema>
 export const visualAuditInfoSchema=z.object({parentRunId:z.uuid(),containerId:z.string(),regionId:id,contextVersion:z.literal('aliases-v1'),sourceImage:reconstructionImageInfoSchema,candidateImage:candidateRasterInfoSchema,recheck:z.object({auditRunId:z.uuid(),repairRunId:z.uuid()}).strict().optional()}).strict()
 export type VisualAuditInfo=z.infer<typeof visualAuditInfoSchema>

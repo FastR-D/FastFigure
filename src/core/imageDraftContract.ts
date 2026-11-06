@@ -6,7 +6,7 @@ import {referenceInputInfoSchema,referencePurposeSchema,type ReferenceInputInfo}
 import {compositionRecordSchema,type CompositionRecord} from './compositionPlanContract.ts'
 const text=(max:number)=>z.string().trim().min(1).max(max)
 const style=styleAssetSchema.shape
-export const draftStyleSchema=z.object({id:style.id,name:style.name,updatedAt:style.updatedAt,designSystem:style.designSystem,fontRoles:style.fontRoles,preset:style.preset,paletteId:style.paletteId,fontFamily:style.fontFamily,surface:style.surface,colorIndex:style.colorIndex,colorMap:style.colorMap,sketchStyle:style.sketchStyle,roughness:style.roughness,lineStyle:style.lineStyle,guide:style.guide}).strict().superRefine((value,ctx)=>{if(value.colorIndex!==undefined&&value.colorIndex>=(paletteById.get(value.paletteId)?.colors.length??0))ctx.addIssue({code:'custom',message:'风格默认色槽越界'})})
+export const draftStyleSchema=z.object({id:style.id,name:style.name,updatedAt:style.updatedAt,designSystem:style.designSystem,paperTheme:style.paperTheme,fontRoles:style.fontRoles,preset:style.preset,paletteId:style.paletteId,fontFamily:style.fontFamily,surface:style.surface,colorIndex:style.colorIndex,colorMap:style.colorMap,sketchStyle:style.sketchStyle,roughness:style.roughness,lineStyle:style.lineStyle,guide:style.guide}).strict().superRefine((value,ctx)=>{if(value.colorIndex!==undefined&&value.colorIndex>=(paletteById.get(value.paletteId)?.colors.length??0))ctx.addIssue({code:'custom',message:'风格默认色槽越界'})})
 export const imageDraftCompositionSchema=compositionRecordSchema.superRefine((record,ctx)=>{
   if(record.plan.status!=='ready'||record.plan.sections.some(s=>!s.design))ctx.addIssue({code:'custom',message:'图像草稿需要已明确分区和主次的可采用方案，请先补充或重新规划'})
 })
@@ -14,7 +14,7 @@ function compositionIssues(record:CompositionRecord,content:string,style:z.infer
   const plan=record.plan,expected=record.references.filter(r=>r.decision==='use').sort((a,b)=>a.index-b.index),issues:string[]=[]
   if(content!==plan.goal)issues.push('方案内容规格已变化，请清除方案后重新填写，或重新规划')
   if(expected.length!==references.length||expected.some((r,i)=>{const actual=references[i];return !actual||(['id','sha256','purpose','width','height'] as const).some(k=>actual[k]!==r[k])}))issues.push('方案参考图已变化或顺序不符，请恢复原图后重试')
-  if(style.guide!==plan.style.usage||(['designSystem','fontRoles','preset','paletteId','fontFamily','surface','colorIndex','colorMap','sketchStyle','roughness'] as const).some(k=>JSON.stringify(style[k])!==JSON.stringify(plan.style[k]))||JSON.stringify(style.lineStyle)!==JSON.stringify(record.styleReference?.lineStyle))issues.push('草稿风格须沿用方案，请清除方案后另选风格')
+  if(style.guide!==plan.style.usage||(['designSystem','paperTheme','fontRoles','preset','paletteId','fontFamily','surface','colorIndex','colorMap','sketchStyle','roughness'] as const).some(k=>JSON.stringify(style[k])!==JSON.stringify(plan.style[k]))||JSON.stringify(style.lineStyle)!==JSON.stringify(record.styleReference?.lineStyle))issues.push('草稿风格须沿用方案，请清除方案后另选风格')
   return issues
 }
 export const imageDraftInputSchema=z.object({requestId:z.uuid(),title:text(100),content:text(6000),visual:z.string().trim().max(2000),aspect:z.enum(['landscape','square','portrait']),outputKind:z.enum(['figure','illustration']).optional(),model:z.string().trim().max(100).optional(),timeoutSeconds:z.number().int().min(30).max(600),style:draftStyleSchema,

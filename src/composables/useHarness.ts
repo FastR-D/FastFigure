@@ -27,7 +27,6 @@ const runSnapshotSchema = z.object({ id: z.uuid(), sessionId: z.uuid(), status: 
 export function createHarness(editor: Editor) {
   const statuses = ref<HarnessStatus[]>([]), sessions = ref<HarnessSession[]>([]), selectedSessionId = ref(''), kind = ref<HarnessKind>('codex')
   const models = ref({ codex: '', claude: '' })
-  const timeoutSeconds=ref(180)
   const selectedReferences=computed(()=>editor.figure.value.references.flatMap(ref=>{const choice=referenceSelections.value.find(r=>r.id===ref.id);return choice?[choice]:[]}))
   watch(()=>editor.figure.value.references.map(r=>r.id),ids=>{referenceSelections.value=referenceSelections.value.filter(r=>ids.includes(r.id))})
   function toggleReference(id:string,on:boolean){if(!on){referenceSelections.value=referenceSelections.value.filter(r=>r.id!==id);return}if(!referenceSelections.value.some(r=>r.id===id))referenceSelections.value.push({id,purpose:'style'})}
@@ -73,12 +72,11 @@ export function createHarness(editor: Editor) {
   try {
     const settings = JSON.parse(localStorage.getItem('fastfigure.harness.settings') ?? '{}') as Record<string, unknown>
     if (settings.kind === 'codex' || settings.kind === 'claude') kind.value = settings.kind
-    if(typeof settings.timeoutSeconds==='number'&&[60,180,360,600].includes(settings.timeoutSeconds))timeoutSeconds.value=settings.timeoutSeconds
     if(typeof settings.librarySearch==='boolean')librarySearch.value=settings.librarySearch
     if(typeof settings.libraryReview==='boolean')libraryReview.value=settings.libraryReview
     for (const provider of ['codex','claude'] as const) if (typeof settings[provider] === 'string') models.value[provider] = settings[provider].slice(0, 100)
   } catch { /* Invalid local preferences do not affect the figure. */ }
-  watch([kind, models,timeoutSeconds,librarySearch,libraryReview], () => { try { localStorage.setItem('fastfigure.harness.settings', JSON.stringify({ kind: kind.value, ...models.value,timeoutSeconds:timeoutSeconds.value,librarySearch:librarySearch.value,libraryReview:libraryReview.value })) } catch { /* Optional preferences. */ } }, { deep: true })
+  watch([kind, models,librarySearch,libraryReview], () => { try { localStorage.setItem('fastfigure.harness.settings', JSON.stringify({ kind: kind.value, ...models.value,librarySearch:librarySearch.value,libraryReview:libraryReview.value })) } catch { /* Optional preferences. */ } }, { deep: true })
   async function api(path: string, body?: unknown, method = 'POST',signal?:AbortSignal): Promise<unknown> {
     const response = await fetch(`/api/harness${path}`, body !== undefined ? { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),...(signal?{signal}:{}) } : signal?{signal}:{})
     let value: unknown
@@ -294,7 +292,7 @@ export function createHarness(editor: Editor) {
       const designImage=await prepareDesignReviewImage(figure)
       if(disposed||token!==epoch||sessionId!==selectedSessionId.value)return
       if(JSON.stringify(editor.figure.value)!==snapshot)throw new Error('准备整图渲染期间画布已变化，请重新发送审阅')
-      const payload={sessionId,intent:'design-review',figure,content,designImage,catalogue:[],selectedIds:[],timeoutSeconds:timeoutSeconds.value,...(model.value.trim()?{model:model.value.trim()}:{})}
+      const payload={sessionId,intent:'design-review',figure,content,designImage,catalogue:[],selectedIds:[],...(model.value.trim()?{model:model.value.trim()}:{})}
       if(new TextEncoder().encode(JSON.stringify(payload)).length>1_990_000)throw new Error('整图审阅内容超过 2 MB，请简化图件后重试')
       clearRun();baseline.value=snapshot;reviewBaseline.value=figure;reviewBase.value=figure;userContent.value=content;sending.value=true
       const started=z.object({id:z.uuid(),sessionId:z.uuid(),summary:harnessTurnSchema}).parse(await api('/runs',payload))
@@ -339,7 +337,7 @@ export function createHarness(editor: Editor) {
       if(JSON.stringify(editor.figure.value)!==JSON.stringify(canvasBaseline)){error.value='准备原图与组件图谱期间画布已变化，请重新发送';return}
     }
     const searchLibrary=!editingRecipes&&librarySearch.value&&catalogueMode.value==='auto'&&!task&&!chartData&&!adoptedComposition.value&&!refinement
-    const payload = {librarySearch:searchLibrary,libraryReview:searchLibrary&&libraryReview.value,content, figure, catalogue: adoptedComponentSearch.value&&!findComponents?[]:entries,...(!findComponents&&adoptedComponentSearch.value?{componentSearchRunId:adoptedComponentSearch.value.runId}:{}),...(cataloguePreview?{cataloguePreview}:{}),...(editor.assistantStyle.value&&!adoptedComposition.value?{styleReference:clone(editor.assistantStyle.value)}:{}),timeoutSeconds:timeoutSeconds.value, selectedIds: refinement?[]:[...editor.selectedIds.value],...(findComponents?{intent:'find-components'}:intent.value==='plan'||editingRecipes?{intent:intent.value}:{}),...(adoptedComposition.value?{compositionPlanRunId:adoptedComposition.value.record.runId}:{}),...(chartData?{chartData}:{}),...(refinement?{refineFromRunId:refinement.runId}:{}),...(auditRepairSelection.value?{auditRepair:clone(auditRepairSelection.value)}:{}), ...(task?{task,inputImage}:{}),...(model.value.trim() ? { model: model.value.trim() } : {}), ...(referenceId ? { referenceId } : {}),...(referenceInputs.length?{referenceInputs}:{}) }
+    const payload = {librarySearch:searchLibrary,libraryReview:searchLibrary&&libraryReview.value,content, figure, catalogue: adoptedComponentSearch.value&&!findComponents?[]:entries,...(!findComponents&&adoptedComponentSearch.value?{componentSearchRunId:adoptedComponentSearch.value.runId}:{}),...(cataloguePreview?{cataloguePreview}:{}),...(editor.assistantStyle.value&&!adoptedComposition.value?{styleReference:clone(editor.assistantStyle.value)}:{}), selectedIds: refinement?[]:[...editor.selectedIds.value],...(findComponents?{intent:'find-components'}:intent.value==='plan'||editingRecipes?{intent:intent.value}:{}),...(adoptedComposition.value?{compositionPlanRunId:adoptedComposition.value.record.runId}:{}),...(chartData?{chartData}:{}),...(refinement?{refineFromRunId:refinement.runId}:{}),...(auditRepairSelection.value?{auditRepair:clone(auditRepairSelection.value)}:{}), ...(task?{task,inputImage}:{}),...(model.value.trim() ? { model: model.value.trim() } : {}), ...(referenceId ? { referenceId } : {}),...(referenceInputs.length?{referenceInputs}:{}) }
     if (new TextEncoder().encode(JSON.stringify(payload)).length > 1_990_000) { error.value = '本次参考内容超过 2 MB，请减少所选组件或参考图片后再发送'; return }
     if (!selectedSession.value) await newSession()
     if (!selectedSession.value) return
@@ -399,7 +397,7 @@ export function createHarness(editor: Editor) {
     finally{cancelling.value=false;schedulePlanRefresh()}
   }
   watch([()=>JSON.stringify(editor.figure.value),repairPlan,planCanvasBaseline],()=>{if(planRunning.value&&planCanvasBaseline.value&&JSON.stringify(editor.figure.value)!==planCanvasBaseline.value)void cancelRepairPlan('stale')})
-  async function startRepairPlan(regionIds:string[],content:string,totalSeconds:number){
+  async function startRepairPlan(regionIds:string[],content:string){
     if(locked.value||loading.value||!proposal.value||!reviewBase.value||!currentTurn.value?.task||currentTurn.value.review!=='pending')return
     if(stale.value){error.value='画布已变化，请基于当前画布重新生成';return}
     const candidate=clone(proposal.value),parentRunId=runId.value,session=selectedSessionId.value,canvasBaseline=baseline.value
@@ -409,7 +407,7 @@ export function createHarness(editor: Editor) {
       for(const regionId of regionIds){const task={kind:'repair' as const,containerId:group.id,regionId};regions.push({regionId,image:await prepareReconstructionImage(candidate,task)})}
       if(disposed)return
       if(JSON.stringify(editor.figure.value)!==canvasBaseline)throw new Error('准备分区裁片期间画布已变化，请重新开始')
-      const payload={sessionId:session,parentRunId,content,totalSeconds,perRunSeconds:timeoutSeconds.value,regions,...(model.value.trim()?{model:model.value.trim()}:{})}
+      const payload={sessionId:session,parentRunId,content,regions,...(model.value.trim()?{model:model.value.trim()}:{})}
       if(new TextEncoder().encode(JSON.stringify(payload)).length>3_990_000)throw new Error('分区裁片超过 4 MB，请减少所选分区')
       const started=repairPlanSchema.parse(await api('/repair-plans',payload));if(disposed)return
       if(started.sessionId!==session)throw new Error('核对计划与当前会话不匹配')
@@ -464,7 +462,7 @@ export function createHarness(editor: Editor) {
       const group=reconstructionCandidateGroup(reviewBase.value,candidate,currentTurn.value.task),task={kind:'repair' as const,containerId:group.id,regionId},images=await prepareVisualAuditImages(candidate,task)
       if(disposed)return
       if(JSON.stringify(editor.figure.value)!==canvasBaseline)throw new Error('准备审阅图片期间画布已变化，请重新开始')
-      const payload={sessionId:selectedSessionId.value,parentRunId,regionId,content,...images,timeoutSeconds:timeoutSeconds.value,...(model.value.trim()?{model:model.value.trim()}:{})}
+      const payload={sessionId:selectedSessionId.value,parentRunId,regionId,content,...images,...(model.value.trim()?{model:model.value.trim()}:{})}
       if(new TextEncoder().encode(JSON.stringify(payload)).length>1_990_000)throw new Error('两张审阅裁片超过 2 MB，请选择更小分区')
       const started=z.object({id:z.uuid(),sessionId:z.uuid(),summary:harnessTurnSchema}).parse(await api('/visual-audits',payload));if(disposed)return
       if(started.sessionId!==selectedSessionId.value||started.summary.id!==started.id)throw new Error('视觉审阅与当前会话不匹配')
@@ -503,7 +501,7 @@ export function createHarness(editor: Editor) {
   function dispose() { for(const job of selectionPreviewJobs.values())job.controller.abort();disposed = true; ++epoch;clearTimeout(planTimer); disconnect() }
   function resumeDataSelection(content:string){if(!locked.value&&!loading.value)draft.value=content}
   watch(intent,value=>{if(value==='edit-recipes'||value==='design-review'){clearComposition();clearCandidateRefinement();reconstructionTask.value=null;adoptedComponentSearch.value=null;editor.assistantDataset.value=null;editor.assistantStyle.value=null}})
-  return { statuses, sessions, selectedSessionId, selectedSession, kind, model,timeoutSeconds, draft,intent,adoptedComposition,compositionStale,adoptComposition,clearComposition, attachReference,selectedReferences,toggleReference,setReferencePurpose, chartDataset:editor.assistantDataset,adoptedComponentSearch,componentSearchStale,clearComponentSearch,findReconstructionComponents,adoptReconstructionSearch,reconstructionTask,reuseReconstructionComponents,refinementFrom,refinementStale, preparingImage, prepareReconstruction,prepareCandidateRepair, clearReconstruction, loading, busy, cancelling, error, connection, runStatus,
+  return { statuses, sessions, selectedSessionId, selectedSession, kind, model, draft,intent,adoptedComposition,compositionStale,adoptComposition,clearComposition, attachReference,selectedReferences,toggleReference,setReferencePurpose, chartDataset:editor.assistantDataset,adoptedComponentSearch,componentSearchStale,clearComponentSearch,findReconstructionComponents,adoptReconstructionSearch,reconstructionTask,reuseReconstructionComponents,refinementFrom,refinementStale, preparingImage, prepareReconstruction,prepareCandidateRepair, clearReconstruction, loading, busy, cancelling, error, connection, runStatus,
     resumeDataSelection,userContent, output, message, activities, proposal, stale, status, catalogueMode,librarySearch,libraryReview, catalogueQuery, selectedComponentKeys, catalogueResults, referenceComponents, usedComponents, toggleComponent,
     runId, turns, omittedTurns, currentTurn, reviewFigure, reviewBase,reviewBaseline, reviewSync, reviewError, locked, inspectTurn, syncReview,
     repairPlan,planRunning,planPreparing,startRepairPlan,cancelRepairPlan,refreshRepairPlan,

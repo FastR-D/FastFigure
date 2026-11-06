@@ -6,7 +6,7 @@ describe('Figure change review', () => {
   it('ignores object / collection order and does not report renamed endpoints as rewired edges', () => {
     const before = createExample(), after = clone(before)
     after.nodes.reverse(); after.edges.reverse()
-    after.style = { designSystem:before.style.designSystem,fontFamily:before.style.fontFamily,paletteId:before.style.paletteId, seed: before.style.seed, accent: before.style.accent, preset: before.style.preset, roughness: before.style.roughness }
+    after.style = { designSystem:before.style.designSystem,paperTheme:before.style.paperTheme,fontFamily:before.style.fontFamily,paletteId:before.style.paletteId, seed: before.style.seed, accent: before.style.accent, preset: before.style.preset, roughness: before.style.roughness }
     expect(diffFigures(before, after).changes).toEqual([])
     after.nodes.find(n => n.id === 'encoder')!.label = 'Revised encoder'
     const diff = diffFigures(before, after)

@@ -10,9 +10,9 @@ describe('plain caption layout',()=>{
     expect(lines.map(l=>l.children?.join(''))).toEqual(node.label.split('\n'));expect(lines.every(l=>l.attrs?.['font-size']===15)).toBe(true)
     for(const line of lines){const baseline=Number(line.attrs?.y);expect(baseline).toBeGreaterThan(node.y);expect(baseline+15*.2).toBeLessThan(node.y+node.height)}expect(node).toEqual(before)
   })
-  it('respects explicit padding and retains the existing inset for boxed labels',()=>{
-    const node=fixture(),doc=createBlank();node.visual={padding:12};expect(labels(nodeVisual(node,doc))).toHaveLength(1)
-    delete node.visual;node.kind='rectangle';expect(labels(nodeVisual(node,doc))).toHaveLength(1)
+  it('retains all text with explicit padding and boxed labels',()=>{
+    const node=fixture(),doc=createBlank();node.visual={padding:12};expect(labels(nodeVisual(node,doc))).toHaveLength(2)
+    delete node.visual;node.kind='rectangle';expect(labels(nodeVisual(node,doc))).toHaveLength(2)
     node.kind='text';node.visual={padding:0};expect(labels(nodeVisual(node,doc)).map(l=>l.children?.join(''))).toEqual(node.label.split('\n'))
   })
   it('keeps both caption lines when the saved component is scaled and reused',()=>{

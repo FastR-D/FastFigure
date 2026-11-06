@@ -1,3 +1,4 @@
+import {editableFigure} from '../../src/core/editableFigure.ts'
 import {createDesignReviewContext,parseDesignReviewResponse,designReviewPrompt} from '../../src/core/designReview.ts'
 import { selectedReferenceInputs,type ReferenceUse } from '../../src/core/referenceInputs.ts'
 import {checkFigureText} from '../../src/core/figureTextCheck.ts'
@@ -40,7 +41,7 @@ export class HarnessError extends Error {
   constructor(status: number, message: string) { super(message); this.status = status }
 }
 interface Session { info: HarnessSession; adapter: HarnessAdapter; cwd?: string; active?: string;plan?:string;lastPlan?:string;retainedCandidate?:string; turns: HarnessTurn[]; omitted: number }
-interface PlanJob {state:RepairPlan;inputs:RepairPlanInput['regions'];done?:Promise<void>;stopReason?:'cancelled'|'stale'|'budget'}
+interface PlanJob {state:RepairPlan;inputs:RepairPlanInput['regions'];done?:Promise<void>;stopReason?:'cancelled'|'stale'}
 interface AuditExecution {input:VisualAuditInput;info:VisualAuditInfo;task:{kind:'repair';containerId:string;regionId:string}}
 interface FeedbackCandidate {key:string;path:string;sha256:string;capabilities:FeedbackCapabilities}
 interface SelectionPreviewExchange {directory:string;request:SelectionPreviewRequest;startedAt:number;pending?:{resolve:()=>void;reject:(reason:unknown)=>void};images:{bytes:Buffer;contentType:string;path:string}[];upload?:{digest:string;promise:Promise<void>}}
@@ -73,8 +74,7 @@ export class HarnessService {
   private runs = new Map<string, Run>()
   private plans=new Map<string,PlanJob>()
   private factory: AdapterFactory
-  private timeoutMs: number
-  constructor(factory: AdapterFactory = defaultAdapterFactory, timeoutMs = 180_000,private library?:ComponentLibraryStore) { this.factory = factory; this.timeoutMs = timeoutMs }
+  constructor(factory: AdapterFactory = defaultAdapterFactory,private library?:ComponentLibraryStore) { this.factory = factory }
   async status() { return await Promise.all((['codex', 'claude'] as const).map(async kind => { const adapter = this.factory(kind); try { return await adapter.status() } finally { adapter.dispose() } })) }
   listSessions() { return [...this.sessions.values()].map(s => ({...s.info,...(s.plan?{activePlanId:s.plan}:{})})).reverse() }
   createSession(kind: HarnessKind, title: string): HarnessSession {
@@ -141,7 +141,7 @@ export class HarnessService {
       for(const image of [input.sourceImage,input.candidateImage]){const dims=rasterDimensions(image.dataUrl);if(dims.width!==image.width||dims.height!==image.height)throw new Error('审阅图片实际尺寸与元数据不匹配')}
     }catch(e){throw new HarnessError(400,(e as Error).message)}
     const sourceImage=(({dataUrl:_,...info})=>info)(input.sourceImage),candidateImage=(({dataUrl:_,...info})=>info)(input.candidateImage),previous=summary.auditRepair,info:VisualAuditInfo={parentRunId:parent.id,containerId:task.containerId,regionId:task.regionId,contextVersion:'aliases-v1',sourceImage,candidateImage,...(previous?.regionId===task.regionId&&previous.containerId===task.containerId?{recheck:{auditRunId:previous.auditRunId,repairRunId:parent.id}}:{})}
-    return this.start({sessionId:input.sessionId,figure:candidate,content:input.content,selectedIds:[],catalogue:[],task,inputImage:input.sourceImage,refineFromRunId:parent.id,...(input.model?{model:input.model}:{}),...(input.timeoutSeconds?{timeoutSeconds:input.timeoutSeconds}:{})},undefined,{input,info,task})
+    return this.start({sessionId:input.sessionId,figure:candidate,content:input.content,selectedIds:[],catalogue:[],task,inputImage:input.sourceImage,refineFromRunId:parent.id,...(input.model?{model:input.model}:{}),},undefined,{input,info,task})
   }
   start(raw: unknown,planId?:string,audit?:AuditExecution): Run {
     const parsed = harnessRunInputSchema.safeParse(raw)
@@ -150,7 +150,7 @@ export class HarnessService {
     if (!session) throw new HarnessError(404, '会话不存在，服务重启后请新建会话')
     if(input.designImage){
       const image=input.designImage,bytes=Buffer.from(image.dataUrl.split(',')[1]!,'base64')
-      try{const dims=rasterDimensions(image.dataUrl);if(dims.width!==image.width||dims.height!==image.height)throw new Error('构图渲染实际尺寸与元数据不匹配');if(createHash('sha256').update(canonicalFigureJson(input.figure)).digest('hex')!==image.figureSha256)throw new Error('构图渲染与工程快照不匹配');if(createHash('sha256').update(bytes).digest('hex')!==image.imageSha256)throw new Error('构图渲染字节指纹不匹配')}catch(e){throw new HarnessError(400,(e as Error).message)}
+      try{if(image.viewport!==`canvas-${input.figure.canvas.width}x${input.figure.canvas.height}`)throw new Error('构图渲染须覆盖完整当前画布');const dims=rasterDimensions(image.dataUrl);if(dims.width!==image.width||dims.height!==image.height)throw new Error('构图渲染实际尺寸与元数据不匹配');if(createHash('sha256').update(canonicalFigureJson(input.figure)).digest('hex')!==image.figureSha256)throw new Error('构图渲染与工程快照不匹配');if(createHash('sha256').update(bytes).digest('hex')!==image.imageSha256)throw new Error('构图渲染字节指纹不匹配')}catch(e){throw new HarnessError(400,(e as Error).message)}
     }
     let adoptedSearch:ComponentSearchSnapshot|undefined
     if(input.intent==='find-components'&&!this.library)throw new HarnessError(503,'当前服务未配置本机素材库')
@@ -224,7 +224,7 @@ export class HarnessService {
     session.info.lastRunId = run.id
     session.turns.push({ id: run.id, sessionId: run.sessionId,ordinal:session.omitted+session.turns.length+1, status: 'running', content: input.content, createdAt: new Date().toISOString(),
       ...(repositoryRecall?{repositoryRecall}:{}),
-      ...(input.designImage?{designReview:{...(({dataUrl:_,...info})=>info)(input.designImage),contextVersion:'design-aliases-v1' as const}}:{}),...(input.styleReference?{styleReference:clone(input.styleReference)}:{}),...(input.model ? { model: input.model } : {}),...(input.intent?{intent:input.intent}:{}),...(adoptedComposition?{adoptedComposition}:{}),...(referenceInputs.length?{referenceInputs}:{}),...(input.chartData?{chartData:datasetInfo(input.chartData)}:{}),...(audit?{visualAudit:audit.info}:refinement?{refinement}:{}),...(auditRepair?{auditRepair}:{}),timeoutSeconds:input.timeoutSeconds??this.timeoutMs/1000,...(input.task&&!audit?{task:input.task}:{}),...(input.inputImage?{inputImage:(( {dataUrl:_,...info})=>info)(input.inputImage)}:{}),...(input.cataloguePreview?{cataloguePreview:cataloguePreviewInfo(input.cataloguePreview)}:{}), message: '', error: '', components: [], hasProposal: false, review: 'none', available: true })
+      ...(input.designImage?{designReview:{...(({dataUrl:_,...info})=>info)(input.designImage),contextVersion:'design-aliases-v1' as const}}:{}),...(input.styleReference?{styleReference:clone(input.styleReference)}:{}),...(input.model ? { model: input.model } : {}),...(input.intent?{intent:input.intent}:{}),...(adoptedComposition?{adoptedComposition}:{}),...(referenceInputs.length?{referenceInputs}:{}),...(input.chartData?{chartData:datasetInfo(input.chartData)}:{}),...(audit?{visualAudit:audit.info}:refinement?{refinement}:{}),...(auditRepair?{auditRepair}:{}),...(input.task&&!audit?{task:input.task}:{}),...(input.inputImage?{inputImage:(( {dataUrl:_,...info})=>info)(input.inputImage)}:{}),...(input.cataloguePreview?{cataloguePreview:cataloguePreviewInfo(input.cataloguePreview)}:{}), message: '', error: '', components: [], hasProposal: false, review: 'none', available: true })
     if (session.turns.length > 50) {
       const plan=session.plan?this.plans.get(session.plan)?.state:undefined,protectedIds=new Set([run.id,session.retainedCandidate,plan?.parentRunId,plan?.latestCandidateRunId])
       const index=session.turns.findIndex(t=>!protectedIds.has(t.id)),removed=session.turns.splice(index,1)[0]!
@@ -240,8 +240,8 @@ export class HarnessService {
     if (run.status === 'running') run.controller.abort(new DOMException('运行已取消', 'AbortError'))
   }
   getPlan(id:string){const plan=this.plans.get(id);if(!plan)throw new HarnessError(404,'分区核对计划不存在或已清理');return plan}
-  planSnapshot(id:string):RepairPlan {const p=this.getPlan(id).state;return structuredClone({...p,remainingSeconds:Math.max(0,Math.ceil((Date.parse(p.deadlineAt)-(p.finishedAt?Date.parse(p.finishedAt):Date.now()))/1000))})}
-  cancelPlan(id:string,reason:'cancelled'|'stale'|'budget'='cancelled'){
+  planSnapshot(id:string):RepairPlan {return structuredClone(this.getPlan(id).state)}
+  cancelPlan(id:string,reason:'cancelled'|'stale'='cancelled'){
     const plan=this.getPlan(id);if(plan.state.status!=='running')return
     plan.stopReason??=reason;plan.state.stopping=true;plan.state.message='正在停止分区核对，已完成候选会保留'
     if(plan.state.activeRunId)this.cancel(plan.state.activeRunId)
@@ -258,21 +258,19 @@ export class HarnessService {
       group=reconstructionCandidateGroup(parent.baseFigure,candidate,summary.task)
       steps=input.regions.map(r=>{const task={kind:'repair' as const,containerId:group.id,regionId:r.regionId},context=repairContext(candidate,task);validateReconstructionImage(candidate,task,r.image);const dims=rasterDimensions(r.image.dataUrl);if(dims.width!==r.image.width||dims.height!==r.image.height)throw new Error('裁片实际尺寸不匹配');return{regionId:r.regionId,title:context.worker.title||r.regionId,status:'pending' as const}})
     }catch(e){throw new HarnessError(400,(e as Error).message)}
-    const now=Date.now(),state:RepairPlan={id:randomUUID(),sessionId:input.sessionId,parentRunId:parent.id,latestCandidateRunId:parent.id,containerId:group.id,createdAt:new Date(now).toISOString(),deadlineAt:new Date(now+input.totalSeconds*1000).toISOString(),totalSeconds:input.totalSeconds,perRunSeconds:input.perRunSeconds,remainingSeconds:input.totalSeconds,status:'running',stopping:false,message:'按所选顺序逐区核对，结果等待人工审阅',steps}
+    const now=Date.now(),state:RepairPlan={id:randomUUID(),sessionId:input.sessionId,parentRunId:parent.id,latestCandidateRunId:parent.id,containerId:group.id,createdAt:new Date(now).toISOString(),status:'running',stopping:false,message:'按所选顺序逐区核对，结果等待人工审阅',steps}
     const job:PlanJob={state,inputs:input.regions};this.plans.set(state.id,job);session.plan=state.id;session.lastPlan=state.id
     for(const [id,p] of this.plans){if(this.plans.size<=24)break;if(p.state.status!=='running'&&this.sessions.get(p.state.sessionId)?.lastPlan!==id)this.plans.delete(id)}
     job.done=this.executePlan(job,input);return job
   }
   private async executePlan(job:PlanJob,input:RepairPlanInput){
-    const state=job.state,timer=setTimeout(()=>this.cancelPlan(state.id,'budget'),Math.max(0,Date.parse(state.deadlineAt)-Date.now()))
+    const state=job.state
     try{
       for(const [index,step] of state.steps.entries()){
         if(job.stopReason)break
-        const remaining=Math.floor((Date.parse(state.deadlineAt)-Date.now())/1000)
-        if(remaining<30){job.stopReason='budget';break}
         const parent=this.getRun(state.latestCandidateRunId),candidate=parent.events.find(e=>e.type==='run.completed')?.proposal
         if(!candidate)throw new Error('上一版候选已不可用，计划已停止')
-        const run=this.start({sessionId:input.sessionId,figure:candidate,content:`按计划核对分区「${step.title}」，只修复可确认的问题；没有问题返回空补丁，不为产生差异而改图。\n${input.content}`,selectedIds:[],catalogue:[],task:{kind:'repair',containerId:state.containerId,regionId:step.regionId},inputImage:job.inputs[index]!.image,refineFromRunId:parent.id,timeoutSeconds:Math.min(input.perRunSeconds,remaining),...(input.model?{model:input.model}:{})},state.id)
+        const run=this.start({sessionId:input.sessionId,figure:candidate,content:`按计划核对分区「${step.title}」，只修复可确认的问题；没有问题返回空补丁，不为产生差异而改图。\n${input.content}`,selectedIds:[],catalogue:[],task:{kind:'repair',containerId:state.containerId,regionId:step.regionId},inputImage:job.inputs[index]!.image,refineFromRunId:parent.id,...(input.model?{model:input.model}:{})},state.id)
         step.runId=run.id;step.status='running';state.activeRunId=run.id;state.message=`正在核对 ${index+1} / ${state.steps.length}：${step.title}`
         await run.done
         delete state.activeRunId
@@ -280,10 +278,10 @@ export class HarnessService {
         const next=run.events.find(e=>e.type==='run.completed')?.proposal
         if(next&&repairContentChanged(candidate,next)){step.status='changed';state.latestCandidateRunId=run.id}else step.status='unchanged'
       }
-      if(job.stopReason){state.status='stopped';state.reason=job.stopReason;state.message=job.stopReason==='budget'?'总预算已到或剩余不足 30 秒，已停止；保留最近候选':job.stopReason==='stale'?'当前画布已变化，已停止；候选仍可回看':'已停止分区核对；保留最近候选'}
+      if(job.stopReason){state.status='stopped';state.reason=job.stopReason;state.message=job.stopReason==='stale'?'当前画布已变化，已停止；候选仍可回看':'已停止分区核对；保留最近候选'}
       else{state.status='completed';state.reason=state.steps.some(s=>s.status==='changed')?'completed':'unchanged';state.message=state.reason==='unchanged'?'所选分区未产生有效内容改动，保留原候选':'所选分区已核对，仍需人工检查并应用候选'}
     }catch(e){state.status='failed';state.reason='failed';state.message=`核对已停止：${(e as Error).message.slice(0,1000)}；保留最近候选`}
-    finally{clearTimeout(timer);state.stopping=false;state.finishedAt=new Date(Date.now()).toISOString();delete state.activeRunId;for(const s of state.steps)if(s.status==='pending')s.status='skipped';job.inputs=[];const session=this.sessions.get(state.sessionId);if(session?.plan===state.id){session.plan=undefined;session.retainedCandidate=state.latestCandidateRunId}this.pruneRuns()}
+    finally{state.stopping=false;state.finishedAt=new Date(Date.now()).toISOString();delete state.activeRunId;for(const s of state.steps)if(s.status==='pending')s.status='skipped';job.inputs=[];const session=this.sessions.get(state.sessionId);if(session?.plan===state.id){session.plan=undefined;session.retainedCandidate=state.latestCandidateRunId}this.pruneRuns()}
   }
   referenceImage(id:string,index:number){
     const run=this.getRun(id),info=this.summary(id).referenceInputs?.find(r=>r.index===index),ref=info?run.baseFigure.references.find(r=>r.id===info.id):undefined
@@ -397,7 +395,7 @@ export class HarnessService {
     const promise=new Promise<void>((yes,no)=>{resolve=yes;reject=no}),startedAt=Date.now()
     const exchange:SelectionPreviewExchange={request,startedAt,directory,pending:{resolve,reject},images:[]};run.selectionPreviewExchange=exchange
     const abort=()=>reject(run.controller.signal.reason);run.controller.signal.addEventListener('abort',abort,{once:true})
-    const report=clone(this.summary(run.id).repositoryRecall!);report.selection!.previews={requestId:request.requestId,evidenceRunId:run.id,poolSha256:request.poolSha256,candidateCount:entries.length,status:'pending',sheets:[]};report.selection!.message='等待浏览器渲染完整候选图谱，共用本轮时限';this.updateRepositoryRecall(run,report)
+    const report=clone(this.summary(run.id).repositoryRecall!);report.selection!.previews={requestId:request.requestId,evidenceRunId:run.id,poolSha256:request.poolSha256,candidateCount:entries.length,status:'pending',sheets:[]};report.selection!.message='等待浏览器渲染完整候选图谱';this.updateRepositoryRecall(run,report)
     this.emit(run,'activity',`正在准备 ${entries.length} 项冻结素材的实际图谱；浏览器需保持连接，刷新后可继续`)
     try{if(run.controller.signal.aborted)reject(run.controller.signal.reason);await promise;run.controller.signal.throwIfAborted()}
     catch(error){const current=clone(this.summary(run.id).repositoryRecall!);Object.assign(current.selection!.previews!,{status:run.controller.signal.aborted&&run.controller.signal.reason instanceof Error&&run.controller.signal.reason.name==='AbortError'?'cancelled':'failed',error:(error instanceof Error?error.message:'筛选图谱未生成').slice(0,1500),elapsedMs:Date.now()-startedAt});this.updateRepositoryRecall(run,current);throw error}
@@ -448,7 +446,7 @@ export class HarnessService {
       run.selectionEvidence={prompt};selection.promptSha256=createHash('sha256').update(prompt).digest('hex')
       await writeFile(join(folder,'prompt.txt'),prompt,{mode:0o600})
       selection.message='正在按完整要求逐项筛选素材';this.updateRepositoryRecall(run,report)
-      this.emit(run,'activity',`正在独立模型会话筛选 ${prepared.candidates.length} 项冻结素材；与绘图共用本轮时限`)
+      this.emit(run,'activity',`正在独立模型会话筛选 ${prepared.candidates.length} 项冻结素材`)
       const status=await adapter.status();if(status.state!=='ready'||report.visualQuery&&!status.images)throw new Error(status.message||'素材筛选需要图片输入');selection.cliVersion=status.version
       let emitted=0
       const response=await adapter.send({cwd:folder,content:prompt,signal:run.controller.signal,...(report.visualQuery?{images:[{path:join(directory,`lookup-image.${run.searchInputImage!.dataUrl.startsWith('data:image/png')?'png':'webp'}`),dataUrl:run.searchInputImage!.dataUrl},...run.selectionPreviewExchange!.images.map(image=>({path:image.path,dataUrl:`data:${image.contentType};base64,${image.bytes.toString('base64')}`}))]}:{}),...(input.model?{model:input.model}:{}),emit:(type,text)=>{
@@ -501,8 +499,6 @@ export class HarnessService {
     for (const listener of run.listeners) listener(event)
   }
   private async execute(session: Session, run: Run, input: HarnessRunInput,audit?:AuditExecution,repairEvidence='') {
-    const timeoutMs=input.timeoutSeconds?input.timeoutSeconds*1000:this.timeoutMs,budget=timeoutMs>=60_000?`${timeoutMs/60_000} 分钟`:`${timeoutMs/1000} 秒`
-    const timeout = setTimeout(() => run.controller.abort(new Error(`Harness 运行超过 ${budget}，请缩小任务后重试`)), timeoutMs)
     let emitted = 0,pending='',flushTimer:ReturnType<typeof setTimeout>|undefined,auditAdapter:HarnessAdapter|undefined
     const flush=()=>{clearTimeout(flushTimer);flushTimer=undefined;if(pending){const text=pending;pending='';this.emit(run,'assistant.delta',text)}}
     try {
@@ -569,11 +565,12 @@ export class HarnessService {
       await writeFile(join(directory, 'response.json'), JSON.stringify(response), { mode: 0o600 })
       // A no-op repair retains its parent candidate; it has not reached the canvas yet.
       let candidate=response.figure??(input.refineFromRunId?input.figure:null)
+      if(candidate&&input.figure.folder)candidate.folder=input.figure.folder
       if(candidate&&adoptedComposition)candidate=applyCompositionRecord(candidate,adoptedComposition,response.used)
       if(candidate&&input.styleReference)candidate=recordHarnessStyle(candidate,input.styleReference)
       const styleLines=input.styleReference?.lineStyle?candidate?.styleUses?.at(-1)?.lines:undefined
       const message=styleLines?`风格连线规范：可处理 ${styleLines.total} 条，调整 ${styleLines.changed} 条，保留 ${styleLines.skipped} 条；几何与端点绑定保持。\n${response.message}`.slice(0,5000):response.message
-      const proposal = candidate && diffFigures(run.canvasBaseline,candidate).changes.length ? candidate : undefined
+      const proposal = candidate && diffFigures(run.canvasBaseline,candidate).changes.length ? editableFigure(candidate) : undefined
       if(input.auditRepair&&proposal)session.retainedCandidate=run.id
       run.status = 'completed'; this.emit(run, 'run.completed', message, proposal, response.used,undefined,chartResponse?.chartRecommendation,('referenceUse' in response?response.referenceUse:undefined)??chartResponse?.chartRecommendation.referenceUse,undefined,'recipeUpdates'in response?response.recipeUpdates:undefined,'sharedYAxes'in response?response.sharedYAxes:undefined,'sharedLegends'in response?response.sharedLegends:undefined,'plotAlignments'in response?response.plotAlignments:undefined,'sharedColorbars'in response?response.sharedColorbars:undefined,'callouts'in response?response.callouts:undefined,'calloutReflows'in response?response.calloutReflows:undefined)
     } catch (e) {
@@ -584,7 +581,7 @@ export class HarnessService {
       if(recall?.selection?.status==='pending'){const report=clone(recall);Object.assign(report.selection!,{status:cancelled?'cancelled':'failed',message:(reason instanceof Error?reason.message:'素材筛选未完成').slice(0,1500)});this.updateRepositoryRecall(run,report)}
       run.status = cancelled ? 'cancelled' : 'failed'
       this.emit(run, cancelled ? 'run.cancelled' : 'run.failed', reason instanceof Error ? reason.message.slice(0, 1200) : 'Harness 运行失败')
-    } finally { clearTimeout(timeout);clearTimeout(flushTimer);auditAdapter?.dispose();run.selectionInputs=undefined;run.feedbackInputs=undefined;run.feedbackInherited=undefined;session.active = undefined }
+    } finally { clearTimeout(flushTimer);auditAdapter?.dispose();run.selectionInputs=undefined;run.feedbackInputs=undefined;run.feedbackInherited=undefined;session.active = undefined }
   }
   async dispose() {
     for(const p of this.plans.values())if(p.state.status==='running')this.cancelPlan(p.state.id)

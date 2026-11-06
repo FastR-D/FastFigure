@@ -1,4 +1,4 @@
+import {fontFamilySchema} from './fontFamily.ts'
 import {z} from 'zod'
-import {fontFamilies} from '../data/materials.ts'
-export const chartTypographyFields={fontFamily:z.enum(fontFamilies).optional(),fontSize:z.number().finite().min(8).max(36).optional()}
-export const chartTypographyReportSchema=z.object({fontFamily:z.enum(fontFamilies),fontSize:z.number().finite().min(8).max(36)}).strict()
+export const chartTypographyFields={fontFamily:fontFamilySchema.optional(),fontSize:z.number().finite().min(8).max(36).optional()}
+export const chartTypographyReportSchema=z.object({fontFamily:fontFamilySchema,fontSize:z.number().finite().min(8).max(36)}).strict()

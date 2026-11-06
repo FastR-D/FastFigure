@@ -30,12 +30,12 @@ const editor = useEditor(), base = clone(editor.figure.value), baseline = JSON.s
 const current = editor.currentContainer.value
 const useCurrent = !(current.parentId && current.role==='component') && !current.dataChart && !current.reconstruction && !current.structureOrigin && childrenOf(base,current.id).filter(o => !('kind' in o)).length >= 2
 const mode=ref<'layout'|'axes'|'legend'|'plots'|'colorbar'>('layout'),beforeAxes=ref(false),axisIds=ref<string[]>([])
-const barIds=ref<string[]>([]),barSize=ref(14),barFamily=ref(editor.activeStyle.value.fontFamily??'Inter'),barPlacement=ref<'top'|'bottom'>('bottom'),barInventory=chartColorbarTargets(base,editor.selectedIds.value),barGroups=sharedColorbarEditTargets(base,editor.selectedIds.value)
+const barIds=ref<string[]>([]),barSize=ref(14),barFamily=ref(editor.activeStyle.value.fontFamily??'MiSans'),barPlacement=ref<'top'|'bottom'>('bottom'),barInventory=chartColorbarTargets(base,editor.selectedIds.value),barGroups=sharedColorbarEditTargets(base,editor.selectedIds.value)
 const barAction=ref<'create'|'update'>(barGroups.some(group=>group.selected)?'update':'create'),barEditRequest=ref<SharedColorbarUpdateRequest|null>(null)
 const scopedBars=(id:string)=>barInventory.filter(t=>t.kind==='heatmap'&&ancestors(base,t.containerId).includes(id))
 const plotIds=ref<string[]>([]),plotColumns=ref(2),plotInventory=chartPlotTargets(base,editor.selectedIds.value)
 const scopedPlots=(id:string)=>plotInventory.filter(t=>ancestors(base,t.containerId).includes(id))
-const legendIds=ref<string[]>([]),legendPlacement=ref<'top'|'bottom'>('bottom'),legendSize=ref(14),legendFamily=ref(editor.activeStyle.value.fontFamily??'Inter')
+const legendIds=ref<string[]>([]),legendPlacement=ref<'top'|'bottom'>('bottom'),legendSize=ref(14),legendFamily=ref(editor.activeStyle.value.fontFamily??'MiSans')
 const legendInventory=chartLegendTargets(base,editor.selectedIds.value),legendGroups=sharedLegendEditTargets(base,editor.selectedIds.value)
 const legendAction=ref<'create'|'update'>(legendGroups.some(group=>group.selected)?'update':'create'),legendEditRequest=ref<SharedLegendUpdateRequest|null>(null),legendColumns=ref(0),legendGap=ref(20)
 const scopedLegends=(id:string)=>legendInventory.filter(target=>ancestors(base,target.containerId).includes(id))

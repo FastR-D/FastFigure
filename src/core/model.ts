@@ -1,6 +1,9 @@
+import {fontFamilySchema,importedFontName} from './fontFamily.ts'
+import {paperThemeTokensSchema} from './paperThemeTokens.ts'
 import {textRunsSchema} from './richTextContract.ts'
 import {embeddedImageSchema} from './imageAssetContract.ts'
 import {outputFrameSchema} from './outputFrame.ts'
+import {canvasDimensionSchema,maxCanvasSize} from './canvasContract.ts'
 import {defaultFigureStyle,visualRoles,textRoles,fontRolesSchema} from './paperStyle.ts'
 import {edgeAppearanceSchema} from './lineStyleContract.ts'
 import {nativeDetailSourceSchema} from './detailInsetContract.ts'
@@ -15,7 +18,7 @@ import {linearGradientSchema,supportsGradient} from './gradient.ts'
 import {colorMapSchema} from './colorMappingContract.ts'
 import { referenceUseSchema,referencePurposeSchema } from './referenceInputs.ts'
 import {sketchStyleIds} from './sketchStyle.ts'
-import {fontFamilies, iconById, paletteById } from '../data/materials.ts'
+import { iconById, paletteById } from '../data/materials.ts'
 import { structureSchema } from './structures.ts'
 import { syncBindings,isClosedPathTarget } from './paths.ts'
 import { reconstructionRecordSchema, reconstructionTraceSchema,reconstructionReuseRecordSchema } from './reconstructionContract.ts'
@@ -36,7 +39,11 @@ export type NodeKind = typeof nodeKinds[number]
 export const nodeKindLabels: Record<NodeKind, string> = { module: '通用模块', tokens: 'Token 序列', tensor: '矩阵 / 张量', queue: '队列', neuron: '神经元', operator: '融合算子', volume: '特征体', projection: '投影层', rectangle: '矩形', ellipse: '圆 / 椭圆', diamond: '菱形', text: '无框文字 / 注释', icon: '矢量图标', image:'图片插画',path:'路径 / 连线',port:'外部接口' }
 export const primitiveKinds = ['rectangle','ellipse','diamond','text','icon','image','path','port'] as const
 export const isPrimitive = (kind: NodeKind) => (primitiveKinds as readonly string[]).includes(kind)
-export const textStyleSchema = z.object({ family: z.string().max(80).regex(/^[\p{L}\p{N} _.-]+$/u).optional(), size: z.number().min(1).max(256).optional(), bold: z.boolean().optional(),weight:z.number().int().min(1).max(1000).optional(), italic: z.boolean().optional(),letterSpacing:z.number().min(-32).max(128).optional(), color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(), align: z.enum(['left','center','right']).optional() })
+export function nodeSizeLimits(kind:NodeKind,units=1){
+  const primitive=isPrimitive(kind),symbol=kind==='neuron'||kind==='operator',small=primitive||symbol
+  return{minWidth:(kind==='path'?0:small?1:80)*units,minHeight:(kind==='path'?0:small?1:44)*units,maxWidth:Math.min(maxCanvasSize,primitive?maxCanvasSize:360*units),maxHeight:Math.min(maxCanvasSize,primitive?maxCanvasSize:180*units)}
+}
+export const textStyleSchema = z.object({ family: importedFontName.optional(), size: z.number().min(1).max(256).optional(), bold: z.boolean().optional(),weight:z.number().int().min(1).max(1000).optional(), italic: z.boolean().optional(),letterSpacing:z.number().min(-32).max(128).optional(), color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(), align: z.enum(['left','center','right']).optional() })
 export type TextStyle = z.infer<typeof textStyleSchema>
 export const chartMarkSchema=z.object({role:z.enum(['series','axis','grid','stat','heat','band','annotation','frame']),series:z.number().int().min(0).max(11).optional(),channels:z.array(z.enum(['fill','stroke','text'])).max(3).default([]),key:z.string().min(1).max(64).regex(/^[a-zA-Z0-9_-]+$/).optional()})
 const paletteIdSchema = z.string().max(120).refine(id => paletteById.has(id), '未知配色方案')
@@ -47,7 +54,7 @@ const id = z.string().min(1).max(80).regex(/^[a-zA-Z0-9_-]+$/)
 const fraction=z.number().finite().min(0).max(1),coordinatePoint=z.object({x:fraction,y:fraction})
 const pathPoint=coordinatePoint.extend({c1:coordinatePoint.optional(),c2:coordinatePoint.optional(),move:z.boolean().optional(),close:z.boolean().optional()})
 export const pathBindingSchema=z.object({nodeId:id,note:z.string().trim().max(240).optional(),x:fraction.optional(),y:fraction.optional(),anchorIndex:z.number().int().min(0).max(127).optional(),offsetX:z.number().min(-384).max(384).optional(),offsetY:z.number().min(-384).max(384).optional()}).superRefine((b,ctx)=>{if(b.anchorIndex!==undefined?b.x!==undefined||b.y!==undefined:b.x===undefined||b.y===undefined)ctx.addIssue({code:'custom',message:'路径绑定须选择锚点编号或完整比例坐标，不能混用'})})
-export const pathSchema=z.object({points:z.array(pathPoint).min(2).max(128),arrow:z.enum(['none','open','filled']).default('none'),startArrow:z.enum(['none','open','filled']).optional(),arrowSize:z.number().finite().min(.1).max(256).optional(),fillRule:z.enum(['nonzero','evenodd']).optional(),start:pathBindingSchema.optional(),end:pathBindingSchema.optional()})
+export const pathSchema=z.object({points:z.array(pathPoint).min(2).max(128),orthogonal:z.boolean().optional(),arrow:z.enum(['none','open','filled']).default('none'),startArrow:z.enum(['none','open','filled']).optional(),arrowSize:z.number().finite().min(.1).max(256).optional(),fillRule:z.enum(['nonzero','evenodd']).optional(),start:pathBindingSchema.optional(),end:pathBindingSchema.optional()})
 export const evidenceRegionSchema = z.object({
   x: z.number().min(0).max(1), y: z.number().min(0).max(1),
   width: z.number().positive().max(1), height: z.number().positive().max(1),
@@ -84,7 +91,7 @@ export const componentOriginSchema = componentAncestorSchema.extend({
   sources: z.array(componentSourceSchema).max(12), lineage: z.array(componentAncestorSchema).max(16),
   recipe: componentRecipeSchema.optional(),
 })
-const coord = z.number().finite().min(0).max(2000)
+const coord = z.number().finite().min(0).max(maxCanvasSize)
 export const componentPortSchema=z.object({key:z.string().min(1).max(32).regex(/^[a-zA-Z][a-zA-Z0-9_-]*$/),direction:z.enum(['input','output','both']),side:z.enum(['left','right','top','bottom']),position:fraction})
 export type ComponentPort=z.infer<typeof componentPortSchema>
 export const nodeSchema = z.object({
@@ -93,10 +100,10 @@ export const nodeSchema = z.object({
   chart:chartMarkSchema.optional(),
   id, kind: z.enum(nodeKinds), label: z.string().max(240),name:z.string().max(100).optional(), description: z.string().max(240).optional(),
   parentId: id,
-  x: coord, y: coord, width: z.number().min(0).max(1000), height: z.number().min(0).max(620),
+  x: coord, y: coord, width: z.number().min(0).max(maxCanvasSize), height: z.number().min(0).max(maxCanvasSize),
   textRuns:textRunsSchema.optional(),image:embeddedImageSchema.optional(),path:pathSchema.optional(),interfaceFor:id.optional(),socket:componentPortSchema.optional(),
   textLayout:z.object({x:fraction,y:fraction,matrix:linearSchema,baseline:z.enum(['auto','alphabetic','middle','central','hanging','text-before-edge','text-after-edge','ideographic']).optional()}).optional(),
-  textRole:z.enum(textRoles).optional(), textStyle: textStyleSchema.optional(), descriptionStyle: textStyleSchema.optional(), structure: structureSchema.optional(), visual: visualSchema.optional(), iconId: z.string().refine(id => id === 'none' || iconById.has(id), '未知图标').optional(),
+  titleBlock:z.boolean().optional(),textRole:z.enum(textRoles).optional(), textStyle: textStyleSchema.optional(), descriptionStyle: textStyleSchema.optional(), structure: structureSchema.optional(), visual: visualSchema.optional(), iconId: z.string().refine(id => id === 'none' || iconById.has(id), '未知图标').optional(),
   evidence: componentSourceSchema.optional(),
 })
 export type FigureNode = z.infer<typeof nodeSchema>
@@ -116,20 +123,20 @@ const containerSchema = z.object({sharedColorbar:sharedColorbarRecordSchema.opti
   dataChart:dataChartRecordSchema.optional(),
   reconstruction:reconstructionRecordSchema.optional(),
   id, parentId: id.nullable(), title: z.string().min(1,'容器标题不能为空').max(100,'容器标题最多 100 字'), role: z.enum(containerRoles),
-  x: coord, y: coord, width: z.number().min(.05).max(1000), height: z.number().min(.05).max(620),
+  x: coord, y: coord, width: z.number().min(.05).max(maxCanvasSize), height: z.number().min(.05).max(maxCanvasSize),
   visual:visualSchema.optional(),structureOrigin:structureSchema.optional(),
   opacity:z.number().min(0).max(1).optional(),
-  appearance: z.object({ designSystem:z.enum(['paper','legacy']).optional(),fontRoles:fontRolesSchema.optional(),fontFamily:z.enum(fontFamilies).optional(),sketchStyle:z.enum(sketchStyleIds).optional(),roughness:z.number().min(0).max(2).optional(),preset: z.enum([...styleIds, 'inherit']).default('inherit'), accent: z.enum([...accentIds, 'inherit']).default('inherit'), paletteId: z.union([z.literal('inherit'),paletteIdSchema]).optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }).optional(),
-  textStyle: textStyleSchema.optional(),
+  appearance: z.object({ designSystem:z.enum(['paper','legacy']).optional(),paperTheme:paperThemeTokensSchema.optional(),fontRoles:fontRolesSchema.optional(),fontFamily:fontFamilySchema.optional(),sketchStyle:z.enum(sketchStyleIds).optional(),roughness:z.number().min(0).max(2).optional(),preset: z.enum([...styleIds, 'inherit']).default('inherit'), accent: z.enum([...accentIds, 'inherit']).default('inherit'), paletteId: z.union([z.literal('inherit'),paletteIdSchema]).optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }).optional(),
+  titleDetached:z.boolean().optional(),textStyle: textStyleSchema.optional(),
   component: componentOriginSchema.optional(),
   evidence: componentSourceSchema.optional(),
 })
 export type FigureContainer = z.infer<typeof containerSchema>
 export const figureDocumentSchema = z.object({
   publication:publicationSettingsSchema.optional(),
-  version: z.literal('0.2'), title: z.string().min(1).max(100),
-  canvas: z.object({ width: z.literal(1000), height: z.literal(620),frame:outputFrameSchema.optional() }),
-  style: z.object({ designSystem:z.enum(['paper','legacy']).optional(),fontRoles:fontRolesSchema.optional(),fontFamily:z.enum(fontFamilies).optional(),sketchStyle:z.enum(sketchStyleIds).optional(),preset: z.enum(styleIds), roughness: z.number().min(0).max(2), seed: z.number().int().min(1).max(2147483647), accent: z.enum(accentIds), paletteId: paletteIdSchema.optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }),
+  version: z.literal('0.2'), title: z.string().min(1).max(100),folder:z.string().trim().min(1).max(100).optional(),
+  canvas: z.object({ width:canvasDimensionSchema, height:canvasDimensionSchema,frame:outputFrameSchema.optional() }),
+  style: z.object({ designSystem:z.enum(['paper','legacy']).optional(),paperTheme:paperThemeTokensSchema.optional(),fontRoles:fontRolesSchema.optional(),fontFamily:fontFamilySchema.optional(),sketchStyle:z.enum(sketchStyleIds).optional(),preset: z.enum(styleIds), roughness: z.number().min(0).max(2), seed: z.number().int().min(1).max(2147483647), accent: z.enum(accentIds), paletteId: paletteIdSchema.optional(), colorIndex:z.number().int().min(0).max(11).optional(), colorMap:colorMapSchema.optional() }),
   nodes: z.array(nodeSchema).max(240), edges: z.array(edgeSchema).max(120),
   containers: z.array(containerSchema).min(1).max(21),
   references: z.array(referenceImageSchema).max(3).default([]),referenceUses:z.array(referenceUseSchema.refine(r=>r.decision==='use','图件只保存已采用的参考来源')).max(12).optional(),
@@ -137,6 +144,7 @@ export const figureDocumentSchema = z.object({
   styleUses:z.array(styleUseSchema).max(8).optional(),
   imageDrafts:z.array(imageDraftOriginSchema).max(8).optional(),
 }).superRefine((doc, ctx) => {
+  if(doc.canvas.frame&&(doc.canvas.frame.x+doc.canvas.frame.width>doc.canvas.width+.001||doc.canvas.frame.y+doc.canvas.frame.height>doc.canvas.height+.001))ctx.addIssue({code:'custom',message:'出图区域须位于画板内'})
   if(new TextEncoder().encode(JSON.stringify(doc)).length>maxProjectBytes)ctx.addIssue({code:'custom',message:'工程总容量最多 8 MB，请精简图片或来源记录'})
   for(const node of doc.nodes)if((node.visual?.fillGradient||node.visual?.strokeGradient)&&!supportsGradient(node.kind))ctx.addIssue({code:'custom',message:'渐变暂用于形状和路径，文字、图标与接口不支持'})
   for(const container of doc.containers)if(container.visual?.fillGradient||container.visual?.strokeGradient)ctx.addIssue({code:'custom',message:'容器渐变暂不支持，请使用独立形状作为背景'})
@@ -156,7 +164,8 @@ export const figureDocumentSchema = z.object({
     if (!isPrimitive(node.kind) && !node.label.trim()) ctx.addIssue({ code: 'custom', message: '科研节点标签不能为空' })
     if(!isPrimitive(node.kind)&&node.label.length>100) ctx.addIssue({code:'custom',message:'科研节点标签最多 100 字'})
     const units=node.metricScale??1
-    if (!isPrimitive(node.kind) && (node.width < 80*units-1e-6 || node.height < 44*units-1e-6||node.width>360*units+1e-6||node.height>180*units+1e-6)) ctx.addIssue({ code: 'custom', message: '科研节点尺寸须符合当前缩放下的 80–360 × 44–180 基准范围' })
+    const limits=nodeSizeLimits(node.kind,units),basis=nodeSizeLimits(node.kind)
+    if (!isPrimitive(node.kind) && (node.width < limits.minWidth-1e-6 || node.height < limits.minHeight-1e-6||node.width>limits.maxWidth+1e-6||node.height>limits.maxHeight+1e-6)) ctx.addIssue({ code: 'custom', message: `科研节点尺寸须符合当前缩放下的 ${basis.minWidth}–360 × ${basis.minHeight}–180 基准范围` })
     if(isPrimitive(node.kind)&&node.kind!=='path'&&!node.interfaceFor&&(node.width<units-1e-6||node.height<units-1e-6)) ctx.addIssue({code:'custom',message:'图元尺寸至少为当前缩放下的 1 × 1 基准尺寸'})
     if(node.kind==='path'&&(!node.path||node.width+node.height<.001*units)) ctx.addIssue({code:'custom',message:'路径须含至少两个不同的点'})
     if(node.path&&!node.path.points.flatMap(p=>[p,...(p.c1?[p.c1]:[]),...(p.c2?[p.c2]:[])]).some(p=>Math.abs((p.x-node.path!.points[0]!.x)*node.width)+Math.abs((p.y-node.path!.points[0]!.y)*node.height)>.00001)) ctx.addIssue({code:'custom',message:'路径点不能全部重合'})
@@ -201,7 +210,7 @@ export const figureDocumentSchema = z.object({
     if (object.parentId === null) continue
     const c = containers.get(object.parentId)
     if (!c) { ctx.addIssue({ code: 'custom', message: '对象必须引用有效父容器' }); continue }
-    const inset=(c.role==='component'?2:12)*(c.metricScale??1),top=(c.role==='component'?2:48)*(c.metricScale??1)
+    const inset=(c.role==='component'?2:12)*(c.metricScale??1),top=(c.role==='component'?2:c.titleDetached?12:48)*(c.metricScale??1)
     if ('interfaceFor' in object&&object.interfaceFor===c.id) continue
     if (object.x < c.x + inset - 0.001 || object.y < c.y + top - 0.001 || object.x + object.width > c.x + c.width - inset + 0.001 || object.y + object.height > c.y + c.height - inset + 0.001)
       ctx.addIssue({ code: 'custom', message: '对象必须位于父容器内容区' })
@@ -228,7 +237,7 @@ export const figureDocumentSchema = z.object({
     if((e.routing==='manual')!==!!e.manualRoute)ctx.addIssue({code:'custom',message:'指定折点连线须同时保存 manual 路由与折点，自动模式不能带指定折点'})
     if(e.manualRoute){
       if(e.manualRoute.containerId!==edgeRouteContainer(doc,e.source,e.target)||!doc.containers.some(c=>c.id===e.manualRoute!.containerId))ctx.addIssue({code:'custom',message:'连线折点须使用当前共同容器的坐标'})
-      else if(edgeWaypointPoints(doc,e).some(p=>p.x< -1e-6||p.x>1000+1e-6||p.y< -1e-6||p.y>620+1e-6))ctx.addIssue({code:'custom',message:'连线折点超出画板'})
+      else if(edgeWaypointPoints(doc,e).some(p=>p.x< -1e-6||p.x>doc.canvas.width+1e-6||p.y< -1e-6||p.y>doc.canvas.height+1e-6))ctx.addIssue({code:'custom',message:'连线折点超出画板'})
     }
     const source=doc.nodes.find(n=>n.id===e.source),target=doc.nodes.find(n=>n.id===e.target)
     if(source?.socket&&(source.socket.direction==='input'||source.socket.side!==e.sourcePort)||target?.socket&&(target.socket.direction==='output'||target.socket.side!==e.targetPort))ctx.addIssue({code:'custom',message:'连接须遵循接口方向和固定边界'})

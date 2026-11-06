@@ -11,9 +11,16 @@ export default defineComponent({
   setup(props) {
     return () => {
       if(props.theme){
-        const theme=props.theme,doc=createBlank();doc.style={...doc.style,designSystem:theme.designSystem??'legacy',fontRoles:theme.fontRoles,preset:theme.preset,sketchStyle:theme.sketchStyle,roughness:theme.roughness??1,paletteId:theme.paletteId,fontFamily:theme.fontFamily}
+        const theme=props.theme,doc=createBlank();doc.style={...doc.style,designSystem:theme.designSystem??'legacy',paperTheme:theme.paperTheme,fontRoles:theme.fontRoles,preset:theme.preset,sketchStyle:theme.sketchStyle,roughness:theme.roughness??1,paletteId:theme.paletteId,fontFamily:theme.fontFamily}
+        if(theme.designSystem==='paper'){
+          Object.assign(doc.containers[0]!,{role:'component',x:2,y:2,width:260,height:140,visual:{fill:'none',stroke:'none'}})
+          doc.containers.push({id:'scope',parentId:'stage',role:'panel',title:'机制 · Planning',x:8,y:70,width:248,height:66,visual:{role:'planning'}})
+          doc.nodes=[{id:'sense',parentId:'stage',kind:'rectangle',textRole:'heading',label:'感知',x:8,y:10,width:72,height:46,visual:{role:'perception'}},{id:'plan',parentId:'stage',kind:'rectangle',textRole:'heading',label:'规划',x:96,y:10,width:72,height:46,visual:{role:'planning'}},{id:'act',parentId:'stage',kind:'rectangle',textRole:'heading',label:'执行',x:184,y:10,width:72,height:46,visual:{role:'execution'}}]
+          doc.edges=[{id:'sense-plan',source:'sense',target:'plan',sourcePort:'right',targetPort:'left',routing:'straight'},{id:'plan-act',source:'plan',target:'act',sourcePort:'right',targetPort:'left',routing:'straight'}]
+          return h('svg',{viewBox:'0 0 264 144','aria-hidden':true,class:'style-preview theme-preview paper-theme-preview'},createScene(doc,false).map(render))
+        }
         Object.assign(doc.containers[0]!,{role:'component',x:7,y:6,width:118,height:64,visual:{tone:theme.surface==='hatch'?'hatch':'fill'}})
-        doc.nodes=[{id:'preview-box',parentId:'stage',kind:'rectangle',label:'Abc',x:18,y:21,width:43,height:32,textStyle:{size:16}},{id:'preview-circle',parentId:'stage',kind:'ellipse',label:'x',x:85,y:23,width:30,height:30,textStyle:{size:16},visual:{colorIndex:1}}]
+        doc.nodes=[{id:'preview-box',parentId:'stage',kind:'rectangle',label:'Abc',x:18,y:21,width:43,height:32,textStyle:{size:16},visual:{padding:3}},{id:'preview-circle',parentId:'stage',kind:'ellipse',label:'x',x:85,y:23,width:30,height:30,textStyle:{size:16},visual:{colorIndex:1,padding:3}}]
         doc.edges=[{id:'preview-link',source:'preview-box',target:'preview-circle',sourcePort:'right',targetPort:'left'}]
         return h('svg',{viewBox:'0 0 132 78','aria-hidden':true,class:'style-preview theme-preview'},createScene(doc,false).map(render))
       }

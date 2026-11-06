@@ -4,7 +4,6 @@ import {pathPoints} from './paths'
 import {scaleSubtree} from './scaling'
 import {addComponentPort} from './componentPorts'
 import {instantiateComponentAt} from './assets'
-import {exportDrawio} from './export'
 import { describe,expect,it } from 'vitest'
 import { createHash } from 'node:crypto'
 import { DOMParser } from '@xmldom/xmldom'
@@ -60,7 +59,7 @@ describe('native raw-value matrix heatmaps',()=>{
     expect(after.nodes.slice(0,doc.nodes.length).map(n=>n.id)).toEqual(doc.nodes.map(n=>n.id));expect(after.nodes.find(n=>n.id===title.id)).toMatchObject({label:'Owner title',textStyle:{family:'MiSans',bold:true}})
     for(const id of ['owner-note',port.id])expect(after.nodes.find(n=>n.id===id)).toEqual(doc.nodes.find(n=>n.id===id))
     if(!diverging){const a=after.nodes.find(n=>n.parentId==='first'&&n.chart?.key==='series-0-point-1')!,b=after.nodes.find(n=>n.parentId==='second'&&n.chart?.key==='series-1-point-0')!;expect(a.visual!.fill).toBe(b.visual!.fill)}
-    const svg=exportSvg(after);for(const id of visibility.hidden){expect(svg).not.toContain(`data-object-id="${id}"`);expect(exportDrawio(after)).not.toContain(`id="${id}"`)}
+    const svg=exportSvg(after);for(const id of visibility.hidden){expect(svg).not.toContain(`data-object-id="${id}"`);}
     const standalone=captureComponent(after,after.containers.find(c=>c.sharedColorbar)!.id,'Standalone');expect(standalone.figure.containers[0]!.sharedColorbar).toBeUndefined();expect(standalone.sources).toContainEqual(heatmapScale(doc.containers.find(c=>c.id==='first')!.dataChart!.spec).palette.source)
     const placed=instantiateComponentAt(createBlank(),scaleComponent(captureComponent(after,'stage','Compared heatmaps'),.45),'stage',{x:80,y:180},'copied',true).document;expect(sharedColorbarStates(placed)[0]!.active).toBe(true)
     const scaled=scaleSubtree(after,after.containers.find(c=>c.sharedColorbar)!.id,.8,'top-left').document;expect(sharedColorbarStates(scaled)[0]!.active).toBe(true)

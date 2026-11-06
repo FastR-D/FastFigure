@@ -1,6 +1,6 @@
 # 素材居中、统一格式与按点直角箭头
 
-当前开发重点回到素材、箭头和样式。数据绘图新增功能已中止，未完成的均值 / SD / SEM 汇总已撤回；已有数据功能保留。draw.io / PPTX 导出适配暂停。
+当前开发重点回到素材、箭头和样式。数据绘图新增功能已中止，未完成的均值 / SD / SEM 汇总已撤回；已有数据功能保留。导出支持 SVG、PNG 和工程 JSON。
 
 ## 手工操作
 
@@ -68,7 +68,7 @@
 
 `textPolicy=family/typeface/match`，省略默认为 family；`anchor=center/top-left`。`axis=both/horizontal/vertical`，`direction=horizontal/vertical/strict`，`arrow=none/open/filled`。修改已有路径增加 `nodeId`；定位文字仅在明确要求时用 `positionedText="reflow"`。每次最多 8 项；格式字段非法、引用失效或操作结果不符合工程约束时整次拒绝，输入工程保持。文字适配的逐项空间不足属于可审核结果；成功项可以应用，无变化时只返回说明，不创建候选。
 
-尺寸的 `dimension=width/height/both`。连线样式的 `style` 至少一项；省略项保持。`stroke` 为六位颜色，`strokeWidth=.01..64`，`dash` 最多 16 个非负线段 / 间隔且不能全零，`[]` 为实线；三者可用 `null` 恢复主题色 / 默认线宽 / 实线。节点连接保存到 `edge.appearance`，宽度和虚线为画板单位，随素材整体缩放。节点连线外观在修改审阅中单独列出。工程、原生 SVG 元数据、采集 / 重插和存续配方连接保留，draw.io / PPTX 外部导出适配仍暂停。
+尺寸的 `dimension=width/height/both`。连线样式的 `style` 至少一项；省略项保持。`stroke` 为六位颜色，`strokeWidth=.01..64`，`dash` 最多 16 个非负线段 / 间隔且不能全零，`[]` 为实线；三者可用 `null` 恢复主题色 / 默认线宽 / 实线。节点连接保存到 `edge.appearance`，宽度和虚线为画板单位，随素材整体缩放。节点连线外观在修改审阅中单独列出。工程、原生 SVG 元数据、采集 / 重插和存续配方连接保留。
 
 `arrow` 是终点箭头，`startArrow` 是起点箭头，均为 `none/open/filled`；起点省略时无箭头，已有受控编辑中省略则保持原设置。`arrowSize=.1..256` 是画板中的两端箭头长度，`null` 恢复默认，缩放素材时显式大小一起缩放。普通路径字段位于 `node.path`，节点连接位于 `edge.appearance`；`line-style` 共用同一补丁，不改控制点或反转绑定。首 / 尾开放子路径的箭头沿端点切线朝外；闭合部分和孤立点不绘制箭头，也不跨越 move 推断方向。曲线控制点重合时回退到有效的端点方向。
 
@@ -81,3 +81,6 @@
 核心复用 `geometry.test.ts` / `harness.test.ts` / `styleAsset.test.ts`，检查整组选区与后代、外部绑定、给定点及方向、文字层级与缩放字号、格式通道与渐变、定位文字基点、扩框 / 透明组 / 空间失败、样本冻结、原子失败和协议互斥。桌面复用现有 `editor` 流程，检查真实 SVG 字号、完整原文及椭圆内字形边界、手工应用 / 撤销与助手候选审核，不新增测试入口或宽度矩阵。CLI 夹具验证协议和产品流程，不代表真实模型遵循率或科研语义质量。
 
 实现：`src/core/materialEditing.ts`、`src/core/materialSizing.ts`、`src/core/lineAppearance.ts`、`src/core/textFrameFit.ts`、`src/components/workspace/MaterialEditDialog.vue`。
+
+
+直角箭头的主入口改为画布布点：点击创建点，拖拽联动相邻水平 / 垂直段，双击或 Enter 完成，Esc 取消。工具栏也提供完成 / 取消按钮。现有直角路径可通过属性栏“编辑箭头折点”继续调整。草稿不改工程，完成后与普通图元共用撤销、保存和导出。

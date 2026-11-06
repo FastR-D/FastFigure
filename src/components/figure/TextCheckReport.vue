@@ -9,9 +9,9 @@ const reasonsText=(reasons:TextCheckReason[])=>reasons.map(reason=>textCheckReas
 <template>
   <Disclosure :open="expanded" class="text-check-report" aria-label="原生文字检查">
     <DisclosureTrigger size="xs">文字检查 · {{ report.total }} 项</DisclosureTrigger>
-    <Text class="muted-caption">已检查 {{ report.checkedNodes }} 个节点、{{ report.checkedFields }} 项文字。行数省略与渲染一致；宽高是排版估算。</Text>
+    <Text class="muted-caption">已检查 {{ report.checkedNodes }} 个节点、{{ report.checkedFields }} 项文字。文字保持完整显示；宽高是排版估算。</Text>
     <Text v-if="report.positionedNodes||report.invisibleNodes||report.hiddenStructureLabels" class="muted-caption">未检查：{{ report.positionedNodes }} 个定位字形节点、{{ report.invisibleNodes }} 个不可见节点、{{ report.hiddenStructureLabels }} 项未绘制的结构标签。</Text>
-    <Text class="muted-caption">不检查实际字形、遮挡、容器标题或科学内容。</Text>
+    <Text class="muted-caption">不检查实际字形、遮挡或科学内容。</Text>
     <Text v-if="!report.total" class="muted-caption">本轮规则未发现问题。</Text>
     <Box v-for="issue in report.issues" :key="`${issue.nodeId}:${issue.field}`" class="text-check-issue">
       <Button size="xs" variant="quiet" :aria-label="`定位文字 ${issue.nodeId} ${textCheckFieldLabel(issue.field)}`" @click="emit('locate',issue.nodeId)">{{ issue.nodeLabel||issue.nodeId }} · {{ textCheckFieldLabel(issue.field) }}</Button>

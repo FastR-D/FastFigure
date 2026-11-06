@@ -10,7 +10,6 @@ import { createEditor } from '../composables/useEditor'
 import { diffFigures } from './figureDiff'
 import { edgePath, exportSvg, nodeVisual } from './svg'
 import { defaultPaletteId } from '../data/materials'
-import { exportDrawio } from './export'
 import { parseHarnessResponse } from './harness'
 import { defaultLayoutOptions, layoutContainer } from './layout'
 
@@ -164,11 +163,9 @@ describe('independent native structure objects',()=>{
     deep.nodes=[{id:'encoder',kind:'module',label:'Encoder',parentId:'level-6',x:100,y:350,width:184,height:164,structure:{type:'encoder'}}]
     valid(deep);const frozen=clone(deep);expect(()=>expandStructure(deep,'encoder')).toThrow('六层');expect(deep).toEqual(frozen)
   })
-  it('exports real vector paths with bindings, editable native text, valid IDs and preserves fields in Harness revisions',()=>{
-    const {document:doc,containerId}=expanded('decoder'),svg=exportSvg(doc),xml=exportDrawio(doc)
+  it('exports real vector paths with editable text and preserves fields in Harness revisions',()=>{
+    const {document:doc}=expanded('decoder'),svg=exportSvg(doc)
     expect(svg).not.toContain('<image');expect(svg).toContain('Cross-attention');expect(svg).toContain('data-expanded-structure="decoder"')
-    expect(xml).toContain(`id="${containerId}"`);expect(xml).toContain('value="Cross-attention"');expect(xml).toContain('exitPerimeter=0;')
-    const ids=[...xml.matchAll(/<mxCell id="([^"]+)"/g)].map(m=>m[1]);expect(new Set(ids).size).toBe(ids.length)
     const proposal=clone(doc);for(const n of proposal.nodes){delete n.path;delete n.interfaceFor}for(const c of proposal.containers){delete c.visual;delete c.structureOrigin}
     const parsed=parseHarnessResponse(JSON.stringify({message:'保持结构',figure:proposal}),doc).figure!
     expect(parsed).toEqual(doc)

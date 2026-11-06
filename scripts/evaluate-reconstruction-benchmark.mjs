@@ -30,7 +30,7 @@ try{
   const {evaluateReconstruction}=await server.ssrLoadModule('/src/core/reconstructionEvaluation.ts')
   if(hash(readFileSync(join(root,'src/core/reconstructionEvaluation.ts')))!==report.evaluatorSha256)throw new Error('Evaluator changed while loading; no model call was made')
   if(live){
-    const {HarnessService}=await server.ssrLoadModule('/server/harness/service.ts'),{harnessHttp}=await server.ssrLoadModule('/server/harness/http.ts');service=new HarnessService(undefined,timeoutSeconds*1000);benchmarkHandle=harnessHttp(service)
+    const {HarnessService}=await server.ssrLoadModule('/server/harness/service.ts'),{harnessHttp}=await server.ssrLoadModule('/server/harness/http.ts');service=new HarnessService();benchmarkHandle=harnessHttp(service)
     await server.listen();base=server.resolvedUrls.local[0].replace(/\/$/,'');const status=(await api('/status')).find(s=>s.kind===kind);if(status?.state!=='ready'||status.version.includes('fixture'))throw new Error('The real CLI is unavailable');report.cliVersion=status.version
     const cache=join(homedir(),'.cache/ms-playwright'),candidates=[process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,chromium.executablePath()];if(existsSync(cache))for(const dir of readdirSync(cache).filter(x=>/^chromium-\d+$/.test(x)).sort().reverse())candidates.push(join(cache,dir,'chrome-linux64/chrome'),join(cache,dir,'chrome-linux/chrome'))
     browser=await chromium.launch({headless:true,executablePath:candidates.find(p=>p&&existsSync(p))});page=await browser.newPage({viewport:{width:1920,height:1080}});await page.goto(base);await page.getByTestId('figure-canvas').waitFor()
@@ -51,7 +51,10 @@ try{
         // No SVG, source labels, coordinates, object counts or expected answers are sent.
         const started=await api('/runs',{sessionId:session.id,content:'忠实重建所附科研示意图的文字、内部结构、形状、注释和连接。保留原图布局和绘制顺序；说明不确定之处，不重新设计或省略细节。',selectedIds:['stage'],catalogue:[],...data});activeRun=started.id
         console.log(JSON.stringify({caseId:sample.id,runId:activeRun,status:'running',timeoutSeconds,width:data.inputImage.width,height:data.inputImage.height}))
-        await service.getRun(activeRun).done;result=await api(`/runs/${activeRun}`)
+        const benchmarkRunId=activeRun;let stoppedByBudget=false
+        const benchmarkTimer=setTimeout(()=>{stoppedByBudget=true;service.cancel(benchmarkRunId)},timeoutSeconds*1000)
+        try{await service.getRun(activeRun).done}finally{clearTimeout(benchmarkTimer)}
+        result=await api(`/runs/${activeRun}`);if(stoppedByBudget)result.benchmarkBudgetExpired=true
         activeRun=undefined;result.benchmarkInput=entry.inputImage;writeFileSync(join(output,`${sample.id}.json`),JSON.stringify(result,null,2));if(result.status!=='completed')throw new Error(result.summary.error??'Model run failed')
       }else{const file=join(resolve(predictions),`${sample.id}.json`);if(!existsSync(file))throw new Error('No saved prediction for this selected case');result=JSON.parse(readFileSync(file,'utf8'))}
       const candidate=result.events?.findLast(e=>e.proposal)?.proposal??result.figure??(result.version?result:undefined)

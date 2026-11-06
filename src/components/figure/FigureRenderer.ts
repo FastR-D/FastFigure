@@ -12,6 +12,8 @@ import { measureText } from '../../core/textGeometry'
 import { directionLabels } from '../../core/componentPorts'
 import {figureHitLayers} from './FigureHitLayer'
 import { pathPoints } from '../../core/paths'
+import type {AlignmentGuide} from '../../core/alignmentSnap'
+import type {ArrowPoint} from '../../core/orthogonalGeometry'
 
 export default defineComponent({
   name: 'FigureRenderer',
@@ -25,6 +27,8 @@ export default defineComponent({
     interactive: { type: Boolean, default: false }, selectionOnly:{type:Boolean,default:false}, sourceId: { type: String, default: '' },
     highlightedId: { type: String, default: '' },
     connectMode:{type:Boolean,default:false},
+    alignmentGuides:{type:Array as PropType<AlignmentGuide[]>,default:()=>[]},
+    arrowDraft:{type:Array as PropType<ArrowPoint[]>,default:()=>[]},arrowPreview:{type:Array as PropType<ArrowPoint[]>,default:()=>[]},
     selectedEdgePoint:{type:Number as PropType<number|null>,default:null},
     selectedPathPoint:{type:Number as PropType<number|null>,default:null},
   },
@@ -69,10 +73,17 @@ export default defineComponent({
         }
       }
       if (props.interactive) {
-        for (const c of doc.containers) overlay.push(h('rect', { x: c.x, y: c.y, width: c.width, height:c.role==='component'?c.height:46*(c.metricScale??1),
-          fill: c.role==='component'?'none':'transparent',...(c.role==='component'?{stroke:'transparent','stroke-width':10,'pointer-events':'stroke'}:{}), style: props.selectionOnly?'cursor:pointer':'cursor:move', 'data-container-handle': c.id, role: 'button', tabindex: 0, 'aria-label': `选择容器 ${c.title}`,
+        if(props.arrowPreview.length>1)overlay.push(h('path',{d:props.arrowPreview.map((p,i)=>`${i?'L':'M'}${p.x} ${p.y}`).join(' '),fill:'none',stroke:'#1769d3','stroke-width':1.6,'vector-effect':'non-scaling-stroke','pointer-events':'none','data-arrow-draft':''}))
+        for(const [index,p]of props.arrowDraft.entries())overlay.push(h('circle',{cx:p.x,cy:p.y,r:4.5,fill:'#fff',stroke:'#1769d3','stroke-width':1.5,'vector-effect':'non-scaling-stroke','pointer-events':'none','data-arrow-draft-point':index}))
+        for(const guide of props.alignmentGuides)overlay.push(h('line',{
+          x1:guide.axis==='x'?guide.position:guide.start,y1:guide.axis==='y'?guide.position:guide.start,
+          x2:guide.axis==='x'?guide.position:guide.end,y2:guide.axis==='y'?guide.position:guide.end,
+          stroke:'#d74792','stroke-width':1,'stroke-dasharray':'4 3','vector-effect':'non-scaling-stroke','pointer-events':'none','data-alignment-guide':guide.axis,
+        }))
+        for (const c of doc.containers) overlay.push(h('rect', { x: c.x, y: c.y, width: c.width, height:c.role==='component'||c.titleDetached?c.height:46*(c.metricScale??1),
+          fill: c.role==='component'||c.titleDetached?'none':'transparent',...(c.role==='component'||c.titleDetached?{stroke:'transparent','stroke-width':10,'pointer-events':'stroke'}:{}), style: props.selectionOnly?'cursor:pointer':'cursor:move', 'data-container-handle': c.id, role: 'button', tabindex: 0, 'aria-label': `选择容器 ${c.title}`,
           onPointerdown: (e: PointerEvent) => { e.stopPropagation(); if(props.selectionOnly)emit('select',c.id,e.shiftKey||e.ctrlKey||e.metaKey);else emit('objectDown', c.id, e) },
-          onDblclick: (e: MouseEvent) => { e.stopPropagation();if(props.selectionOnly)return; emit('edit', c.id, 'label') },
+          onDblclick: (e: MouseEvent) => { e.stopPropagation();if(props.selectionOnly||c.titleDetached)return; emit('edit', c.id, 'label') },
           onKeydown: (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); emit('select', c.id, e.shiftKey||props.selectionOnly&&(e.ctrlKey||e.metaKey)) } },
         }))
         for (const id of props.selectedIds) {
@@ -119,7 +130,7 @@ export default defineComponent({
               e.preventDefault(); e.stopPropagation(); const step = e.shiftKey ? 10 : 1
               emit('resizeKey', e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0, e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0)
             },
-          }))
+          },[h('title',{},'拖动等比例缩放 · Shift 拖动自由调整')]))
         }
         if (props.sourceId) {
           const n = findObject(doc, props.sourceId)
@@ -130,7 +141,7 @@ export default defineComponent({
           const socket=node.socket!,[x,y]=anchor(node,socket.side),selected=props.selectedIds.includes(node.id),color=socket.direction==='input'?'#1769d3':socket.direction==='output'?'#28775d':'#7557a5'
           const label=`${node.label}（${directionLabels[socket.direction]}）`,left=socket.side==='left'&&x>100||socket.side==='right'&&x>900
           const tx=socket.side==='top'||socket.side==='bottom'?x:left?x-11:x+11,ty=socket.side==='top'?y+18:socket.side==='bottom'?y-12:y+4
-          const caption=node.label.length>18?`${node.label.slice(0,17)}…`:node.label,captionWidth=measureText(caption,{family:'Inter',size:11}).width,centered=socket.side==='top'||socket.side==='bottom',labelX=centered?tx-captionWidth/2:left?tx-captionWidth:tx
+          const caption=node.label.length>18?`${node.label.slice(0,17)}…`:node.label,captionWidth=measureText(caption,{family:'MiSans',size:11}).width,centered=socket.side==='top'||socket.side==='bottom',labelX=centered?tx-captionWidth/2:left?tx-captionWidth:tx
           const hitX=Math.min(x-10,labelX),hitY=Math.min(y-10,ty-11),hitRight=Math.max(x+10,labelX+captionWidth),hitBottom=Math.max(y+10,ty+3)
           overlay.push(h('g',{'data-named-port':node.id,tabindex:0,role:'button','aria-label':`接口 ${label}`,'aria-pressed':selected,style:'cursor:crosshair',
             onPointerdown:(event:PointerEvent)=>{event.stopPropagation();emit('namedPortDown',node.id,event)},
@@ -152,6 +163,7 @@ export default defineComponent({
       },{selectionOnly:props.selectionOnly,connectMode:props.connectMode,selectedIds:props.selectedIds}):[]
       const viewport = props.viewport ?? (props.interactive?{x:0,y:0,width:doc.canvas.width,height:doc.canvas.height}:outputFrame(doc))
       return h('svg', { xmlns: 'http://www.w3.org/2000/svg', viewBox: `${viewport.x} ${viewport.y} ${viewport.width} ${viewport.height}`,
+        ...(props.interactive?{tabindex:0}:{}),
         width: '100%', height: '100%', role: 'img', 'aria-label': doc.title, 'data-testid': props.interactive ? props.selectionOnly?'capture-canvas':'figure-canvas' : undefined,
         style: `display:block;touch-action:none;font-synthesis:weight style;font-family:${fontStack(props.figure.style.fontFamily)}`,
         onPointerdown: props.interactive ? (e: PointerEvent) => emit('backgroundDown', e) : undefined,

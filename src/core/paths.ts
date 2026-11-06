@@ -1,3 +1,5 @@
+import {maxCanvasSize} from './canvasContract.ts'
+import {moveArrowPoint} from './orthogonalGeometry.ts'
 import {orthogonalThroughPoints} from './edgeWaypoints.ts'
 import {z} from 'zod'
 import type { FigureDocument, FigureNode } from './model.ts'
@@ -118,11 +120,12 @@ export function remapPathAnchorBindings(doc:FigureDocument,targetId:string,index
 export function movePathPoint(doc: FigureDocument, id: string, index: number, point: PathPoint) {
   const node=doc.nodes.find(n=>n.id===id),parent=node&&doc.containers.find(c=>c.id===node.parentId)
   if(!node?.path||!parent||!Number.isInteger(index)||index<0||index>=node.path.points.length||![point.x,point.y].every(Number.isFinite)) throw new Error('请选择有效的路径点')
-  const inset=(parent.role==='component'?2:12)*(parent.metricScale??1),top=(parent.role==='component'?2:48)*(parent.metricScale??1)
+  const inset=(parent.role==='component'?2:12)*(parent.metricScale??1),top=(parent.role==='component'?2:parent.titleDetached?12:48)*(parent.metricScale??1)
   const points=pathPoints(doc,node),next={x:Math.max(parent.x+inset,Math.min(parent.x+parent.width-inset,point.x)),y:Math.max(parent.y+top,Math.min(parent.y+parent.height-inset,point.y))}
   if(Math.hypot(points[index]!.x-next.x,points[index]!.y-next.y)<.00001) return
   if(index===0) delete node.path.start
   if(index===points.length-1) delete node.path.end
+  if(node.path.orthogonal&&!node.path.start&&!node.path.end){setPathPoints(node,moveArrowPoint(points,index,next));return}
   const original=mapPathPoints(points,p=>({...p})),dx=next.x-points[index]!.x,dy=next.y-points[index]!.y
   let first=index,last=index
   while(first>0&&!points[first]!.move&&!points[first-1]!.close)first--
@@ -137,7 +140,7 @@ export function movePathPoint(doc: FigureDocument, id: string, index: number, po
 export function movePathControl(doc:FigureDocument,id:string,index:number,key:'c1'|'c2',point:{x:number;y:number}) {
   const node=doc.nodes.find(n=>n.id===id),parent=node&&doc.containers.find(c=>c.id===node.parentId),points=node&&pathPoints(doc,node)
   if(!node||!parent||!points?.[index]?.[key]||![point.x,point.y].every(Number.isFinite))throw new Error('请选择有效曲线控制点')
-  const inset=(parent.role==='component'?2:12)*(parent.metricScale??1),top=(parent.role==='component'?2:48)*(parent.metricScale??1)
+  const inset=(parent.role==='component'?2:12)*(parent.metricScale??1),top=(parent.role==='component'?2:parent.titleDetached?12:48)*(parent.metricScale??1)
   points[index]![key]={x:Math.max(parent.x+inset,Math.min(parent.x+parent.width-inset,point.x)),y:Math.max(parent.y+top,Math.min(parent.y+parent.height-inset,point.y))}
   setPathPoints(node,points)
 }
@@ -164,7 +167,7 @@ export function setPathSegment(doc:FigureDocument,id:string,index:number,type:'l
 
 /** Retain every supplied point in order; insert one explicit elbow for each diagonal pair. */
 export function orthogonalPoints(input:{x:number;y:number}[],direction:'horizontal'|'vertical'|'strict'):PathPoint[]{
-  const given=z.array(z.object({x:z.number().finite().min(0).max(1000),y:z.number().finite().min(0).max(620)}).strict()).min(2).max(64).parse(input)
+  const given=z.array(z.object({x:z.number().finite().min(0).max(maxCanvasSize),y:z.number().finite().min(0).max(maxCanvasSize)}).strict()).min(2).max(64).parse(input)
   for(const [i,next]of given.entries()){
     if(!i)continue
     const previous=given[i-1]!

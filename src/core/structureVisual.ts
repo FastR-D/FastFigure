@@ -3,7 +3,7 @@ import { nodeStructure, structureLabels } from './structures.ts'
 import { figurePaint, mixColor } from './paint.ts'
 import { layoutWrappedText,type WrappedTextLayout } from './typography.ts'
 
-/** Shared native geometry for the canvas, library previews, SVG and editable draw.io children. */
+/** Shared native geometry for the canvas, library previews, SVG exports. */
 export interface StructurePart {
   key: string; kind: 'box' | 'ellipse' | 'line' | 'text'; x: number; y: number; width: number; height: number
   fill: string; stroke: string; radius?: number; points?: { x: number; y: number }[]; arrow?: boolean

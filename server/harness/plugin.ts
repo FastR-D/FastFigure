@@ -9,7 +9,7 @@ import {componentLibraryHttp} from '../componentLibrary/http.ts'
 export function harnessPlugin(): Plugin {
   const disposers = new Set<() => Promise<void>>()
   function register() {
-    const library=new ComponentLibraryStore(),service = new HarnessService(undefined,180_000,library), drafts=new ImageDraftService(),harness=harnessHttp(service),images=imageDraftHttp(drafts),components=componentLibraryHttp(library)
+    const library=new ComponentLibraryStore(),service = new HarnessService(undefined,library), drafts=new ImageDraftService(),harness=harnessHttp(service),images=imageDraftHttp(drafts),components=componentLibraryHttp(library)
     const handle=(request:Parameters<typeof harness>[0],response:Parameters<typeof harness>[1])=>request.url?.startsWith('/api/component-library/')?components(request,response):request.url?.startsWith('/api/image-drafts/')?images(request,response):harness(request,response)
     let disposal: Promise<void> | undefined
     const dispose = () => disposal ??= Promise.all([service.dispose(),drafts.dispose()]).then(()=>library.close())

@@ -7,7 +7,6 @@ import { moveObjects, resizeObject } from './geometry'
 import { scaleSubtree } from './scaling'
 import { defaultLayoutOptions, layoutContainer } from './layout'
 import { exportSvg } from './svg'
-import { exportDrawio } from './export'
 import { harnessPrompt, parseHarnessResponse } from './harness'
 import { diffFigures } from './figureDiff'
 import {catalogueAsset,type CatalogueEntry} from './catalogue'
@@ -86,7 +85,7 @@ describe('reference image to native scene adapter',()=>{
   it('creates editable text, shapes, curves and arrows in source paint order with per-object image evidence',()=>{
     const before=original(),saved=clone(before),doc=built();expect(before).toEqual(saved);expect(doc.nodes.map(n=>n.kind)).toEqual(['rectangle','text','path','ellipse','path']);expect(doc.nodes.map(n=>n.reconstruction!.objectId)).toEqual(scene().nodes.map(n=>n.id))
     expect(doc.containers[0]!.reconstruction).toMatchObject({referenceSha256:reference.sha256,sourceWidth:800,sourceHeight:400,revision:0});expect(doc.references).toEqual([reference]);expect(doc.nodes.every(n=>n.evidence?.image?.sha256===reference.sha256)).toBe(true);expect(doc.nodes[2]!.path!.points.some(p=>p.c1)).toBe(true);expect(doc.nodes.at(-1)!.path!.arrow).toBe('filled')
-    expect(()=>parseDocument(doc)).not.toThrow();expect(exportSvg(doc)).not.toContain('<image');expect(exportDrawio(doc)).toContain('data-vector-fallback');expect(exportSvg(doc)).toContain('Encoder')
+    expect(()=>parseDocument(doc)).not.toThrow();expect(exportSvg(doc)).not.toContain('<image');expect(exportSvg(doc)).toContain('Encoder')
   })
   it('limits a crop to its actual source coordinates and retains source region attribution',()=>{
     const crop={...task,region:{x:.025,y:.1,width:.425,height:.8}},part=scene();part.nodes=part.nodes.filter(n=>n.owner==='left');part.regions=part.regions.filter(r=>r.id==='left')

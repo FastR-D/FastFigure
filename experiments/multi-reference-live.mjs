@@ -8,11 +8,10 @@ import { createInterface } from 'node:readline';
 import { createServer } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { chromium } from 'playwright-core';
-const { values: args } = parseArgs({ options: { output: { type: 'string' }, timeout: { type: 'string', default: '180' }, model: { type: 'string' }, plan: { type: 'boolean', default: false }, 'color-roles': { type: 'boolean', default: false }, style: { type: 'string' } } });
+const { values: args } = parseArgs({ options: { output: { type: 'string' }, model: { type: 'string' }, plan: { type: 'boolean', default: false }, 'color-roles': { type: 'boolean', default: false }, style: { type: 'string' } } });
 assert(args.output, 'Pass a fresh --output');
-const output = resolve(args.output), timeout = Number(args.timeout), sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const output = resolve(args.output), sha = bytes => createHash('sha256').update(bytes).digest('hex');
 assert(!existsSync(output));
-assert(Number.isInteger(timeout) && timeout >= 30 && timeout <= 600);
 mkdirSync(output, { recursive: true });
 const save = (name, value) => writeFileSync(join(output, name), JSON.stringify(value, null, 2));
 const server = await createServer({ configFile: false, plugins: [vue()], cacheDir: join(output, '.vite'), server: { host: '127.0.0.1', port: 0, watch: null } });
@@ -63,7 +62,7 @@ try {
     }
     const referenceInputs = figure.references.map((ref, i) => ({ id: ref.id, purpose: purposes[i] })), savedFigure = JSON.stringify(figure);
     service = new HarnessService(() => { const adapter = new CodexAdapter(); return { kind: adapter.kind, status: () => adapter.status(), dispose: () => adapter.dispose(), send: async (turn) => { calls++; assert.equal(turn.images?.length, 3); turn.images.forEach((image, i) => assert.equal(sha(Buffer.from(image.dataUrl.split(',')[1], 'base64')), sha(sourceBytes[i]))); writeFileSync(join(output, args.plan?`prompt-${calls===1?'plan':'generate'}.txt`:'prompt.txt'), turn.content); return adapter.send(turn); } }; });
-    const session = service.createSession('codex', 'Multiple reference composition'), input = { sessionId: session.id, figure, referenceInputs, selectedIds: [], catalogue: [{ kind: 'asset', asset }], timeoutSeconds: timeout, ...(args.model ? { model: args.model } : {}), content: '请生成一个计算机论文风格的自制方法示意：输入特征向量 → 给定的 MLP 分类头 → 两个类别分数。请复用我选定的 MLP 素材，保留 3–3–3–2 神经元、内部连接和命名接口；不要用一个写着 MLP 的方框替代内部结构，也不增加 softmax、训练或损失等未提供内容。图 1 只参考从左到右的构图，图 2 只参考柔和配色、字体和留白，不参考其中柱状图或数值，图 3 对照 MLP 的结构语义。输入与输出用真实的特征 / 张量图示，文字简短。可将素材等比缩放至约 0.75 放在中央，两侧留足连接空间；整体放入一个完整的图件容器。逐图说明采用与不采用的部分以及不确定性。只返回待审阅候选，不写文件、不执行命令。' };
+    const session = service.createSession('codex', 'Multiple reference composition'), input = { sessionId: session.id, figure, referenceInputs, selectedIds: [], catalogue: [{ kind: 'asset', asset }], ...(args.model ? { model: args.model } : {}), content: '请生成一个计算机论文风格的自制方法示意：输入特征向量 → 给定的 MLP 分类头 → 两个类别分数。请复用我选定的 MLP 素材，保留 3–3–3–2 神经元、内部连接和命名接口；不要用一个写着 MLP 的方框替代内部结构，也不增加 softmax、训练或损失等未提供内容。图 1 只参考从左到右的构图，图 2 只参考柔和配色、字体和留白，不参考其中柱状图或数值，图 3 对照 MLP 的结构语义。输入与输出用真实的特征 / 张量图示，文字简短。可将素材等比缩放至约 0.75 放在中央，两侧留足连接空间；整体放入一个完整的图件容器。逐图说明采用与不采用的部分以及不确定性。只返回待审阅候选，不写文件、不执行命令。' };
     if(styleReference)input.styleReference=styleReference;
     if(args['color-roles']){assert(args.plan&&styleReference?.paletteId==='figureforge-publication-soft','Color roles scenario requires --plan and Publication Soft style');input.content+=' 这份原生 MLP 使用不同语义色槽区分输入层、隐藏处理层和输出层。请逐角色规划颜色映射，让输入层青色、隐藏处理层蓝色、输出层橙色，内部连接随处理色；使用素材 colorSlots 清单，不把全组统一成单色，不改节点标签、固定 RGB 或结构。';}
     if(args.plan){input.intent='plan';input.content=input.content.replace('只返回待审阅候选，不写文件、不执行命令。','本轮只返回可审阅的绘图方案，不生成图体；明确采用后才绘制，不写文件、不执行命令。');}

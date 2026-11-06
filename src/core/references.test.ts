@@ -4,7 +4,6 @@ import { createEditor } from '../composables/useEditor'
 import { captureComponent, componentDocument, instantiateComponent, parseAsset } from './assets'
 import { clone, createExample, parseDocument, referenceImageSchema, type ReferenceImage } from './model'
 import { exportSvg } from './svg'
-import { exportDrawio } from './export'
 import { fitReference, normalizedRegion, referenceSource, resizeReference, wholeImage } from './references'
 import {componentImageSearchQuery,parseComponentImageAnalysis} from './componentSearch'
 
@@ -95,10 +94,9 @@ describe('Reference guides and evidence provenance', () => {
     // This full-size capture has no room inside a parent: failure must leave target and guide metadata intact.
     const before = clone(target)
     expect(() => instantiateComponent(target, asset, 'stage')).toThrow(); expect(target).toEqual(before)
-    const svg = exportSvg(doc), drawio = exportDrawio(doc)
+    const svg = exportSvg(doc)
     expect(svg).not.toContain(ref.dataUrl); expect(svg).not.toContain('<image')
     expect(svg).toContain(ref.sha256); expect(svg).toContain('Architecture paper')
-    expect(drawio).not.toContain(ref.dataUrl); expect(drawio).not.toContain('data:image/png'); expect(drawio).not.toContain('data:image/webp')
   })
   it('rejects duplicate reference identities/hashes and limits the total embedded image budget', () => {
     const doc = createExample(); doc.references = [image(), image('ref-b')]

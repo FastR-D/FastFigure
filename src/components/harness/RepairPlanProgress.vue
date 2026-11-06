@@ -10,7 +10,6 @@ const labels={pending:'等待',running:'核对中',changed:'有内容改动',unc
 <template>
   <Box v-if="plan&&visible" class="repair-plan-progress" role="region" aria-label="分区核对进度">
     <Box class="repair-plan-heading"><Text>分区核对 · {{ plan.status==='running'?'进行中':plan.status==='completed'?'已完成':'已停止' }}</Text><Button v-if="plan.status==='running'" size="xs" variant="quiet" :disabled="plan.stopping" @click="harness.cancelRepairPlan()">{{ plan.stopping?'正在停止…':'停止分区核对' }}</Button></Box>
-    <Text class="muted-caption">总时限 {{ plan.totalSeconds/60 }} 分钟 · 剩余 {{ Math.ceil(plan.remainingSeconds) }} 秒 · 单轮上限 {{ plan.perRunSeconds/60 }} 分钟</Text>
     <Text class="repair-plan-message" role="status">{{ plan.message }}</Text>
     <Box class="repair-plan-steps"><Box v-for="(step,i) in plan.steps" :key="step.regionId"><Text>{{ i+1 }}. {{ step.title }}</Text><Text>{{ labels[step.status] }}</Text></Box></Box>
     <Button v-if="plan.status!=='running'&&harness.runId.value!==plan.latestCandidateRunId" size="xs" :disabled="harness.locked.value||harness.loading.value||!harness.turns.value.some(t=>t.id===plan?.latestCandidateRunId&&t.available)" @click="harness.inspectTurn(plan.latestCandidateRunId)">查看最近候选</Button>

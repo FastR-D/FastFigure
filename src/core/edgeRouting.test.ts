@@ -2,12 +2,11 @@ import {createHash} from 'node:crypto'
 import {afterEach,describe,expect,it,vi} from 'vitest'
 import {effectScope} from 'vue'
 import {DOMParser} from '@xmldom/xmldom'
-import {anchor,clone,createBlank,createExample,parseDocument,rootContainer,type Port} from './model'
+import {clone,createBlank,createExample,parseDocument,rootContainer,type Port} from './model'
 import {routeEdge,routeFigure,routePath,segmentHitsRect} from './routing'
 import {buildRecipe} from '../data/recipes'
 import {captureComponent,componentDocument,instantiateComponentAt,scaleComponent} from './assets'
 import {exportSvg} from './svg'
-import {exportDrawio} from './export'
 import {importSvg} from './svgImport'
 import {diffFigures} from './figureDiff'
 import {parseHarnessResponse} from './harness'
@@ -90,7 +89,6 @@ describe('explicit native edge routing',()=>{
     const pipeline=componentDocument(buildRecipe('pipeline',{stages:2,direction:'row'})),link=pipeline.edges[0]!,ends=routeEdge(pipeline,link).points,pins=[{x:(ends[0]!.x+ends.at(-1)!.x)/2,y:(ends[0]!.y+ends.at(-1)!.y)/2}],edited=applyMaterialEdits(pipeline,[{kind:'edge-route',edgeId:link.id,points:pins,direction:'horizontal'},{kind:'line-style',objectIds:[link.id],includeDescendants:false,style:{strokeWidth:2.5,arrow:'none',startArrow:'open',arrowSize:10}}]).figure,updated=updateRecipeInstance(edited,'stage',{stages:3}).document,kept=updated.edges.find(e=>e.id===link.id)!
     expect(kept.routing).toBe('manual');expect(edgeWaypointPoints(updated,kept)).toEqual(pins);expect(kept.source).toBe(link.source);expect(updateRecipeInstance(edited,'stage',{stages:3},'scale',false).document.edges.every(e=>!e.manualRoute)).toBe(true)
     expect(kept.appearance).toEqual({strokeWidth:2.5,arrow:'none',startArrow:'open',arrowSize:10});expect(updateRecipeInstance(edited,'stage',{stages:3},'scale',false).document.edges.every(e=>!e.appearance)).toBe(true)
-
   })
   it('shows blocked direct manipulation without deleting pins, supports point removal and enforces manual-route document contracts',()=>{
     const doc=applyMaterialEdits(fixture(),[{kind:'edge-route',edgeId:'wire',points:[{x:300,y:230},{x:300,y:360}],direction:'horizontal'}]).figure,edge=doc.edges[0]!,before=clone(edge)
@@ -148,13 +146,6 @@ describe('explicit native edge routing',()=>{
     const response=parseHarnessResponse(JSON.stringify({message:'Preserve network',figure:doc}),doc)
     expect(response.figure?.edges).toEqual(doc.edges)
     const invalid=clone(doc);invalid.edges[0]!.routing='curve' as 'straight';expect(()=>parseDocument(invalid)).toThrow()
-  })
-  it('keeps draw.io endpoints on their actual node anchors including padded vector fallback cells',()=>{
-    const doc=instantiateComponentAt(createBlank(),scaleComponent(buildRecipe('mlp',{inputs:2,hiddenLayers:1,hidden:2,outputs:1}),.5),'stage',{x:100,y:160},'head').document
-    const xml=new DOMParser().parseFromString(exportDrawio(doc),'application/xml'),cells=[...Array.from(xml.getElementsByTagName('mxCell'))],byId=new Map(cells.map(c=>[c.getAttribute('id'),c]))
-    for(const edge of doc.edges){const cell=byId.get(edge.id)!,styles=Object.fromEntries(cell.getAttribute('style')!.split(';').map(s=>s.split('=')));expect(cell.getAttribute('data-edge-routing')).toBe('straight');expect(styles.rounded).toBe('0');expect(styles.exitPerimeter).toBe('0');expect(styles.entryPerimeter).toBe('0');expect(cell.getElementsByTagName('mxPoint').length).toBe(0)
-      for(const [endpoint,prefix]of [['source','exit'],['target','entry']] as const){const node=doc.nodes.find(n=>n.id===edge[endpoint])!,parent=doc.containers.find(c=>c.id===node.parentId)!,geometry=byId.get(node.id)!.getElementsByTagName('mxGeometry')[0]!,[x,y]=anchor(node,edge[`${endpoint}Port`]);expect(Number(geometry.getAttribute('x'))+parent.x+Number(geometry.getAttribute('width'))*Number(styles[`${prefix}X`])).toBeCloseTo(x,9);expect(Number(geometry.getAttribute('y'))+parent.y+Number(geometry.getAttribute('height'))*Number(styles[`${prefix}Y`])).toBeCloseTo(y,9)}
-    }
   })
   it('lets model instance links choose direct routing while saved material internals retain their own mode',()=>{
     const asset=buildRecipe('pipeline',{stages:2,direction:'row'}),result=composeCatalogue(createBlank(),[{kind:'asset',asset}],[{id:'first',componentKey:`asset:${asset.id}`,parentId:'stage',x:80,y:170,keepAppearance:false},{id:'second',componentKey:`asset:${asset.id}`,parentId:'stage',x:510,y:320,keepAppearance:false}],[{id:'bridge',source:{scope:'port',instanceId:'first',port:'output',index:0},target:{scope:'port',instanceId:'second',port:'input',index:0},sourcePort:'right',targetPort:'left',routing:'straight'}])

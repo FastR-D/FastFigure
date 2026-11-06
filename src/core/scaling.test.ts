@@ -9,10 +9,10 @@ import { addComponentPort, updateComponentPort } from './componentPorts'
 import { expandStructure } from './expandStructure'
 import { pathPoints } from './paths'
 import { exportSvg } from './svg'
-import { exportDrawio } from './export'
 import { diffFigures } from './figureDiff'
 import { parseHarnessResponse } from './harness'
 import { createEditor } from '../composables/useEditor'
+import {nodeTextStyle} from './typography'
 import { ungroupObject } from './geometry'
 import { defaultLayoutOptions, layoutContainer } from './layout'
 const blank=()=>createBlank()
@@ -21,10 +21,10 @@ describe('whole component scaling',()=>{
   it('scales the entire hierarchy and default font metrics around the selected center without mutating the source',()=>{
     const doc=createExample(),before=clone(doc),root=doc.containers[0]!,scaled=scaleSubtree(doc,'stage',.5).document,next=scaled.containers[0]!
     expect(doc).toEqual(before);expect(next.x+next.width/2).toBe(root.x+root.width/2);expect(next.y+next.height/2).toBe(root.y+root.height/2)
-    for(const n of scaled.nodes){const old=doc.nodes.find(p=>p.id===n.id)!;expect(n.width).toBe(old.width*.5);expect(n.x-next.x).toBe((old.x-root.x)*.5);expect(n.textStyle?.size).toBe(8);expect(n.metricScale).toBe(.5)}
-    expect(scaled.nodes.find(n=>n.id==='encoder')?.descriptionStyle?.size).toBe(5.5)
+    for(const n of scaled.nodes){const old=doc.nodes.find(p=>p.id===n.id)!;expect(n.width).toBe(old.width*.5);expect(n.x-next.x).toBe((old.x-root.x)*.5);expect(n.textStyle?.size).toBe(nodeTextStyle(old,false,doc.style).size*.5);expect(n.metricScale).toBe(.5)}
+    expect(scaled.nodes.find(n=>n.id==='encoder')?.descriptionStyle?.size).toBe(6)
     expect(scaled.edges.every(e=>e.metricScale===.5)).toBe(true);expect(()=>parseDocument(scaled)).not.toThrow()
-    expect(exportSvg(scaled)).toContain('scale(0.5)');expect(exportDrawio(scaled)).toContain('image=data:image/svg+xml')
+    expect(exportSvg(scaled)).toContain('scale(0.5)');
   })
   it('keeps the top left corner and independently scales primitive, structured and nested assets',()=>{
     const assets=[...['shape-circle','volume','encoder'].map(id=>catalogueAsset({kind:'seed',id})),buildRecipe('fusion',{branches:3,operator:'concat',feature:'volume'})]
@@ -41,7 +41,7 @@ describe('whole component scaling',()=>{
     const socket=scaled.nodes.find(n=>n.id==='port')!;expect(socket.socket).toEqual(port.socket);expect(anchor(socket,'right')).toEqual([280,210]);expect(scaled.edges[0]).toEqual(source.edges[0]);expect(scaled.nodes.find(n=>n.id==='external')).toEqual(source.nodes.find(n=>n.id==='external'))
   })
   it('keeps transformed text matrices and scales actual sizes without baking in the current palette',()=>{
-    const doc=blank();doc.nodes.push({id:'text',parentId:'stage',kind:'text',label:'Rotated',x:100,y:200,width:70,height:40,textLayout:{x:.2,y:.8,matrix:[0,1,-1,0]},textStyle:{family:'Inter',size:20,letterSpacing:2},visual:{textTone:'ink',colorIndex:2,stroke:'none',fill:'none',strokeWidth:1}})
+    const doc=blank();doc.nodes.push({id:'text',parentId:'stage',kind:'text',label:'Rotated',x:100,y:200,width:70,height:40,textLayout:{x:.2,y:.8,matrix:[0,1,-1,0]},textStyle:{family:'MiSans',size:20,letterSpacing:2},visual:{textTone:'ink',colorIndex:2,stroke:'none',fill:'none',strokeWidth:1}})
     const scaled=scaleSubtree(doc,'stage',.5).document,n=scaled.nodes[0]!
     expect(n.textLayout).toEqual(doc.nodes[0]!.textLayout);expect(n.textStyle).toMatchObject({size:10,letterSpacing:1});expect(n.textStyle?.color).toBeUndefined();expect(exportSvg(scaled)).toContain('font-size="10"')
   })

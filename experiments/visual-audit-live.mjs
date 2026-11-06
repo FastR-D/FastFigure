@@ -23,7 +23,7 @@ try{
     await page.goto(`http://127.0.0.1:${server.httpServer.address().port}`);await page.getByTestId('figure-canvas').waitFor()
     const designImage=await page.evaluate(async figure=>{const{prepareDesignReviewImage}=await import('/src/core/visualAuditImage.ts');return prepareDesignReviewImage(figure)},figure)
     const content=args.includes('--goal')?arg('--goal'):'本图希望解释 U 形编解码器的多尺度跳连与拼接机制。作为论文主图，请看整图实际阅读路径、主次、结构搭配与文字密度；先说值得保留的表达，再提出有证据的建议，不要求一定发现问题。'
-    const run=service.start({sessionId:session.id,figure,content,intent:'design-review',designImage,catalogue:[],selectedIds:[],timeoutSeconds:180,...(args.includes('--model')?{model:arg('--model')}:{})})
+    const run=service.start({sessionId:session.id,figure,content,intent:'design-review',designImage,catalogue:[],selectedIds:[],...(args.includes('--model')?{model:arg('--model')}:{})})
     console.log(JSON.stringify({phase:'main-figure-design-review',runId:run.id,version:status.version,seed,size:[designImage.width,designImage.height]}));await run.done
     const summary=service.summary(run.id);save('run.json',{id:run.id,status:run.status,summary,events:run.events});if(realCalls){const image=service.getCandidateImage(run.id);writeFileSync(join(output,`review-input.${image.contentType.split('/')[1]}`),image.bytes)};assert.equal(run.status,'completed',summary.error);assert(summary.designReviewReport);assert(!summary.hasProposal);assert.equal(summary.review,'none');assert.equal(JSON.stringify(figure),before)
     save('report.json',summary.designReviewReport);const image=service.getCandidateImage(run.id);assert.equal(createHash('sha256').update(image.bytes).digest('hex'),summary.designReview.imageSha256)
@@ -45,7 +45,7 @@ try{
   await server.listen();browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH??'/home/gugumur/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome'});const page=await browser.newPage({viewport:{width:1920,height:1080}})
   await page.goto(`http://127.0.0.1:${server.httpServer.address().port}`);await page.getByTestId('figure-canvas').waitFor()
   const task={kind:'repair',containerId:'stage',regionId:text.reconstruction.owner},images=await page.evaluate(async({candidate,task})=>{const{prepareVisualAuditImages}=await import('/src/core/visualAuditImage.ts');return prepareVisualAuditImages(candidate,task)},{candidate,task})
-  const audit=service.startAudit({sessionId:session.id,parentRunId:parent.id,regionId:task.regionId,content:'比较原图和当前候选，列出本区域可确认的视觉差异。识别不清的地方明确列为不确定，不要求产生问题。',timeoutSeconds:180,...images})
+  const audit=service.startAudit({sessionId:session.id,parentRunId:parent.id,regionId:task.regionId,content:'比较原图和当前候选，列出本区域可确认的视觉差异。识别不清的地方明确列为不确定，不要求产生问题。',...images})
   console.log(JSON.stringify({phase:'independent-audit',runId:audit.id,parentRunId:parent.id,version:status.version,sourceSize:[images.sourceImage.width,images.sourceImage.height],candidateSize:[images.candidateImage.width,images.candidateImage.height],seedMode:'deterministic controlled replay; critic is a real model'}));await audit.done
   const snapshot=run=>({id:run.id,sessionId:run.sessionId,status:run.status,summary:service.summary(run.id),baseFigure:run.baseFigure,canvasBaseline:run.canvasBaseline,events:run.events})
   save('audit.json',snapshot(audit))
@@ -54,7 +54,7 @@ try{
   const chosen=report.findings.find(f=>f.type==='text'&&f.repairable)??report.findings.find(f=>f.repairable);assert(chosen,'No confirmed repairable issue observed')
   const selected=args.includes('--merge')?report.findings.filter(f=>f.repairable):[chosen];if(args.includes('--merge'))assert(selected.some(f=>f.type==='text')&&selected.some(f=>f.type==='missing'),'Merge experiment requires both controlled defects to be observed; no retry or injected finding')
   const sourceImage=await page.evaluate(async({candidate,task})=>{const{prepareReconstructionImage}=await import('/src/core/reconstructionImage.ts');return prepareReconstructionImage(candidate,task)},{candidate,task})
-  const repair=service.start({sessionId:session.id,figure:candidate,content:'合并核对所选视觉问题，以原图为准，仅修正可确认的本分区问题，保留其他区域与手工对象。',selectedIds:[],task,inputImage:sourceImage,refineFromRunId:parent.id,auditRepair:{auditRunId:audit.id,findingIds:selected.map(f=>f.id)},timeoutSeconds:180})
+  const repair=service.start({sessionId:session.id,figure:candidate,content:'合并核对所选视觉问题，以原图为准，仅修正可确认的本分区问题，保留其他区域与手工对象。',selectedIds:[],task,inputImage:sourceImage,refineFromRunId:parent.id,auditRepair:{auditRunId:audit.id,findingIds:selected.map(f=>f.id)}})
   console.log(JSON.stringify({phase:'selected-finding-repair',runId:repair.id,chosenFindings:selected.map(f=>f.id)}));await repair.done;save('repair.json',snapshot(repair));assert.equal(repair.status,'completed',service.summary(repair.id).error)
   const final=repair.events.findLast(e=>e.proposal)?.proposal;assert(final);save('final.fastfigure.json',final)
   const fixedText=final.nodes.find(n=>n.reconstruction?.objectId===text.reconstruction.objectId)?.label,otherRegionsUnchanged=candidate.nodes.filter(n=>n.reconstruction?.owner!==task.regionId).every(n=>JSON.stringify(n)===JSON.stringify(final.nodes.find(f=>f.id===n.id)))
@@ -64,7 +64,7 @@ try{
   save('metrics.json',metrics);assert(otherRegionsUnchanged);if(selected.some(f=>f.type==='text'))assert.equal(fixedText,'Encoder');if(selected.some(f=>f.type==='missing'))assert(metrics.curveRestored,'Selected missing-structure finding was not repaired')
   if(args.includes('--recheck')){
     const nextImages=await page.evaluate(async({candidate,task})=>{const{prepareVisualAuditImages}=await import('/src/core/visualAuditImage.ts');return prepareVisualAuditImages(candidate,task)},{candidate:final,task})
-    const recheck=service.startAudit({sessionId:session.id,parentRunId:repair.id,regionId:task.regionId,content:'修复后复审这版候选：从原图重新核对本分区，不沿用旧报告的结论，不因上一轮返回补丁就判定已解决。列出剩余或新引入的问题，识别不清写为不确定。',timeoutSeconds:180,...nextImages})
+    const recheck=service.startAudit({sessionId:session.id,parentRunId:repair.id,regionId:task.regionId,content:'修复后复审这版候选：从原图重新核对本分区，不沿用旧报告的结论，不因上一轮返回补丁就判定已解决。列出剩余或新引入的问题，识别不清写为不确定。',...nextImages})
     console.log(JSON.stringify({phase:'independent-recheck',runId:recheck.id,parentRunId:repair.id}));await recheck.done;save('recheck.json',snapshot(recheck));assert.equal(recheck.status,'completed',service.summary(recheck.id).error)
     const next=service.summary(recheck.id);save('recheck-report.json',next.auditReport);assert.deepEqual(next.visualAudit.recheck,{auditRunId:audit.id,repairRunId:repair.id});assert(!next.hasProposal)
     for(const [name,image] of [['source',service.getInputImage(recheck.id)],['candidate',service.getCandidateImage(recheck.id)]])writeFileSync(join(output,`recheck-${name}.${image.contentType.split('/')[1]}`),image.bytes)

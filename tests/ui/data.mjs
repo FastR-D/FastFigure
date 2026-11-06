@@ -48,7 +48,7 @@ export async function checkData({ page, panel, turn, send, run, saveProject, und
         let doc=createBlank();Object.assign(doc.containers[0],{x:0,y:0,width:1000,height:620,title:'Compared heatmaps'});doc.title='Compared heatmaps';doc.style.preset='precise';
         const base={...chartExample('heatmap'),valueLabel:'Score (a.u.)',series:[{name:'A',values:[0,10,null]},{name:'B',values:[5,15,20]}]};
         for(const [id,x,spec] of [['first',35,{...base,title:'Matrix A'}],['second',540,{...base,title:'Matrix B',fontSize:12,series:[{name:'A',values:[20,30,null]},{name:'B',values:[10,25,40]}]}]])doc=instantiateComponentAt(doc,scaleComponent(buildDataChart(spec),.42),'stage',{x,y:120},id,true).document;
-        return JSON.parse(JSON.stringify(doc));
+        const {editableFigure}=await import('/src/core/editableFigure.ts');return JSON.parse(JSON.stringify(editableFigure(doc)));
     });
     await page.getByRole('navigation',{name:'工作区导航',exact:true}).getByRole('button',{name:'组件',exact:true}).click();
     await page.getByRole('button',{name:'工程',exact:true}).click();await page.getByLabel('导入工程文件',{exact:true}).setInputFiles({name:'heatmap-comparison.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(heatInput))});await page.getByRole('dialog',{name:'工程管理',exact:true}).waitFor({state:'hidden'});assert.deepEqual(await saveProject(),heatInput);

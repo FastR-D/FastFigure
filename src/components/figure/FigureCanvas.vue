@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref } from 'vue'
-import { Box, Text, Icon, Button, Image } from '../ui'
+import { nextTick,onBeforeUnmount, ref,watch } from 'vue'
+import { Box, Image } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { findObject, type Rect } from '../../core/geometry'
 import FigureRenderer from './FigureRenderer'
@@ -9,12 +9,65 @@ import InlineTextEditor from './InlineTextEditor.vue'
 import FigureTextCheckDialog from './FigureTextCheckDialog.vue'
 import {edgeWaypointPoints} from '../../core/edgeWaypoints'
 import { pathPoints } from '../../core/paths'
+import {snapSelection,selectionBounds,type AlignmentGuide} from '../../core/alignmentSnap'
+import {useArrowDrawing} from '../../composables/useArrowDrawing'
 const editor = useEditor()
+const arrowDrawing=useArrowDrawing(editor)
+function arrowDown(event:PointerEvent){const svg=(event.currentTarget as HTMLElement).querySelector<SVGSVGElement>('[data-testid="figure-canvas"]');if(svg)arrowDrawing.down(event,svg)}
+function arrowHover(event:PointerEvent){if(panning.value)return;const svg=(event.currentTarget as HTMLElement).querySelector<SVGSVGElement>('[data-testid="figure-canvas"]');if(svg)arrowDrawing.hover(event,svg)}
+function arrowFinish(event:MouseEvent){if(editor.arrowDrawMode.value){event.preventDefault();event.stopPropagation();arrowDrawing.finish()}}
 const { figure, selectedIds, zoom, showGrid, connectMode, connectionSource } = editor
 const selectionRect = ref<Rect | null>(null)
-const textCheckOpen=ref(false)
+const guides=ref<AlignmentGuide[]>([]),pan=ref({x:0,y:0}),panning=ref(false)
+const dropPoint=ref<{x:number;y:number}|null>(null)
+watch(editor.libraryDrag.active,value=>{if(!value)dropPoint.value=null})
+watch(editor.viewReset,()=>{pan.value={x:0,y:0}})
+let wheelFrame=0,wheelDelta=0,wheelPosition={x:0,y:0}
 let cancelActive: (() => void) | undefined
-function track(event: PointerEvent, move: (point: DOMPoint, start: DOMPoint) => void, done: () => void, cancel: () => void) {
+function zoomWheel(event:WheelEvent){
+  event.preventDefault();if(cancelActive)return
+  const viewport=event.currentTarget as HTMLElement
+  wheelDelta+=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?viewport.clientHeight:1);wheelPosition={x:event.clientX,y:event.clientY}
+  if(wheelFrame)return
+  wheelFrame=requestAnimationFrame(async()=>{
+    wheelFrame=0;const paper=viewport.querySelector<HTMLElement>('.figure-paper');if(!paper)return
+    const before=paper.getBoundingClientRect(),at={x:(wheelPosition.x-before.left)/before.width,y:(wheelPosition.y-before.top)/before.height},cursor={...wheelPosition}
+    editor.setZoom(zoom.value*Math.exp(-wheelDelta*.0015));wheelDelta=0;await nextTick()
+    const after=paper.getBoundingClientRect();pan.value={x:pan.value.x+cursor.x-after.left-at.x*after.width,y:pan.value.y+cursor.y-after.top-at.y*after.height}
+  })
+}
+function startPan(event:PointerEvent){
+  if(event.button!==2)return
+  event.preventDefault();event.stopImmediatePropagation();cancelActive?.();panning.value=true
+  const target=event.currentTarget as HTMLElement,start={x:event.clientX,y:event.clientY},origin={...pan.value}
+  target.setPointerCapture(event.pointerId)
+  const nativeEvents=['mousedown','mousemove','mouseup','auxclick','contextmenu','dragstart','selectstart'] as const
+  const suppress=(e:Event)=>{e.preventDefault();e.stopImmediatePropagation()}
+  const move=(e:PointerEvent)=>{if(e.pointerId===event.pointerId){suppress(e);pan.value={x:origin.x+e.clientX-start.x,y:origin.y+e.clientY-start.y}}}
+  const cleanup=()=>{window.removeEventListener('pointermove',move,true);window.removeEventListener('pointerup',up,true);window.removeEventListener('pointercancel',cancel,true);window.removeEventListener('keydown',key);window.removeEventListener('blur',cancel);target.removeEventListener('lostpointercapture',cancel);nativeEvents.forEach(type=>window.removeEventListener(type,suppress,true));if(target.hasPointerCapture(event.pointerId))target.releasePointerCapture(event.pointerId);panning.value=false;cancelActive=undefined}
+  const up=(e:PointerEvent)=>{if(e.pointerId===event.pointerId)cleanup()},cancel=()=>{pan.value=origin;cleanup()},key=(e:KeyboardEvent)=>{if(e.key==='Escape')cancel()}
+  nativeEvents.forEach(type=>window.addEventListener(type,suppress,{capture:true,passive:false}))
+  window.addEventListener('pointermove',move,{capture:true,passive:false});window.addEventListener('pointerup',up,true);window.addEventListener('pointercancel',cancel,true);window.addEventListener('keydown',key);window.addEventListener('blur',cancel);target.addEventListener('lostpointercapture',cancel);cancelActive=cancel
+}
+function suppressRightMouse(event:MouseEvent){if(event.button===2||(event.buttons&2)||panning.value){event.preventDefault();event.stopImmediatePropagation()}}
+function libraryPoint(event:DragEvent){
+  const svg=(event.currentTarget as HTMLElement).querySelector<SVGSVGElement>('[data-testid="figure-canvas"]'),matrix=svg?.getScreenCTM()
+  if(!matrix)return null
+  const point=new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse())
+  return point.x>=0&&point.y>=0&&point.x<=figure.value.canvas.width&&point.y<=figure.value.canvas.height?{x:point.x,y:point.y}:null
+}
+function libraryOver(event:DragEvent){
+  if(!editor.libraryDrag.accepts(event)||panning.value||cancelActive)return
+  event.preventDefault();event.stopPropagation();event.dataTransfer!.dropEffect='copy';dropPoint.value=libraryPoint(event)
+}
+function libraryLeave(event:DragEvent){if(!(event.relatedTarget instanceof Node)||(event.currentTarget as HTMLElement).contains(event.relatedTarget)===false)dropPoint.value=null}
+function libraryDrop(event:DragEvent){
+  event.preventDefault();event.stopPropagation();dropPoint.value=null
+  if(panning.value||cancelActive)return
+  const point=libraryPoint(event),item=editor.libraryDrag.take(event)
+  if(point&&item)void editor.dropLibraryItem(item,point)
+}
+function track(event: PointerEvent, move: (point: DOMPoint, start: DOMPoint,event:PointerEvent) => void, done: () => void, cancel: () => void) {
   cancelActive?.()
   const target = event.currentTarget as SVGElement
   const svg = target instanceof SVGSVGElement ? target : target.ownerSVGElement
@@ -27,7 +80,7 @@ function track(event: PointerEvent, move: (point: DOMPoint, start: DOMPoint) => 
     window.removeEventListener('pointercancel', onCancel); window.removeEventListener('keydown', onKey)
     cancelActive = undefined
   }
-  const onMove = (e: PointerEvent) => { if (e.pointerId === event.pointerId) move(point(e), start) }
+  const onMove = (e: PointerEvent) => { if (e.pointerId === event.pointerId) move(point(e), start,e) }
   const onUp = (e: PointerEvent) => { if (e.pointerId === event.pointerId) { cleanup(); done() } }
   const onCancel = () => { cleanup(); cancel() }
   const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel() }
@@ -40,9 +93,14 @@ function startDrag(id: string, event: PointerEvent) {
   const wasConnecting = connectMode.value
   if (wasConnecting || event.shiftKey || !selectedIds.value.includes(id)) editor.select(id, event.shiftKey)
   if (wasConnecting || event.shiftKey) return
+  const target=event.currentTarget as SVGElement;(target instanceof SVGSVGElement?target:target.ownerSVGElement)?.focus({preventScroll:true})
   editor.beginDrag()
-  let previous: DOMPoint | undefined
-  track(event, (point, start) => { const last = previous ?? start; editor.moveSelection(point.x - last.x, point.y - last.y); previous = point }, editor.endDrag, editor.cancelDrag)
+  const origin=selectionBounds(figure.value,selectedIds.value),svg=target instanceof SVGSVGElement?target:target.ownerSVGElement,scale=Math.abs(svg?.getScreenCTM()?.a??1)
+  track(event, (point,start,e) => {
+    const wanted={...origin,x:origin.x+point.x-start.x,y:origin.y+point.y-start.y},snapped=e.altKey?{...wanted,guides:[]}:snapSelection(figure.value,selectedIds.value,wanted,5/scale),current=selectionBounds(figure.value,selectedIds.value)
+    editor.moveSelection(snapped.x-current.x,snapped.y-current.y);const actual=selectionBounds(figure.value,selectedIds.value)
+    guides.value=Math.abs(actual.x-snapped.x)<.01&&Math.abs(actual.y-snapped.y)<.01?snapped.guides:[]
+  },()=>{guides.value=[];editor.endDrag()},()=>{guides.value=[];editor.cancelDrag()})
 }
 function startResize(event: PointerEvent) {
   if (event.button !== 0 || cancelActive) return
@@ -50,7 +108,7 @@ function startResize(event: PointerEvent) {
   if (!object) return
   const width = object.width, height = object.height
   editor.beginDrag()
-  track(event, (point, start) => editor.resize(width + point.x - start.x, height + point.y - start.y), editor.endDrag, editor.cancelDrag)
+  track(event, (point, start,e) => editor.resize(width + point.x - start.x, height + point.y - start.y,e.shiftKey?undefined:{width,height}), editor.endDrag, editor.cancelDrag)
 }
 function startRegion(event: PointerEvent) {
   if (event.button !== 0 || connectMode.value || cancelActive) return
@@ -113,33 +171,24 @@ function resizeKey(dx: number, dy: number) {
   if (dx) editor.setSize('width', object.width + dx)
   if (dy) editor.setSize('height', object.height + dy)
 }
-onBeforeUnmount(() => { cancelActive?.(); editor.cancelDrag() })
+onBeforeUnmount(() => { cancelActive?.();cancelAnimationFrame(wheelFrame); editor.cancelDrag();editor.libraryDrag.clear() })
 </script>
 
 <template>
   <Box class="canvas-stage" :class="{ 'with-grid': showGrid, 'is-connecting': connectMode }">
-    <Box class="canvas-guidance">
-      <Text class="canvas-label">FIGURE 01</Text>
-      <Text>{{ connectMode ? '依次点击起点和终点，建立连接' : '双击文字编辑 · Shift 多选 · Alt 单击选路径' }}</Text>
-    </Box>
     <Box class="canvas-comparison" :class="{ 'has-reference': editor.activeReference.value && editor.referenceMode.value === 'side' }">
       <ReferenceGuide v-if="editor.referenceMode.value === 'side' && editor.activeReference.value" />
-      <Box class="canvas-viewport">
-      <Box class="figure-paper" :style="{ width: `${zoom}%` }">
-        <FigureRenderer :figure="figure" :routes="editor.routes.value" :selected-ids="selectedIds" :selection-rect="selectionRect" :selected-path-point="editor.selectedPathPoint.value" :selected-edge-point="editor.selectedEdgePoint.value" @edge-point-down="startEdgePoint" @edge-point-key="edgePointKey" @edge-point-remove="editor.removeEdgePoint" :source-id="connectionSource ?? ''" :connect-mode="connectMode" interactive @object-down="startDrag" @select="editor.select" @background-down="startRegion" @resize-down="startResize" @resize-key="resizeKey" @edit="editor.beginTextEdit" @path-point-down="startPathPoint" @path-point-key="pathPointKey" @path-point-remove="pathPointRemove" @path-control-down="startPathControl" @path-control-key="pathControlKey" @named-port-down="startNamedPort" @named-port-key="namedPortKey" />
+      <Box class="canvas-viewport" :class="{'is-panning':panning}" @wheel="zoomWheel" @pointerdown.capture="startPan" @mousedown.capture="suppressRightMouse" @mousemove.capture="suppressRightMouse" @mouseup.capture="suppressRightMouse" @auxclick.capture="suppressRightMouse" @contextmenu.capture.prevent.stop @dragover="libraryOver" @dragleave="libraryLeave" @drop="libraryDrop">
+      <Box class="figure-paper" :class="{'is-drawing':editor.arrowDrawMode.value&&!panning,'is-component-drop':!!dropPoint}" :style="{ width: `${zoom}%`,aspectRatio:`${figure.canvas.width} / ${figure.canvas.height}`,transform:`translate(${pan.x}px,${pan.y}px)` }" @pointerdown.capture="arrowDown" @pointermove.capture="arrowHover" @dblclick.capture="arrowFinish">
+        <FigureRenderer :figure="figure" :routes="editor.routes.value" :selected-ids="selectedIds" :alignment-guides="guides" :arrow-draft="arrowDrawing.points.value" :arrow-preview="arrowDrawing.preview.value" :selection-rect="selectionRect" :selected-path-point="editor.selectedPathPoint.value" :selected-edge-point="editor.selectedEdgePoint.value" @edge-point-down="startEdgePoint" @edge-point-key="edgePointKey" @edge-point-remove="editor.removeEdgePoint" :source-id="connectionSource ?? ''" :connect-mode="connectMode" interactive @object-down="startDrag" @select="editor.select" @background-down="startRegion" @resize-down="startResize" @resize-key="resizeKey" @edit="editor.beginTextEdit" @path-point-down="startPathPoint" @path-point-key="pathPointKey" @path-point-remove="pathPointRemove" @path-control-down="startPathControl" @path-control-key="pathControlKey" @named-port-down="startNamedPort" @named-port-key="namedPortKey" />
+        <Box v-if="dropPoint" class="component-drop-marker" data-component-drop aria-hidden="true" :style="{left:`${dropPoint.x/figure.canvas.width*100}%`,top:`${dropPoint.y/figure.canvas.height*100}%`}" />
         <InlineTextEditor />
         <Box v-if="editor.referenceMode.value === 'overlay' && editor.activeReference.value" class="reference-overlay" data-testid="reference-overlay" aria-hidden="true">
-          <Image :src="editor.activeReference.value.dataUrl" alt="" :style="{ left: `${editor.activeReference.value.placement.x / 10}%`, top: `${editor.activeReference.value.placement.y / 6.2}%`, width: `${editor.activeReference.value.placement.width / 10}%`, height: `${editor.activeReference.value.placement.height / 6.2}%`, opacity: editor.referenceOpacity.value }" />
+          <Image :src="editor.activeReference.value.dataUrl" alt="" :style="{ left: `${editor.activeReference.value.placement.x / figure.canvas.width*100}%`, top: `${editor.activeReference.value.placement.y / figure.canvas.height*100}%`, width: `${editor.activeReference.value.placement.width / figure.canvas.width*100}%`, height: `${editor.activeReference.value.placement.height / figure.canvas.height*100}%`, opacity: editor.referenceOpacity.value }" />
         </Box>
       </Box>
       </Box>
     </Box>
-    <Box class="canvas-bottom">
-      <Text><Icon name="check" />{{ selectedIds.length > 1 ? `已选择 ${selectedIds.length} 个对象` : '文字与连接可独立编辑' }}</Text>
-      <Button v-if="editor.blockedRoutes.value.length" variant="quiet" size="xs" class="routing-warning" @click="editor.select(editor.blockedRoutes.value[0]![0]); editor.activePanel.value = 'layers'">{{ editor.blockedRoutes.value.length }} 条连线受阻</Button>
-      <Button variant="quiet" size="xs" @click="textCheckOpen=true">检查文字</Button>
-      <Button variant="quiet" size="xs" @click="editor.selectedId.value = 'stage'">容器样式 <Icon name="arrow" /></Button>
-    </Box>
-    <FigureTextCheckDialog :open="textCheckOpen" @close="textCheckOpen=false" />
+    <FigureTextCheckDialog :open="editor.textCheckOpen.value" @close="editor.textCheckOpen.value=false" />
   </Box>
 </template>

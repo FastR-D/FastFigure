@@ -2,7 +2,7 @@ import {clone,parseDocument,type FigureDocument,type FigureNode,type FigureConta
 import {buildDataChart} from './dataChart.ts'
 import {heatmapScale} from './heatmap.ts'
 import {scaleComponent} from './assets.ts'
-import {ancestors,childrenOf,contentBounds,resolveStyle,translateGeometry,descendants} from './geometry.ts'
+import {ancestors,childrenOf,layoutContentBounds,resolveStyle,translateGeometry,descendants} from './geometry.ts'
 import {reflowDataChart,sameChartValue} from './chartReflow.ts'
 import {chartText,textWidth,formatChartValue,type ChartAdd} from './chartText.ts'
 import {sharedColorbarCreateRequestSchema,sharedColorbarUpdateRequestSchema,sharedColorbarReportSchema,type SharedColorbarCreateRequest,type SharedColorbarRequest,type SharedColorbarReport} from './sharedColorbarContract.ts'
@@ -95,7 +95,7 @@ export function createSharedColorbar(input:FigureDocument,raw:Omit<SharedColorba
   }
   const common=ancestors(doc,first.root.id).find(id=>request.containerIds.every(chart=>ancestors(doc,chart).includes(id))),parentId=request.parentId??common,parent=doc.containers.find(c=>c.id===parentId)
   if(!parent||parent.dataChart||parent.sharedLegend||parent.sharedColorbar||request.containerIds.some(id=>!ancestors(doc,id).includes(parent.id)))throw new Error('请选择所有热图的共同外层容器')
-  const area=contentBounds(parent),family=request.fontFamily??resolveStyle(doc,parent.id).fontFamily??'Inter',size=request.fontSize,padding=8,barHeight=12
+  const area=layoutContentBounds(doc,parent),family=request.fontFamily??resolveStyle(doc,parent.id).fontFamily??'MiSans',size=request.fontSize,padding=8,barHeight=12
   const values=[min,center??min+(max-min)/2,max],labels=values.map(formatChartValue),half=Math.max(...labels.map(t=>textWidth(t,size,family)))/2+2
   if(new Set(labels).size!==3)throw new Error('色标刻度文字无法区分，请先调整数据单位')
   const width=Math.max(320+half*2+padding*2,textWidth(first.spec.valueLabel!,size,family)+padding*2),barWidth=width-half*2-padding*2,barX=padding+half,barY=padding+size*1.3+8,tickY=barY+barHeight+size+8,height=tickY+size*.3+padding
@@ -147,7 +147,7 @@ export function updateSharedColorbar(input:FigureDocument,raw:unknown){
   }
   const group=doc.containers.find(group=>group.id===request.containerId)!,parts=record.parts.map(part=>doc.nodes.find(node=>node.id===part.nodeId)!),valueLabel=charts[0]!.spec.valueLabel!,sameScale=record.paletteId===paletteId&&record.min===min&&record.max===max&&record.center===scale.center&&record.valueLabel===valueLabel,sameText=before.labels.every(label=>(request.fontFamily===undefined||request.fontFamily===label.fontFamily)&&(request.fontSize===undefined||request.fontSize===label.fontSize))
   if(!sameScale||!sameText||request.placement!=='preserve'){
-    const layout=layoutColorbarParts(doc,group,parts,scale,valueLabel,request),area=contentBounds(parent),managed=new Set(parts.map(part=>part.id)),extras=descendants(doc,group.id).filter(object=>!managed.has(object.id)),solidExtras=extras.filter(object=>!('kind'in object&&object.kind==='port')),units=group.metricScale??1,box={x:group.x,y:group.y,width:Math.max(layout.width,...solidExtras.map(object=>object.x+object.width-group.x+2*units)),height:Math.max(layout.height,...solidExtras.map(object=>object.y+object.height-group.y+2*units))}
+    const layout=layoutColorbarParts(doc,group,parts,scale,valueLabel,request),area=layoutContentBounds(doc,parent),managed=new Set(parts.map(part=>part.id)),extras=descendants(doc,group.id).filter(object=>!managed.has(object.id)),solidExtras=extras.filter(object=>!('kind'in object&&object.kind==='port')),units=group.metricScale??1,box={x:group.x,y:group.y,width:Math.max(layout.width,...solidExtras.map(object=>object.x+object.width-group.x+2*units)),height:Math.max(layout.height,...solidExtras.map(object=>object.y+object.height-group.y+2*units))}
     if(request.placement!=='preserve'){box.x=area.x+(area.width-box.width)/2;box.y=request.placement==='top'?area.y:area.y+area.height-box.height}
     if(box.x<area.x-1e-6||box.y<area.y-1e-6||box.x+box.width>area.x+area.width+1e-6||box.y+box.height>area.y+area.height+1e-6)throw new Error('调整后的色标超出共同容器，请预留空间或选择另一侧')
     const overlap=(a:typeof box,b:typeof box)=>a.x<b.x+b.width-1e-6&&a.x+a.width>b.x+1e-6&&a.y<b.y+b.height-1e-6&&a.y+a.height>b.y+1e-6,owned=new Set([group.id,...descendants(doc,group.id).map(object=>object.id)])

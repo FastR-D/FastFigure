@@ -3,7 +3,6 @@ import { effectScope } from 'vue'
 import { createEditor } from '../composables/useEditor'
 import { clone, createExample, parseDocument } from './model'
 import { edgePath, exportSvg } from './svg'
-import { exportDrawio } from './export'
 
 let scope: ReturnType<typeof effectScope>
 beforeEach(() => {
@@ -46,11 +45,11 @@ describe('FigureIR integrity and editing', () => {
   it('deletes incident edges atomically, and undo/redo restore valid complete documents', () => {
     const e = editor(), original = clone(e.figure.value)
     e.selectedId.value = 'encoder'; e.removeSelected()
-    expect(e.figure.value.nodes).toHaveLength(4)
+    expect(e.figure.value.nodes).toHaveLength(original.nodes.length-1)
     expect(e.figure.value.edges.some(x => x.source === 'encoder' || x.target === 'encoder')).toBe(false)
     expect(() => parseDocument(e.figure.value)).not.toThrow()
     e.undo(); expect(e.figure.value).toEqual(original)
-    e.redo(); expect(e.figure.value.nodes).toHaveLength(4)
+    e.redo(); expect(e.figure.value.nodes).toHaveLength(original.nodes.length-1)
   })
   it('rejects invalid import atomically and round-trips local project state', () => {
     const e = editor(), original = clone(e.figure.value)
@@ -61,12 +60,10 @@ describe('FigureIR integrity and editing', () => {
     expect(e.saved.value).toBe(true)
     expect(editor().figure.value).toEqual(e.figure.value)
   })
-  it('escapes text on export and retains native draw.io edge bindings', () => {
+  it('escapes text on SVG export', () => {
     const doc = createExample(); doc.nodes[0]!.label = '<script>& "研究"'
-    const svg = exportSvg(doc), drawio = exportDrawio(doc)
+    const svg = exportSvg(doc)
     expect(svg).not.toContain('<script>')
     expect(svg).toContain('&lt;script&gt;')
-    expect(drawio).toContain('source="input" target="encoder"')
-    expect(drawio).toContain('exitX=1;exitY=0.5;entryX=0;entryY=0.5;')
   })
 })

@@ -14,14 +14,13 @@ import type {ReferenceInputInfo} from './referenceInputs'
 import {setContainerColor} from './containerColor'
 import {figurePaint} from './paint'
 import {resolveStyle} from './geometry'
-import {exportDrawio} from './export'
 import {buildDataChart} from './dataChart'
 import {chartExample} from './dataChartTable'
 import {colorSlotInventory,setContainerColorMap} from './colorMapping'
 import {colorMapSchema,type ColorMapping} from './colorMappingContract'
 import {instantiateComponentAt} from './assets'
 const runId='7c9bfbd2-661b-4982-9589-9b9973efea78'
-const plan=():CompositionPlan=>({status:'ready',title:'Pipeline plan',goal:'Explain the feature pipeline',readingOrder:'left-to-right',layout:'Place the native pipeline on the left with a short explanatory annotation on the right.',style:{preset:'precise',paletteId:'figureforge-publication-soft',fontFamily:'Inter',usage:'Blue for processing; muted notes.'},sections:[{id:'process',title:'Processing',purpose:'Two operations',visual:'Use two native stages with a directed connection.',components:[{id:'pipe',key:'asset:builtin-pipeline'}],referenceImages:[1],annotations:['Features flow through both stages']},{id:'note',title:'Summary',purpose:'Explain output',visual:'Use a short caption beside the last stage.',components:[],referenceImages:[],annotations:[]}],connections:[{from:'process',to:'note',meaning:'Explain the resulting features'}],checks:['Preserve the two-stage relation'],questions:[],uncertainties:['Reference style is a model interpretation.']})
+const plan=():CompositionPlan=>({status:'ready',title:'Pipeline plan',goal:'Explain the feature pipeline',readingOrder:'left-to-right',layout:'Place the native pipeline on the left with a short explanatory annotation on the right.',style:{preset:'precise',paletteId:'figureforge-publication-soft',fontFamily:'MiSans',usage:'Blue for processing; muted notes.'},sections:[{id:'process',title:'Processing',purpose:'Two operations',visual:'Use two native stages with a directed connection.',components:[{id:'pipe',key:'asset:builtin-pipeline'}],referenceImages:[1],annotations:['Features flow through both stages']},{id:'note',title:'Summary',purpose:'Explain output',visual:'Use a short caption beside the last stage.',components:[],referenceImages:[],annotations:[]}],connections:[{from:'process',to:'note',meaning:'Explain the resulting features'}],checks:['Preserve the two-stage relation'],questions:[],uncertainties:['Reference style is a model interpretation.']})
 const entries=():CatalogueEntry[]=>[{kind:'asset',asset:buildRecipe('pipeline',{stages:2,direction:'row'})}]
 const references:ReferenceInputInfo[]=[{index:1,id:'r1',title:'Style source',purpose:'style',citation:'Authored fixture',fileName:'a.png',sha256:'a'.repeat(64),width:100,height:50},{index:2,id:'r2',title:'Unused layout',purpose:'layout',citation:'Authored fixture',fileName:'b.png',sha256:'b'.repeat(64),width:100,height:50}]
 const notes=()=>[{image:1,decision:'use',observation:'Muted colors',application:'Processing section',uncertainty:''},{image:2,decision:'omit',observation:'Unrelated composition',application:'No matching role',uncertainty:''}]
@@ -76,7 +75,7 @@ describe('reviewable composition planning',()=>{
     setContainerColorMap(doc,'stage',rows);expect(doc.nodes).toEqual(before.nodes);expect(doc.edges).toEqual(before.edges)
     expect(figurePaint(resolveStyle(doc,'stage'),0).color).toBe('#FC8D62');expect(figurePaint(resolveStyle(doc,'stage'),1).color).toBe('#66C2A5')
     const svg=exportSvg(doc),xml=new DOMParser().parseFromString(svg,'image/svg+xml'),edge=Array.from(xml.getElementsByTagName('path')).find(p=>p.getAttribute('data-edge-id')==='a-b')!
-    expect(edge.getAttribute('stroke')).toBe(figurePaint(resolveStyle(doc,'stage')).ink);expect(svg).toContain('#123456');expect(svg).toContain('#654321');expect(exportDrawio(doc)).toContain(`strokeColor=${edge.getAttribute('stroke')}`)
+    expect(edge.getAttribute('stroke')).toBe(figurePaint(resolveStyle(doc,'stage')).ink);expect(svg).toContain('#123456');expect(svg).toContain('#654321');
     doc.containers.push({id:'other',parentId:'stage',role:'component',title:'Other palette',x:480,y:180,width:200,height:120,appearance:{preset:'inherit',accent:'inherit',paletteId:'figureforge-tableau10'}});expect(figurePaint(resolveStyle(doc,'other'),0).color).toBe('#4E79A7')
     const chart=scaleComponent(buildDataChart(chartExample('scatter')),.3),withChart=instantiateComponentAt(doc,chart,'stage',{x:600,y:350},'chart',true).document
     expect(resolveStyle(withChart,'chart').colorMap).toBeUndefined();expect(()=>setContainerColorMap(withChart,'stage',rows)).toThrow('数据图表')
@@ -139,7 +138,7 @@ describe('reviewable composition planning',()=>{
     const blue=figurePaint(resolveStyle(result,'blue')),orange=figurePaint(resolveStyle(result,'orange'));expect(blue.color).toBe('#8DA0CB');expect(orange.color).toBe('#FC8D62')
     const svg=new DOMParser().parseFromString(exportSvg(result),'image/svg+xml'),paths=Array.from(svg.getElementsByTagName('path'))
     expect(paths.find(path=>path.getAttribute('data-edge-id')===result.edges[0]!.id)?.getAttribute('stroke')).toBe(blue.ink);expect(paths.find(path=>path.getAttribute('data-edge-id')===result.edges[1]!.id)?.getAttribute('stroke')).toBe(orange.ink)
-    expect(exportSvg(result)).toContain('#123456');expect(exportDrawio(result)).toContain(`strokeColor=${blue.ink}`);expect(exportDrawio(result)).toContain(`strokeColor=${orange.ink}`)
+    expect(exportSvg(result)).toContain('#123456');
     expect(()=>applyCompositionRecord(before,record,[{...built.used[0]!,instanceId:'wrong'},built.used[1]!])).toThrow('实例标识')
   })
   it('keeps inherited default colors through save, capture, scaling and SVG while respecting explicit object slots and chart scopes',()=>{

@@ -6,7 +6,7 @@ const sources=JSON.parse(readFileSync(new URL('../third-party/sources.json',impo
 function source(project,path){const bytes=readFileSync(new URL(`../third-party/${project}/${path}`,import.meta.url));if(createHash('sha256').update(bytes).digest('hex')!==sources[project].files[path])throw new Error(`Source fingerprint changed: ${project}/${path}`);return bytes.toString()}
 function output(path,value){const file=new URL(`../${path}`,import.meta.url);mkdirSync(new URL('.',file),{recursive:true});writeFileSync(file,JSON.stringify(value)+'\n')}
 const retrieval=source('topconf','forge/retrieval.mjs'),vectorCheck='IE.length !== ids.length * 512 || TE.length !== ids.length * 512 ||'
-for(const file of ['reconstruction-core.mjs','reconstruction-pipeline.mjs','editable-native.mjs','editable-text-layout.mjs','container-geometry.mjs'])writeFileSync(new URL(`../src/vendor/topconf/${file}`,import.meta.url),source('topconf',`forge/${file}`))
+for(const file of ['reconstruction-core.mjs','reconstruction-pipeline.mjs','editable-native.mjs','container-geometry.mjs'])writeFileSync(new URL(`../src/vendor/topconf/${file}`,import.meta.url),source('topconf',`forge/${file}`))
 if(!retrieval.includes(vectorCheck))throw new Error('Upstream retrieval shape changed; review the CPU adapter')
 writeFileSync(new URL('../src/vendor/topconf/retrieval.mjs',import.meta.url),'// Adapted from Top-Conf Figure Gallery (MIT). See third-party/topconf/LICENSE and docs/development/reference-ecosystem.md.\n// FastFigure: vector arrays are optional for title/author-only CPU retrieval.\n'+retrieval.replace(vectorCheck,'(IE && IE.length !== ids.length * 512) || (TE && TE.length !== ids.length * 512) ||'))
 const figures=JSON.parse(source('topconf','data/figures.json'))
@@ -15,7 +15,7 @@ for(const [project,files] of [['topconf',['LICENSE','NOTICE.md','IMAGES_POLICY.m
 const context=vm.createContext({window:{}})
 vm.runInContext(source('nature','figureforge/js/templates.js'),context,{timeout:3000})
 const unavailable={violin:'上游模板含负尺寸矩形，待校正数据几何','comp-ab':'上游模板含负尺寸矩形，待校正数据几何'}
-const templates=Object.entries({...context.window.getChartTemplates(),...context.window.getLayoutTemplates()}).map(([id,t])=>{const svg=t.svg.replaceAll("'Arial',sans-serif",'Inter,MiSans,sans-serif');return {id,name:t.name,svg,sha256:createHash('sha256').update(svg).digest('hex'),...(unavailable[id]?{unavailable:unavailable[id]}:{})}})
+const templates=Object.entries({...context.window.getChartTemplates(),...context.window.getLayoutTemplates()}).map(([id,t])=>{const svg=t.svg.replaceAll("'Arial',sans-serif",'MiSans,MiSans,sans-serif');return {id,name:t.name,svg,sha256:createHash('sha256').update(svg).digest('hex'),...(unavailable[id]?{unavailable:unavailable[id]}:{})}})
 output('public/resources/figureforge/templates.json',{version:1,commit:sources.nature.commit,templates})
 vm.runInContext(source('nature','figureforge/js/palettes.js'),context,{timeout:3000})
 const palettes=vm.runInContext('PALETTES',context)

@@ -7,7 +7,6 @@ import { movePathControl, movePathPoint, pathPoints, pointsData, setPathPoints, 
 import { multiply, parseTransform, transform } from './affine'
 import { captureComponent, componentDocument, instantiateComponent, scaleComponent } from './assets'
 import { createScene, exportSvg } from './svg'
-import { exportDrawio } from './export'
 import { contains, contentBounds, moveObjects, resizeObject, ungroupObject } from './geometry'
 import { diffFigures } from './figureDiff'
 import { parseHarnessResponse } from './harness'
@@ -48,14 +47,13 @@ describe('native curves and affine geometry',()=>{
   })
 })
 describe('editable SVG ingestion',()=>{
-  it('preserves affine linear fill/stroke fields using true curve bounds, CSS stops and local gradient inheritance through reuse and export',async()=>{
+  it('preserves affine linear fill/stroke fields using true curve bounds, CSS stops and local gradient inheritance through reuse and export',()=>{
     const matrix=parseTransform('matrix(1.5 .2 .7 .8 30 20)'),result=load('<defs><linearGradient id="base" x2="0" y2="1"><stop offset="0" style="stop-color:#ff0000;stop-opacity:.4"/><stop offset="1" stop-color="#0000ff"/></linearGradient><linearGradient id="shade" href="#base" spreadMethod="reflect"/></defs><path transform="matrix(1.5 .2 .7 .8 30 20)" d="M0 0Q50 200 100 0L100 100L0 100Z" fill="url(#shade)" stroke="url(#shade)"/>'),doc=result.asset.figure,node=doc.nodes[0]!,gradient=node.visual!.fillGradient!
     expect(gradient).toMatchObject({spread:'reflect',stops:[{offset:0,color:'#ff0000',opacity:.4},{offset:1,color:'#0000ff',opacity:1}]});expect(node.visual!.strokeGradient).toEqual(gradient);expect(node.visual!.strokeMatrix).toBeDefined()
     for(const point of [{x:0,y:0},{x:50,y:100},{x:100,y:25}]){const p=transform(transform(point,matrix),result.report.sourceTransform!),t=gradient.vector[0]*(p.x-node.x)/node.width+gradient.vector[1]*(p.y-node.y)/node.height+gradient.vector[2];expect(t).toBeCloseTo(point.y/100,9)}
     const scaled=scaleComponent(captureComponent(doc,'stage','Gradient'),.5),placed=instantiateComponent(createBlank(),scaled,'stage',true).document,copy=placed.nodes[0]!
     expect(copy.visual!.fillGradient).toEqual(gradient);const coords=gradientCoordinates(gradient,copy);expect(Object.values(coords).every(Number.isFinite)).toBe(true)
     const exported=exportSvg(placed),restored=importSvg(exported,{...options,sha256:'b'.repeat(64)}).asset.figure;expect(restored.nodes[0]!.visual!.fillGradient).toEqual(gradient);expect(exported).toContain('<linearGradient')
-    const {importDrawio}=await import('./drawioImport'),back=await importDrawio(exportDrawio(placed),{...options,fileName:'gradient.drawio',serializeXml:(element:Element)=>new XMLSerializer().serializeToString(element as never)});expect(back.asset.figure.nodes.some(n=>n.visual?.fillGradient?.stops[0]?.color==='#ff0000')).toBe(true)
     const duplicate=clone(placed);duplicate.nodes.push({...clone(copy),id:'duplicate-gradient'});expect(()=>importSvg(exportSvg(duplicate),{...options,preferMetadata:false})).not.toThrow()
     const proposal=clone(placed);delete proposal.nodes[0]!.visual!.fillGradient;expect(parseHarnessResponse(JSON.stringify({message:'Keep paint',figure:proposal}),placed).figure!.nodes[0]!.visual!.fillGradient).toEqual(gradient);proposal.nodes[0]!.visual!.fillGradient=null;expect(parseHarnessResponse(JSON.stringify({message:'Solid',figure:proposal}),placed).figure!.nodes[0]!.visual!.fillGradient).toBeNull()
   })
@@ -65,22 +63,22 @@ describe('editable SVG ingestion',()=>{
     for(const definitions of ['<linearGradient id="g" href="#g"/>','<radialGradient id="g"/>','<linearGradient id="g" href="#missing"/>'])expect(()=>load(`<defs>${definitions}</defs><rect width="100" height="50" fill="url(#g)"/>`)).toThrow()
   })
   it('imports basic shapes, native text and curves with exact source fingerprints and editable controls',()=>{
-    const result=load('<rect id="box" x="10" y="10" width="100" height="60" rx="4" fill="#ebf4fa"/><circle cx="180" cy="40" r="20" fill="none" stroke="blue"/><text x="20" y="45" font-family="Inter" font-size="18">Encoder</text><path d="M110 40 C130 20 140 70 160 40" fill="none" stroke="black"/>')
+    const result=load('<rect id="box" x="10" y="10" width="100" height="60" rx="4" fill="#ebf4fa"/><circle cx="180" cy="40" r="20" fill="none" stroke="blue"/><text x="20" y="45" font-family="MiSans" font-size="18">Encoder</text><path d="M110 40 C130 20 140 70 160 40" fill="none" stroke="black"/>')
     expect(result.asset.figure.nodes.map(n=>n.kind)).toEqual(['rectangle','ellipse','text','path']);expect(result.report).toMatchObject({paths:1,texts:1,curves:1})
     expect(result.asset.sources).toHaveLength(1);expect(result.asset.sources[0]!.file).toEqual({format:'svg',fileName:options.fileName,sha256:options.sha256});valid(result.asset.figure)
-    const xml=exportSvg(result.asset.figure);expect(xml).toContain('C');expect(xml).toContain('font-family="&quot;Inter');expect(xml).not.toContain('<image')
+    const xml=exportSvg(result.asset.figure);expect(xml).toContain('C');expect(xml).toContain('font-family="&quot;MiSans');expect(xml).not.toContain('<image')
   })
   it('handles nested transforms, viewBox, CSS cascade and translucent paint without flattening group alpha',()=>{
     const input=svg('<style>.node {fill:#faebcd;stroke:#aabbcc;stroke-width:2}.outer .node {fill:#112233}</style><g class="outer" transform="translate(20 10)" opacity=".5"><rect class="node" width="40" height="30" fill="red" style="stroke:#445566;fill-opacity:.4"/><path d="M0 0L20 20" stroke="black" fill="none" transform="scale(2 1)" stroke-dasharray="2,3" stroke-dashoffset="1"/></g>')
     const result=importSvg(input,options),doc=result.asset.figure
     expect(doc.nodes[0]!.visual).toMatchObject({fill:'#112233',stroke:'#445566',fillOpacity:.4,opacity:1});expect(doc.containers.find(c=>c.opacity)).toMatchObject({opacity:.5})
     expect(doc.nodes[1]!.visual?.strokeMatrix).toBeTruthy();const scene=JSON.stringify(createScene(doc,false));expect(scene).toContain('data-composite-group');expect(scene).toContain('stroke-dashoffset');expect(exportSvg(doc)).toContain('fill-opacity="0.4"')
-    expect(()=>exportDrawio(doc)).toThrow('组合透明度');valid(doc)
+    valid(doc)
   })
   it('supports compound evenodd contours, relative shorthand and arc conversion',()=>{
     const result=load('<path fill="#abcdef" fill-rule="evenodd" d="m0 0h100v100h-100z m20 20h60v60h-60z"/><path d="M120 20q10 20 20 0t20 0a10 10 0 0 1 20 0" stroke="black" fill="none"/>'),doc=result.asset.figure
     expect(doc.nodes[0]!.path!.points.filter(p=>p.close)).toHaveLength(2);expect(doc.nodes[0]!.path!.fillRule).toBe('evenodd');expect(doc.nodes[1]!.path!.points.some(p=>p.c2)).toBe(true);valid(doc)
-    expect(exportSvg(doc)).toContain('fill-rule="evenodd"');expect(exportDrawio(doc)).toContain('data-vector-fallback="1"')
+    expect(exportSvg(doc)).toContain('fill-rule="evenodd"');
   })
   it('resolves local use and symbol viewports, and selects a source subgroup without its siblings',()=>{
     const input=svg('<defs><symbol id="sym" viewBox="0 0 20 10"><rect width="20" height="10" fill="blue"/></symbol></defs><g id="first" transform="translate(10 20)"><use href="#sym" width="80" height="40"/></g><g id="second"><circle cx="100" cy="50" r="10"/></g>')
@@ -129,10 +127,6 @@ describe('editable SVG ingestion',()=>{
     const proposal=parseHarnessResponse(JSON.stringify({message:'Updated',figure:candidate}),original).figure!
     expect(proposal.nodes.find(n=>n.kind==='text')!.textLayout).toEqual(original.nodes.find(n=>n.kind==='text')!.textLayout);expect(proposal.nodes.find(n=>n.path)!.path).toEqual(original.nodes.find(n=>n.path)!.path);expect(proposal.containers.find(c=>c.opacity)!.opacity).toBe(.6)
   })
-  it('keeps imported affine text and filled curves as separate vector objects in drawio',()=>{
-    const result=load('<path d="M0 0Q30 70 60 0Z" fill="red"/><text x="0" y="90" transform="skewX(10)">Caption</text>'),xml=exportDrawio(result.asset.figure)
-    expect(xml.match(/data-vector-fallback="1"/g)).toHaveLength(2);expect(xml).toContain('image=data:image/svg+xml,');expect(xml).not.toContain('image/png')
-  })
   it('reports source markers as adapted editable arrows',()=>{
     const result=load('<defs><marker id="a"><path d="M0 0L10 5L0 10Z"/></marker></defs><path d="M0 0L100 0" fill="none" stroke="black" marker-end="url(#a)"/>');expect(result.asset.figure.nodes[0]!.path!.arrow).toBe('filled');expect(result.report.warnings.join()).toContain('标准可编辑箭头')
   })
@@ -154,12 +148,11 @@ describe('editable SVG ingestion',()=>{
 describe('native draw.io source ingestion',()=>{
   const graph='<mxGraphModel pageWidth="640" pageHeight="360"><root><mxCell id="0"/><mxCell id="1" parent="0"/><mxCell id="group" parent="1" vertex="1" style="group;"><mxGeometry x="100" y="60" width="440" height="180" as="geometry"/></mxCell><mxCell id="encoder" parent="group" vertex="1" value="&lt;b&gt;Encoder&lt;/b&gt;&lt;br/&gt;keys" style="rounded=1;arcSize=10;fillColor=#dceefa;strokeColor=#1f3344;fontFamily=MiSans;fontSize=14;html=1;whiteSpace=wrap;"><mxGeometry x="20" y="30" width="100" height="60" as="geometry"/></mxCell><mxCell id="decoder" parent="group" vertex="1" value="Decoder" style="ellipse;fillColor=#edf6ed;strokeColor=#1f3344;fontFamily=MiSans;fontSize=14;"><mxGeometry x="260" y="30" width="100" height="60" as="geometry"/></mxCell><mxCell id="flow" parent="group" edge="1" source="encoder" target="decoder" style="endArrow=block;strokeColor=#334455;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="200" y="60"/></Array></mxGeometry></mxCell></root></mxGraphModel>'
   const settings={...options,parseHtml:(source:string)=>new DOMParser().parseFromString(source,'text/html') as unknown as Document,serializeXml:(element:Element)=>new XMLSerializer().serializeToString(element as never)}
-  it('imports four gradient directions and independent alpha while retaining source-bound connections through SVG fallback',async()=>{
+  it('imports four gradient directions and independent alpha while retaining source-bound connections',async()=>{
     const {importDrawio}=await import('./drawioImport'),source=(direction:string,extra='')=>graph.replace('fillColor=#dceefa',`fillColor=#ff0000;gradientColor=#0000ff;gradientDirection=${direction};opacity=60;fillOpacity=50;strokeOpacity=40;${extra}`)
     for(const [direction,vector] of [['east',[1,0,0]],['south',[0,1,0]],['west',[-1,0,1]],['north',[0,-1,1]]] as const){
       const loaded=await importDrawio(source(direction),settings),doc=loaded.asset.figure,node=doc.nodes.find(n=>n.name==='drawio-cell-3-shape')!
-      expect(node.visual).toMatchObject({opacity:1,fillOpacity:.3,strokeOpacity:.24,fillGradient:{stops:[{color:'#ff0000'},{color:'#0000ff'}]}});node.visual!.fillGradient!.vector.forEach((value,i)=>expect(value).toBeCloseTo(vector[i]!,10))
-      const back=await importDrawio(exportDrawio(doc),settings);expect(back.report.boundEnds).toBe(2);expect(back.asset.figure.nodes.some(n=>n.visual?.fillGradient?.stops[1]?.color==='#0000ff')).toBe(true)
+      expect(loaded.report.boundEnds).toBe(2);expect(node.visual).toMatchObject({opacity:1,fillOpacity:.3,strokeOpacity:.24,fillGradient:{stops:[{color:'#ff0000'},{color:'#0000ff'}]}});node.visual!.fillGradient!.vector.forEach((value,i)=>expect(value).toBeCloseTo(vector[i]!,10))
     }
     const turned=await importDrawio(source('south','direction=north'),settings);expect(turned.asset.figure.nodes.find(n=>n.name==='drawio-cell-3-shape')!.visual!.fillGradient!.vector[0]).toBeCloseTo(1)
     await expect(importDrawio(source('diagonal'),settings)).rejects.toThrow('方向')
@@ -181,8 +174,6 @@ describe('native draw.io source ingestion',()=>{
     const small=instantiateComponent(createBlank(),scaleComponent(first.asset,.4),'stage').document,both=instantiateComponent(small,scaleComponent(second.asset,.4),'stage').document,collected=captureComponent(both,'stage','Two source pages');expect(collected.sources.filter(source=>source.file?.format==='drawio').map(source=>source.file!.page!.id).sort()).toEqual(['arch','same']);expect(collected.sources.filter(source=>source.file).every(source=>!source.file!.objectId)).toBe(true)
     const prepared=prepareDrawio(await inspectDrawio(graph.replace('id="flow"','id="flow" value="Flow"'),settings),'page-0',settings),edgeGroup=prepared.inventory.groups.find(group=>group.name==='Flow')!,fragment=importPreparedDrawio(prepared,{...settings,group:edgeGroup.key});expect(fragment.report).toMatchObject({connections:1,boundEnds:0,unboundEnds:2});expect(fragment.asset.figure.nodes.find(node=>node.path)!.path!.start).toBeUndefined();valid(fragment.asset.figure)
     const embedded=`<svg xmlns="http://www.w3.org/2000/svg" content="${source.replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;')}"/>`;expect((await inspectDrawio(embedded,settings)).pages.map(page=>page.id)).toEqual(['arch','same'])
-    const styled=clone(doc),line=styled.nodes.find(node=>node.id===edge.id)!;line.visual={...line.visual,strokeWidth:2,dash:[4,6],opacity:.5,strokeOpacity:.4};const exported=exportDrawio(styled);expect(exported).toContain(`edge="1" parent="${line.parentId}" source="${encoder.id}" target="${decoder.id}"`);expect(exported).toContain('dashed=1;dashPattern=2 3;');const back=await(await import('./drawioImport')).importDrawio(exported,settings),restored=back.asset.figure.nodes.find(node=>node.path?.start&&node.path.end)!,expected=pathPoints(styled,line).map(point=>transform(point,back.report.sourceTransform!)),actual=pathPoints(back.asset.figure,restored)
-    expect(back.report.boundEnds).toBe(2);for(const i of [0,actual.length-1]){expect(actual[i]!.x).toBeCloseTo(expected[i]!.x,6);expect(actual[i]!.y).toBeCloseTo(expected[i]!.y,6)}expect((restored.visual!.opacity??1)*(restored.visual!.strokeOpacity??1)).toBeCloseTo(.2);expect(restored.visual!.dash).toEqual([4,6]);valid(back.asset.figure)
   })
   it('keeps mxGraph label offset direction and endpoint bindings when automatic routing changes the line, while absolute labels ignore geometry x/y',async()=>{
     const {inspectDrawio,prepareDrawio,importPreparedDrawio}=await import('./drawioImport'),labeled=graph.replace('id="flow"','id="flow" value="Flow"').replace('endArrow=block;','edgeStyle=orthogonalEdgeStyle;endArrow=block;').replace('x="260" y="30"','x="260" y="110"').replace('<mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="200" y="60"/></Array></mxGeometry>','<mxGeometry x="-0.5" y="12" relative="1" as="geometry"/>'),pages=await inspectDrawio(labeled,settings),prepared=prepareDrawio(pages,'page-0',settings),connection=prepared.drawing.connections[0]!
@@ -193,8 +184,8 @@ describe('native draw.io source ingestion',()=>{
     const absolute=prepareDrawio(await inspectDrawio(labeled.replace('x="-0.5" y="12" relative="1"','x="900" y="999" relative="0"'),settings),'page-0',settings).drawing.connections[0]!
     expect(absolute.label!.point).toEqual({x:(start.x+end.x)/2,y:(start.y+end.y)/2})
   })
-  it('imports embedded vector fallback from exported draw.io, and rejects malformed topology, active labels, unsupported visual effects and decompression overflow without partial success',async()=>{
-    const {inspectDrawio,importDrawio}=await import('./drawioImport'),native=load('<rect x="20" y="20" width="100" height="60" fill="#dceefa"/><path d="M120 50C150 20 160 70 190 50" stroke="#123456" fill="none"/><text x="30" y="50" font-size="16">Editable</text>').asset.figure,roundtrip=await importDrawio(exportDrawio(native),settings)
+  it('imports embedded SVG vectors, and rejects malformed topology, active labels, unsupported visual effects and decompression overflow without partial success',async()=>{
+    const {inspectDrawio,importDrawio}=await import('./drawioImport'),embedded=svg('<rect x="20" y="20" width="100" height="60" fill="#dceefa"/><path d="M120 50C150 20 160 70 190 50" stroke="#123456" fill="none"/><text x="30" y="50" font-size="16">Editable</text>'),source=graph.replace(/style="rounded=1;[^"]+"/,`style="shape=image;image=data:image/svg+xml,${encodeURIComponent(embedded)};"`),roundtrip=await importDrawio(source,settings)
     expect(roundtrip.asset.figure.nodes.some(node=>node.kind==='text'&&node.label==='Editable')).toBe(true);expect(roundtrip.asset.figure.nodes.some(node=>node.path?.points.some(point=>point.c1))).toBe(true);expect(exportSvg(roundtrip.asset.figure)).not.toContain('<image');valid(roundtrip.asset.figure)
     for(const source of [graph.replace('parent="group"','parent="missing"'),graph.replace('id="decoder"','id="encoder"'),graph.replace('parent="1" vertex="1"','parent="encoder" vertex="1"'),graph.replace('endArrow=block','startArrow=block;endArrow=block')])await expect(importDrawio(source,settings)).rejects.toThrow()
     const activeLabel=graph.replace('&lt;b&gt;Encoder&lt;/b&gt;','&lt;img src=&quot;https://example.org/remote.png&quot;/&gt;');await expect(importDrawio(activeLabel,settings)).rejects.toThrow('活动或外部内容')

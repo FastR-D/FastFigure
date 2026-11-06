@@ -1,7 +1,7 @@
 import {createCallouts} from '../../src/core/callouts'
 import {sharedColorbarStates} from '../../src/core/sharedColorbar'
 import {sharedLegendStates} from '../../src/core/sharedLegend'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createHash,randomUUID } from 'node:crypto'
 import { createServer, request as httpRequest, type Server } from 'node:http'
 import { mkdtemp, readFile, rm,writeFile } from 'node:fs/promises'
@@ -112,7 +112,7 @@ describe('Harness run service and HTTP event replay', () => {
   it('screens frozen candidates before drawing, preserves plan selection and stops on invalid or uncertain choices',async()=>{
     const library=new ComponentLibraryStore(await directory());let original=buildRecipe('pipeline',{stages:2,direction:'row'}),preferredId=''
     for(let i=0;i<8;i++){const asset=buildRecipe('pipeline',{stages:2,direction:'row'});asset.name=i?'Recall pipeline '+i:'Preferred source';asset.tags=['poolneedle'];asset.figure.nodes[0]!.label=i?'Other stage':'Frozen preferred stage';const stored=library.publish({asset});if(!i){original=asset;preferredId=stored.record.id}}
-    const prompts:string[]=[],service=new HarnessService(()=>{const adapter=new CodexAdapter(options());return{kind:adapter.kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:turn=>{prompts.push(turn.content);return adapter.send(turn)}}},180_000,library);services.push(service)
+    const prompts:string[]=[],service=new HarnessService(()=>{const adapter=new CodexAdapter(options());return{kind:adapter.kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:turn=>{prompts.push(turn.content);return adapter.send(turn)}}},library);services.push(service)
     try{
       const session=service.createSession('codex','Selection'),base=createBlank(),query='LIBRARY_RECALL_TEST SELECTION_DEEP_TEST poolneedle pipeline，不要解码器',data={sessionId:session.id,content:query,figure:base,selectedIds:[],catalogue:[{kind:'seed' as const,id:'decoder'},{kind:'recipe' as const,id:'patch-embedding'}],librarySearch:true,libraryReview:true}
       expect(library.recommend(query).matches.some(row=>row.record.id===preferredId)).toBe(false)
@@ -134,7 +134,7 @@ describe('Harness run service and HTTP event replay', () => {
   })
   it('recalls server library sources, freezes the selected version and reuses plan sources without a new search',async()=>{
     const library=new ComponentLibraryStore(await directory()),asset=buildRecipe('pipeline',{stages:2,direction:'row'});asset.name='Recall pipeline';asset.tags=['poolneedle'];asset.figure.nodes[0]!.label='Stored stage';const stored=library.publish({asset});let recalls=0;const recommend=library.recommend.bind(library);library.recommend=query=>{recalls++;return recommend(query)}
-    const adapter=new ClaudeAdapter(options()),prompts:string[]=[],service=new HarnessService(()=>({kind:adapter.kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:turn=>{prompts.push(turn.content);return adapter.send(turn)}}),180_000,library);services.push(service)
+    const adapter=new ClaudeAdapter(options()),prompts:string[]=[],service=new HarnessService(()=>({kind:adapter.kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:turn=>{prompts.push(turn.content);return adapter.send(turn)}}),library);services.push(service)
     try{
       const session=service.createSession(adapter.kind,'Library recall'),base=createBlank(),first=service.start({sessionId:session.id,content:'LIBRARY_RECALL_TEST poolneedle pipeline',figure:base,selectedIds:[],catalogue:[],librarySearch:true}),report=service.summary(first.id).repositoryRecall!
       expect(report.matches[0]).toMatchObject({snapshotId:stored.record.id,decision:'included'});asset.figure.nodes[0]!.label='Later version';const later=library.publish({asset});library.setState(stored.record.id,{archived:true});await first.done;expect(first.status,service.summary(first.id).error).toBe('completed');const proposal=first.events.at(-1)!.proposal!;expect(proposal.nodes.some(n=>n.label==='Stored stage')).toBe(true);expect(proposal.nodes.some(n=>n.label==='Later version')).toBe(false);expect(service.summary(first.id).components[0]!.componentKey).toBe(`asset:library-${stored.record.id}`);expect(prompts[0]).toContain('本轮本机素材召回记录：');expect(service.history(session.id).turns[0]!.repositoryRecall).toEqual(report)
@@ -195,11 +195,11 @@ describe('Harness run service and HTTP event replay', () => {
     const {service,session}=serviceSession('codex','Candidate checkpoints')
     const data=reconstructionInput(session.id),original=clone(data.figure),first=service.start(data);await first.done
     const candidate=clone(first.events.at(-1)!.proposal!),task:ReconstructionTask={kind:'repair',containerId:'stage',regionId:'left'}
-    const second=service.start({...data,figure:candidate,task,refineFromRunId:first.id,inputImage:cropInput(candidate,task,1200,1100),timeoutSeconds:60});await second.done
+    const second=service.start({...data,figure:candidate,task,refineFromRunId:first.id,inputImage:cropInput(candidate,task,1200,1100)});await second.done
     expect(second.status).toBe('completed');expect(second.baseFigure).toEqual(candidate);expect(second.canvasBaseline).toEqual(original)
     const repaired=second.events.at(-1)!.proposal!
     expect(repaired.nodes.find(n=>n.reconstruction?.objectId==='label')!.label).toBe('Encoder corrected');expect(repaired.nodes.find(n=>n.reconstruction?.objectId==='output')).toEqual(candidate.nodes.find(n=>n.reconstruction?.objectId==='output'))
-    expect(service.summary(second.id)).toMatchObject({review:'pending',refinement:{parentRunId:first.id,rootRunId:first.id,round:1},timeoutSeconds:60})
+    expect(service.summary(second.id)).toMatchObject({review:'pending',refinement:{parentRunId:first.id,rootRunId:first.id,round:1}})
     expect(service.getRun(first.id).events.at(-1)!.proposal).toEqual(candidate);expect(service.summary(first.id).review).toBe('pending');expect(data.figure).toEqual(original)
     // A real HTTP round trip omits optional undefined fields in the repair result.
     const third=service.start({...data,content:'RECONSTRUCTION_NO_CHANGE',figure:JSON.parse(JSON.stringify(repaired)),task,refineFromRunId:second.id});await third.done
@@ -235,11 +235,17 @@ describe('Harness run service and HTTP event replay', () => {
     expect(service.summary(first.id).review).toBe('pending');expect(service.getRun(first.id).events.at(-1)!.proposal).toEqual(candidate)
     const resumed=service.start({...branch,content:'RECONSTRUCTION_NO_CHANGE'});await resumed.done;expect(resumed.events.at(-1)!.proposal).toEqual(candidate);expect(service.summary(resumed.id).refinement?.round).toBe(1)
   })
-  it('uses each accepted run time budget and records it instead of silently retaining the service default',async()=>{
-    const service=new HarnessService(()=>({kind:'codex',status:async()=>({kind:'codex',state:'ready',images:true,message:'Test only'}),dispose:()=>undefined,send:turn=>new Promise((resolve,reject)=>{const timer=setTimeout(()=>resolve('{"message":"Done","figure":null}'),120);turn.signal.addEventListener('abort',()=>{clearTimeout(timer);reject(turn.signal.reason)},{once:true})})}),40);services.push(service)
-    const session=service.createSession('codex','Budgets'),first=service.start(input(session.id));await first.done;expect(first.status).toBe('failed')
-    const longer=service.start({...input(session.id),timeoutSeconds:30});await longer.done;expect(longer.status).toBe('completed');expect(service.summary(longer.id).timeoutSeconds).toBe(30)
-    for(const timeoutSeconds of [0,29,601,1.5])expect(()=>service.start({...input(session.id),timeoutSeconds})).toThrow('请求无效')
+  it('keeps an ordinary run alive past the former deadline until completion or manual cancellation',async()=>{
+    let ready!:()=>void,complete!:(value:string)=>void
+    const started=new Promise<void>(resolve=>{ready=resolve})
+    const service=new HarnessService(()=>({kind:'codex',status:async()=>({kind:'codex',state:'ready',images:true,message:'Test only'}),dispose:()=>undefined,send:turn=>new Promise((resolve,reject)=>{complete=resolve;turn.signal.addEventListener('abort',()=>reject(turn.signal.reason),{once:true});ready()})}));services.push(service)
+    vi.useFakeTimers()
+    try{
+      const session=service.createSession('codex','No deadline'),first=service.start(input(session.id));await started
+      await vi.advanceTimersByTimeAsync(3_600_000);expect(first.status).toBe('running');expect(first.controller.signal.aborted).toBe(false)
+      complete('{"message":"Done","figure":null}');await first.done;expect(first.status).toBe('completed');expect(service.summary(first.id)).not.toHaveProperty('timeoutSeconds')
+      const second=service.start(input(session.id));service.cancel(second.id);await second.done;expect(second.status).toBe('cancelled')
+    }finally{vi.useRealTimers()}
   })
   it('coalesces tiny token deltas without dropping text, hitting the event cap, or emitting after a terminal event',async()=>{
     const figure=createExample();figure.nodes[0]!.label='Coalesced output'
@@ -273,7 +279,7 @@ describe('Harness run service and HTTP event replay', () => {
   it('finds reconstruction materials, freezes selection and crop through adoption and persists source-visible feedback',async()=>{
     const path=await directory(),library=new ComponentLibraryStore(path),asset=buildRecipe('tensor-stack',componentRecipes.find(recipe=>recipe.id==='tensor-stack')!.defaults);asset.name='Frozen lookup tensor';asset.tags.push('tensor-stack');const stored=library.publish({asset})
     let release!:()=>void,ready!:()=>void,gated=true;const gate=new Promise<void>(resolve=>release=resolve),selectionStarted=new Promise<void>(resolve=>ready=resolve),received:{content:string;image:string}[]=[]
-    const service=new HarnessService(kind=>{const adapter=new ClaudeAdapter(options());return{kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:async turn=>{if(turn.content.includes('实际检索裁片指纹：')){const line=turn.content.split('\n').find(line=>line.startsWith('实际筛选图谱目录：'));expect(turn.images).toHaveLength(1+(line?JSON.parse(line.slice('实际筛选图谱目录：'.length)).length:0));received.push({content:turn.content,image:turn.images![0]!.dataUrl})}if(gated&&turn.content.startsWith('你是 FastFigure 的素材筛选助手')){gated=false;ready();await gate}return adapter.send(turn)}}},180_000,library);services.push(service)
+    const service=new HarnessService(kind=>{const adapter=new ClaudeAdapter(options());return{kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:async turn=>{if(turn.content.includes('实际检索裁片指纹：')){const line=turn.content.split('\n').find(line=>line.startsWith('实际筛选图谱目录：'));expect(turn.images).toHaveLength(1+(line?JSON.parse(line.slice('实际筛选图谱目录：'.length)).length:0));received.push({content:turn.content,image:turn.images![0]!.dataUrl})}if(gated&&turn.content.startsWith('你是 FastFigure 的素材筛选助手')){gated=false;ready();await gate}return adapter.send(turn)}}},library);services.push(service)
     try{
       const session=service.createSession('claude','Look-up source'),data=reconstructionInput(session.id),image=cropInput(data.figure,data.task),before=clone(data.figure),request={...data,content:'IMAGE_COMPONENT_LOOKUP_TEST LOOKUP_SAVED：为此裁片寻找可编辑 tensor-stack 素材，不代替作者核对。'.padEnd(12_000,'x'),catalogue:[],inputImage:image,intent:'find-components' as const},lookup=service.start(request)
       const rendering=await pendingSelectionPreviews(service,lookup)
@@ -301,7 +307,7 @@ describe('Harness run service and HTTP event replay', () => {
   })
   it.each(['cancel','render-error'] as const)('stops a pending candidate render on %s without sending the selector or producing a candidate',async mode=>{
     const path=await directory(),library=new ComponentLibraryStore(path);let calls=0
-    const service=new HarnessService(kind=>({kind,status:async()=>({kind,state:'ready',images:true,message:'Controlled lifecycle',version:'stub'}),dispose(){},send:async()=>{calls++;if(calls>1)throw new Error('Selector must not run');return JSON.stringify({summary:'Layered geometry',terms:[{term:'tensor-stack',basis:'Visible offset planes',certainty:'visible'}],cautions:[]})}}),180000,library);services.push(service)
+    const service=new HarnessService(kind=>({kind,status:async()=>({kind,state:'ready',images:true,message:'Controlled lifecycle',version:'stub'}),dispose(){},send:async()=>{calls++;if(calls>1)throw new Error('Selector must not run');return JSON.stringify({summary:'Layered geometry',terms:[{term:'tensor-stack',basis:'Visible offset planes',certainty:'visible'}],cautions:[]})}}),library);services.push(service)
     try{const session=service.createSession('codex','Pending renderer'),data=reconstructionInput(session.id),run=service.start({...data,intent:'find-components',catalogue:[],inputImage:cropInput(data.figure,data.task)}),render=await pendingSelectionPreviews(service,run)
       if(mode==='cancel')service.cancel(run.id)
       else await service.submitSelectionPreviews(run.id,{sessionId:session.id,requestId:render.packet.requestId,error:'Controlled raster failure'})
@@ -415,7 +421,7 @@ describe('Harness run service and HTTP event replay', () => {
     expect(run.status).toBe('completed')
     const event = run.events.at(-1)!
     expect(event.components?.map(c => c.componentKey)).toEqual(['asset:test-personal', 'recipe:fusion'])
-    expect(event.proposal?.nodes).toHaveLength(6)
+    expect(event.proposal?.nodes.filter(n=>!n.titleBlock)).toHaveLength(6);expect(event.proposal?.nodes.filter(n=>n.titleBlock)).toHaveLength(3)
     expect(event.proposal?.containers.find(c => c.id === 'personal-stage')?.component?.sources).toEqual(asset.sources)
     expect(event.proposal?.edges.find(e => e.id === 'composed-bridge')?.source).not.toBe('step-1')
     expect(request.figure.nodes).toEqual([])
@@ -434,15 +440,15 @@ describe('Harness run service and HTTP event replay', () => {
     expect(run.status).toBe('failed'); expect(run.events.at(-1)?.type).toBe('run.failed')
     expect(run.events.some(e => e.proposal)).toBe(false)
   })
-  it('enforces session/global concurrency, cancellation, limits and timeout with one terminal event', async () => {
-    const service = new HarnessService(() => new ClaudeAdapter(options('stall')), 100); services.push(service)
+  it('enforces session/global concurrency, cancellation and limits with one terminal event', async () => {
+    const service = new HarnessService(() => new ClaudeAdapter(options('stall'))); services.push(service)
     const a = service.createSession('claude', 'a'), b = service.createSession('claude', 'b'), c = service.createSession('claude', 'c')
     const first = service.start(input(a.id)), second = service.start(input(b.id))
     expect(() => service.start(input(a.id))).toThrow('已有运行')
     expect(() => service.start(input(c.id))).toThrow('2 个运行')
     await expect(service.removeSession(a.id)).rejects.toThrow('停止')
-    service.cancel(first.id); await first.done; await second.done
-    expect(first.status).toBe('cancelled'); expect(second.status).toBe('failed')
+    service.cancel(first.id);service.cancel(second.id); await first.done; await second.done
+    expect(first.status).toBe('cancelled'); expect(second.status).toBe('cancelled')
     for (const run of [first, second]) expect(run.events.filter(e => ['run.completed','run.failed','run.cancelled'].includes(e.type))).toHaveLength(1)
     await service.removeSession(a.id)
     expect(() => service.getRun(first.id)).toThrow('不存在')
@@ -529,7 +535,7 @@ describe('Harness run service and HTTP event replay', () => {
     else if (field === 'sharedColorbars') expect(sharedColorbarStates(proposal)[0]!.active).toBe(true)
     else if (field === 'plotAlignments') expect(proposal.containers.filter(c => c.dataChart).every(c => c.dataChart!.spec.plotArea)).toBe(true)
     else if(field === 'callouts') expect(proposal.nodes.slice(0, figure.nodes.length)).toEqual(before.nodes)
-    else {expect(proposal.nodes.map(n=>n.id)).toEqual(before.nodes.map(n=>n.id));expect(event.calloutReflows![0]!.changed).toBe(true);expect(event.calloutReflows![0]!.bindingsChanged).toBe(true);expect(event.calloutReflows![0]!.afterLength).toBeLessThan(40)}
+    else {expect(proposal.nodes.filter(n=>!n.titleBlock).map(n=>n.id)).toEqual(before.nodes.filter(n=>!n.titleBlock).map(n=>n.id));expect(event.calloutReflows![0]!.changed).toBe(true);expect(event.calloutReflows![0]!.bindingsChanged).toBe(true);expect(event.calloutReflows![0]!.afterLength).toBeLessThan(40)}
     expect(service.summary(run.id).review).toBe('pending')
     service.review(run.id, 'applied')
     expect(service.summary(run.id).review).toBe('applied')

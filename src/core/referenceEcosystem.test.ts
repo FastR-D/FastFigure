@@ -9,7 +9,6 @@ import { composeCatalogue, describeCatalogue } from './catalogue'
 import { paletteById } from '../data/materials'
 import { recolorChartSeries } from './paint'
 import { exportSvg } from './svg'
-import { exportDrawio } from './export'
 import { parseHarnessResponse } from './harness'
 import { diffFigures } from './figureDiff'
 const read=(file:string)=>JSON.parse(readFileSync(new URL(`../../${file}`,import.meta.url),'utf8'))
@@ -30,7 +29,7 @@ describe('pinned FigureForge template reuse',()=>{
   it.each(representativeTemplates)('converts $id into editable geometry, retains attribution and reuses it through the model catalogue',template=>{
     const asset=convertFigureforgeTemplate(template,{parseXml}),before=clone(asset),inserted=instantiateComponent(createBlank(),asset,'stage')
     expect(asset.sources[0]?.reference).toContain('MIT');expect(asset.sources[0]?.file?.sha256).toBe(template.sha256)
-    expect(()=>parseDocument(inserted.document)).not.toThrow();expect(exportSvg(inserted.document)).not.toContain('<image');expect(exportDrawio(inserted.document)).toContain('mxGraphModel')
+    expect(()=>parseDocument(inserted.document)).not.toThrow();expect(exportSvg(inserted.document)).not.toContain('<image');
     const small=scaleComponent(asset,.5),insertion=instantiateComponent(createBlank(),small,'stage'),recaptured=captureComponent(insertion.document,insertion.containerId,'Example')
     expect(recaptured.sources[0]?.file?.sha256).toBe(template.sha256)
     const entry={kind:'asset' as const,asset},instance=composeCatalogue(createBlank(),[entry],[{id:'chart',componentKey:`asset:${asset.id}`,parentId:'stage',x:70,y:155,scale:.7,keepAppearance:true}],[])

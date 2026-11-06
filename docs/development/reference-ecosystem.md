@@ -1,6 +1,6 @@
 # 外部图件生态接入
 
-2026-10-29，按用户指定优先复用两个项目。FastFigure 是独立实现，第三方源码、版权和修改范围保留在 `third-party/`；固定版本与原文件 SHA-256 见 `third-party/sources.json`。
+2026-10-29，按用户指定优先复用两个项目。FastFigure 是独立实现，第三方源码、版权和修改范围保留在 `third-party/`；固定版本与保留文件 SHA-256 见 `third-party/sources.json`。
 
 | 来源 | 固定版本 | 本轮已复用 | 本轮未接入 |
 | --- | --- | --- | --- |
@@ -10,6 +10,8 @@
 数量来自固定版本的实际数据与转换检查，不能用 README 的宣传统计替代。图库包含 ICLR / ICML / NeurIPS / CVPR / ACL / AAAI，2023–2026 年；结构分类有 conceptual / framework / pipeline / architecture / taxonomy / teaser / comparison / results。Oral / Spotlight 等标记沿用原索引，本轮没有重新核对全部会议官方记录。
 
 第廿八批让工程中的至多三张参考图共同进入助手，人可逐图选择用途，逐图回看实际输入与模型说明；已采用来源随素材保留。它未新增自动跨图检索或独立风格资产，见 [多参考图](multiple-references.md)。
+
+`editable-native.mjs` 已裁剪为重建所需的路径几何函数，删除上游 PPTX 导出、OOXML 回读校验及专用文字排版模块。`third-party/sources.json` 记录裁剪后的 SHA-256 和修改范围，`resources:build` 只复制保留的实现。
 
 ## 用户入口与数据流
 

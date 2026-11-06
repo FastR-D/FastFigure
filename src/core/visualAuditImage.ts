@@ -9,12 +9,13 @@ import {designRasterSchema} from './designReview'
 
 /** Full-canvas review uses the same font-aware renderer as editable candidates. */
 export async function prepareDesignReviewImage(figure:FigureDocument){
-  const {canvas,fonts}=await rasterizeFigure(figure,{x:0,y:0,width:1000,height:620},1600,992)
+  const {width,height}=figure.canvas,scale=Math.min(1.6,2000/Math.max(width,height))
+  const {canvas,fonts}=await rasterizeFigure(figure,{x:0,y:0,width,height},Math.round(width*scale),Math.round(height*scale))
   let dataUrl='';for(const quality of [.96,.88,.76,.6]){dataUrl=canvas.toDataURL('image/webp',quality);if(dataUrl.length<=1_000_000)break}
   if(dataUrl.length>1_000_000)throw new Error('整图审阅渲染超过预算，请简化图件后重试')
   const digest=async(bytes:Uint8Array)=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new Uint8Array(bytes)))].map(b=>b.toString(16).padStart(2,'0')).join('')
   const figureSha256=await digest(new TextEncoder().encode(canonicalFigureJson(figure))),imageSha256=await digest(Uint8Array.from(atob(dataUrl.split(',')[1]!),c=>c.charCodeAt(0)))
-  return designRasterSchema.parse({dataUrl,width:canvas.width,height:canvas.height,figureSha256,imageSha256,renderer:'fastfigure-browser-v1',viewport:'canvas-1000x620',fonts})
+  return designRasterSchema.parse({dataUrl,width:canvas.width,height:canvas.height,figureSha256,imageSha256,renderer:'fastfigure-browser-v1',viewport:`canvas-${width}x${height}`,fonts})
 }
 
 export async function prepareVisualAuditImages(figure:FigureDocument,task:Extract<ReconstructionTask,{kind:'repair'}>){

@@ -3,13 +3,19 @@ import { Box, Button, Text, Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { styles } from '../../core/model'
 import StylePreview from './StylePreview'
-import {figureThemes,paperTheme} from '../../core/figureThemes'
+import ContainerStyleControls from './ContainerStyleControls.vue'
+import {figureThemes,paperThemes} from '../../core/figureThemes'
 const editor = useEditor()
 </script>
 
 <template>
   <Box class="style-theme-gallery">
-    <Text class="style-section-label">默认论文风格</Text><Button class="style-card theme-card" variant="quiet" :aria-pressed="editor.activeStyle.value.designSystem==='paper'" aria-label="应用论文插图主题" @click="editor.applySavedStyle(paperTheme,true)"><StylePreview :theme="paperTheme" /><Text>论文插图</Text><Text class="theme-card-detail">规整轮廓 · 手写正文 · 柔和语义色</Text></Button>
+    <Text class="style-section-label">论文主题</Text>
+    <Box class="paper-theme-gallery" aria-label="论文主题">
+      <Button v-for="theme in paperThemes" :key="theme.id" class="style-card theme-card paper-theme-card" variant="quiet" :aria-pressed="editor.activeStyle.value.designSystem==='paper'&&editor.activeStyle.value.preset!=='sketch'&&(editor.activeStyle.value.paperTheme?.variant??'soft')===theme.paperTheme?.variant" :aria-label="`应用 ${theme.name} 主题`" @click="editor.applySavedStyle(theme,true)">
+        <StylePreview :theme="theme" /><Box class="style-card-caption"><Text>{{ theme.name }}</Text><Icon v-if="editor.activeStyle.value.designSystem==='paper'&&editor.activeStyle.value.preset!=='sketch'&&(editor.activeStyle.value.paperTheme?.variant??'soft')===theme.paperTheme?.variant" name="check" /></Box><Text class="theme-card-detail">{{ theme.description }}</Text><Text class="theme-card-detail">标题 {{ theme.paperTheme?.headingSize }} · 正文 {{ theme.paperTheme?.bodySize }} · 注释 {{ theme.paperTheme?.captionSize }}</Text>
+      </Button>
+    </Box>
     <Text class="style-section-label">手绘主题</Text>
     <Text class="muted-caption">一并设置初始字体、配色和笔触，之后可在画板工具栏自由改字体。</Text>
     <Box class="style-gallery" aria-label="手绘主题">
@@ -27,5 +33,6 @@ const editor = useEditor()
       <Box class="style-card-caption"><Text>{{ style.name }}</Text><Icon v-if="editor.activeStyle.value.preset === style.id&&!editor.activeStyle.value.sketchStyle" name="check" /></Box>
     </Button>
     </Box>
+    <ContainerStyleControls />
   </Box>
 </template>

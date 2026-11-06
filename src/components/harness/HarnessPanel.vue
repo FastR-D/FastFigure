@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
-import { Article, Aside, Box, BrandMark, Button, Field, Footer, Header, Heading, Icon, Select, Text, TextArea, TextField } from '../ui'
+import { Article, Aside, Box, BrandMark, Button, Field, Footer, Header, Heading, Icon, Modal,ModalBody,Select, Text, TextArea, TextField } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { useEditor } from '../../composables/useEditor'
 import { createHarness } from '../../composables/useHarness'
@@ -31,7 +31,7 @@ async function scrollToLatest(force = false) {
 }
 function scrolled() { const element = stream.value; if (element) followTail.value = element.scrollHeight - element.scrollTop - element.clientHeight < 56 }
 watch(open, async value => {
-  if (!value) return
+  if (!value) {settingsOpen.value=false;return}
   if (!harness.statuses.value.length) await harness.refresh()
   await nextTick()
   surface.value?.querySelector<HTMLTextAreaElement>('textarea[aria-label="绘图要求"]')?.focus({ preventScroll: true })
@@ -52,15 +52,7 @@ onBeforeUnmount(harness.dispose)
 
 <template>
   <Aside v-show="open" ref="surface" class="assistant-panel" data-assistant-panel aria-label="Harness 绘图助手">
-    <Header class="assistant-heading"><Box class="assistant-brand"><BrandMark /><Box><Heading>绘图助手</Heading><Text>{{ harness.busy.value ? '正在处理当前要求' : '与画布一起迭代' }}</Text></Box></Box><IconButton icon="close" label="关闭绘图助手" @click="editor.closeAssistant" /></Header>
     <Box class="assistant-session-bar"><Select :value="harness.selectedSessionId.value" :disabled="harness.locked.value || harness.loading.value" :options="harness.sessions.value.map((s,i) => ({value:s.id,label:`${s.kind} · ${s.title} (${harness.sessions.value.length-i})`}))" placeholder="新的绘图会话" size="sm" aria-label="Harness 会话" @change="harness.loadSession($event)" /><IconButton icon="plus" label="新建会话" :disabled="harness.locked.value || harness.loading.value || harness.status.value?.state !== 'ready'" @click="harness.newSession" /><IconButton icon="notes" label="助手设置" :active="settingsOpen" :aria-expanded="settingsOpen" @click="settingsOpen = !settingsOpen" /></Box>
-    <Box v-if="settingsOpen" class="assistant-settings">
-      <Box class="assistant-setting-grid"><Field><Text>Harness</Text><Select :value="harness.kind.value" :disabled="harness.locked.value || harness.loading.value" :options="[{value:'codex',label:'Codex'}, {value:'claude',label:'Claude'}]" aria-label="Harness 类型" @change="harness.setKind($event as HarnessKind)" /></Field><Field><Text>模型</Text><TextField v-model="harness.model.value" :disabled="harness.locked.value" maxlength="100" aria-label="Harness 模型" placeholder="CLI 默认模型" /></Field></Box>
-      <Field><Text>每轮运行时限</Text><Select :value="String(harness.timeoutSeconds.value)" :disabled="harness.locked.value||harness.loading.value" :options="[{value:'60',label:'1 分钟'},{value:'180',label:'3 分钟'},{value:'360',label:'6 分钟'},{value:'600',label:'10 分钟'}]" aria-label="运行时限" @change="harness.timeoutSeconds.value=Number($event)" /></Field><Text class="muted-caption">复杂图可增加时限，或先框选子图；运行中可随时停止。</Text>
-      <Box class="harness-status"><Icon :name="harness.status.value?.state === 'ready' ? 'check' : 'info'" /><Text>{{ harness.loading.value ? '正在连接…' : harness.status.value?.state === 'ready' ? 'CLI 可用' : 'CLI 不可用' }}</Text><IconButton icon="refresh" label="重新检测 Harness" :disabled="harness.loading.value || harness.locked.value" @click="harness.refresh" /></Box>
-      <Text class="muted-caption">{{ harness.status.value?.version }} · {{ harness.status.value?.message || '使用本机 CLI 登录与模型配置' }}</Text>
-      <Button size="xs" variant="quiet" :disabled="harness.locked.value || harness.loading.value || !harness.selectedSessionId.value" @click="harness.removeSession">移除当前会话</Button>
-    </Box>
     <RepairPlanProgress :harness="harness" />
     <Box ref="stream" class="assistant-stream" aria-label="Harness 运行结果" @scroll.passive="scrolled">
       <Box v-if="!harness.turns.value.length && !harness.userContent.value && !harness.error.value" class="assistant-empty"><BrandMark /><Heading>从一张结构图开始</Heading><Text>描述模块、连接与样式要求，或结合参考图和组件继续绘制。</Text><Button size="xs" @click="harness.intent.value='design-review';harness.draft.value = '分析当前方法图，提出布局与可读性改进建议。'">分析当前图件</Button><Button size="xs" @click="harness.draft.value = '结合参考组件，为当前方法设计清晰的模块化结构图。'">结合组件绘图</Button></Box>
@@ -73,7 +65,7 @@ onBeforeUnmount(harness.dispose)
     </Box>
     <Button v-if="!followTail" size="xs" class="assistant-jump" @click="followTail = true; scrollToLatest(true)">回到最新消息 <Icon name="chevron" /></Button>
     <Footer class="assistant-composer">
-      <Field v-if="!harness.reconstructionTask.value&&!editor.assistantDataset.value"><Text>本轮任务</Text><Select :value="harness.intent.value" :disabled="harness.locked.value||harness.loading.value||!!harness.adoptedComposition.value" :options="[{value:'draw',label:'生成候选图'},{value:'plan',label:'先规划绘图方案'},{value:'edit-recipes',label:'调整已有组合参数'},{value:'design-review',label:'审阅当前主图'}]" aria-label="助手本轮任务" @change="harness.intent.value=$event as 'draw'|'plan'|'edit-recipes'|'design-review'" /></Field>
+      <Field v-if="!harness.reconstructionTask.value&&!editor.assistantDataset.value" class="assistant-task-row"><Text>本轮任务</Text><Select :value="harness.intent.value" :disabled="harness.locked.value||harness.loading.value||!!harness.adoptedComposition.value" :options="[{value:'draw',label:'生成候选图'},{value:'plan',label:'先规划绘图方案'},{value:'edit-recipes',label:'调整已有组合参数'},{value:'design-review',label:'审阅当前主图'}]" aria-label="助手本轮任务" @change="harness.intent.value=$event as 'draw'|'plan'|'edit-recipes'|'design-review'" /></Field>
       <Box v-if="harness.adoptedComposition.value" class="assistant-adopted-plan"><Text>已采用方案：{{ harness.adoptedComposition.value.record.plan.title }}</Text><Text class="muted-caption">来源和方案已固定，发送要求后生成候选。</Text><Text v-if="harness.compositionStale.value" role="alert" class="error-text">画布或参考图已变化，请清除方案重新规划，或还原后发送。</Text><Button size="xs" variant="quiet" :disabled="harness.locked.value" @click="harness.clearComposition">清除已采用方案</Button></Box>
       <Text v-if="harness.intent.value==='design-review'" class="muted-caption">审阅整张画布的视觉重点、结构搭配与留白。请说明研究论点和使用场景；返回定位建议，画布保持原样。</Text>
       <HarnessRecipeTargets v-if="harness.intent.value==='edit-recipes'" :disabled="harness.locked.value||harness.loading.value" />
@@ -87,4 +79,16 @@ onBeforeUnmount(harness.dispose)
       <Text class="assistant-composer-hint">{{ harness.preparingImage.value?'正在准备图片与组件图谱…':harness.loading.value ? '正在连接本地服务…' : 'Ctrl / ⌘ Enter 发送 · 当前图件会作为上下文' }}</Text>
     </Footer>
   </Aside>
+  <Modal :open="settingsOpen&&open" label="助手设置" size="md" @close="settingsOpen=false">
+    <Header><Heading>助手设置</Heading><IconButton icon="close" label="关闭助手设置" @click="settingsOpen=false" /></Header>
+    <ModalBody>
+      <Box class="assistant-settings">
+      <Box class="assistant-setting-grid"><Field><Text>Harness</Text><Select :value="harness.kind.value" :disabled="harness.locked.value || harness.loading.value" :options="[{value:'codex',label:'Codex'}, {value:'claude',label:'Claude'}]" aria-label="Harness 类型" @change="harness.setKind($event as HarnessKind)" /></Field><Field><Text>模型</Text><TextField v-model="harness.model.value" :disabled="harness.locked.value" maxlength="100" aria-label="Harness 模型" placeholder="CLI 默认模型" /></Field></Box>
+      <Box class="harness-status"><Icon :name="harness.status.value?.state === 'ready' ? 'check' : 'info'" /><Text>{{ harness.loading.value ? '正在连接…' : harness.status.value?.state === 'ready' ? 'CLI 可用' : 'CLI 不可用' }}</Text><IconButton icon="refresh" label="重新检测 Harness" :disabled="harness.loading.value || harness.locked.value" @click="harness.refresh" /></Box>
+      <Text class="muted-caption">{{ harness.status.value?.version }} · {{ harness.status.value?.message || '使用本机 CLI 登录与模型配置' }}</Text>
+      <Button size="xs" variant="quiet" :disabled="harness.locked.value || harness.loading.value || !harness.selectedSessionId.value" @click="harness.removeSession">移除当前会话</Button>
+      </Box>
+    </ModalBody>
+    <Footer><Button variant="primary" @click="settingsOpen=false">完成</Button></Footer>
+  </Modal>
 </template>

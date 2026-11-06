@@ -1,6 +1,6 @@
 # 参考图结构重建与分区修复
 
-2026-10-29。将参考图片经本地 Harness 转成可编辑文字、形状和曲线，再按语义分区提交修复补丁。用户审阅后应用，保持 PC 工作台、左侧助手、单应用和 pnpm；PPTX 继续暂缓。
+2026-10-29。将参考图片经本地 Harness 转成可编辑文字、形状和曲线，再按语义分区提交修复补丁。用户审阅后应用，保持 PC 工作台、左侧助手、单应用和 pnpm。
 
 ## 操作流程
 
@@ -23,9 +23,9 @@
 
 ## 复用范围
 
-直接复用 Top-Conf Figure Gallery 固定版本 `77a7d84570a6a9f3e63c22bb31b9fb59757e3dab` 的 `planSemanticRegions`、`planDetailRegions`、`regionObjectCatalog`、`snapshotVersions`、`applyRegionPatch`、`translateNode`，以及所依赖的几何模块。未修改源码保存在 `third-party/topconf/forge/`，运行副本在 `src/vendor/topconf/`；离线资源构建核对 SHA-256 后复制，许可和署名沿用 MIT 声明。
+直接复用 Top-Conf Figure Gallery 固定版本 `77a7d84570a6a9f3e63c22bb31b9fb59757e3dab` 的 `planSemanticRegions`、`planDetailRegions`、`regionObjectCatalog`、`snapshotVersions`、`applyRegionPatch`、`translateNode`，以及所依赖的几何模块。保留源码在 `third-party/topconf/forge/`，运行副本在 `src/vendor/topconf/`；`editable-native.mjs` 已裁剪为路径几何，修改范围见 `third-party/sources.json`；离线资源构建核对 SHA-256 后复制，许可和署名沿用 MIT 声明。
 
-适配器将其独立 Scene 协议转换为 FigureIR，补充父分区剩余区域的编辑归属、保护人工对象、稳定原生 ID、来源注册和绘制顺序。进入上游补丁几何处理之前，用现有严格 SVG 路径解析器校验路径。没有调用上游 PPTX 导出器、像素质量门或自动接受修复函数。
+适配器将其独立 Scene 协议转换为 FigureIR，补充父分区剩余区域的编辑归属、保护人工对象、稳定原生 ID、来源注册和绘制顺序。进入上游补丁几何处理之前，用现有严格 SVG 路径解析器校验路径。上游 PPTX 导出器已移除；没有启用像素质量门或自动接受修复函数。
 
 ## 数据与范围约束
 

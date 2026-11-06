@@ -3,9 +3,9 @@ import type {DataChartSpec} from './dataChartSchema.ts'
 
 export type ChartRole=NonNullable<FigureNode['chart']>['role']
 export type ChartAdd=(key:string,node:Omit<FigureNode,'id'|'parentId'>,role:ChartRole,series?:number,channels?:NonNullable<FigureNode['chart']>['channels'])=>FigureNode
-export const textWidth=(text:string,size:number,family='Inter')=>[...text].reduce((sum,c)=>sum+size*(c.codePointAt(0)!>255?1:family==='JetBrains Mono'?.6:/[ilI .,:;'!]/.test(c)?.34:/[MW@%]/.test(c)?1.05:/[mw]/.test(c)?.9:/[A-Z]/.test(c)?.8:.65),0)
+export const textWidth=(text:string,size:number,family='MiSans')=>[...text].reduce((sum,c)=>sum+size*(c.codePointAt(0)!>255?1:family==='JetBrains Mono'?.6:/[ilI .,:;'!]/.test(c)?.34:/[MW@%]/.test(c)?1.05:/[mw]/.test(c)?.9:/[A-Z]/.test(c)?.8:.65),0)
 export const formatChartValue=(v:number)=>Object.is(v,-0)?'0':Math.abs(v)>=1e6||v!==0&&Math.abs(v)<1e-4?v.toExponential(3).replace(/\.?0+e/,'e'):String(Number(v.toPrecision(12)))
-export function wrapChartText(text:string,size:number,width:number,family='Inter'){
+export function wrapChartText(text:string,size:number,width:number,family='MiSans'){
   const lines:string[]=[];let remaining=text.trim()
   while(textWidth(remaining,size,family)>width){
     const chars=[...remaining];let end=1
@@ -21,7 +21,7 @@ export function wrapChartText(text:string,size:number,width:number,family='Inter
   return lines
 }
 /** One text geometry implementation for all native chart compilers. */
-export function chartText(add:ChartAdd,family='Inter',scale=1){
+export function chartText(add:ChartAdd,family='MiSans',scale=1){
   return(key:string,text:string,x:number,y:number,size=11,align:'left'|'center'|'right'='left',role:ChartRole='axis',angle=0,series?:number,color='#253447')=>{
     if(!text)return
     size*=scale
@@ -33,7 +33,7 @@ export function chartText(add:ChartAdd,family='Inter',scale=1){
 
 /** Deterministic layout estimates shared by browser and compiler; never measure with host fonts. */
 export function chartTypographyMetrics(spec:Pick<DataChartSpec,'fontFamily'|'fontSize'>){
-  const family=spec.fontFamily??'Inter',base=spec.fontSize??10,scale=base/10,size=(value:number)=>value*scale,width=(text:string,value:number)=>textWidth(text,size(value),family),wrap=(text:string,value:number,available:number)=>wrapChartText(text,size(value),available,family)
+  const family=spec.fontFamily??'MiSans',base=spec.fontSize??10,scale=base/10,size=(value:number)=>value*scale,width=(text:string,value:number)=>textWidth(text,size(value),family),wrap=(text:string,value:number,available:number)=>wrapChartText(text,size(value),available,family)
   const footer=(values:string[],available:number)=>values.flatMap((text,index)=>wrap(text,10,available).map((text,line)=>({key:`note-${index}${line?`-line-${line}`:''}`,text})))
   // A vertical title occupies its own left strip; it may extend past the plot without touching the heading or notes.
   const axisFits=(text:string,center:number,rows:number,height=460)=>{const half=width(text,12)/2+1,upper=size(17)+8+size(17)*.3+8,lower=rows?height-Math.max(10,size(10)*.3+4)-(rows-1)*size(14)-size(10)-8:height-12;return center-half>=upper&&center+half<=lower}

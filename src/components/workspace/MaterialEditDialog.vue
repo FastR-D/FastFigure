@@ -64,8 +64,8 @@ const preview=computed(()=>{const revision=fontEpoch.value;try{return{revision,r
 const fitRows=computed(()=>preview.value.result?.reports.flatMap(r=>r.textFit??[])??[])
 let fontRequest=0,disposed=false
 const faces=computed(()=>{
-  const source=findObject(base,sourceId.value),families=base.nodes.filter(n=>scopeIds.some(id=>id===n.id||descendants(base,id).some(o=>o.id===n.id))).flatMap(n=>[n.textStyle?.family??resolveStyle(base,n.parentId).fontFamily??'Inter',n.descriptionStyle?.family??resolveStyle(base,n.parentId).fontFamily??'Inter'])
-  if(source)families.push(source.textStyle?.family??resolveStyle(base,'kind'in source?source.parentId:source.id).fontFamily??'Inter')
+  const source=findObject(base,sourceId.value),families=base.nodes.filter(n=>scopeIds.some(id=>id===n.id||descendants(base,id).some(o=>o.id===n.id))).flatMap(n=>[n.textStyle?.family??resolveStyle(base,n.parentId).fontFamily??'MiSans',n.descriptionStyle?.family??resolveStyle(base,n.parentId).fontFamily??'MiSans'])
+  if(source)families.push(source.textStyle?.family??resolveStyle(base,'kind'in source?source.parentId:source.id).fontFamily??'MiSans')
   return[...new Set(families)].sort().join('|')
 })
 watch(faces,async names=>{

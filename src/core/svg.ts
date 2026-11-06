@@ -1,3 +1,4 @@
+import {paperThemeDefaults} from './paperThemeTokens.ts'
 import {richTextElements} from './richText.ts'
 import {measureTextEvidence} from './textGeometry.ts'
 import {outputFrame} from './outputFrame.ts'
@@ -108,6 +109,10 @@ export function nodeVisual(node: FigureNode, doc: FigureDocument): SvgElement[] 
   node=paperNode(node,doc.style)
   const { x, y, width: w, height: h } = node, p = figurePaint(doc.style, node.visual?.colorIndex)
   const result: SvgElement[] = [], borderless = node.kind === 'text' || node.kind === 'icon'
+  if(node.titleBlock&&isPaperStyle(doc.style)&&(doc.style.paperTheme??paperThemeDefaults.soft).titleStyle==='tab'){
+    const tokens=doc.style.paperTheme??paperThemeDefaults.soft
+    result.push(el('rect',{x,y,width:w,height:h,rx:5,fill:tokens.titleFill,stroke:tokens.ink,'stroke-width':tokens.strokeWidth,'data-title-tab':node.id}))
+  }
   const definitions:SvgElement[]=[]
   const finish=(elements:SvgElement[])=>definitions.length?[el('defs',{},definitions),...elements]:elements
   function paint(channel:'fill'|'stroke',fallback:string,matrix?:Affine){
@@ -135,7 +140,7 @@ export function nodeVisual(node: FigureNode, doc: FigureDocument): SvgElement[] 
     return finish(result)
   }
   if(node.kind==='image'&&node.image)return[el('title',{},[node.image.alt]),el('image',{x,y,width:w,height:h,href:node.image.dataUrl,preserveAspectRatio:node.image.fit==='cover'?'xMidYMid slice':'xMidYMid meet','data-image-sha256':node.image.sha256})]
-  if(node.kind==='text'&&node.textRuns){const padding=node.visual?.padding??2,id=`ff-rich-${node.id}`;return[el('defs',{},[el('clipPath',{id},[el('rect',{x,y,width:w,height:h})])]),el('g',{'clip-path':`url(#${id})`},richTextElements(node,doc.style,{x:x+padding,y:y+padding,width:w-padding*2,height:h-padding*2}))]}
+  if(node.kind==='text'&&node.textRuns){const padding=node.visual?.padding??2;return[...result,...richTextElements(node,doc.style,{x:x+padding,y:y+padding,width:w-padding*2,height:h-padding*2})]}
   if(node.kind==='text'&&node.textLayout){
     const layout=node.textLayout,s=nodeTextStyle(node,false,doc.style),base={x:x+w*layout.x,y:y+h*layout.y}
     return [el('title',{},[node.label]),text(0,0,node.label,{...textAttributes(node.textStyle,false,doc.style.fontFamily),fill:node.textStyle?.color??node.visual?.fill??s.color,stroke:node.visual?.stroke??'none','stroke-width':node.visual?.strokeWidth??1,'fill-opacity':node.visual?.fillOpacity??1,'stroke-opacity':node.visual?.strokeOpacity??1,'stroke-linecap':node.visual?.lineCap??'butt','stroke-linejoin':node.visual?.lineJoin??'miter','stroke-miterlimit':node.visual?.miterLimit??4,'stroke-dashoffset':node.visual?.dashOffset??0,...(node.visual?.dash?.length?{'stroke-dasharray':node.visual.dash.join(' ')}:{}),'dominant-baseline':layout.baseline??'alphabetic','text-anchor':s.align==='center'?'middle':s.align==='right'?'end':'start',transform:`matrix(${layout.matrix.join(' ')} ${base.x} ${base.y})`,'data-edit-field':'label','xml:space':'preserve'})]
@@ -170,10 +175,9 @@ export function nodeVisual(node: FigureNode, doc: FigureDocument): SvgElement[] 
     if(node.description) {
       const bodyAlign=node.descriptionStyle?.align??'center', bodyX=bodyAlign==='left'?x+10:bodyAlign==='right'?x+w-10:x+w/2
       const body=layoutWrappedText(node.description,w-20,layout.bodySize,1)
-      result.push(text(bodyX,y+h-8,body.lines[0]??'',{...textAttributes(node.descriptionStyle,false,doc.style.fontFamily),'font-size':layout.bodySize,fill:node.descriptionStyle?.color??'#667085','text-anchor':bodyAlign==='left'?'start':bodyAlign==='right'?'end':'middle','data-edit-field':'description',...wrappedTextAttributes(body,'description',w-20,Math.min(layout.footer,h-8),layout.bodySize)}))
+      result.push(...body.lines.map((line,i)=>text(bodyX,y+h-8+i*layout.bodySize*1.3,line,{...textAttributes(node.descriptionStyle,false,doc.style.fontFamily),'font-size':layout.bodySize,fill:node.descriptionStyle?.color??'#667085','text-anchor':bodyAlign==='left'?'start':bodyAlign==='right'?'end':'middle','data-edit-field':'description',...wrappedTextAttributes(body,'description',w-20,Math.min(layout.footer,h-8),layout.bodySize)})))
     }
-    const clipId=`ff-structure-${node.id}-${hash(`${x}-${y}-${w}-${h}`)}`,content=result.splice(contentStart)
-    result.push(el('defs',{},[el('clipPath',{id:clipId},[el('rect',{x:x+1,y:y+1,width:w-2,height:h-2})])]),el('g',{'clip-path':`url(#${clipId})`},content))
+    const content=result.splice(contentStart);result.push(el('g',{},content))
     return finish(result)
   }
   const hasIcon = !!node.iconId && iconById.has(node.iconId)
@@ -211,7 +215,7 @@ export function nodeVisual(node: FigureNode, doc: FigureDocument): SvgElement[] 
   let textX = align === 'left' ? left : align === 'right' ? left + textWidth : left + textWidth/2
   const color = node.textStyle?.color ?? (node.visual?.textTone?style.color:node.visual?.fill && node.visual.fill !== 'none' ? foreground(node.visual.fill) : style.color)
   const metrics=lines.map(line=>measureTextEvidence(line,{...style,size})),ascent=Math.max(...metrics.map(m=>m.ascent)),descent=Math.max(...metrics.map(m=>m.descent))
-  const baseline = described ? top+size : top+(textHeight-bodySpace-lines.length*size*1.25)/2+size
+  const baseline = described ? top+size : Math.max(top+size,top+(textHeight-bodySpace-lines.length*size*1.25)/2+size)
   if(hasIcon&&node.kind!=='icon'||node.kind==='tensor'){
     const tensor=!hasIcon&&node.kind==='tensor',badgeSize=tensor?20:inlineIconSize,badgeGap=tensor?6:inlineIconGap
     const centered=align==='center',labelWidth=Math.min(textWidth,Math.max(...metrics.map(m=>m.width))),groupWidth=badgeSize+badgeGap+labelWidth
@@ -222,15 +226,13 @@ export function nodeVisual(node: FigureNode, doc: FigureDocument): SvgElement[] 
     else result.push(iconVisual(node.iconId!,iconX,iconY,badgeSize,detailInk)!)
   }
   result.push(el('title',{},[node.label+(described?' — '+node.description:'')]))
-  const clipId = `ff-text-${node.id}-${hash(`${node.label}-${size}-${x}-${y}-${w}-${h}`)}`
-  result.push(el('defs',{},[el('clipPath',{id:clipId},[el('rect',{x,y,width:w,height:h})])]))
   const labels:SvgElement[] = lines.map((line,i)=>text(textX,baseline+i*size*1.25,line,{...textAttributes(node.textStyle,false,doc.style.fontFamily),'font-size':size,fill:color,'text-anchor':align==='left'?'start':align==='right'?'end':'middle','data-edit-field':'label',...(i===0?wrappedTextAttributes(labelLayout,'label',textWidth,textHeight-bodySpace,size):{})}))
   if (described) {
     const bodyLayout=layoutWrappedText(node.description!,bodyWidth,bodySize,Math.max(1,Math.floor(bodySpace/(bodySize*1.3)))),bodyLines=bodyLayout.lines
     const align=node.descriptionStyle?.align??'left', bodyX=align==='right'?bodyLeft+bodyWidth:align==='center'?x+w/2:bodyLeft
     labels.push(...bodyLines.map((line,i)=>text(bodyX,bodyBottom-bodySpace+bodySize+i*bodySize*1.3,line,{...textAttributes(node.descriptionStyle,false,doc.style.fontFamily),'font-size':bodySize,fill:node.descriptionStyle?.color??'#667085','text-anchor':align==='right'?'end':align==='center'?'middle':'start','data-edit-field':'description',...(i===0?wrappedTextAttributes(bodyLayout,'description',bodyWidth,bodySpace,bodySize,1.3):{})})))
   }
-  result.push(el('g',{'clip-path':`url(#${clipId})`},labels))
+  result.push(el('g',{},labels))
   return finish(result)
 }
 function containerVisual(c: FigureContainer, doc: FigureDocument): SvgElement {
@@ -244,11 +246,12 @@ function containerVisual(c: FigureContainer, doc: FigureDocument): SvgElement {
   const p = figurePaint(doc.style,c.visual?.colorIndex), preset = doc.style.preset,surface=containerSurface(c),stroke=c.visual?.stroke??p.ink,strokeWidth=c.visual?.strokeWidth??(c.role==='component'?1.3:1.4),fill=c.visual?.fill??(surface==='hatch'?p.hatch:c.role==='component'||preset==='soft'?p.fill:'#ffffff'),handDrawn=c.visual?.handDrawn??preset==='sketch'
   const result: SvgElement[] = []
   if(c.role==='component') {
-    const background=handDrawn?roughRect(c.x,c.y,c.width,c.height,doc,c.id,fill,{stroke,strokeWidth,hatch:surface==='hatch'}):el('rect',{x:c.x,y:c.y,width:c.width,height:c.height,rx:c.visual?.radius??7,fill:surface==='hatch'?'none':fill,stroke,'stroke-width':strokeWidth,...(c.visual?.dash?.length?{'stroke-dasharray':c.visual.dash.join(' '),'stroke-dashoffset':c.visual.dashOffset??0}:{})})
+    const background=handDrawn&&isPaperStyle(doc.style)?sketchedShape(el('rect',{x:c.x,y:c.y,width:c.width,height:c.height,rx:c.visual?.radius??10,fill,stroke,'stroke-width':strokeWidth}),doc,c.id):handDrawn?roughRect(c.x,c.y,c.width,c.height,doc,c.id,fill,{stroke,strokeWidth,hatch:surface==='hatch'}):el('rect',{x:c.x,y:c.y,width:c.width,height:c.height,rx:c.visual?.radius??7,fill:surface==='hatch'?'none':fill,stroke,'stroke-width':strokeWidth,...(c.visual?.dash?.length?{'stroke-dasharray':c.visual.dash.join(' '),'stroke-dashoffset':c.visual.dashOffset??0}:{})})
     const layers=surface==='hatch'&&!handDrawn?[roughRect(c.x,c.y,c.width,c.height,doc,c.id,fill,{stroke:'none',hatch:true,roughness:0}),background]:[background]
     return el('g',{'data-container-id':c.id,'data-container-surface':surface,'data-expanded-structure':c.structureOrigin?.type??'custom',opacity:c.visual?.opacity??1},layers)
   }
-  if(handDrawn)result.push(roughRect(c.x,c.y,c.width,c.height,doc,c.id,fill,{stroke,strokeWidth,hatch:surface==='hatch'}))
+  if(handDrawn&&isPaperStyle(doc.style))result.push(sketchedShape(el('rect',{x:c.x,y:c.y,width:c.width,height:c.height,rx:c.visual?.radius??10,fill,stroke,'stroke-width':strokeWidth}),doc,c.id))
+  else if(handDrawn)result.push(roughRect(c.x,c.y,c.width,c.height,doc,c.id,fill,{stroke,strokeWidth,hatch:surface==='hatch'}))
   else if (preset === 'bracket') {
     if(surface==='plain')result.push(el('rect',{x:c.x,y:c.y,width:c.width,height:c.height,fill,stroke:'none'}))
     if(surface==='hatch')result.push(roughRect(c.x,c.y,c.width,c.height,doc,c.id,fill,{stroke:'none',hatch:true,roughness:0}))
@@ -257,15 +260,21 @@ function containerVisual(c: FigureContainer, doc: FigureDocument): SvgElement {
     if(surface==='hatch')result.push(roughRect(c.x,c.y,c.width,c.height,doc,c.id,fill,{stroke:'none',hatch:true,roughness:0}))
     result.push(el('rect', { x: c.x, y: c.y, width: c.width, height: c.height,rx:c.visual?.radius??(preset === 'soft' || preset === 'header' ? 12 : 3), fill:surface==='hatch'?'none':fill,stroke, 'stroke-width':strokeWidth, ...(preset === 'dashed' ? { 'stroke-dasharray': '8 6' } : {}) }))
   }
+  if(c.titleDetached)return el('g',{'data-container-id':c.id,'data-container-surface':surface,opacity:c.visual?.opacity??1},result)
   if (preset === 'header') {
     result.push(el('path', { d: `M${c.x + 13} ${c.y + 1} H${c.x + c.width - 13} Q${c.x + c.width - 1} ${c.y + 1} ${c.x + c.width - 1} ${c.y + 13} V${c.y + 46} H${c.x + 1} V${c.y + 13} Q${c.x + 1} ${c.y + 1} ${c.x + 13} ${c.y + 1}`, fill:surface==='transparent'?'none':c.visual?.fill??p.fill }))
     result.push(el('path', { d: `M${c.x} ${c.y + 46} H${c.x + c.width}`, stroke, 'stroke-width': 1 }))
   }
   if (surface==='hatch'&&handDrawn) result.push(el('rect', { x: c.x + 14, y: c.y + 10, width: Math.min(c.width - 28, [...c.title].length * 9 + 16), height: 25, fill: '#fff' }))
-  const titleWidth = [...c.title].reduce((sum, char) => sum + (char.charCodeAt(0) > 255 ? 15 : 7.5), 0)
+  const titleStyle={...c.textStyle,size:c.textStyle?.size??15},titleSize=titleStyle.size,titleAvailable=Math.max(1,c.width-44)
+  const titleLayout=layoutWrappedText(c.title,titleAvailable,titleSize,1,titleStyle),titleLabel=titleLayout.lines[0]??''
   const titleAlign=c.textStyle?.align??'left',titleX=titleAlign==='center'?c.x+c.width/2:titleAlign==='right'?c.x+c.width-22:c.x+22
-  result.push(text(titleX, c.y + 29, c.title, { ...textAttributes(c.textStyle,true,doc.style.fontFamily),'text-anchor':titleAlign==='center'?'middle':titleAlign==='right'?'end':'start', 'data-edit-field':'label',
-    ...(titleWidth > c.width - 44 ? { textLength: c.width - 44, lengthAdjust: 'spacingAndGlyphs' } : {}) }))
+  const tokens=doc.style.paperTheme??paperThemeDefaults.soft
+  if(isPaperStyle(doc.style)&&tokens.titleStyle==='tab'){
+    const tw=Math.min(c.width-28,measureTextEvidence(titleLabel,titleStyle).width+20),tx=titleAlign==='center'?c.x+(c.width-tw)/2:titleAlign==='right'?c.x+c.width-14-tw:c.x+14
+    result.push(el('rect',{x:tx,y:c.y+5,width:tw,height:titleSize*1.3+8,rx:5,fill:tokens.titleFill,stroke:p.ink,'stroke-width':tokens.strokeWidth,'data-title-tab':c.id}))
+  }
+  result.push(text(titleX,c.y+29,titleLabel,{...textAttributes(titleStyle,true,doc.style.fontFamily),'text-anchor':titleAlign==='center'?'middle':titleAlign==='right'?'end':'start','data-edit-field':'label',...wrappedTextAttributes(titleLayout,'label',titleAvailable,38,titleSize)}))
   return el('g', { 'data-container-id': c.id,'data-container-surface':surface,opacity:c.visual?.opacity??1 }, result)
 }
 export function createScene(doc: FigureDocument, showDocumentTitle = true, routes: FigureRoutes = routeFigure(doc)): SvgElement[] {
@@ -312,24 +321,15 @@ function serialize(item: SvgElement | string): string {
   if (typeof item === 'string') return escapeXml(item)
   return `<${item.tag}${Object.entries(item.attrs ?? {}).map(([k, v]) => ` ${k}="${escapeXml(String(v))}"`).join('')}>${(item.children ?? []).map(serialize).join('')}</${item.tag}>`
 }
-export function exportIconSvg(id: string) {
-  const icon = iconById.get(id)
-  return icon ? serialize(el('svg',{xmlns:'http://www.w3.org/2000/svg',viewBox:`0 0 ${icon.width} ${icon.height}`},icon.elements)) : ''
-}
 export function exportSvg(doc: FigureDocument) {
   const frame=outputFrame(doc),publication=doc.publication,number=(value:number)=>Number(value.toFixed(6)),width=publication?`${number(publication.widthMm)}mm`:frame.width,height=publication?`${number(publication.widthMm*frame.height/frame.width)}mm`:frame.height
   return '<?xml version="1.0" encoding="UTF-8"?>\n' + serialize(el('svg', {
     xmlns: 'http://www.w3.org/2000/svg', width, height,
     viewBox: `${frame.x} ${frame.y} ${frame.width} ${frame.height}`, 'font-family': fontStack(doc.style.fontFamily),style:'font-synthesis:weight style',
-  }, [el('title', {}, [doc.title]), el('metadata', {}, [JSON.stringify({ ...doc, references: [] })]), el('rect', { width: 1000, height: 620, fill: '#fff' }), ...createScene(doc,publication?.showTitle??!isPaperStyle(doc.style))]))
+  }, [el('title', {}, [doc.title]), el('metadata', {}, [JSON.stringify({ ...doc, references: [] })]), el('rect', { width:doc.canvas.width, height:doc.canvas.height, fill: '#fff' }), ...createScene(doc,publication?.showTitle??!isPaperStyle(doc.style))]))
 }
 
-/** Same scene as the editor, without paper metadata, document title or interaction overlays. */
-export function exportSceneSvg(doc:FigureDocument,viewport:{x:number;y:number;width:number;height:number},width:number,height:number){
-  return serialize(el('svg',{xmlns:'http://www.w3.org/2000/svg',width,height,viewBox:`${viewport.x} ${viewport.y} ${viewport.width} ${viewport.height}`,'font-family':fontStack(doc.style.fontFamily),style:'font-synthesis:weight style'},createScene(doc,false)))
-}
-
-/** Isolated vector fallback for editors without our path / affine text model. */
-export function exportNodeSvg(doc:FigureDocument,node:FigureNode,padding=4) {
-  return serialize(el('svg',{xmlns:'http://www.w3.org/2000/svg',viewBox:`${node.x-padding} ${node.y-padding} ${node.width+padding*2} ${node.height+padding*2}`,'font-family':fontStack(resolveStyle(doc,node.parentId).fontFamily),style:'font-synthesis:weight style'},[el('g',{opacity:node.visual?.opacity??1},nodeVisual(node,{...doc,style:resolveStyle(doc,node.parentId)}))]))
+/** Same scene as the editor, without metadata or interaction overlays; document title is opt-in. */
+export function exportSceneSvg(doc:FigureDocument,viewport:{x:number;y:number;width:number;height:number},width:number,height:number,showTitle=false){
+  return serialize(el('svg',{xmlns:'http://www.w3.org/2000/svg',width,height,viewBox:`${viewport.x} ${viewport.y} ${viewport.width} ${viewport.height}`,'font-family':fontStack(doc.style.fontFamily),style:'font-synthesis:weight style'},createScene(doc,showTitle)))
 }

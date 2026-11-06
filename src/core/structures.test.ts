@@ -9,7 +9,6 @@ import { nodeStructure, structureLabels, structurePresets } from './structures'
 import { structuredNodeLayout, structureParts } from './structureVisual'
 import { figurePaint } from './paint'
 import { exportSvg } from './svg'
-import { exportDrawio } from './export'
 import { parseHarnessResponse } from './harness'
 import { diffFigures } from './figureDiff'
 
@@ -49,18 +48,13 @@ describe('paper component structural grammar',()=>{
     for(const structure of [{type:'unknown'},{type:'encoder',repeats:13},{type:'encoder',labels:['a'.repeat(41)]}]) expect(()=>parseDocument({...doc,nodes:[{...node,structure}]})).toThrow()
     expect(nodeStructure({...node,structure:undefined,label:'Arbitrary module'})).toBeUndefined()
   })
-  it('retains real vector structures, editable labels, fonts, and collision-free draw.io children',()=>{
+  it('retains real vector structures, editable labels and fonts in SVG',()=>{
     const doc=seed('decoder').figure,node=doc.nodes[0]!
     node.textStyle={family:'MiSans',size:18,bold:true,italic:true};node.description='Context-aware';node.structure!.labels=['因果注意力','残差归一化','编码器上下文','Add & Norm','FFN','Add & Norm']
-    doc.nodes.push({id:'decoder-layer-0',kind:'text',label:'Reserved ID',parentId:'stage',x:12,y:48,width:24,height:20})
-    const svg=exportSvg(doc),xml=exportDrawio(doc)
+    const svg=exportSvg(doc)
     expect(svg).toContain('data-structure="decoder"');expect(svg).toContain('data-edit-field="structure:0"')
     expect(svg).toContain('font-weight="700"');expect(svg).toContain('font-style="italic"');expect(svg).toContain('MiSans')
-    expect(svg).not.toContain('<image');expect(xml).not.toContain('shape=image')
-    expect(xml).toContain('value="因果注意力"');expect(xml).toContain('value="编码器上下文"');expect(xml).toContain('fontStyle=3;')
-    expect(xml).toContain('id="decoder-layer-0-1"');expect(xml).toContain('id="decoder-encoder-context"')
-    const ids=[...xml.matchAll(/<mxCell id="([^"]+)"/g)].map(m=>m[1])
-    expect(new Set(ids).size).toBe(ids.length)
+    expect(svg).not.toContain('<image');
   })
   it('preserves structural parameters, annotation, icon and palette through capture / JSON / insertion',()=>{
     const doc=seed('encoder').figure,node=doc.nodes[0]!

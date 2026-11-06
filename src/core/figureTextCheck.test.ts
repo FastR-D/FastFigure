@@ -28,15 +28,15 @@ describe('renderer-backed native text checks',()=>{
     const expected=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(captureFigureJson(doc))))].map(value=>value.toString(16).padStart(2,'0')).join(''),pending=publicationReportPacket(doc,{...doc.publication,widthMm:182});doc.nodes[0]!.label='Changed after export started';const packet=await pending
     expect(packet.sourceSha256).toBe(expected);expect(packet.settings.widthMm).toBe(182);expect(packet.report).toEqual(checkPublication(before,packet.settings));expect(before.publication!.widthMm).toBe(88.9)
   })
-  it('reports actual line-limit omission and displays exactly the renderer lines without mutating the figure',()=>{
+  it('reports line overflow without omitting content and displays exactly the renderer lines without mutating the figure',()=>{
     const doc=createBlank();doc.nodes=[node()];const before=clone(doc),report=checkFigureText(doc),labels=texts(nodeVisual(doc.nodes[0]!,doc)).filter(t=>t.attrs?.['data-edit-field']==='label')
-    expect(report).toMatchObject({checkedNodes:1,checkedFields:1,total:1,omitted:0,issues:[{nodeId:'caption',field:'label',source:'First line\nSecond line',requiredLines:2,lineLimit:1,reasons:['line-limit']}]});expect(report.issues[0]!.shown).toBe(labels.map(t=>t.children?.join('')).join('\n'));expect(report.issues[0]!.shown).toBe('First lin…');expect(doc).toEqual(before)
+    expect(report).toMatchObject({checkedNodes:1,checkedFields:1,total:1,omitted:0,issues:[{nodeId:'caption',field:'label',source:'First line\nSecond line',requiredLines:2,lineLimit:1,reasons:['line-limit','height']}]});expect(report.issues[0]!.shown).toBe(labels.map(t=>t.children?.join('')).join('\n'));expect(report.issues[0]!.shown).toBe('First line\nSecond line');expect(doc).toEqual(before)
     doc.nodes[0]!.height=44;expect(checkFigureText(doc).total).toBe(0)
   })
   it('does not mistake literal ellipses or empty labels for renderer omissions and keeps whitespace wrapping unchanged',()=>{
     const doc=createBlank();doc.nodes=[node({label:'Literal…',height:44}),node({id:'empty',label:'',height:44})]
     expect(checkFigureText(doc)).toMatchObject({total:0,checkedNodes:1,checkedFields:1})
-    expect(layoutWrappedText('A\nB',100,15,1)).toMatchObject({lines:['…'],requiredLines:2,maxLines:1,truncated:true})
+    expect(layoutWrappedText('A\nB',100,15,1)).toMatchObject({lines:['A','B'],requiredLines:2,maxLines:1,truncated:true})
     expect(wrapText('  Alpha   beta \n 中文 ',300,15,2)).toEqual(['Alpha   beta','中文'])
   })
   it('distinguishes estimated width or height problems from definite line-limit omission',()=>{
@@ -50,7 +50,7 @@ describe('renderer-backed native text checks',()=>{
     doc.nodes=[node({kind:'module',label:'Encoder',description:'Body',width:184,height:66,descriptionStyle:{size:64},structure:{type:'encoder'}})];expect(checkFigureText(doc).issues.find(i=>i.field==='description')!.reasons).toContain('height')
   })
   it('locates structured titles, internal labels and footnotes using their editable field IDs',()=>{
-    const doc=createBlank();doc.nodes=[node({kind:'module',label:'非常长的标题'.repeat(20),description:'长注释'.repeat(40),width:184,height:300,structure:{type:'encoder',labels:['非常长的结构标签'.repeat(4)]}})]
+    const doc=createBlank();doc.nodes=[node({kind:'module',label:'非常长的标题'.repeat(5),description:'长注释'.repeat(40),width:184,height:300,structure:{type:'encoder',labels:['非常长的结构标签'.repeat(4)]}})]
     const fields=checkFigureText(doc).issues.map(i=>i.field);expect(fields).toContain('label');expect(fields).toContain('description');expect(fields).toContain('structure:0')
     expect(exportSvg(doc)).toContain('data-text-truncated="1"')
   })

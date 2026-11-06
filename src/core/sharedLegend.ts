@@ -1,5 +1,5 @@
 import {clone,parseDocument,type FigureDocument,type FigureNode} from './model.ts'
-import {ancestors,childrenOf,contentBounds,resolveStyle,descendants,translateGeometry,type Rect} from './geometry.ts'
+import {ancestors,childrenOf,layoutContentBounds,resolveStyle,descendants,translateGeometry,type Rect} from './geometry.ts'
 import {basisNode,scaleNodeMetrics} from './scaling.ts'
 import {figurePaint} from './paint.ts'
 import {nodeTextStyle} from './typography.ts'
@@ -150,9 +150,9 @@ export function createSharedLegend(input:FigureDocument,raw:Omit<SharedLegendCre
   if(doc.containers.some(c=>c.sharedLegend?.chartIds.some(id=>request.containerIds.includes(id))))throw new Error('图表已关联共享图例，请调整已有图例或先解除原共享关系')
   const common=[...ancestors(doc,first.root.id)].find(id=>request.containerIds.every(chartId=>ancestors(doc,chartId).includes(id)))??'stage',parentId=request.parentId??common,parent=doc.containers.find(c=>c.id===parentId)
   if(!parent||parent.dataChart||parent.sharedLegend||request.containerIds.some(id=>!ancestors(doc,id).includes(parentId)))throw new Error('请选择所有源图表的共同外层容器')
-  const family=request.fontFamily??resolveStyle(doc,parentId).fontFamily??'Inter'
+  const family=request.fontFamily??resolveStyle(doc,parentId).fontFamily??'MiSans'
   if(!fontFamilies.includes(family))throw new Error('请选择可用图例字体')
-  const area=contentBounds(parent),layout=layoutLegendEntries(doc,first.entries,{fontFamily:family,fontSize:request.fontSize,columns:request.columns,gap:request.gap,padding:10,maxWidth:area.width-24})
+  const area=layoutContentBounds(doc,parent),layout=layoutLegendEntries(doc,first.entries,{fontFamily:family,fontSize:request.fontSize,columns:request.columns,gap:request.gap,padding:10,maxWidth:area.width-24})
   const box={x:area.x+(area.width-Math.max(100,layout.width))/2,y:request.placement==='top'?area.y:area.y+area.height-layout.height,width:Math.max(100,layout.width),height:layout.height}
   if(box.height>area.height||box.width>area.width)throw new Error('共享图例放不进共同容器，请扩大可用空间')
   if(childrenOf(doc,parentId).filter(o=>!('kind'in o&&o.kind==='port')).some(o=>overlaps(box,o)))throw new Error('图例位置与现有对象重叠，请在面板编排中预留空间，或选择另一侧')
@@ -186,7 +186,7 @@ export function updateSharedLegend(input:FigureDocument,raw:unknown){
   const sameText=before.labels.every(label=>(request.fontFamily===undefined||request.fontFamily===label.fontFamily)&&(request.fontSize===undefined||Math.abs(request.fontSize-label.fontSize)<1e-8))
   const membershipChanged=!!sourceSync&&(sourceSync.removed.length>0||sourceSync.entries.some(entry=>entry.action!=='kept'))
   if(sameText&&!membershipChanged&&request.columns===undefined&&request.gap===undefined&&request.placement==='preserve')return finish()
-  const area=contentBounds(parent),pairs=group.sharedLegend.entries.map(entry=>({mark:doc.nodes.find(n=>n.id===entry.markId)!,label:doc.nodes.find(n=>n.id===entry.labelId)!})),managed=new Set(pairs.flatMap(pair=>[pair.mark.id,pair.label.id]))
+  const area=layoutContentBounds(doc,parent),pairs=group.sharedLegend.entries.map(entry=>({mark:doc.nodes.find(n=>n.id===entry.markId)!,label:doc.nodes.find(n=>n.id===entry.labelId)!})),managed=new Set(pairs.flatMap(pair=>[pair.mark.id,pair.label.id]))
   const layout=layoutLegendEntries(doc,pairs,{fontFamily:request.fontFamily,fontSize:request.fontSize,columns,gap,padding:10*scale,maxWidth:area.width-24*scale}),extras=descendants(doc,group.id).filter(object=>!managed.has(object.id)),solidExtras=extras.filter(object=>!('kind'in object&&object.kind==='port'))
   const box={x:group.x,y:group.y,width:Math.max(100*scale,layout.width,...solidExtras.map(object=>object.x+object.width-group.x+2*scale)),height:Math.max(layout.height,...solidExtras.map(object=>object.y+object.height-group.y+2*scale))}
   if(request.placement!=='preserve'){box.x=area.x+(area.width-box.width)/2;box.y=request.placement==='top'?area.y:area.y+area.height-box.height}

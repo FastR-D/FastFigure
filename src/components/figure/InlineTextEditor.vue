@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount,onMounted,ref, useTemplateRef, watch } from 'vue'
 import { Box, Button, TextArea, Text } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { findObject } from '../../core/geometry'
 import { fontStack } from '../../data/materials'
 import { nodeStructure, structureLabels } from '../../core/structures'
 const editor = useEditor(), draft = ref(''), input = useTemplateRef<HTMLTextAreaElement>('input')
+const surface=useTemplateRef<HTMLElement>('surface')
+const canvas=computed(()=>editor.figure.value.canvas)
 const object = computed(() => editor.textEdit.value ? findObject(editor.figure.value, editor.textEdit.value.id) : undefined)
 const description = computed(() => editor.textEdit.value?.field === 'description')
 const structureIndex = computed(()=>editor.textEdit.value?.field.startsWith('structure:') ? Number(editor.textEdit.value.field.slice(10)) : null)
@@ -17,6 +19,10 @@ watch(editor.textEdit, async edit => {
   await nextTick(); input.value?.focus(); input.value?.select()
 })
 function finish(cancel = false) { editor.finishTextEdit(draft.value, cancel) }
+function outsidePointer(event:PointerEvent){if(editor.textEdit.value&&surface.value&&!event.composedPath().includes(surface.value))finish(true)}
+function focusOut(event:FocusEvent){if(editor.textEdit.value&&!(event.relatedTarget instanceof Node&&surface.value?.contains(event.relatedTarget)))finish(true)}
+onMounted(()=>document.addEventListener('pointerdown',outsidePointer,true))
+onBeforeUnmount(()=>document.removeEventListener('pointerdown',outsidePointer,true))
 function keydown(event: KeyboardEvent) {
   if (event.isComposing) return
   if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); finish(true) }
@@ -25,8 +31,8 @@ function keydown(event: KeyboardEvent) {
 }
 </script>
 <template>
-  <Box v-if="editor.textEdit.value && object" class="canvas-text-editor" :style="{left:`${object.x/10}%`,top:`${object.y/6.2}%`,width:`max(180px,${object.width/10}%)`,maxWidth:`calc(100% - ${object.x/10}%)`}" @pointerdown.stop @keydown="keydown">
-    <TextArea ref="input" v-model="draft" aria-label="画布文字编辑" :maxlength="structureIndex!==null?40:description||object&&'kind' in object&&object.kind==='text'?240:100" rows="3" :style="{fontFamily:fontStack(style?.family),fontSize:`${Math.min(24,Math.max(14,style?.size ?? 16))}px`,fontWeight:style?.bold?700:400,fontStyle:style?.italic?'italic':'normal'}" @blur="finish()" />
+  <Box v-if="editor.textEdit.value && object" ref="surface" class="canvas-text-editor" :style="{left:`${object.x/canvas.width*100}%`,top:`${object.y/canvas.height*100}%`,width:`max(180px,${object.width/canvas.width*100}%)`,maxWidth:`calc(100% - ${object.x/canvas.width*100}%)`}" @pointerdown.stop @keydown="keydown" @focusout="focusOut">
+    <TextArea ref="input" v-model="draft" aria-label="画布文字编辑" :maxlength="structureIndex!==null?40:description||object&&'kind' in object&&object.kind==='text'?240:100" rows="3" :style="{fontFamily:fontStack(style?.family),fontSize:`${Math.min(24,Math.max(14,style?.size ?? 16))}px`,fontWeight:style?.bold?700:400,fontStyle:style?.italic?'italic':'normal'}" />
     <Box @pointerdown.prevent><Text>{{ description ? '注释' : '文字' }} · Ctrl/⌘ Enter 完成</Text><Button size="xs" @click="finish(true)">取消</Button><Button size="xs" variant="primary" @click="finish()">完成</Button></Box>
   </Box>
 </template>

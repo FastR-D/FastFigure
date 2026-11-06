@@ -16,7 +16,7 @@ function setReuse(harness:Harness,event:Event){harness.reuseReconstructionCompon
     <Text v-else class="muted-caption">仅修改分区 {{ task.regionId }} 的可编辑对象；其他对象作为只读上下文。</Text>
     <template v-if="task.kind==='reconstruct'">
       <Button size="xs" :disabled="harness.locked.value||harness.loading.value||!harness.draft.value.trim()||harness.status.value?.state!=='ready'||!harness.status.value?.images" @click="harness.findReconstructionComponents">看图找重绘素材</Button>
-      <Text class="muted-caption">先看原图，再对照完整候选的实际图谱与目录筛选；采用后绘图。通常两次模型调用，共用本轮时限。</Text>
+      <Text class="muted-caption">先看原图，再对照完整候选的实际图谱与目录筛选；采用后绘图。通常两次模型调用。</Text>
       <Box v-if="harness.adoptedComponentSearch.value" class="assistant-adopted-plan"><Text>已采用看图检索的冻结素材与裁片</Text><Text v-for="entry in harness.adoptedComponentSearch.value.catalogue" :key="entry.kind==='asset'?entry.asset.id:entry.id">{{ catalogueAsset(entry).name }}</Text><Text v-if="harness.componentSearchStale.value" class="error-text" role="alert">画布或参考图已变化，请重新找素材。</Text><Button size="xs" :disabled="harness.locked.value" @click="harness.clearComponentSearch">清除采用，改为手动选择</Button></Box>
       <Field v-else class="checkbox-field"><TextField :checked="harness.reuseReconstructionComponents.value" @change="setReuse(harness,$event)" type="checkbox" :disabled="harness.locked.value" aria-label="库素材辅助重建" /><Text>库素材辅助重建</Text></Field>
       <Text v-if="harness.reuseReconstructionComponents.value" class="muted-caption">将附带实际组件图谱；允许用匹配的原生结构近似局部；候选列出匹配理由与差异。图内数据须使用原始数据，素材内部对象在分区修复中只读。</Text>

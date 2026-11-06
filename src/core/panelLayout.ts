@@ -78,7 +78,7 @@ export function layoutPanels(input: FigureDocument, parentId: string, items: Pan
     translateSubtree(doc,source,dx,dy)
     source.parentId = id
     doc.containers.push({id,parentId,role:'panel',title:titles[index]!,...box,
-      visual:{fill:'none',stroke:'none',handDrawn:false},textStyle:{family:'Inter',size:options.fontSize,bold:true,align:'left'}})
+      visual:{fill:'none',stroke:'none',handDrawn:false},textStyle:{family:'MiSans',size:options.fontSize,bold:true,align:'left'}})
     panelIds.push(id)
   })
   reframeEdgeWaypoints(doc,snapshotEdgeWaypoints(doc))

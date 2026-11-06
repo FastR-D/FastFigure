@@ -12,9 +12,9 @@ export const paletteById = new Map(colorPalettes.map(p => [p.id, p]))
 export const defaultPaletteId = 'plotly-plotly-39871828'
 export const materialIcons: MaterialIcon[] = [...paperIcons,...iconData]
 export const iconById = new Map(materialIcons.map(i => [i.id, i]))
-export const fontFamilies = ['Inter', 'MiSans', 'Noto Serif SC', 'JetBrains Mono', 'Comic Sans MS', 'Comic Neue', 'Patrick Hand', 'Excalifont'] as const
-export const fontOptions = [{ value: 'Inter', label: 'Inter · 现代无衬线' }, { value: 'MiSans', label: 'MiSans · 小米黑体' }, { value: 'Noto Serif SC', label: '思源宋体 · 衬线' }, { value: 'JetBrains Mono', label: 'JetBrains Mono · 代码' },{value:'Comic Sans MS',label:'Comic Sans MS · 系统 / Comic Neue 回退'},{value:'Comic Neue',label:'Comic Neue · 漫画'},{value:'Patrick Hand',label:'Patrick Hand · 手稿'},{value:'Excalifont',label:'Excalifont · 白板'}]
-export function fontStack(family = 'Inter') { if(family==='Comic Sans MS')return '"Comic Sans MS", "Comic Neue", "MiSans", cursive';if(['Comic Neue','Patrick Hand','Excalifont'].includes(family))return `"${family}", "MiSans", cursive`;return `${['serif','sans-serif','monospace','system-ui'].includes(family)?family:`"${family}"`}, "Inter", "MiSans", sans-serif` }
+export const fontFamilies = ['MiSans', 'Noto Serif SC', 'JetBrains Mono', 'Comic Sans MS', 'Comic Neue', 'Patrick Hand', 'Excalifont'] as const
+export const fontOptions = [{ value: 'MiSans', label: 'MiSans · 小米黑体' }, { value: 'Noto Serif SC', label: '思源宋体 · 衬线' }, { value: 'JetBrains Mono', label: 'JetBrains Mono · 代码' },{value:'Comic Sans MS',label:'Comic Sans MS · 系统 / Comic Neue 回退'},{value:'Comic Neue',label:'Comic Neue · 漫画'},{value:'Patrick Hand',label:'Patrick Hand · 手稿'},{value:'Excalifont',label:'Excalifont · 白板'}]
+export function fontStack(family = 'MiSans') { if(family==='MiSans')return '"MiSans", sans-serif'; if(family==='Comic Sans MS')return '"Comic Sans MS", "Comic Neue", "MiSans", cursive';if(['Comic Neue','Patrick Hand','Excalifont'].includes(family))return `"${family}", "MiSans", cursive`;return `${['serif','sans-serif','monospace','system-ui'].includes(family)?family:`"${family}"`}, "MiSans", sans-serif` }
 export function searchIcons(query: string, category = 'all') {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean)
   return materialIcons.filter(icon => (category === 'all' || icon.category === category) && terms.every(term => `${icon.id} ${icon.name} ${icon.tags.join(' ')}`.toLowerCase().includes(term)))

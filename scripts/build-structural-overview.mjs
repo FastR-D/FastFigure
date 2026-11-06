@@ -21,7 +21,7 @@ const panels=recipes.map((recipe,index)=>{
 <text x="${x+22}" y="${y+30}" font-size="21" font-weight="600" fill="#243247">${recipe.name}</text>
 <text x="${x+22}" y="${y+51}" font-size="12" fill="#64748b">${recipe.id}</text>${scene}`;
 });
-const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" font-family="Inter, MiSans, sans-serif">
+const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" font-family="MiSans, MiSans, sans-serif">
 <title>FastFigure 论文结构图原生配方</title><rect width="${width}" height="${height}" fill="#f5f7fa"/>
 <text x="38" y="58" font-size="30" font-weight="700" fill="#1e293b">论文主图：${recipes.length} 类结构表达</text>
 <text x="38" y="96" font-size="17" fill="#536176">原生图元 · 独立改字与编辑 · 参数更新 · 素材保存 · 助手复用</text>

@@ -1,32 +1,25 @@
 <script setup lang="ts">
 import {visualRoleLabels,textRoleLabels,type visualRoles,type textRoles} from '../../core/paperStyle'
 import {snapshotEdgeWaypoints,reframeEdgeWaypoints} from '../../core/edgeWaypoints'
-import {containerSurface,containerSurfaceOptions,setContainerSurface,type ContainerSurface} from '../../core/containerSurface'
 import TextRunsEditor from './TextRunsEditor.vue'
 import GradientControls from './GradientControls.vue'
 import {supportsGradient} from '../../core/gradient'
 import ImageDraftOriginView from '../references/ImageDraftOriginView.vue'
 import ReconstructionReuseSummary from '../references/ReconstructionReuseSummary.vue'
 import PathBindings from './PathBindings.vue'
-import StyleAssetSummary from '../library/StyleAssetSummary.vue'
-import { computed, ref, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { Aside, Box, Text, Heading, Field, TextField, TextArea, Button, Icon, Select } from '../ui'
 import { useEditor } from '../../composables/useEditor'
-import { nodeKinds, nodeKindLabels, containerRoles,edgeRoutingSchema, type AccentId, type NodeKind, type Port } from '../../core/model'
+import { nodeKinds, nodeKindLabels, containerRoles,edgeRoutingSchema, type NodeKind, type Port } from '../../core/model'
 import { ancestors,findObject, resolveStyle } from '../../core/geometry'
 import ReferenceUseSummary from '../harness/ReferenceUseSummary.vue'
 import CompositionPlanView from '../harness/CompositionPlanView.vue'
 import ComponentPorts from './ComponentPorts.vue'
 import ContainerConnections from './ContainerConnections.vue'
-import StyleGallery from '../library/StyleGallery.vue'
 import SelectionTools from '../workspace/SelectionTools.vue'
 import { nodeStructure, structureLabels, structurePresets, structurePreset, type StructureType } from '../../core/structures'
 import { pathPoints } from '../../core/paths'
 import { figurePaint } from '../../core/paint'
-import ThemeColorPicker from '../library/ThemeColorPicker.vue'
-import {canColorContainer,setContainerColor} from '../../core/containerColor'
-const ColorMappingDialog=defineAsyncComponent(()=>import('../library/ColorMappingDialog.vue'))
-const colorMappingOpen=ref(false)
 const ReconstructionInspector=defineAsyncComponent(()=>import('./ReconstructionInspector.vue'))
 const editor = useEditor()
 const recipeOwner=computed(()=>[editor.selectedId.value,...ancestors(editor.figure.value,editor.selectedId.value)].map(id=>editor.figure.value.containers.find(c=>c.id===id)).find(container=>container?.parametric))
@@ -34,11 +27,8 @@ const node = editor.selectedNode, edge = editor.selectedEdge
 const container = editor.selectedContainer
 const multiple = computed(() => editor.selectedIds.value.length > 1)
 const object = computed(() => !multiple.value ? findObject(editor.figure.value, editor.selectedId.value) : undefined)
-const localColor=computed(()=>editor.currentContainer.value.id==='stage'?editor.figure.value.style.colorIndex:editor.currentContainer.value.appearance?.colorIndex)
-const colorable=computed(()=>canColorContainer(editor.figure.value,editor.currentContainer.value.id))
 function changeVisualRole(role:string){editor.update(doc=>{const o=findObject(doc,editor.selectedId.value);if(!o)return;o.visual={...o.visual,role:(role||undefined) as typeof visualRoles[number]|undefined};for(const key of ['fill','stroke','fillGradient','strokeGradient','radius','padding','dash'] as const)delete o.visual[key]})}
 function changeTextRole(role:string){editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(!n)return;n.textRole=(role||undefined) as typeof textRoles[number]|undefined;if(n.textStyle)for(const key of ['family','bold','weight','color'] as const)delete n.textStyle[key]})}
-function changeContainerColor(index:number|undefined){editor.update(doc=>setContainerColor(doc,editor.currentContainer.value.id,index))}
 const selectedLabel = computed(() => node.value?.label ?? container.value?.title ?? '')
 const nodeOptions = computed(() => editor.figure.value.nodes.filter(n=>n.kind!=='path').map(n=>({value:n.id,label:n.socket?`${editor.figure.value.containers.find(c=>c.id===n.interfaceFor)?.title} · ${n.label}`:n.label||nodeKindLabels[n.kind]})))
 const portOptions = [{ value: 'left', label: '左侧' }, { value: 'right', label: '右侧' }, { value: 'top', label: '顶部' }, { value: 'bottom', label: '底部' }]
@@ -71,16 +61,6 @@ function repeatsChange(event:Event) {
 function value(e: Event) { return (e.target as HTMLInputElement).value }
 function labelChange(e: Event) { const input = e.target as HTMLInputElement; editor.setLabel(input.value); input.value = selectedLabel.value }
 function setKind(kind: string) { editor.update(doc => { const n = doc.nodes.find(n => n.id === editor.selectedId.value); if (n) n.kind = kind as NodeKind }) }
-function sizeChange(axis: 'width' | 'height', event: Event) {
-  const input = event.target as HTMLInputElement
-  editor.setSize(axis, Number(input.value))
-  if (object.value) input.value = String(Math.round(object.value[axis]))
-}
-function positionChange(axis: 'x' | 'y', event: Event) {
-  const input = event.target as HTMLInputElement
-  editor.setPosition(axis, Number(input.value))
-  if (object.value) input.value = String(Math.round(object.value[axis]))
-}
 function edgeChange(key: 'source' | 'target' | 'sourcePort' | 'targetPort', v: string) {
   editor.update(doc => { const e = doc.edges.find(e => e.id === editor.selectedId.value); if (e) { const pins=snapshotEdgeWaypoints(doc,edge=>edge.id===e.id);if (key === 'sourcePort' || key === 'targetPort') e[key] = v as Port; else {e[key]=v;const socket=doc.nodes.find(n=>n.id===v)?.socket;if(socket)e[key==='source'?'sourcePort':'targetPort']=socket.side}reframeEdgeWaypoints(doc,pins) } })
 }
@@ -98,10 +78,10 @@ function showEvidence() {
     <Box class="inspector-body">
       <Box class="selection-description"><Box class="selection-icon"><Icon :name="multiple ? 'group' : node ? 'diagram' : edge ? 'connect' : 'panel'" /></Box><Box><Text class="selection-title">{{ multiple ? `已选择 ${editor.selectedIds.value.length} 个对象` : node ? node.label : edge ? '节点连接' : container?.title }}</Text><Text class="muted-caption">{{ multiple ? '批量设置格式、排列图元或删除' : node ? '可独立编辑的科研组件' : edge ? '端口绑定随节点移动' : '移动容器时带动内部对象' }}</Text></Box></Box>
       <template v-if="object&&!multiple&&!node?.chart&&!container?.dataChart&&editor.activeStyle.value.designSystem==='paper'&&!['path','port','image'].includes(node?.kind??'')"><Field><Text>视觉角色</Text><Select :value="object.visual?.role??''" :options="[{value:'',label:'随主题与色槽'},...Object.entries(visualRoleLabels).map(([value,label])=>({value,label}))]" aria-label="视觉角色" @change="changeVisualRole" /></Field><Field v-if="node"><Text>文字角色</Text><Select :value="node.textRole??''" :options="[{value:'',label:'自动选择'},...Object.entries(textRoleLabels).map(([value,label])=>({value,label}))]" aria-label="文字角色" @change="changeTextRole" /></Field></template>
-      <Field v-if="!edge && !multiple && !node?.socket&&node?.kind!=='image'"><Text>{{ node?.kind==='path'?'线段名称':node ? '组件标签' : container?.role==='component'?'组合名称':'容器标题' }}</Text><TextField :key="editor.selectedId.value" :value="selectedLabel" :maxlength="node?.kind==='text'?240:100" aria-label="对象标签" @change="labelChange" /></Field>
+      <Field v-if="node && !multiple && !node.socket&&node.kind!=='image'"><Text>{{ node?.kind==='path'?'线段名称':node?.kind==='text'?'文字内容':'组件标签' }}</Text><TextField :key="editor.selectedId.value" :value="selectedLabel" :maxlength="node?.kind==='text'?240:100" aria-label="对象标签" @change="labelChange" /></Field>
       <Box v-if="node?.image&&!multiple" class="structure-settings"><Text>{{ node.image.pixelWidth }} × {{ node.image.pixelHeight }} · 图片插画</Text><Field><Text>图片适配</Text><Select :value="node.image.fit" :options="[{value:'contain',label:'完整显示'},{value:'cover',label:'填满边框（居中裁切）'}]" aria-label="图片适配" @change="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n?.image)n.image.fit=$event as 'contain'|'cover'})" /></Field><Text v-if="node.image.source" class="muted-caption">{{ node.image.source.provider==='user'?'用户导入':'AI 生成' }} · {{ node.image.source.provider }}</Text></Box>
       <TextRunsEditor v-if="node?.kind==='text'&&!node.textLayout&&!multiple" />
-      <Button v-if="object && !multiple&&node?.kind!=='path'&&node?.kind!=='port'&&node?.kind!=='image'&&container?.role!=='component'" size="xs" @click="editor.beginTextEdit(object.id)">在画布中编辑文字</Button>
+      <Button v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'&&node.kind!=='image'" size="xs" @click="editor.beginTextEdit(node.id)">在画布中编辑文字</Button>
       <Field v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'&&node.kind!=='image'"><Text>简洁注释</Text><TextArea :value="node.description ?? ''" rows="2" maxlength="240" aria-label="对象注释" placeholder="补充输入输出、动作或关键约束…" @change="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n)n.description=($event.target as HTMLTextAreaElement).value})" /></Field>
       <Box v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'&&node.kind!=='image'" class="material-actions"><Button size="xs" @click="editor.activePanel.value='icons'">选择图示</Button><Button v-if="node.iconId && node.kind!=='icon'" size="xs" @click="editor.update(doc=>{const n=doc.nodes.find(n=>n.id===editor.selectedId.value);if(n)n.iconId='none'})">移除图示</Button></Box>
       <Field v-if="node && !multiple&&node.kind!=='path'&&node.kind!=='port'&&node.kind!=='image'"><Text>组件类型</Text><Select :value="node.kind" :options="kindOptions" aria-label="组件类型" @change="setKind" /></Field>
@@ -114,7 +94,7 @@ function showEvidence() {
         <Field><Text>描边颜色</Text><TextField type="color" :value="pathColor" aria-label="路径描边颜色" @change="editor.paintSelection('stroke',value($event))" /></Field>
         <Text class="muted-caption">{{ node.path.start?'起点已绑定':'起点自由' }} · {{ node.path.end?'终点已绑定':'终点自由' }}</Text>
         <PathBindings :node="node" />
-        <Button v-if="!node.path.points.some(p=>p.move||p.close)" size="xs" @click="editor.materialEdit.value='path-arrow'">按点调整直角箭头</Button>
+        <Button v-if="node.path.orthogonal" size="xs" @click="editor.arrowEditId.value=node.id;editor.arrowDrawMode.value=true">编辑箭头折点</Button>
         <Box class="material-actions"><Button size="xs" @click="editor.addPathBend">增加折点</Button><Button size="xs" :disabled="editor.selectedPathPoint.value===null||editor.selectedPathPoint.value===0||editor.selectedPathPoint.value===points.length-1||points[editor.selectedPathPoint.value]?.move||points[editor.selectedPathPoint.value]?.close" @click="editor.removePathBend">删除折点</Button><Button v-if="node.path.start||node.path.end" size="xs" @click="editor.detachPath">解除端点绑定</Button></Box>
         <Box v-for="(point,index) in points" :key="index" class="path-point-fields"><Button size="xs" :aria-pressed="editor.selectedPathPoint.value===index" @click="editor.selectedPathPoint.value=index">点 {{ index+1 }}</Button><TextField type="number" :value="Math.round(point.x)" :aria-label="`路径点 ${index+1} X`" @change="pointChange(index,'x',$event)" /><TextField type="number" :value="Math.round(point.y)" :aria-label="`路径点 ${index+1} Y`" @change="pointChange(index,'y',$event)" /></Box>
         <Field v-if="editor.selectedPathPoint.value!==null && editor.selectedPathPoint.value>0 && !points[editor.selectedPathPoint.value]?.move && !points[editor.selectedPathPoint.value-1]?.close"><Text>到选中点的线段</Text><Select :value="points[editor.selectedPathPoint.value]?.c2?'cubic':points[editor.selectedPathPoint.value]?.c1?'quadratic':'line'" :options="[{value:'line',label:'直线'}, {value:'quadratic',label:'二次贝塞尔'}, {value:'cubic',label:'三次贝塞尔'}]" aria-label="选中线段类型" @change="editor.changePathSegment(editor.selectedPathPoint.value!,$event as 'line'|'quadratic'|'cubic')" /></Field>
@@ -139,16 +119,10 @@ function showEvidence() {
       <ComponentPorts />
       <ReferenceUseSummary v-if="container?.id==='stage'&&!multiple" :uses="editor.figure.value.referenceUses" removable @remove="index=>editor.update(doc=>{doc.referenceUses?.splice(index,1);if(!doc.referenceUses?.length)delete doc.referenceUses})" />
       <Box v-if="container?.id==='stage'&&!multiple&&editor.figure.value.imageDrafts?.length"><Heading>AI 草稿来源</Heading><Box v-for="origin in editor.figure.value.imageDrafts" :key="origin.runId"><ImageDraftOriginView :origin="origin" /><Button size="xs" variant="quiet" :aria-label="`移除草稿完整记录 ${origin.title}`" @click="editor.update(doc=>{doc.imageDrafts=doc.imageDrafts?.filter(d=>d.runId!==origin.runId);if(!doc.imageDrafts?.length)delete doc.imageDrafts})">移除完整记录（保留 AI 来源标记）</Button></Box></Box>
-      <Box v-if="container?.id==='stage'&&!multiple&&editor.figure.value.styleUses?.length" class="style-use-records"><Heading>风格使用记录</Heading><Box v-for="(use,index) in editor.figure.value.styleUses" :key="index"><StyleAssetSummary :asset="use.asset" /><Text v-if="use.lines" class="muted-caption">连线规范：可处理 {{ use.lines.total }} 条，调整 {{ use.lines.changed }} 条，保留 {{ use.lines.skipped }} 条。</Text><Text>{{ use.application==='manual'?'手工应用':'助手候选' }} · {{ use.target.title }} · {{ use.typography==='applied'?`字体调整 ${use.textNodes} 项 / 保留 ${use.skippedTextNodes} 项`:use.typography==='preferred'?'字体为建议，需核对实际表现':'保留现有字体' }}</Text><Button size="xs" variant="quiet" :aria-label="`移除风格记录 ${index+1}`" @click="editor.update(doc=>{doc.styleUses=doc.styleUses?.filter((_,i)=>i!==index);if(!doc.styleUses?.length)delete doc.styleUses})">移除来源记录</Button></Box></Box><Box v-if="container?.id==='stage'&&!multiple&&editor.figure.value.compositionPlans?.length"><Heading>绘图方案记录</Heading><CompositionPlanView v-for="record in editor.figure.value.compositionPlans" :key="record.runId" :record="record" removable @remove="editor.update(doc=>{doc.compositionPlans=doc.compositionPlans?.filter(p=>p.runId!==record.runId);if(!doc.compositionPlans?.length)delete doc.compositionPlans})" /></Box>
+      <Box v-if="container?.id==='stage'&&!multiple&&editor.figure.value.compositionPlans?.length"><Heading>绘图方案记录</Heading><CompositionPlanView v-for="record in editor.figure.value.compositionPlans" :key="record.runId" :record="record" removable @remove="editor.update(doc=>{doc.compositionPlans=doc.compositionPlans?.filter(p=>p.runId!==record.runId);if(!doc.compositionPlans?.length)delete doc.compositionPlans})" /></Box>
       <Box v-if="container?.dataChart&&!multiple" class="data-chart-inspector"><Heading>数据图表</Heading><Text class="muted-caption">{{ container.dataChart.spec.origin==='example'?'示例':'自填' }}数据 · {{ container.dataChart.spec.kind==='heatmap'?`${container.dataChart.spec.x.length} 行 × ${container.dataChart.spec.series.length} 列`:container.dataChart.spec.kind==='boxplot'?`${container.dataChart.spec.series.length} 组 · ${container.dataChart.spec.x.length} 行样本`:`${container.dataChart.spec.series.length} 个系列 · ${container.dataChart.spec.x.length} 个横轴值` }}</Text><Button size="xs" @click="editor.chartDialog.value={containerId:container.id}">编辑图表数据</Button><Text class="muted-caption">修改数据会重绘生成图元，另加的注释保留；可预览并撤销。</Text></Box>
       <ReconstructionReuseSummary v-if="container?.reconstructionReuse" :record="container.reconstructionReuse" />
     <ReconstructionInspector v-if="container?.reconstruction&&!multiple" :container-id="container.id" />
-      <Box v-if="object && !node?.socket" class="position-grid">
-        <Field><Text>X 位置</Text><TextField type="number" :value="Math.round(object.x)" aria-label="X 位置" @change="positionChange('x', $event)" /></Field>
-        <Field><Text>Y 位置</Text><TextField type="number" :value="Math.round(object.y)" aria-label="Y 位置" @change="positionChange('y', $event)" /></Field>
-        <Field><Text>宽度</Text><TextField type="number" :value="Math.round(object.width)" aria-label="对象宽度" @change="sizeChange('width', $event)" /></Field>
-        <Field><Text>高度</Text><TextField type="number" :value="Math.round(object.height)" aria-label="对象高度" @change="sizeChange('height', $event)" /></Field>
-      </Box>
       <Button v-if="object?.parentId && !multiple" variant="quiet" class="parent-navigation" @click="editor.select(object.parentId!)"><Icon name="layers" />选择父容器</Button>
       <Button v-if="container && !multiple" @click="editor.assetDialog.value = {mode:'capture',containerId:container.id}"><Icon name="book" />存为我的组件</Button>
       <Button v-if="recipeOwner && !multiple" @click="editor.recipeDialogId.value=recipeOwner!.id"><Icon name="grid" />调整组合参数</Button>
@@ -165,16 +139,6 @@ function showEvidence() {
         <Box class="material-actions"><Button size="xs" @click="editor.materialEdit.value='edge-route'">指定连线折点</Button><Button size="xs" @click="editor.materialEdit.value='line-style'">调整连线样式</Button></Box><Text v-if="edge.manualRoute" class="muted-caption">{{ edge.manualRoute.points.length }} 个指定折点；拖动蓝点或用方向键微调，Delete 删除。受阻时保留原指定路线。</Text>
         <Field><Text>连线方式</Text><Select :value="edge.routing??'orthogonal'" :options="[{value:'orthogonal',label:'折线避障'},{value:'straight',label:'直线'},{value:'manual',label:'指定折点'}]" aria-label="连线方式" @change="setEdgeRouting" /></Field>
       </Box>
-      <Box v-if="!node?.socket" class="inspector-section"><Heading>容器样式</Heading><Text>应用于：{{ editor.currentContainer.value.title }}</Text></Box>
-      <StyleGallery />
-      <Button :disabled="!colorable" @click="colorMappingOpen=true">多色映射与预览</Button><ColorMappingDialog v-if="colorMappingOpen" :container-id="editor.currentContainer.value.id" @close="colorMappingOpen=false" />
-      <Field><Text>默认主题色</Text><ThemeColorPicker :palette-id="editor.activeStyle.value.paletteId" :model-value="localColor" :effective-index="editor.activeStyle.value.colorIndex" :inherit="editor.currentContainer.value.id!=='stage'" :disabled="!colorable" label="容器默认主题色" @update:model-value="changeContainerColor" /></Field>
-      <Text v-if="colorable" class="muted-caption">改变默认填充、描边与内部连接；手工颜色和对象指定色槽保持。</Text><Text v-else class="muted-caption">此容器包含数据图表，请使用图表配色。</Text>
-      <Field><Text>容器填充</Text><Select :value="containerSurface(editor.currentContainer.value)" :options="containerSurfaceOptions" aria-label="容器填充" @change="editor.update(doc=>{const target=doc.containers.find(c=>c.id===editor.currentContainer.value.id);if(target)setContainerSurface(target,$event as ContainerSurface)})" /></Field>
-      <Field><Text>图件色系</Text><Select :value="editor.activeStyle.value.accent" :options="[{value:'blue',label:'学术蓝'}, {value:'slate',label:'石墨灰'}, {value:'teal',label:'青灰'}, {value:'sand',label:'浅砂黄'}, {value:'rose',label:'浅玫红'}]" aria-label="图件色系" @change="editor.setAccent($event as AccentId)" /></Field>
-      <Button v-if="editor.currentContainer.value.parentId" variant="quiet" @click="editor.inheritAppearance"><Icon name="refresh" />恢复父级样式</Button>
-      <Field v-if="editor.activeStyle.value.preset === 'sketch'"><Box class="field-heading"><Text>手绘强度（工程）</Text><Text>{{ editor.figure.value.style.roughness.toFixed(1) }}</Text></Box><TextField type="range" min="0" max="2" step="0.1" :value="editor.figure.value.style.roughness" aria-label="手绘强度" @change="editor.update(doc => { doc.style.roughness = Number(value($event)) })" /></Field>
-      <Box class="inspector-note"><Icon name="check" /><Text>样式独立保存，文字、模块与连接保持可编辑。</Text></Box>
       <Button v-if="!node?.socket && (multiple || node || edge || container?.parentId)" variant="danger" @click="editor.removeSelected"><Icon name="trash" />删除{{ multiple ? '所选对象' : node ? '组件' : edge ? '连接' : '容器' }}</Button>
     </Box>
   </Aside>

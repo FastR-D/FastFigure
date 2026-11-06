@@ -3,7 +3,6 @@ import {createSharedColorbar,sharedColorbarStates} from './sharedColorbar'
 import {calloutTargets,createCallouts} from './callouts'
 import {pathPoints} from './paths'
 import {createSharedLegend,updateSharedLegend,sharedLegendEditTargets,sharedLegendStates,sharedLegendVisibility,detachSharedLegend} from './sharedLegend'
-import {exportDrawio} from './export'
 import {layoutPanels,defaultPanelOptions} from './panelLayout'
 import { describe,expect,it } from 'vitest'
 import { createHash } from 'node:crypto'
@@ -103,18 +102,17 @@ describe('native chart axes and scientific panel comparison',()=>{
     const auto=clone(fixed);delete auto.plotArea;expect(buildDataChart(auto).figure.nodes.length).toBeGreaterThan(0);expect(doc).toEqual(snapshot)
     expect(chartPlotBounds(parsed.figure!.nodes.filter(n=>n.parentId==='first')).bottom).toBe(parsed.plotAlignments![0]!.charts[0]!.after.bottom)
   })
-
   it.each(['line','bar','scatter'] as const)('shares %s legends without deleting observations, keeps bindings on capture, and safely restores local legends after incompatible edits',kind=>{
     const doc=legendFigure(kind),before=clone(doc),result=createSharedLegend(doc,{containerIds:['first','second'],fontFamily:'Comic Sans MS',fontSize:14}),group=result.document.containers.find(c=>c.sharedLegend)!,visibility=sharedLegendVisibility(result.document),entry=group.sharedLegend!.entries[0]!
     expect(doc).toEqual(before);expect(result.document.nodes.filter(n=>n.parentId!==group.id)).toEqual(before.nodes);expect(result.document.containers.filter(c=>c.id!==group.id)).toEqual(before.containers);expect(visibility.warnings).toEqual([]);expect(visibility.hidden.size).toBe(doc.containers.find(c=>c.dataChart)!.dataChart!.spec.series.length*4)
     const hiddenLabel=doc.nodes.find(n=>visibility.hidden.has(n.id)&&n.kind==='text')!;expect(calloutTargets(result.document).find(t=>t.targetId===hiddenLabel.id)!.error).toBe('目标已隐藏');expect(()=>createCallouts(result.document,[{targetId:hiddenLabel.id,text:'Hidden target',reason:'Must not bind invisible labels'}])).toThrow('可见')
-    const svg=exportSvg(result.document);for(const id of visibility.hidden)expect(svg).not.toContain(`data-object-id="${id}"`);expect(svg).toContain(`data-object-id="${entry.markId}"`);expect(exportDrawio(result.document)).not.toContain(`id="${[...visibility.hidden][0]}"`)
+    const svg=exportSvg(result.document);for(const id of visibility.hidden)expect(svg).not.toContain(`data-object-id="${id}"`);expect(svg).toContain(`data-object-id="${entry.markId}"`);
     const captured=captureComponent(result.document,'stage','Compared charts'),placed=instantiateComponentAt(createBlank(),scaleComponent(captured,.45),'stage',{x:65,y:150},'all',true).document
     expect(sharedLegendStates(placed)[0]!.active).toBe(true)
     expect(captureComponent(result.document,group.id,'Standalone legend').figure.containers[0]!.sharedLegend).toBeUndefined()
     const recovered=importSvg(svg,{fileName:'shared.svg',sha256:'a'.repeat(64),parseXml:source=>new DOMParser().parseFromString(source,'image/svg+xml') as unknown as Document}).asset.figure;expect(sharedLegendStates(recovered)[0]!.active).toBe(true)
     const changed=clone(result.document),legend=changed.nodes.find(n=>n.parentId==='second'&&n.chart?.key==='series-0-legend')!;legend.visual={...legend.visual,stroke:'#cc5500',fill:'#cc5500'}
-    expect(sharedLegendStates(changed)[0]!.active).toBe(false);const restored=exportSvg(changed);for(const id of visibility.hidden)expect(restored).toContain(`data-object-id="${id}"`);expect(restored).not.toContain(`data-object-id="${entry.markId}"`);expect(exportDrawio(changed)).toContain('共享图例已停用')
+    expect(sharedLegendStates(changed)[0]!.active).toBe(false);const restored=exportSvg(changed);for(const id of visibility.hidden)expect(restored).toContain(`data-object-id="${id}"`);expect(restored).not.toContain(`data-object-id="${entry.markId}"`);
     const pointOnly=clone(result.document);pointOnly.nodes.find(n=>n.parentId==='second'&&n.chart?.key==='series-0-point-0')!.visual!.stroke='#ff0000';expect(sharedLegendStates(pointOnly)[0]!.active).toBe(false)
     expect(sharedLegendVisibility(detachSharedLegend(result.document,group.id)).hidden.size).toBe(0)
     const renamed=clone(result.document);renamed.nodes.find(n=>n.id===entry.labelId)!.label='Other method';expect(sharedLegendStates(renamed)[0]!.active).toBe(false)

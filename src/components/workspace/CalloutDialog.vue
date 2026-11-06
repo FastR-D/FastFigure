@@ -21,7 +21,7 @@ function toggleExisting(key:string){
   if(picked.value.length<8)picked.value.push(key)
 }
 const adjusted=computed(()=>{if(!picked.value.length)return{result:null,error:''};try{return{result:reflowCallouts(base,picked.value.map(key=>{const row=existing.find(row=>row.key===key)!;return{leaderId:row.leaderId,labelId:row.labelId,mode:reflowMode.value,anchorPolicy:anchorPolicy.value,side:reflowMode.value==='route'?'auto':reflowSide.value,reason:'作者选择调整已有引线注释'}})),error:''}}catch(error){return{result:null,error:(error as Error).message}}})
-const targetId=ref(targets.find(t=>t.selected&&!t.error)?.targetId??targets.find(t=>!t.error)?.targetId??''),text=ref(''),size=ref(12),width=ref(180),side=ref('auto'),family=ref(editor.activeStyle.value.fontFamily??'Inter'),before=ref(false)
+const targetId=ref(targets.find(t=>t.selected&&!t.error)?.targetId??targets.find(t=>!t.error)?.targetId??''),text=ref(''),size=ref(12),width=ref(180),side=ref('auto'),family=ref(editor.activeStyle.value.fontFamily??'MiSans'),before=ref(false)
 const target=computed(()=>targets.find(t=>t.targetId===targetId.value)),parentId=ref(target.value?.parentIds[0]??'stage')
 const parents=computed(()=>target.value?.parentIds.map(id=>({value:id,label:base.containers.find(c=>c.id===id)!.title}))??[])
 const stale=computed(()=>baseline!==JSON.stringify(editor.figure.value))

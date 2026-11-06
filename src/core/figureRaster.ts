@@ -3,11 +3,11 @@ import type { Rect } from './geometry'
 import { exportSceneSvg } from './svg'
 
 /** Rasterize browser-shaped glyphs in place; SVG-as-image cannot reliably load web fonts. */
-export async function rasterizeFigure(figure:FigureDocument,viewport:Rect,width:number,height:number){
-  if(!Number.isInteger(width)||!Number.isInteger(height)||width<3||height<3||width>2000||height>2000)throw new Error('候选裁片尺寸无效')
-  if(![viewport.x,viewport.y,viewport.width,viewport.height].every(Number.isFinite)||viewport.width<=0||viewport.height<=0)throw new Error('候选裁片范围无效')
+export async function rasterizeFigure(figure:FigureDocument,viewport:Rect,width:number,height:number,showTitle=false){
+  if(!Number.isInteger(width)||!Number.isInteger(height)||width<1||height<1||width>8192||height>8192)throw new Error('图件渲染尺寸无效')
+  if(![viewport.x,viewport.y,viewport.width,viewport.height].every(Number.isFinite)||viewport.width<=0||viewport.height<=0)throw new Error('图件渲染范围无效')
   const holder=document.createElement('div');holder.style.cssText='position:fixed;left:-100000px;top:0;visibility:hidden;pointer-events:none'
-  const xml=new DOMParser().parseFromString(exportSceneSvg(figure,viewport,width,height),'image/svg+xml'),svg=document.importNode(xml.documentElement,true) as unknown as SVGSVGElement
+  const xml=new DOMParser().parseFromString(exportSceneSvg(figure,viewport,width,height,showTitle),'image/svg+xml'),svg=document.importNode(xml.documentElement,true) as unknown as SVGSVGElement
   holder.append(svg);document.body.append(holder)
   const fonts=new Set<string>();let glyphPixels=0
   try{

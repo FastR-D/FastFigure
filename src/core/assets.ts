@@ -171,7 +171,7 @@ function transplant(candidate: FigureDocument, asset: ComponentAsset, position: 
   })
   const root = containers.find(c => c.id === map.get('stage'))!
   root.role = parentId === null ? root.role==='component'?'component':'stage' : root.role === 'stage' ? 'group' : root.role
-  if (keepAppearance && parentId !== null) root.appearance = { designSystem:source.style.designSystem,fontRoles:source.style.fontRoles?clone(source.style.fontRoles):undefined,fontFamily:source.style.fontFamily,sketchStyle:source.style.sketchStyle,roughness:source.style.roughness,preset: source.style.preset, accent: source.style.accent, ...(source.style.paletteId ? {paletteId:source.style.paletteId} : {}),colorIndex:source.style.colorIndex??0,colorMap:clone(source.style.colorMap??[]) }
+  if (keepAppearance && parentId !== null) root.appearance = { designSystem:source.style.designSystem,paperTheme:source.style.paperTheme?clone(source.style.paperTheme):undefined,fontRoles:source.style.fontRoles?clone(source.style.fontRoles):undefined,fontFamily:source.style.fontFamily,sketchStyle:source.style.sketchStyle,roughness:source.style.roughness,preset: source.style.preset, accent: source.style.accent, ...(source.style.paletteId ? {paletteId:source.style.paletteId} : {}),colorIndex:source.style.colorIndex??0,colorMap:clone(source.style.colorMap??[]) }
   root.component = { assetId: asset.id, name: asset.name, revision: asset.updatedAt, sources: clone(asset.sources), lineage: clone(asset.lineage), ...(asset.recipe ? { recipe: clone(asset.recipe) } : {}) }
   candidate.containers.push(...containers)
   candidate.nodes.push(...source.nodes.map(n => {

@@ -1,3 +1,4 @@
+import {maxCanvasSize} from './canvasContract.ts'
 import {z} from 'zod'
 import {clone,parseDocument,type FigureDocument,type FigureNode} from './model.ts'
 import {ancestors,bounds,contentBounds,descendants,findObject,fitTransparentAncestors,moveObjects,parentOf,resolveStyle,topLevelSelection} from './geometry.ts'
@@ -17,7 +18,7 @@ import {createDetailInset} from './detailInset.ts'
 
 const id=z.string().min(1).max(80).regex(/^[a-zA-Z0-9_-]+$/)
 const ids=z.array(id).min(1).max(24).refine(values=>new Set(values).size===values.length,'对象不能重复')
-const point=z.object({x:z.number().finite().min(0).max(1000),y:z.number().finite().min(0).max(620)}).strict()
+const point=z.object({x:z.number().finite().min(0).max(maxCanvasSize),y:z.number().finite().min(0).max(maxCanvasSize)}).strict()
 export const materialEditSchema=z.discriminatedUnion('kind',[
   detailInsetRequestSchema,
   z.object({kind:z.literal('center'),objectIds:ids,axis:z.enum(['both','horizontal','vertical'])}).strict(),
@@ -141,7 +142,7 @@ function arrow(doc:FigureDocument,request:Extract<MaterialEdit,{kind:'arrow'}>):
   }
   const before=node?JSON.stringify(node):''
   if(!node){let number=1;while(findObject(doc,`point-arrow-${number}`)||doc.edges.some(e=>e.id===`point-arrow-${number}`))number++;node={id:`point-arrow-${number}`,kind:'path',label:'',parentId:parent.id,x:0,y:0,width:0,height:0,path:{points:[],arrow:request.arrow},visual:{fill:'none',strokeWidth:1.6,lineCap:'round',lineJoin:'round',handDrawn:false}};doc.nodes.push(node)}
-  node.path!.arrow=request.arrow;setPathPoints(node,points)
+  node.path!.arrow=request.arrow;node.path!.orthogonal=true;setPathPoints(node,points)
   if(request.startArrow!==undefined)node.path!.startArrow=request.startArrow
   if(request.arrowSize===null)delete node.path!.arrowSize;else if(request.arrowSize!==undefined)node.path!.arrowSize=request.arrowSize
   return{kind:'arrow',objectIds:[node.id],summary:`${request.nodeId?'更新':'新建'}直角路径：${request.points.length} 个给定点、${points.length-1} 段水平 / 垂直线，终点${{none:'无箭头',open:'开放箭头',filled:'实心箭头'}[request.arrow]}${node.path!.startArrow&&node.path!.startArrow!=='none'?`，起点${node.path!.startArrow==='open'?'开放':'实心'}箭头`:''}；不自动避障`,changed:before!==JSON.stringify(node)?1:0,skipped:[]}

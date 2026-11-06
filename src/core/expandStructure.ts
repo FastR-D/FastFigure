@@ -34,7 +34,7 @@ export function expandStructure(input: FigureDocument, nodeId: string) {
     const shape:FigureNode={id:unique(`${containerId}-${part.key}`),parentId:containerId,kind:part.kind==='line'?'path':part.kind==='box'?'rectangle':part.kind==='ellipse'?'ellipse':'text',
       label:part.labelIndex===undefined?'':labels[part.labelIndex]??'',x:node.x+part.x,y:node.y+part.y,width:part.width,height:part.height,
       visual:{role:'detail',...(part.fill==='none'?{fill:'none' as const}:part.fill===paint.fill||part.fill===paint.hatch?{tone:part.fill===paint.hatch?'hatch' as const:'fill' as const}:{fill:part.fill}),...(part.stroke==='none'?{stroke:'none' as const}:node.visual?.stroke?{stroke:node.visual.stroke}:{}),colorIndex:node.visual?.colorIndex,textTone:part.kind==='box'?'deep':'ink',radius:part.radius??0,strokeWidth:1,opacity:(part.opacity??1)*(node.visual?.opacity??1),padding:0,handDrawn:false},
-      textStyle:{family:node.textStyle?.family??'Inter',size:part.fontSize??11,align:'center'}}
+      textStyle:{family:node.textStyle?.family??'MiSans',size:part.fontSize??11,align:'center'}}
     if(part.kind==='line') {
       shape.label=part.key.startsWith('residual')?'残差旁路':part.key.startsWith('connection')?'神经元连接':'结构线段'
       shape.path={points:[{x:0,y:0},{x:1,y:1}],arrow:part.arrow?'open':'none'}

@@ -1,11 +1,11 @@
 import {measureTextEvidence} from './textGeometry.ts'
-import {paperTextStyle} from './paperStyle.ts'
+import {paperTextStyle,isPaperStyle} from './paperStyle.ts'
 import { fontStack } from '../data/materials.ts'
 import type { FigureContainer, FigureDocument, FigureNode, TextStyle } from './model.ts'
 import { nodeStructure } from './structures.ts'
 import { figurePaint, mixColor } from './paint.ts'
 export function resolvedTextStyle(style?: TextStyle, title = false) {
-  return { family: style?.family ?? 'Inter', size: style?.size ?? (title ? 15 : 16), bold: style?.bold ?? (style?.weight!==undefined?style.weight>=600:title),weight:style?.weight, italic: style?.italic ?? false,letterSpacing:style?.letterSpacing, color: style?.color ?? '#243247', align: style?.align ?? (title?'left':'center') }
+  return { family: style?.family ?? 'MiSans', size: style?.size ?? (title ? 15 : 16), bold: style?.bold ?? (style?.weight!==undefined?style.weight>=600:title),weight:style?.weight, italic: style?.italic ?? false,letterSpacing:style?.letterSpacing, color: style?.color ?? '#243247', align: style?.align ?? (title?'left':'center') }
 }
 export function textAttributes(style?: TextStyle, title = false, family?:string) {
   const s = resolvedTextStyle({family,...style}, title)
@@ -16,7 +16,8 @@ export function nodeTextStyle(node: FigureNode, description=false,theme?:FigureD
   const ink=node.visual?.stroke&&node.visual.stroke!=='none'?node.visual.stroke:theme?figurePaint(theme,node.visual?.colorIndex).ink:'#243247'
   const color=node.visual?.textTone==='ink'?ink:node.visual?.textTone==='deep'?mixColor(ink,'#182235',.2):undefined
   const paper=theme&&!node.chart&&!node.reconstruction&&!node.textLayout?paperTextStyle(theme,description?'caption':node.textRole??(structured||node.kind==='module'?'heading':'body')):{}
-  return resolvedTextStyle(description?{family:theme?.fontFamily,align:structured?'center':'left',...paper,size:11,...node.descriptionStyle}:{
+  if(node.titleBlock&&!description&&theme&&isPaperStyle(theme))paper.size=theme.paperTheme?.containerHeadingSize??20
+  return resolvedTextStyle(description?{family:theme?.fontFamily,align:structured?'center':'left',size:11,...paper,...node.descriptionStyle}:{
     family:theme?.fontFamily,size:node.kind==='operator'&&node.label.length<3?25:node.kind==='icon'?12:16,
     align:structured?'center':node.iconId&&node.iconId!=='none'&&node.kind!=='icon'||node.kind==='text'||node.description?'left':'center',...paper,...(color?{color}:{}),...node.textStyle,
   })
@@ -24,12 +25,12 @@ export function nodeTextStyle(node: FigureNode, description=false,theme?:FigureD
 /** Canvas units: a missing style scales with the drawing basis; an explicit style uses actual units. */
 export function canvasNodeTextStyle(node:FigureNode,description=false,theme?:FigureDocument['style']){
   const style=nodeTextStyle(node,description,theme),explicit=description?node.descriptionStyle:node.textStyle
-  if(!explicit&&!node.textLayout)style.size*=node.metricScale??1
+  if(explicit?.size===undefined&&!node.textLayout)style.size*=node.metricScale??1
   return style
 }
 export function canvasContainerTextStyle(container:FigureContainer,theme?:FigureDocument['style']){
-  const style=resolvedTextStyle({family:theme?.fontFamily,...(theme?paperTextStyle(theme,'heading'):{}),...container.textStyle},true)
-  if(!container.textStyle)style.size*=container.metricScale??1
+  const style=resolvedTextStyle({family:theme?.fontFamily,...(theme?paperTextStyle(theme,'heading'):{}),...(theme&&isPaperStyle(theme)?{size:theme.paperTheme?.containerHeadingSize??20}:{}),...container.textStyle},true)
+  if(container.textStyle?.size===undefined)style.size*=container.metricScale??1
   return style
 }
 export const estimatedTextWidth=(value:string,size:number)=>[...value].reduce((n,char)=>n+size*(char.codePointAt(0)!>255?1:/[ilI.,:;!' ]/.test(char)?0.3:/[MW@]/.test(char)?0.85:0.57),0)
@@ -54,8 +55,8 @@ export function layoutWrappedText(value: string, width: number, size: number, ma
     }
     lines.push(line.trim())
   }
-  const limit=Math.max(1,Math.floor(maxLines)),truncated=lines.length>limit,visible=truncated?[...lines.slice(0,limit-1),`${lines[limit-1]?.slice(0,-1)??''}…`]:lines
-  return{lines:visible,requiredLines:lines.length,maxLines:limit,truncated,overwide:visible.some(line=>(style?measureTextEvidence(line,{...style,size}).width:estimatedTextWidth(line,size))>Math.max(0,width)+1e-6)}
+  const limit=Math.max(1,Math.floor(maxLines)),truncated=lines.length>limit
+  return{lines,requiredLines:lines.length,maxLines:limit,truncated,overwide:lines.some(line=>(style?measureTextEvidence(line,{...style,size}).width:estimatedTextWidth(line,size))>Math.max(0,width)+1e-6)}
 }
 /** Explicit font sizes stay intact. Bound text by lines instead of shrinking a caption to unreadable pixels. */
 export const wrapText=(value:string,width:number,size:number,maxLines=20)=>layoutWrappedText(value,width,size,maxLines).lines

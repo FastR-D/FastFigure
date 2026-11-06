@@ -93,7 +93,7 @@ export function createCallouts(input:FigureDocument,raw:unknown,aliases:Record<s
     if(!target||!canBindPathTarget(target)||!visible(figure,target,hidden))throw new Error('注释须引用本轮有效且可见的普通图元或独立闭合路径；组合请选择内部图元，命名接口使用语义连接')
     const parentId=request.parentId??target.parentId,parent=figure.containers.find(c=>c.id===parentId)
     if(!parent||!ancestors(figure,target.id).includes(parentId))throw new Error('注释容器须为目标的外层容器')
-    const area=contentBounds(parent),family=request.fontFamily??resolveStyle(figure,parentId).fontFamily??'Inter',size=request.fontSize,maxWidth=Math.min(request.maxWidth,area.width)
+    const area=contentBounds(parent),family=request.fontFamily??resolveStyle(figure,parentId).fontFamily??'MiSans',size=request.fontSize,maxWidth=Math.min(request.maxWidth,area.width)
     if(maxWidth<40)throw new Error('注释容器太窄，请选择更外层容器')
     const initial=layoutWrappedText(request.text,maxWidth-4,size,160),width=Math.min(maxWidth,Math.max(size*1.5,...initial.lines.map(line=>estimatedTextWidth(line,size)))+6)
     const textLayout=layoutWrappedText(request.text,width-4,size,160),height=textLayout.lines.length*size*1.25+6

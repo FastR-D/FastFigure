@@ -1,5 +1,5 @@
 import { clone, parseDocument, type FigureDocument, type Port } from './model'
-import { ancestors, childrenOf, contentBounds, findObject, translateSubtree, type FigureObject } from './geometry'
+import { ancestors, childrenOf, layoutContentBounds, findObject, translateSubtree, type FigureObject } from './geometry'
 
 export interface LayoutOptions { mode: 'flow' | 'grid'; direction: 'right' | 'down'; gap: number; columns: number; adjustPorts: boolean; recursive: boolean; fitContainers: boolean }
 export interface LayoutLevel { id: string; title: string; width: number; height: number; count: number; gap: number }
@@ -57,8 +57,11 @@ function ports(a: FigureObject, b: FigureObject, horizontal: boolean): [Port, Po
 /** Arrange a level in a private draft. Fitted children may temporarily exceed ancestors until their turn. */
 function layoutLevel(doc: FigureDocument, containerId: string, options: LayoutOptions, fit: boolean): LayoutLevel {
   const parent = doc.containers.find(c => c.id === containerId)!
-  const objects = childrenOf(doc, containerId).filter(o=>!('interfaceFor' in o&&o.interfaceFor))
-  let area = contentBounds(parent)
+  const headings=doc.nodes.filter(n=>n.parentId===containerId&&n.titleBlock)
+  const objects = childrenOf(doc, containerId).filter(o=>!('interfaceFor' in o&&o.interfaceFor)&&!('titleBlock' in o&&o.titleBlock))
+  if(!objects.length)return{id:containerId,title:parent.title,width:0,height:0,count:0,gap:options.gap}
+  const layoutArea=()=>layoutContentBounds(doc,parent)
+  let area = layoutArea()
   const horizontal = options.direction === 'right'
   const ids = new Set(objects.map(o => o.id))
   const owner = (id: string) => [id, ...ancestors(doc, id)].find(id => ids.has(id))
@@ -109,8 +112,9 @@ function layoutLevel(doc: FigureDocument, containerId: string, options: LayoutOp
   let sizes = measure()
   if (fit) {
     const units=parent.metricScale??1
-    parent.width = Math.max(200*units, Math.ceil(width + 24*units)); parent.height = Math.max(120*units, Math.ceil(height + 60*units))
-    area = contentBounds(parent)
+    const header=Math.max(0,area.y-parent.y)
+    parent.width = Math.max(200*units, Math.ceil(width + 24*units),...headings.map(n=>n.x+n.width-parent.x+12*units)); parent.height = Math.max(120*units, Math.ceil(height + header+12*units))
+    area = layoutArea()
   } else while ((width > area.width + 0.001 || height > area.height + 0.001) && gap > 16) { gap = Math.max(16, gap - 1); sizes = measure() }
   if (width > area.width + 0.001 || height > area.height + 0.001)
     throw new LayoutSpaceError(containerId, parent.title, width, height,parent.metricScale??1)

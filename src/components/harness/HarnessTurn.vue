@@ -42,7 +42,6 @@ const badge = computed(() => props.turn.status === 'running' ? props.turn.design
     <Article class="assistant-message assistant-message-agent">
       <Header><BrandMark /><Text>{{ provider }}</Text><Text class="assistant-run-badge">{{ badge }}</Text></Header>
       <Text class="muted-caption">{{ new Date(turn.createdAt).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) }} · {{ turn.model || 'CLI 默认模型' }}</Text>
-      <Text v-if="turn.timeoutSeconds" class="muted-caption">本轮时限 {{ turn.timeoutSeconds%60===0?`${turn.timeoutSeconds/60} 分钟`:`${turn.timeoutSeconds} 秒` }}</Text>
       <RepositoryRecall v-if="turn.repositoryRecall" :report="turn.repositoryRecall" :run-id="turn.id" :running="turn.status==='running'" />
       <Text v-if="turn.task" class="reconstruction-turn-label">{{ turn.task.kind==='reconstruct'?'参考图结构重建':'原图分区修复' }}</Text>
       <Text v-if="turn.chartData" class="reconstruction-turn-label">数据选图 · {{ turn.chartData.name }} · {{ turn.chartData.rows }} 行 × {{ turn.chartData.columns }} 列</Text>

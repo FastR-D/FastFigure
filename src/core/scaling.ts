@@ -1,7 +1,7 @@
 import {paperNode,paperContainer,isPaperStyle} from './paperStyle.ts'
 import { clone, parseDocument, type FigureContainer, type FigureDocument, type FigureNode, type TextStyle } from './model.ts'
 import { childrenOf, contentBounds, descendants, parentOf, resolveStyle } from './geometry.ts'
-import { nodeTextStyle, resolvedTextStyle } from './typography.ts'
+import { canvasNodeTextStyle, canvasContainerTextStyle } from './typography.ts'
 import { pathPoints, setPathPoints } from './paths.ts'
 import {snapshotEdgeWaypoints,reframeEdgeWaypoints} from './edgeWaypoints.ts'
 export type ScaleAnchor='top-left'|'center'
@@ -16,10 +16,11 @@ export function scaledVisual<T extends FigureNode['visual']>(visual:T,factor:num
 export function scaleNodeMetrics(node:FigureNode,factor:number,doc:FigureDocument) {
   if(node.kind==='port')return
   const theme=resolveStyle(doc,node.parentId),units=node.metricScale??1,resolved=paperNode(node,theme),defaults=resolved===node?undefined:resolved.visual
+  const labelSize=canvasNodeTextStyle(node,false,theme).size,descriptionSize=canvasNodeTextStyle(node,true,theme).size
   node.metricScale=units*factor
   if(node.kind!=='path'){
-    node.textStyle=scaledTypography(node.textStyle,nodeTextStyle(node,false,resolveStyle(doc,node.parentId)).size,factor)
-    if(node.description)node.descriptionStyle=scaledTypography(node.descriptionStyle,nodeTextStyle(node,true).size,factor)
+    node.textStyle=scaledTypography(node.textStyle,labelSize,factor)
+    if(node.description)node.descriptionStyle=scaledTypography(node.descriptionStyle,descriptionSize,factor)
   }
   node.visual=scaledVisual(node.visual,factor,1.3,defaults,defaults?units:1)
   if(node.path?.arrowSize!==undefined)node.path.arrowSize*=factor
@@ -28,11 +29,11 @@ export function scaleNodeMetrics(node:FigureNode,factor:number,doc:FigureDocumen
 /** Local drawing basis: fixed geometry details use metricScale, editable text sizes remain actual units. */
 export function basisNode(node:FigureNode):FigureNode {
   const s=node.metricScale??1
-  return {...node,metricScale:undefined,width:node.width/s,height:node.height/s,textStyle:node.textStyle?scaledTypography(node.textStyle,node.textStyle.size??nodeTextStyle(node).size,1/s):undefined,descriptionStyle:node.descriptionStyle?scaledTypography(node.descriptionStyle,node.descriptionStyle.size??11,1/s):undefined,visual:node.visual?scaledVisual(node.visual,1/s):undefined}
+  return {...node,metricScale:undefined,width:node.width/s,height:node.height/s,textStyle:node.textStyle?(node.textStyle.size!==undefined?scaledTypography(node.textStyle,node.textStyle.size,1/s):{...node.textStyle}):undefined,descriptionStyle:node.descriptionStyle?(node.descriptionStyle.size!==undefined?scaledTypography(node.descriptionStyle,node.descriptionStyle.size,1/s):{...node.descriptionStyle}):undefined,visual:node.visual?scaledVisual(node.visual,1/s):undefined}
 }
 export function basisContainer(c:FigureContainer):FigureContainer {
   const s=c.metricScale??1
-  return {...c,metricScale:undefined,width:c.width/s,height:c.height/s,textStyle:c.textStyle?scaledTypography(c.textStyle,c.textStyle.size??15,1/s):undefined,visual:c.visual?scaledVisual(c.visual,1/s):undefined}
+  return {...c,metricScale:undefined,width:c.width/s,height:c.height/s,textStyle:c.textStyle?(c.textStyle.size!==undefined?scaledTypography(c.textStyle,c.textStyle.size,1/s):{...c.textStyle}):undefined,visual:c.visual?scaledVisual(c.visual,1/s):undefined}
 }
 export function scaleSubtree(input:FigureDocument,id:string,factor:number,anchor:ScaleAnchor='center') {
   if(!Number.isFinite(factor)||factor<.1||factor>4)throw new Error('缩放比例为 10–400%')
@@ -50,7 +51,7 @@ export function scaleSubtree(input:FigureDocument,id:string,factor:number,anchor
   // Materialize all font/paint defaults before changing the object's geometry.
   for(const object of objects){
     if('kind' in object)scaleNodeMetrics(object,factor,doc)
-    else {object.metricScale=(object.metricScale??1)*factor;object.textStyle=scaledTypography(object.textStyle,resolvedTextStyle(object.textStyle,true).size,factor);object.visual=scaledVisual(object.visual,factor,1.3,isPaperStyle(resolveStyle(doc,object.id))?paperContainer(object,resolveStyle(doc,object.id)).visual:undefined,isPaperStyle(resolveStyle(doc,object.id))?(object.metricScale??factor)/factor:1);if(object.reconstruction){const r=object.reconstruction;r.origin={x:x+(r.origin.x-x)*factor+dx,y:y+(r.origin.y-y)*factor+dy};r.scale*=factor}}
+    else {const titleSize=canvasContainerTextStyle(object,resolveStyle(doc,object.id)).size;object.metricScale=(object.metricScale??1)*factor;object.textStyle=scaledTypography(object.textStyle,titleSize,factor);object.visual=scaledVisual(object.visual,factor,1.3,isPaperStyle(resolveStyle(doc,object.id))?paperContainer(object,resolveStyle(doc,object.id)).visual:undefined,isPaperStyle(resolveStyle(doc,object.id))?(object.metricScale??factor)/factor:1);if(object.reconstruction){const r=object.reconstruction;r.origin={x:x+(r.origin.x-x)*factor+dx,y:y+(r.origin.y-y)*factor+dy};r.scale*=factor}}
     object.x=x+(object.x-x)*factor+dx;object.y=y+(object.y-y)*factor+dy;object.width*=factor;object.height*=factor
   }
   for(const edge of doc.edges)if(ids.has(edge.source)&&ids.has(edge.target)){
@@ -62,7 +63,7 @@ export function scaleSubtree(input:FigureDocument,id:string,factor:number,anchor
   for(const saved of externalFramePins.values())saved.points=saved.points.map(p=>({x:x+(p.x-x)*factor+dx,y:y+(p.y-y)*factor+dy}))
   reframeEdgeWaypoints(doc,externalFramePins)
   if(id==='stage'&&doc.canvas.frame){const frame=doc.canvas.frame;frame.x=x+(frame.x-x)*factor+dx;frame.y=y+(frame.y-y)*factor+dy;frame.width*=factor;frame.height*=factor}
-  const parent=parentOf(doc,id),area=parent?contentBounds(parent):{x:0,y:0,width:1000,height:620}
+  const parent=parentOf(doc,id),area=parent?contentBounds(parent):{x:0,y:0,width:doc.canvas.width,height:doc.canvas.height}
   if(root.x<area.x-1e-6||root.y<area.y-1e-6||root.x+root.width>area.x+area.width+1e-6||root.y+root.height>area.y+area.height+1e-6)throw new Error('缩放后的组合超出父容器或画布，请减小比例或调整基点')
   const overlaps=parent?childrenOf(doc,parent.id).filter(o=>o.id!==id&&!('interfaceFor' in o&&o.interfaceFor)&&root.x<o.x+o.width&&root.x+root.width>o.x&&root.y<o.y+o.height&&root.y+root.height>o.y).length:0
   try{return {document:parseDocument(doc),containerId:id,factor,count:objects.length-1,overlaps}}

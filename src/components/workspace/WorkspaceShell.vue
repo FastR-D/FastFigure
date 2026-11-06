@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineAsyncComponent, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
-import { Box, Main, Text, Button, Icon, Heading } from '../ui'
+import { Box, Main, Text, Icon } from '../ui'
 import { createEditor, editorKey } from '../../composables/useEditor'
 import WorkspaceHeader from './WorkspaceHeader.vue'
 import ActivityRail from './ActivityRail.vue'
@@ -48,7 +48,7 @@ function keyboard(e: KeyboardEvent) {
   else if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)) {
     if (!target.closest('[data-testid="figure-canvas"]')) return
     e.preventDefault(); const step = e.shiftKey ? 10 : 1
-    editor.beginDrag(); editor.moveSelection(e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0, e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0); editor.endDrag()
+    editor.nudgeSelection(e.key === 'ArrowLeft' ? -step : e.key === 'ArrowRight' ? step : 0, e.key === 'ArrowUp' ? -step : e.key === 'ArrowDown' ? step : 0)
   }
 }
 function beforeUnload(e: BeforeUnloadEvent) { if (!editor.saved.value) e.preventDefault() }
@@ -64,7 +64,6 @@ onBeforeUnmount(() => { window.removeEventListener('keydown', keyboard); window.
       <ActivityRail />
       <WorkspaceSidebar />
       <Main class="workbench">
-        <Box class="document-heading"><Box><Box class="document-eyebrow"><Text>科研绘图</Text><Icon name="chevron" /><Text>方法与系统架构</Text></Box><Heading>{{ editor.figure.value.title }}</Heading></Box><Button variant="quiet" class="rename-button" title="编辑工程名称" aria-label="编辑工程名称" @click="projectOpen = true"><Icon name="edit" /></Button><Text class="draft-tag">本地工程</Text></Box>
         <Box class="canvas-workspace"><CanvasToolbar /><TextToolbar /><FigureCanvas /></Box>
       </Main>
       <InspectorPanel />

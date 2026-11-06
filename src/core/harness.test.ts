@@ -1,3 +1,4 @@
+import {editableFigure} from './editableFigure'
 import {routeFigure,segmentsCross} from './routing'
 import {pathPoints} from './paths'
 import {createCallouts} from './callouts'
@@ -5,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { effectScope } from 'vue'
 import { createEditor } from '../composables/useEditor'
 import { createHarness } from '../composables/useHarness'
-import { clone, createBlank, createExample, type FigureDocument } from './model'
+import { clone, createBlank, createExample as sourceExample, type FigureDocument } from './model'
 import { harnessPrompt,parseHarnessResponse, type HarnessEvent, type HarnessTurn } from './harness'
 import {instantiateComponent,scaleComponent} from './assets'
 import { buildRecipe } from '../data/recipes'
@@ -17,6 +18,7 @@ import { parseCompositionPlanResponse } from './compositionPlan'
 import {prepareDesignReviewImage} from './visualAuditImage'
 vi.mock('./visualAuditImage',async importOriginal=>({...await importOriginal<typeof import('./visualAuditImage')>(),prepareDesignReviewImage:vi.fn()}))
 
+const createExample=()=>editableFigure(sourceExample())
 const sessionId = '868201df-df6f-44b4-9be4-80a6a39de380', runId = 'ba6a099b-dcc1-4cc6-8e81-50e737adad05'
 function parameterSource(){
   let figure=createBlank();const ids:string[]=[]
@@ -141,7 +143,7 @@ describe('Harness response validation and figure review', () => {
   })
 
   it('adopts a reviewed composition via GET only, gates stale canvases and sends fixed source identity explicitly',async()=>{
-    const {editor,harness}=setup(),original=clone(editor.figure.value),record=parseCompositionPlanResponse(JSON.stringify({message:'Review first',plan:{status:'ready',title:'Native pipeline',goal:'Explain two processing stages',readingOrder:'left-to-right',layout:'Two stages and one short caption',style:{preset:'precise',paletteId:'figureforge-publication-soft',fontFamily:'Inter',usage:'Muted blue processing stages'},sections:[{id:'pipeline',title:'Processing',purpose:'Show stages',visual:'Use the native pipeline',design:{role:'mechanism',structure:'pipeline',rationale:'Native stages explain the supplied order.',emphasis:'primary',frame:{id:'pipeline-region',x:0,y:0,width:1,height:1}},components:[{id:'pipeline',key:'asset:builtin-pipeline'}],referenceImages:[],annotations:[]}],connections:[],checks:['Keep stages'],questions:[],uncertainties:[]}}),runId,'Draw a pipeline',[{kind:'asset',asset:buildRecipe('pipeline',{stages:2,direction:'row'})}],[]).compositionRecord
+    const {editor,harness}=setup(),original=clone(editor.figure.value),record=parseCompositionPlanResponse(JSON.stringify({message:'Review first',plan:{status:'ready',title:'Native pipeline',goal:'Explain two processing stages',readingOrder:'left-to-right',layout:'Two stages and one short caption',style:{preset:'precise',paletteId:'figureforge-publication-soft',fontFamily:'MiSans',usage:'Muted blue processing stages'},sections:[{id:'pipeline',title:'Processing',purpose:'Show stages',visual:'Use the native pipeline',design:{role:'mechanism',structure:'pipeline',rationale:'Native stages explain the supplied order.',emphasis:'primary',frame:{id:'pipeline-region',x:0,y:0,width:1,height:1}},components:[{id:'pipeline',key:'asset:builtin-pipeline'}],referenceImages:[],annotations:[]}],connections:[],checks:['Keep stages'],questions:[],uncertainties:[]}}),runId,'Draw a pipeline',[{kind:'asset',asset:buildRecipe('pipeline',{stages:2,direction:'row'})}],[]).compositionRecord
     harness.intent.value='plan';harness.draft.value='Draw a pipeline';await harness.send();expect(harness.intent.value).toBe('plan');Source.all[0]!.event('run.completed',1,undefined,{compositionRecord:record})
     expect(harness.proposal.value).toBeNull();expect(harness.currentTurn.value?.compositionRecord).toEqual(record);expect(editor.figure.value).toEqual(original)
     const prior=vi.mocked(fetch).getMockImplementation()!;vi.mocked(fetch).mockImplementation(async(url,options)=>String(url).endsWith(`/runs/${runId}`)?Response.json({id:runId,sessionId,status:'completed',content:'Draw a pipeline',baseFigure:original,canvasBaseline:original,summary:turn({intent:'plan',hasProposal:false,review:'none',compositionRecord:record}),events:[]}):prior(url,options))
@@ -182,7 +184,7 @@ describe('Harness response validation and figure review', () => {
   it('recovers an active plan without restarting it, retries transient errors and subsequently opens newer manual turns',async()=>{
     const childId='45839a0d-5739-4f05-9a1d-f3c77ac51bc8',planId='e028ebfb-ae54-401b-923e-c493e6141db4',manualId='96c675bd-9aeb-453a-a929-74ae8ede2765',original=createExample(),parent=candidate(),refined=clone(parent);refined.nodes[1]!.label='Plan result'
     let checks=0,complete=false,later=false
-    const plan:RepairPlan={id:planId,sessionId,parentRunId:runId,latestCandidateRunId:runId,activeRunId:childId,containerId:'stage',createdAt:new Date().toISOString(),deadlineAt:new Date(Date.now()+60_000).toISOString(),totalSeconds:60,perRunSeconds:60,remainingSeconds:60,status:'running',stopping:false,message:'Running',steps:[{regionId:'left',title:'Encoder',runId:childId,status:'running'}]}
+    const plan:RepairPlan={id:planId,sessionId,parentRunId:runId,latestCandidateRunId:runId,activeRunId:childId,containerId:'stage',createdAt:new Date().toISOString(),status:'running',stopping:false,message:'Running',steps:[{regionId:'left',title:'Encoder',runId:childId,status:'running'}]}
     const child=()=>turn({id:childId,status:complete?'completed':'running',review:complete?'pending':'none',hasProposal:complete,refinement:{parentRunId:runId,rootRunId:runId,round:1}})
     vi.stubGlobal('fetch',vi.fn(async(url:string)=>{
       if(url.endsWith('/status'))return Response.json([{kind:'codex',state:'ready',message:'Test',images:true}])
