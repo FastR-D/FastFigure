@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onBeforeUnmount,ref} from 'vue'
-import {Box,Button,Disclosure,DisclosureTrigger,Image,Text,TextArea} from '../ui'
+import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Image,Text,TextArea} from '../ui'
 import type {ComponentImageQuery} from '../../core/componentSearch'
 import {selectionEvidenceSchema} from '../../core/repositorySelection'
 const props=defineProps<{query:ComponentImageQuery}>(),image=ref(''),error=ref(''),loading=ref(false),evidence=ref<{prompt:string;response?:string}|null>(null)
@@ -34,6 +34,6 @@ async function inspect(kind:'image'|'evidence'){
     <Image v-if="image" class="component-query-image" :src="image" alt="模型实际用于素材检索的裁片" />
     <Disclosure><DisclosureTrigger size="xs">实际文字查询</DisclosureTrigger><Text class="feedback-query">{{ query.searchQuery }}</Text></Disclosure>
     <Disclosure v-if="evidence"><DisclosureTrigger size="xs">看图提示与原响应</DisclosureTrigger><TextArea :value="evidence.prompt" readonly rows="6" aria-label="看图检索提示" /><TextArea :value="evidence.response" readonly rows="6" aria-label="看图检索原响应" /></Disclosure>
-    <Text v-if="error" role="alert" class="error-text">{{ error }}</Text>
+    <ErrorMessage v-if="error" class="error-text" :message="error" />
   </Disclosure>
 </template>

@@ -53,7 +53,6 @@ export function createEditor() {
   let previousMaterialPanel: MaterialPanel = 'components'
   const assistantSeed = ref(''), textTarget = ref<'label' | 'description'>('label')
   const assistantReferenceId=ref('')
-  const assistantAssetId=ref('')
   const assistantStyle=ref<StyleAsset|null>(null)
   const assistantTask=ref<{task:ReconstructionTask;content:string}|null>(null)
   const imageDraftPlan=ref<CompositionRecord|null>(null)
@@ -64,12 +63,12 @@ export function createEditor() {
   const library = createComponentLibrary()
   const repository=createComponentRepository()
   const styleLibrary=createStyleLibrary(),styleDialog=ref<{kind:'capture'}|{kind:'edit';id:string}|{kind:'plan';record:CompositionRecord}|null>(null)
-  const libraryTab = ref<'basic' | 'recipes' | 'mine' | 'templates' | 'charts' | 'repository'>('basic')
+  const libraryTab = ref<'basic' | 'recipes' | 'templates' | 'charts' | 'benchmarks'>('basic')
   const chartDialog=ref<{kind?:'line'|'bar'|'scatter'|'heatmap'|'boxplot';containerId?:string}|null>(null)
   const chartDataImportOpen=ref(false),assistantDataset=ref<ChartDataset|null>(null)
   const componentCapture=shallowRef<{id:string;figure:FigureDocument;origin:ComponentCaptureOrigin;selectedIds:string[]}|null>(null)
   function openComponentCapture(source:FigureDocument=figure.value,origin:ComponentCaptureOrigin={kind:'project'},ids:string[]=selectedIds.value){componentCapture.value={id:crypto.randomUUID(),figure:clone(source),origin:clone(origin),selectedIds:[...ids]}}
-  const assetDialog = ref<{ mode: 'recipe'; recipeId: string } | { mode: 'capture'; containerId: string } | { mode: 'asset'; assetId: string } | {mode:'template';asset:ComponentAsset} | {mode:'repository';asset:ComponentAsset;record:ComponentSnapshot} | null>(null)
+  const assetDialog = ref<{ mode: 'recipe'; recipeId: string } | {mode:'template';asset:ComponentAsset} | {mode:'repository';asset:ComponentAsset;record:ComponentSnapshot} | null>(null)
   const recipeDialogId=ref<string|null>(null)
   const layoutDialogOpen = ref(false),vectorImportOpen=ref(false)
   const materialEdit=ref<'center'|'format'|'arrow'|'path-arrow'|'edge-route'|'fit-text'|'match-size'|'line-style'|null>(null)
@@ -405,7 +404,20 @@ export function createEditor() {
     if (update(doc => { ids = ungroupObject(doc, selectedId.value) })) selectedIds.value = ids.length ? ids : ['stage']
   }
   function removeSelected() {
-    if (selectedIds.value.includes('stage')) { notice.value = '保留主容器，可以删除内部节点、子容器与连接'; return }
+    if (!selectedIds.value.length) return
+    if (selectedIds.value.includes('stage')) {
+      if(update(doc=>{
+        // A document keeps one structural root; the authored container and its
+        // entire subtree are replaced with a transparent workspace-sized root.
+        doc.containers=[{id:'stage',parentId:null,role:'stage',title:'画布',x:0,y:0,width:doc.canvas.width,height:doc.canvas.height,titleDetached:true,visual:{fill:'none',stroke:'none'}}]
+        doc.nodes=[];doc.edges=[];delete doc.canvas.frame
+      })){
+        selectedIds.value=[];selectedPathPoint.value=null;selectedEdgePoint.value=null
+        connectMode.value=false;connectionSource.value=null;imageDraftPlan.value=null
+        notice.value='已删除容器及内部内容，可撤销恢复'
+      }
+      return
+    }
     const ids = new Set(selectedIds.value)
     for (const id of selectedIds.value) descendants(figure.value, id).forEach(o => ids.add(o.id))
     for(const node of figure.value.nodes) if(node.path&&[node.path.start,node.path.end].some(b=>b&&ids.has(b.nodeId))) ids.add(node.id)
@@ -478,7 +490,7 @@ export function createEditor() {
     notice.value = '已关联原图区域，存为组件时会保留来源'; return true
   }
   function clearEvidence() { update(doc => { const object = findObject(doc, selectedId.value); if (object) delete object.evidence }) }
-  return { selectedEdgePoint,dragEdgePoint,setEdgePoint,removeEdgePoint,figure, root, currentContainer, activeStyle, selectedId, selectedIds, selectedNode, selectedEdge, selectedContainer, selectedObjects, canGroup, activePanel, library,repository,styleLibrary,styleDialog,assistantStyle,applySavedStyle,useSavedStyle, libraryTab, assetDialog,recipeDialogId,applyRecipePreview,componentCapture,openComponentCapture, chartDialog,chartDataImportOpen,assistantDataset,assistantAssetId,layoutDialogOpen, vectorImportOpen, routes, blockedRoutes,
+  return { selectedEdgePoint,dragEdgePoint,setEdgePoint,removeEdgePoint,figure, root, currentContainer, activeStyle, selectedId, selectedIds, selectedNode, selectedEdge, selectedContainer, selectedObjects, canGroup, activePanel, library,repository,styleLibrary,styleDialog,assistantStyle,applySavedStyle,useSavedStyle, libraryTab, assetDialog,recipeDialogId,applyRecipePreview,componentCapture,openComponentCapture, chartDialog,chartDataImportOpen,assistantDataset,layoutDialogOpen, vectorImportOpen, routes, blockedRoutes,
     connectMode, connectionSource, zoom, viewReset,textCheckOpen,arrowDrawMode,arrowEditId,arrowPointCount,arrowFinishRequest,setZoom,fitCanvas,nudgeSelection,showGrid, saved, storageError, notice, past, future, nodeCount, select, selectAll, selectRegion,
     addNode, insertComponent,libraryDrag,dropLibraryItem,setCanvasSize, setStyle,applyTheme, setAccent, inheritAppearance, setLabel, update, move, moveSelection, beginDrag, endDrag, cancelDrag, setPosition, setSize, resize, alignSelection,
     arrangeSelection, applyLayout, materialEdit,calloutOpen,panelLayoutOpen,detailInsetOpen, applyPanels, publicationOpen, setPublication, scaleDialogId, applyScale, groupSelection, ungroupSelection, removeSelected, undo, redo, save, importProject, newProject, toggleConnect,

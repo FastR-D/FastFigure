@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
-import { Box, Button, Image, Link, Text, TextField } from '../ui'
+import { ErrorMessage, Box, Button, Image, Link, Text, TextField } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { convertFigureforgeTemplate, figureforgeResources, figureforgeUrl, type FigureforgeTemplate } from '../../core/figureforge'
 const editor=useEditor(),templates=shallowRef<FigureforgeTemplate[]>([]),error=ref(''),busy=ref(''),query=ref('')
@@ -26,11 +26,10 @@ async function loadTemplate(template:FigureforgeTemplate){
 </script>
 <template>
   <Box class="figureforge-library">
-    <Text class="panel-description">从 FigureForge 复用的论文模板，可逐个修改文字、数据图元与曲线。</Text>
     <TextField v-model="query" type="search" aria-label="搜索论文模板" placeholder="折线、柱状、面板、scatter…" />
     <Box class="section-eyebrow"><Text>{{ loading?'正在加载模板…':`可编辑模板 · ${available.length}` }}</Text><Text>示例数据</Text></Box>
     <Box class="asset-grid"><Button v-for="template in available" :key="template.id" variant="quiet" class="asset-card" :disabled="!!busy" draggable="true" @dragstart="editor.libraryDrag.start($event,{kind:'asset',asset:()=>loadTemplate(template)})" :aria-label="`配置模板 ${template.name}`" @click="choose(template)"><Image class="template-thumbnail" :draggable="false" :src="`data:image/svg+xml;charset=utf-8,${encodeURIComponent(template.svg)}`" :alt="`${template.name}示例预览`" loading="lazy" /><Box><Text class="asset-name">{{ template.name }}</Text><Text class="component-note">{{ busy===template.id?'正在转换…':'原生图元 · 拖拽插入 / 点击配置' }}</Text></Box></Button></Box>
-    <Text v-if="error" role="alert" class="error-text">{{ error }}</Text>
+    <ErrorMessage v-if="error" class="error-text" :message="error" />
     <Text class="muted-caption">数值、误差线和显著性均为示例。{{ templates.filter(t=>t.unavailable).length }} 个模板待渐变支持或上游几何校正。</Text>
     <Box class="material-actions"><Link :href="figureforgeUrl" target="_blank" rel="noopener noreferrer">FigureForge 来源</Link><Link href="/resources/figureforge/LICENSE" target="_blank" rel="noopener noreferrer">MIT 许可</Link></Box>
   </Box>

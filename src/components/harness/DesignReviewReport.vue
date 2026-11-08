@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,onBeforeUnmount,ref,useTemplateRef,watch} from 'vue'
-import {Box,Button,Heading,Image,Text} from '../ui'
+import { ErrorMessage,Box,Button,Heading,Image,Text} from '../ui'
 import type {Harness} from '../../composables/useHarness'
 import type {HarnessTurn} from '../../core/harness'
 import {designReviewCategories} from '../../core/designReview'
@@ -29,7 +29,7 @@ onBeforeUnmount(()=>{request?.abort();release()})
     <Heading>主图设计审阅</Heading><Text class="muted-caption">依据本轮整图渲染提出建议；设计判断仍需结合研究内容。</Text>
     <Text>第一眼与阅读路径：{{ report.firstRead }}</Text>
     <Box ref="preview" class="visual-audit-images"><Box v-if="url" class="visual-audit-image"><Text>实际发送的整图</Text><Box class="visual-audit-raster"><Image :src="url" alt="设计审阅整图" /><Box v-if="finding" class="visual-audit-location" :style="{left:`${finding.box.x*100}%`,top:`${finding.box.y*100}%`,width:`${finding.box.width*100}%`,height:`${finding.box.height*100}%`}" aria-hidden="true" /></Box></Box></Box>
-    <Text v-if="loading" class="muted-caption">正在读取本轮实际图片…</Text><Box v-if="error"><Text class="error-text">{{ error }}</Text><Button size="xs" @click="load">重新读取整图</Button></Box>
+    <Text v-if="loading" class="muted-caption">正在读取本轮实际图片…</Text><Box v-if="error"><ErrorMessage class="error-text" :message="error" /><Button size="xs" @click="load">重新读取整图</Button></Box>
     <Text class="muted-caption">{{ info.width }} × {{ info.height }} 像素 · 报告针对这版画布</Text>
     <Text v-for="(item,i) in report.keep" :key="i">保留：{{ item }}</Text>
     <Text v-if="!report.findings.length" class="muted-caption">本轮没有提出具体改动建议；不代表自动验收通过。</Text>

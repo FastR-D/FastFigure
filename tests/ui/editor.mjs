@@ -3,10 +3,13 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {checkResizing} from './resizing.mjs';
 import {checkLibraryDrag} from './library-drag.mjs';
-import {checkWorkspaceSettings} from './workspace-settings.mjs';
+import {checkWorkspaceSettings,checkRootDeletion,checkCompactAttachments} from './workspace-settings.mjs';
+import {checkGalleryStudy} from './gallery-study.mjs';
 export async function checkEditor({ page, results, saveProject, undo, choose, panel, turn, send, run }) {
     const original = await saveProject(), canvas = page.getByTestId('figure-canvas');
     const navigation=page.getByRole('navigation',{name:'工作区导航',exact:true}),sidebar=page.locator('#workspace-sidebar');
+    assert.deepEqual(await sidebar.getByRole('group',{name:'组件来源',exact:true}).getByRole('button').allTextContents(),['基础','参数化组合','标杆主题','论文模板','实验图表']);
+    assert.equal(await page.getByRole('button',{name:'存为我的组件',exact:true}).count(),0);
     const separator=page.getByRole('separator',{name:'调整左侧栏宽度',exact:true});
     const sidebarLayout=()=>page.evaluate(()=>{const rect=selector=>{const r=document.querySelector(selector).getBoundingClientRect();return{x:r.x,width:r.width}};return{rail:rect('.activity-rail'),button:rect('.activity-rail>button'),sidebar:rect('#workspace-sidebar'),canvas:rect('.workbench'),inspector:rect('.inspector-panel'),scrollWidth:document.documentElement.scrollWidth}});
     const screen=async(x,y)=>canvas.evaluate((svg,p)=>{const point=new DOMPoint(p.x,p.y).matrixTransform(svg.getScreenCTM());return{x:point.x,y:point.y};},{x,y});
@@ -20,6 +23,8 @@ export async function checkEditor({ page, results, saveProject, undo, choose, pa
     await header.getByRole('button',{name:'使用指南',exact:true}).click();const help=page.getByRole('dialog',{name:'使用指南',exact:true});await help.getByText('移动与对齐',{exact:true}).waitFor();await help.getByRole('button',{name:'开始绘图',exact:true}).click();
     await page.getByRole('toolbar',{name:'画布工具',exact:true}).getByRole('button',{name:'检查文字',exact:true}).click();await page.getByRole('dialog',{name:'当前图件文字检查',exact:true}).getByRole('button',{name:'关闭文字检查',exact:true}).click();
     await checkWorkspaceSettings({page,canvas,panel,original,saveProject,undo,results});
+    await checkRootDeletion({page,saveProject,undo,results});
+    await checkCompactAttachments({page,panel,saveProject,undo,choose,results});
     const initialPaper=await page.locator('.figure-paper').boundingBox(),at=await screen(500,310);await page.mouse.move(at.x,at.y);await page.mouse.wheel(0,-120);await page.waitForTimeout(120);assert.notEqual((await page.getByRole('button',{name:'画布缩放',exact:true}).textContent()).trim(),'100%');assert.deepEqual(await saveProject(),original);
     const beforePan=await canvas.boundingBox();await page.mouse.move(at.x,at.y);await page.mouse.down({button:'right'});await page.mouse.move(at.x+40,at.y+25,{steps:4});await page.mouse.up({button:'right'});const afterPan=await canvas.boundingBox();assert(Math.abs(afterPan.x-beforePan.x-40)<1);assert(Math.abs(afterPan.y-beforePan.y-25)<1);assert.deepEqual(await saveProject(),original);
     await page.getByRole('button',{name:'适应画布',exact:true}).click();const resetPaper=await page.locator('.figure-paper').boundingBox();assert(Math.abs(resetPaper.x-initialPaper.x)<1);assert(Math.abs(resetPaper.y-initialPaper.y)<1);
@@ -29,6 +34,7 @@ export async function checkEditor({ page, results, saveProject, undo, choose, pa
     await page.getByRole('button',{name:'工程',exact:true}).click();await page.getByLabel('导入工程文件',{exact:true}).setInputFiles({name:'restore-after-snap.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(original))});await page.getByRole('dialog',{name:'工程管理',exact:true}).waitFor({state:'hidden'});assert.deepEqual(await saveProject(),original);
     await checkResizing({page,canvas,screen,original,saveProject,undo});
     await checkLibraryDrag({page,canvas,screen,original,saveProject,undo,choose,results});
+    await checkGalleryStudy({page,results,saveProject,undo});
     const inspector=page.getByRole('complementary',{name:'对象属性',exact:true});
     for(const label of ['X 位置','Y 位置','对象宽度','对象高度','对象标签','容器默认主题色'])assert.equal(await inspector.getByLabel(label,{exact:true}).count(),0);
     assert.equal(await inspector.getByText('风格使用记录',{exact:true}).count(),0);assert.equal(await inspector.getByRole('heading',{name:'容器样式',exact:true}).count(),0);

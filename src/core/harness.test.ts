@@ -233,23 +233,51 @@ describe('Harness response validation and figure review', () => {
     editor.undo();expect(harness.apply()).toBe(true);expect(editor.figure.value).toEqual(refined);expect(editor.past.value).toHaveLength(1)
     editor.undo();expect(editor.figure.value).toEqual(original);await vi.waitFor(()=>expect(harness.reviewSync.value).toBe(false));harness.dispose()
   })
-  it('sends an immutable selected component snapshot and requires a selection in explicit reference mode', async () => {
-    const { editor, harness } = setup(), asset = buildRecipe('pipeline', { stages: 2, direction: 'row' })
-    asset.id = 'personal-test'; asset.figure.nodes[0]!.label = 'Manual revision before request'
-    editor.library.save(asset)
-    harness.catalogueMode.value = 'selected'; harness.draft.value = 'Reuse my component'
+  it('commits valid picker selections atomically and freezes native themes and ordered image roles in the submitted request',async()=>{
+    const {editor,harness}=setup(),key='asset:gallery-benchmark-training-deployment',keys=[key]
+    expect(harness.catalogueMode.value).toBe('none');expect(harness.referenceComponents.value).toEqual([])
+    expect(harness.setComponentSelection(keys)).toBe(true);keys.push('seed:unknown')
+    expect(harness.selectedComponentKeys.value).toEqual([key])
+    for(const invalid of [[key,key],['unknown'],harness.componentOptions.value.slice(0,7).map(item=>item.key)])expect(harness.setComponentSelection(invalid)).toBe(false)
+    expect(harness.selectedComponentKeys.value).toEqual([key])
+    editor.figure.value.references=[0,1,2].map(i=>({id:`ref-${i}`,title:`Reference ${i}`,citation:'Authored',fileName:`ref-${i}.png`,sha256:String(i+1).repeat(64),pixelWidth:800,pixelHeight:400,dataUrl:'data:image/png;base64,iVBORw0KGgo=',placement:{x:0,y:0,width:800,height:400}}))
+    const choices=[{id:'ref-2',purpose:'layout' as const},{id:'ref-0',purpose:'style' as const}]
+    expect(harness.setReferenceSelection(choices)).toBe(true);choices[0]!.id='changed-outside'
+    const selected=clone(harness.selectedReferences.value)
+    for(const invalid of [[{id:'missing',purpose:'style' as const}],[selected[0]!,selected[0]!]])expect(harness.setReferenceSelection(invalid)).toBe(false)
+    expect(harness.selectedReferences.value).toEqual(selected)
+    harness.loading.value=true;expect(harness.setComponentSelection([])).toBe(false);expect(harness.setReferenceSelection([])).toBe(false);harness.loading.value=false
+    harness.draft.value='Use selected native schematic and the chosen images';await harness.send()
+    const payload=JSON.parse(String(vi.mocked(fetch).mock.calls.find(([url])=>String(url).endsWith('/runs'))![1]?.body))
+    expect(payload.catalogue.map((entry:{asset:{id:string}})=>entry.asset.id)).toEqual(['gallery-benchmark-training-deployment'])
+    expect(payload.referenceInputs).toEqual([{id:'ref-0',purpose:'style'},{id:'ref-2',purpose:'layout'}]);expect(payload.librarySearch).toBe(false)
+    harness.dispose()
+  })
+  it('allows clearing the last selected component and rejects image content roles for data selection without partial changes',async()=>{
+    const {editor,harness}=setup(),key=harness.componentOptions.value[0]!.key
+    harness.setComponentSelection([key]);expect(harness.setComponentSelection([])).toBe(true);expect(harness.catalogueMode.value).toBe('none')
+    editor.figure.value.references=[{id:'ref',title:'Reference',citation:'Authored',fileName:'ref.png',sha256:'a'.repeat(64),pixelWidth:800,pixelHeight:400,dataUrl:'data:image/png;base64,iVBORw0KGgo=',placement:{x:0,y:0,width:800,height:400}}]
+    harness.setReferenceSelection([{id:'ref',purpose:'layout'}]);editor.assistantDataset.value=parseChartDataset('X,Y\n1,2\n3,4',{name:'Raw',origin:'example',errorLabel:'',note:'',dataSource:''})
+    expect(harness.setReferenceSelection([{id:'ref',purpose:'content'}])).toBe(false);expect(harness.selectedReferences.value).toEqual([{id:'ref',purpose:'layout'}])
+    expect(harness.setReferenceSelection([])).toBe(true);expect(harness.selectedReferences.value).toEqual([]);harness.dispose()
+  })
+  it('excludes saved personal components and sends a frozen builtin selection', async () => {
+    const { editor, harness } = setup(), personal = buildRecipe('pipeline', { stages: 2, direction: 'row' })
+    personal.id = 'personal-test'; editor.library.save(personal)
+    expect(harness.componentOptions.value.some(item=>item.key==='asset:personal-test')).toBe(false)
+    const item=harness.componentOptions.value.find(item=>item.entry.kind==='asset')!,asset=clone(item.asset)
+    harness.catalogueMode.value = 'selected'; harness.draft.value = 'Reuse the selected component'
     await harness.send(); expect(harness.error.value).toContain('至少选择')
     expect(fetch).not.toHaveBeenCalled()
-    harness.toggleComponent('asset:personal-test')
-    const sending = harness.send(); editor.library.remove('personal-test'); await sending
+    harness.setComponentSelection([item.key])
+    const sending = harness.send(); harness.selectedComponentKeys.value=[]; editor.library.remove('personal-test'); await sending
     const call = vi.mocked(fetch).mock.calls.find(([url]) => String(url).endsWith('/runs'))!
     const payload = JSON.parse(String(call[1]?.body))
-    expect(payload.catalogue).toHaveLength(1)
-    expect(payload.catalogue[0].asset.figure.nodes[0].label).toBe('Manual revision before request')
+    expect(payload.catalogue).toEqual([{kind:'asset',asset}]);expect(payload.librarySearch).toBe(false)
     expect(editor.library.assets.value).toEqual([])
     Source.all[0]!.event('run.started', 1)
-    Source.all[0]!.event('run.completed', 2, candidate(), { components: [{ instanceId: 'my-instance', componentKey: 'asset:personal-test', name: asset.name, revision: asset.updatedAt, nodeCount: 2 }] })
-    expect(harness.usedComponents.value[0]?.componentKey).toBe('asset:personal-test')
+    Source.all[0]!.event('run.completed', 2, candidate(), { components: [{ instanceId: 'selected-instance', componentKey: item.key, name: asset.name, revision: asset.updatedAt, nodeCount: asset.figure.nodes.length }] })
+    expect(harness.usedComponents.value[0]?.componentKey).toBe(item.key)
     harness.dispose()
   })
   it('accepts structured/fenced responses and preserves source guides and omitted object provenance', () => {

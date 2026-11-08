@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,defineAsyncComponent,onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import {Box,Button,Footer,Header,Heading,Link,Modal,ModalBody,Select,Text,TextField} from '../ui'
+import { ErrorMessage,Box,Button,Footer,Header,Heading,Link,Modal,ModalBody,Select,Text,TextField} from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import {feedbackPageSchema,feedbackRatingLabels} from '../../core/retrievalFeedback'
 import {feedbackRequest} from '../../composables/retrievalFeedbackApi'
@@ -16,7 +16,7 @@ watch(()=>props.open,open=>{if(open)void load();else{epoch++;selected.value=''}}
     <Header><Box><Heading>素材适用性反馈</Heading><Text class="muted-caption">每个样本保留完整要求、冻结图元、助手取舍与改判记录。通过界面提交的判断，不等于独立评测标签。</Text></Box><IconButton icon="close" label="关闭反馈记录" @click="emit('close')" /></Header>
     <ModalBody>
       <Box class="feedback-history-search"><TextField v-model="query" maxlength="200" aria-label="检索素材反馈" placeholder="素材名或这轮绘图要求" @keydown.enter="load()" /><Select :value="rating" :options="[{value:'all',label:'全部判断'},...Object.entries(feedbackRatingLabels).map(([value,label])=>({value,label}))]" aria-label="反馈判断范围" @change="rating=$event;load()" /><Button :disabled="loading" @click="load()">检索反馈</Button></Box>
-      <Text v-if="loading" class="muted-caption">正在读取反馈…</Text><Text v-if="error" role="alert" class="error-text">{{ error }}</Text>
+      <Text v-if="loading" class="muted-caption">正在读取反馈…</Text><ErrorMessage v-if="error" class="error-text" :message="error" />
       <Text class="muted-caption">{{ page.total }} 个匹配样本；列表显示最新判断，打开后可查看全部改判与原生素材。</Text>
       <Box class="feedback-history-list"><Button v-for="record in page.records" :key="record.caseId" variant="quiet" class="feedback-history-card" :aria-label="`查看素材反馈 ${record.name}`" @click="selected=record.caseId"><Box><Text class="selection-title">{{ record.name }}</Text><Text>{{ feedbackRatingLabels[record.latest.rating] }}</Text></Box><Text>{{ record.query }}</Text><Text class="muted-caption">{{ record.latest.note||'未补充说明' }}</Text><Text class="muted-caption">{{ new Date(record.latest.createdAt).toLocaleString() }} · {{ record.assetSha256.slice(0,12) }}</Text></Button></Box>
       <Text v-if="!loading&&!page.total&&!error" class="empty-state">可在助手的“本机素材召回 → 反馈素材适用性”中开始记录。</Text>

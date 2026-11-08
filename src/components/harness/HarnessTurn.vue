@@ -6,7 +6,7 @@ import PlotAlignmentSummary from '../charts/PlotAlignmentSummary.vue'
 import ColorMapSummary from '../library/ColorMapSummary.vue'
 import StyleAssetSummary from '../library/StyleAssetSummary.vue'
 import { computed, ref } from 'vue'
-import { Article, Box, BrandMark, Button, Disclosure, DisclosureTrigger, Header, Icon, Text, TextArea } from '../ui'
+import { ErrorMessage, Article, Box, BrandMark, Button, Disclosure, DisclosureTrigger, Header, Icon, Text, TextArea } from '../ui'
 import type { Harness } from '../../composables/useHarness'
 import type { HarnessTurn } from '../../core/harness'
 import FigureReview from './FigureReview.vue'
@@ -93,7 +93,7 @@ const badge = computed(() => props.turn.status === 'running' ? props.turn.design
         <Text v-else class="muted-caption">{{ reviewLabels[turn.review] }} · 历史结果仅供查看，画布仍可继续编辑。</Text>
         <Box v-if="turn.review === 'pending'" class="assistant-proposal-actions"><Button size="xs" :disabled="harness.locked.value || harness.loading.value" @click="harness.discard">丢弃候选图</Button><Button size="xs" variant="primary" :disabled="harness.stale.value || harness.locked.value || harness.loading.value" @click="harness.apply">应用候选图</Button></Box>
       </Box>
-      <Text v-if="turn.error" role="alert" class="error-text">{{ turn.error }}</Text>
+      <ErrorMessage v-if="turn.error" class="error-text" :message="turn.error" />
       <Button v-if="!current && turn.available" size="xs" :disabled="harness.locked.value || harness.loading.value" @click="emit('inspect', turn.id)">查看本轮详情</Button>
       <Text v-if="!turn.available" class="muted-caption">此轮原始输出与预览已清理，消息仍保留。</Text>
       <Text v-if="turn.refinement&&(turn.status==='failed'||turn.status==='cancelled')" class="muted-caption">上一版候选仍保留。查看上一版后，可重新选择分区修复或应用那一版。</Text>

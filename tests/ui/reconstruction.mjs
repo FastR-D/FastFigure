@@ -51,12 +51,15 @@ export async function checkReconstruction({ page, base, panel, saveProject, undo
     await page.getByRole('button',{name:'关闭组件图谱',exact:true}).click();
     await panel.getByRole('button',{name:'从候选图采集素材',exact:true}).click();
     const capture=page.getByRole('dialog',{name:'从原生图件采集素材',exact:true});
+    const captured=[];
     for(const [preset,name]of [['透视张量栈','Collected native output'],['描摹分区 · Encoder','Collected traced encoder']]){
-        await choose('采集范围预设',preset,capture);await capture.getByRole('textbox',{name:'采集组件名称',exact:true}).fill(name);await capture.getByRole('button',{name:'准备采集预览',exact:true}).click();await capture.getByRole('button',{name:'加入待入库队列',exact:true}).click();await capture.getByRole('button',{name:'已加入队列',exact:true}).waitFor();
+        await choose('采集范围预设',preset,capture);await capture.getByRole('textbox',{name:'采集组件名称',exact:true}).fill(name);await capture.getByRole('button',{name:'准备采集预览',exact:true}).click();
+        const [download]=await Promise.all([page.waitForEvent('download'),capture.getByRole('button',{name:'导出采集组件',exact:true}).click()]);const path=join(results,`${name}.component.json`);await download.saveAs(path);captured.push(JSON.parse(readFileSync(path,'utf8')));
     }
+    assert.equal(await capture.getByRole('button',{name:'加入待入库队列',exact:true}).count(),0);
     const captureDownload=page.waitForEvent('download');await capture.getByRole('button',{name:'导出来源快照',exact:true}).click();const sourceDownload=await captureDownload,sourceSnapshotPath=join(results,'capture-source.fastfigure.json');await sourceDownload.saveAs(sourceSnapshotPath);const sourceSnapshotHash=createHash('sha256').update(readFileSync(sourceSnapshotPath)).digest('hex');
-    await capture.getByRole('button',{name:'查看待入库队列（2）',exact:true}).click();const collectionQueue=page.getByRole('dialog',{name:'批量导入本机素材',exact:true});await collectionQueue.getByRole('button',{name:'将 2 项入库',exact:true}).click();await collectionQueue.getByRole('button',{name:'将 0 项入库',exact:true}).waitFor();await collectionQueue.getByRole('button',{name:'收起',exact:true}).click();
-    for(const name of ['Collected native output','Collected traced encoder']){const result=await(await page.request.get(`${base}/api/component-library/snapshots?q=${encodeURIComponent(name)}`)).json(),record=result.records.find(record=>record.name===name);assert(record);const saved=await(await page.request.get(`${base}/api/component-library/snapshots/${record.id}`)).json(),origin=saved.asset.sources.find(source=>source.collection)?.collection;assert(origin);assert.equal(origin.kind,'candidate');assert.equal(origin.runId,captureRunId);assert.equal(origin.review,'pending');assert.equal(origin.figureSha256,sourceSnapshotHash);assert(saved.asset.sources.some(source=>source.image?.sha256===generatedReference.sha256));}
+    for(const asset of captured){const origin=asset.sources.find(source=>source.collection)?.collection;assert(origin);assert.equal(origin.kind,'candidate');assert.equal(origin.runId,captureRunId);assert.equal(origin.review,'pending');assert.equal(origin.figureSha256,sourceSnapshotHash);assert(asset.sources.some(source=>source.image?.sha256===generatedReference.sha256));}
+    await capture.getByRole('button',{name:'关闭采集素材',exact:true}).click();
     assert.deepEqual(await saveProject(), original);assert.equal((await(await page.request.get(`${base}/api/harness/runs/${captureRunId}`)).json()).summary.review,'pending');await page.getByRole('button',{name:'助手',exact:true}).click();
     await panel.getByRole('button', { name: '应用候选图', exact: true }).click();
     const rebuilt = await saveProject();

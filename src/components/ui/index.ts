@@ -5,6 +5,7 @@ export { default as Icon } from './Icon.vue'
 export { default as BrandMark } from './BrandMark.vue'
 export { fastfigureIconUrl } from './brand.js'
 export { default as Modal } from './Modal.vue'
+export { default as ErrorMessage } from './ErrorMessage.vue'
 export {
   initializeColorMode,
   setColorMode,

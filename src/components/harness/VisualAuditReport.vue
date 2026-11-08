@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed,onBeforeUnmount,ref,useTemplateRef,watch } from 'vue'
-import { Box,Button,Field,Heading,Image,Text,TextField } from '../ui'
+import { ErrorMessage, Box,Button,Field,Heading,Image,Text,TextField } from '../ui'
 import type { Harness } from '../../composables/useHarness'
 import type { HarnessTurn } from '../../core/harness'
 const props=defineProps<{turn:HarnessTurn;harness:Harness}>(),selected=ref(''),chosen=ref<string[]>([]),mode=ref('candidate'),sourceUrl=ref(''),candidateUrl=ref(''),imageError=ref(''),loading=ref(false),preview=useTemplateRef<HTMLElement>('preview')
@@ -29,7 +29,7 @@ function toggle(id:string){chosen.value=chosen.value.includes(id)?chosen.value.f
       <Box v-if="sourceUrl&&mode!=='candidate'" class="visual-audit-image"><Text>原图 · {{ audit.sourceImage.quality==='original'?'原文件裁片':'预览裁片' }}</Text><Image :src="sourceUrl" alt="视觉审阅原图" /></Box>
       <Box v-if="candidateUrl&&mode!=='source'" class="visual-audit-image"><Text>实际发送的候选渲染</Text><Box class="visual-audit-raster"><Image :src="candidateUrl" alt="视觉审阅候选" /><Box v-if="finding" class="visual-audit-location" :style="{left:`${finding.box.x*100}%`,top:`${finding.box.y*100}%`,width:`${finding.box.width*100}%`,height:`${finding.box.height*100}%`}" aria-hidden="true" /></Box></Box>
     </Box>
-    <Text v-if="loading" class="muted-caption">正在读取本轮两张实际输入…</Text><Box v-if="imageError"><Text class="muted-caption">{{ imageError }}</Text><Button size="xs" @click="load">重新读取审阅图片</Button></Box>
+    <Text v-if="loading" class="muted-caption">正在读取本轮两张实际输入…</Text><Box v-if="imageError"><ErrorMessage class="muted-caption" :message="imageError" /><Button size="xs" @click="load">重新读取审阅图片</Button></Box>
     <Text class="muted-caption">{{ audit.sourceImage.width }} × {{ audit.sourceImage.height }} 像素 · 报告针对这版候选</Text>
     <Text v-if="audit.recheck" class="muted-caption">修复后的新一轮审阅：图片来自这版候选，问题是否解决仍需对照核对。</Text>
     <Text v-if="!report.findings.length" class="muted-caption">本区域未观察到明确问题，仍请人工核对小字、连接与语义。</Text>

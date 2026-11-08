@@ -1,9 +1,11 @@
-import { selectedReferenceInputs,type ReferenceSelection,type ReferencePurpose } from '../core/referenceInputs'
+import { selectedReferenceInputs,referenceSelectionSchema,type ReferenceSelection,type ReferencePurpose } from '../core/referenceInputs'
 import { computed, ref, shallowRef, watch } from 'vue'
 import { z } from 'zod'
 import { harnessEventSchema, harnessHistorySchema, harnessSessionSchema, harnessStatusSchema, harnessTurnSchema, type HarnessKind, type HarnessSession, type HarnessStatus, type HarnessTurn } from '../core/harness'
 import { clone, figureDocumentSchema, type FigureDocument } from '../core/model'
 import type { Editor } from './useEditor'
+import {galleryBenchmarks} from '../data/galleryBenchmarks'
+import {paperExamples} from '../data/paperExamples'
 import { catalogueKey, createCatalogue, recommendCatalogue, searchCatalogue, type ComponentUse } from '../core/catalogue'
 import type { ReconstructionTask } from '../core/reconstructionContract'
 import { reconstructionCandidateGroup, referenceForReconstruction, repairContext } from '../core/reconstruction'
@@ -54,12 +56,18 @@ export function createHarness(editor: Editor) {
   const reviewFigure = shallowRef<FigureDocument | null>(null), reviewBase = shallowRef<FigureDocument | null>(null)
   const reviewBaseline=shallowRef<FigureDocument|null>(null)
   const currentTurn = computed(() => turns.value.find(t => t.id === runId.value))
-  const catalogueMode = ref<'auto' | 'selected' | 'none'>('auto'), catalogueQuery = ref(''), selectedComponentKeys = ref<string[]>([]), usedComponents = ref<ComponentUse[]>([])
-  const librarySearch=ref(true),libraryReview=ref(false)
-  const catalogue = computed(() => createCatalogue(editor.library.assets.value))
+  const catalogueMode = ref<'auto' | 'selected' | 'none'>('none'), catalogueQuery = ref(''), selectedComponentKeys = ref<string[]>([]), usedComponents = ref<ComponentUse[]>([])
+  const librarySearch=ref(false),libraryReview=ref(false)
+  const catalogue = computed(() => createCatalogue([]))
+  const manualCatalogue=computed(()=>{
+    const entries=new Map(catalogue.value.map(entry=>[catalogueKey(entry),entry]))
+    for(const asset of [...paperExamples(),...galleryBenchmarks()])if(!entries.has(`asset:${asset.id}`))entries.set(`asset:${asset.id}`,{kind:'asset',asset})
+    return [...entries.values()]
+  })
+  const componentOptions=computed(()=>searchCatalogue(manualCatalogue.value,catalogueQuery.value))
   const catalogueResults = computed(() => searchCatalogue(catalogue.value, catalogueMode.value === 'selected' ? catalogueQuery.value : draft.value || userContent.value))
   const referenceComponents = computed(() => catalogueMode.value === 'none' ? [] : catalogueMode.value === 'auto' ? recommendCatalogue(catalogue.value, draft.value || userContent.value)
-    : searchCatalogue(catalogue.value, '').filter(item => selectedComponentKeys.value.includes(item.key)))
+    : searchCatalogue(manualCatalogue.value, '').filter(item => selectedComponentKeys.value.includes(item.key)))
   const proposal = shallowRef<FigureDocument | null>(null), baseline = ref('')
   const stale = computed(() => (!!proposal.value||!!currentTurn.value?.visualAudit||!!currentTurn.value?.designReview) && JSON.stringify(editor.figure.value) !== baseline.value)
   const refinementStale=computed(()=>!!refinementFrom.value&&JSON.stringify(editor.figure.value)!==refinementFrom.value.baseline)
@@ -72,11 +80,9 @@ export function createHarness(editor: Editor) {
   try {
     const settings = JSON.parse(localStorage.getItem('fastfigure.harness.settings') ?? '{}') as Record<string, unknown>
     if (settings.kind === 'codex' || settings.kind === 'claude') kind.value = settings.kind
-    if(typeof settings.librarySearch==='boolean')librarySearch.value=settings.librarySearch
-    if(typeof settings.libraryReview==='boolean')libraryReview.value=settings.libraryReview
     for (const provider of ['codex','claude'] as const) if (typeof settings[provider] === 'string') models.value[provider] = settings[provider].slice(0, 100)
   } catch { /* Invalid local preferences do not affect the figure. */ }
-  watch([kind, models,librarySearch,libraryReview], () => { try { localStorage.setItem('fastfigure.harness.settings', JSON.stringify({ kind: kind.value, ...models.value,librarySearch:librarySearch.value,libraryReview:libraryReview.value })) } catch { /* Optional preferences. */ } }, { deep: true })
+  watch([kind, models], () => { try { localStorage.setItem('fastfigure.harness.settings', JSON.stringify({ kind: kind.value, ...models.value })) } catch { /* Optional preferences. */ } }, { deep: true })
   async function api(path: string, body?: unknown, method = 'POST',signal?:AbortSignal): Promise<unknown> {
     const response = await fetch(`/api/harness${path}`, body !== undefined ? { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),...(signal?{signal}:{}) } : signal?{signal}:{})
     let value: unknown
@@ -491,9 +497,23 @@ export function createHarness(editor: Editor) {
     if(!info)return
     await startVisualAudit(info.regionId,`修复后复审这版候选：请重新对照原图完整核对本分区，不沿用旧报告的结论，也不因上一轮返回补丁就判定问题已解决。\n上轮选择：${info.findings.map(f=>f.title).join('；')}。\n同时留意修复引入的新问题；识别不清就列为不确定，空清单也不代表自动验收。`)
   }
+  function setComponentSelection(keys:string[]){
+    if(locked.value||loading.value)return false
+    const valid=new Set(manualCatalogue.value.map(catalogueKey))
+    if(keys.length>6||new Set(keys).size!==keys.length||keys.some(key=>!valid.has(key))){error.value='请选择至多 6 个有效且不同的组件';return false}
+    selectedComponentKeys.value=[...keys];catalogueMode.value=keys.length?'selected':'none';error.value='';return true
+  }
+  function setReferenceSelection(choices:ReferenceSelection[]){
+    if(locked.value||loading.value)return false
+    try{
+      const next=z.array(referenceSelectionSchema).max(3).parse(choices)
+      selectedReferenceInputs({figure:editor.figure.value,referenceInputs:next,...(editor.assistantDataset.value?{chartData:editor.assistantDataset.value}:{})})
+      referenceSelections.value=clone(next);error.value='';return true
+    }catch(e){error.value=e instanceof Error&&!('issues'in e)?e.message:'请选择有效的参考图与用途';return false}
+  }
   function toggleComponent(key: string) {
     if (busy.value) return
-    if (!catalogue.value.some(entry => catalogueKey(entry) === key)) return
+    if (!manualCatalogue.value.some(entry => catalogueKey(entry) === key)) return
     if (selectedComponentKeys.value.includes(key)) selectedComponentKeys.value = selectedComponentKeys.value.filter(k => k !== key)
     else if (referenceComponents.value.length < 6) selectedComponentKeys.value.push(key)
     else error.value = '每轮最多选择 6 个参考组件'
@@ -502,7 +522,7 @@ export function createHarness(editor: Editor) {
   function resumeDataSelection(content:string){if(!locked.value&&!loading.value)draft.value=content}
   watch(intent,value=>{if(value==='edit-recipes'||value==='design-review'){clearComposition();clearCandidateRefinement();reconstructionTask.value=null;adoptedComponentSearch.value=null;editor.assistantDataset.value=null;editor.assistantStyle.value=null}})
   return { statuses, sessions, selectedSessionId, selectedSession, kind, model, draft,intent,adoptedComposition,compositionStale,adoptComposition,clearComposition, attachReference,selectedReferences,toggleReference,setReferencePurpose, chartDataset:editor.assistantDataset,adoptedComponentSearch,componentSearchStale,clearComponentSearch,findReconstructionComponents,adoptReconstructionSearch,reconstructionTask,reuseReconstructionComponents,refinementFrom,refinementStale, preparingImage, prepareReconstruction,prepareCandidateRepair, clearReconstruction, loading, busy, cancelling, error, connection, runStatus,
-    resumeDataSelection,userContent, output, message, activities, proposal, stale, status, catalogueMode,librarySearch,libraryReview, catalogueQuery, selectedComponentKeys, catalogueResults, referenceComponents, usedComponents, toggleComponent,
+    resumeDataSelection,userContent, output, message, activities, proposal, stale, status, catalogueMode,librarySearch,libraryReview, catalogueQuery, componentOptions, setComponentSelection, setReferenceSelection, selectedComponentKeys, catalogueResults, referenceComponents, usedComponents, toggleComponent,
     runId, turns, omittedTurns, currentTurn, reviewFigure, reviewBase,reviewBaseline, reviewSync, reviewError, locked, inspectTurn, syncReview,
     repairPlan,planRunning,planPreparing,startRepairPlan,cancelRepairPlan,refreshRepairPlan,
     startVisualAudit,prepareAuditRepair,reauditRepair,auditRepairSelection,locateDesignObjects,prepareDesignReview,

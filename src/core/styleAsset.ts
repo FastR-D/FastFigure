@@ -1,3 +1,4 @@
+import {defaultStyleGuide} from './figureDesignPolicy.ts'
 import {clone,createExample,parseDocument,type FigureDocument} from './model.ts'
 import {descendants,resolveStyle} from './geometry.ts'
 import {containerSurface,setContainerSurface} from './containerSurface.ts'
@@ -23,7 +24,7 @@ export function captureStyleAsset(figure:FigureDocument,containerId='stage'):Sty
   const scope=figure.containers.find(c=>c.id===containerId);if(!scope)throw new Error('请选择要保存风格的容器')
   const appearance=resolveStyle(figure,containerId),first=descendants(figure,containerId).find(n=>'kind' in n&&n.textStyle?.family)
   const family=appearance.fontFamily??(first&&'kind' in first?first.textStyle?.family:undefined)
-  return styleAssetSchema.parse({...identity(),preset:appearance.preset,...(appearance.designSystem?{designSystem:appearance.designSystem}:{}),...(appearance.paperTheme?{paperTheme:clone(appearance.paperTheme)}:{}),...(appearance.fontRoles?{fontRoles:clone(appearance.fontRoles)}:{}),...(appearance.sketchStyle?{sketchStyle:appearance.sketchStyle}:{}),roughness:appearance.roughness,...(appearance.colorMap?{colorMap:clone(appearance.colorMap)}:{}),...(appearance.colorIndex!==undefined?{colorIndex:appearance.colorIndex}:{}),surface:containerSurface(scope),paletteId:appearance.paletteId??defaultPaletteId,fontFamily:fontFamilies.includes(family as typeof fontFamilies[number])?family:appearance.fontFamily??'MiSans',guide:'按模块语义分配颜色，保留简洁注释与可识别结构。',references:(figure.referenceUses??[]).filter(r=>r.purpose==='style'),origin:{kind:'canvas',title:scope.title}})
+  return styleAssetSchema.parse({...identity(),preset:appearance.preset,...(appearance.designSystem?{designSystem:appearance.designSystem}:{}),...(appearance.paperTheme?{paperTheme:clone(appearance.paperTheme)}:{}),...(appearance.fontRoles?{fontRoles:clone(appearance.fontRoles)}:{}),...(appearance.sketchStyle?{sketchStyle:appearance.sketchStyle}:{}),roughness:appearance.roughness,...(appearance.colorMap?{colorMap:clone(appearance.colorMap)}:{}),...(appearance.colorIndex!==undefined?{colorIndex:appearance.colorIndex}:{}),surface:containerSurface(scope),paletteId:appearance.paletteId??defaultPaletteId,fontFamily:fontFamilies.includes(family as typeof fontFamilies[number])?family:appearance.fontFamily??'MiSans',guide:defaultStyleGuide,references:(figure.referenceUses??[]).filter(r=>r.purpose==='style'),origin:{kind:'canvas',title:scope.title}})
 }
 export function styleFromCompositionDraft(record:CompositionRecord):StyleAsset{
   if(record.plan.status!=='ready')throw new Error('请先明确方案问题，再保存风格')

@@ -1,0 +1,1062 @@
+{
+  "version": "0.2",
+  "title": "双路表征 · 身份与交互",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "branches-heading",
+      "kind": "text",
+      "label": "a  Keep branch identity",
+      "parentId": "branches",
+      "x": 36,
+      "y": 104,
+      "width": 600,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "input-0",
+      "kind": "rectangle",
+      "label": "Input A",
+      "parentId": "branches",
+      "x": 44,
+      "y": 176,
+      "width": 136,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "encoder-0",
+      "kind": "rectangle",
+      "label": "Encoder A",
+      "parentId": "branches",
+      "x": 224,
+      "y": 176,
+      "width": 176,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "embedding-0",
+      "kind": "rectangle",
+      "label": "zA",
+      "parentId": "branches",
+      "x": 450,
+      "y": 176,
+      "width": 154,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "encode-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 180,
+      "y": 206,
+      "width": 44,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "input-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "encoder-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "represent-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 400,
+      "y": 206,
+      "width": 50,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "encoder-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "embedding-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "input-1",
+      "kind": "rectangle",
+      "label": "Input B",
+      "parentId": "branches",
+      "x": 44,
+      "y": 350,
+      "width": 136,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "encoder-1",
+      "kind": "rectangle",
+      "label": "Encoder B",
+      "parentId": "branches",
+      "x": 224,
+      "y": 350,
+      "width": 176,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "embedding-1",
+      "kind": "rectangle",
+      "label": "zB",
+      "parentId": "branches",
+      "x": 450,
+      "y": 350,
+      "width": 154,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "encode-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 180,
+      "y": 380,
+      "width": 44,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "input-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "encoder-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "represent-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 400,
+      "y": 380,
+      "width": 50,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "encoder-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "embedding-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "pairing-heading",
+      "kind": "text",
+      "label": "b  Pair correspondence",
+      "parentId": "pairing",
+      "x": 684,
+      "y": 104,
+      "width": 280,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-2",
+      "kind": "text",
+      "label": "B positions",
+      "parentId": "pair-matrix",
+      "x": 785.6,
+      "y": 172.8,
+      "width": 124.80000000000001,
+      "height": 17.6,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 11.200000000000001,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-3",
+      "kind": "text",
+      "label": "A1",
+      "parentId": "pair-matrix",
+      "x": 716.8,
+      "y": 199.2,
+      "width": 49.6,
+      "height": 22.400000000000002,
+      "textRole": "body",
+      "textStyle": {
+        "size": 10.4,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-4",
+      "kind": "text",
+      "label": "1",
+      "parentId": "pair-matrix",
+      "x": 784,
+      "y": 188.8,
+      "width": 33.6,
+      "height": 12.8,
+      "textRole": "body",
+      "textStyle": {
+        "size": 8.8,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-5",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 784,
+      "y": 203.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-6",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 822.4,
+      "y": 203.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f3f5f4",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-7",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 860.8,
+      "y": 203.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f3f5f4",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-8",
+      "kind": "text",
+      "label": "A2",
+      "parentId": "pair-matrix",
+      "x": 716.8,
+      "y": 224.8,
+      "width": 49.6,
+      "height": 22.400000000000002,
+      "textRole": "body",
+      "textStyle": {
+        "size": 10.4,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-9",
+      "kind": "text",
+      "label": "2",
+      "parentId": "pair-matrix",
+      "x": 822.4,
+      "y": 188.8,
+      "width": 33.6,
+      "height": 12.8,
+      "textRole": "body",
+      "textStyle": {
+        "size": 8.8,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-10",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 784,
+      "y": 227.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f3f5f4",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-11",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 822.4,
+      "y": 227.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-12",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 860.8,
+      "y": 227.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f3f5f4",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-13",
+      "kind": "text",
+      "label": "A3",
+      "parentId": "pair-matrix",
+      "x": 716.8,
+      "y": 250.4,
+      "width": 49.6,
+      "height": 22.400000000000002,
+      "textRole": "body",
+      "textStyle": {
+        "size": 10.4,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-14",
+      "kind": "text",
+      "label": "3",
+      "parentId": "pair-matrix",
+      "x": 860.8,
+      "y": 188.8,
+      "width": 33.6,
+      "height": 12.8,
+      "textRole": "body",
+      "textStyle": {
+        "size": 8.8,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-15",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 784,
+      "y": 251.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f3f5f4",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-16",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 822.4,
+      "y": 251.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "#f3f5f4",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-17",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 860.8,
+      "y": 251.2,
+      "width": 33.6,
+      "height": 20.8,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 1.6,
+        "strokeWidth": 0.8,
+        "padding": 3.2,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-18",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 780.8,
+      "y": 200,
+      "width": 116.80000000000001,
+      "height": 72,
+      "textStyle": {
+        "size": 12.8,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "radius": 0,
+        "strokeWidth": 0.8,
+        "padding": 8,
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix-object-19",
+      "kind": "text",
+      "label": "",
+      "parentId": "pair-matrix",
+      "x": 713.6,
+      "y": 281.6,
+      "width": 220.8,
+      "height": 17.6,
+      "textRole": "body",
+      "textStyle": {
+        "size": 9.600000000000001,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.04,
+        "padding": 0
+      }
+    },
+    {
+      "id": "pairing-link-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 604,
+      "y": 190,
+      "width": 176.79999999999995,
+      "height": 24,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0.6666666666666666
+          },
+          {
+            "x": 0.3167420814479639,
+            "y": 0.6666666666666666
+          },
+          {
+            "x": 0.3167420814479639,
+            "y": 0
+          },
+          {
+            "x": 0.9615384615384618,
+            "y": 0
+          },
+          {
+            "x": 0.9615384615384618,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "embedding-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "pair-matrix-object-18",
+          "x": 0,
+          "y": 0.19444444444444445
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "pairing-link-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 604,
+      "y": 272,
+      "width": 235.19999999999993,
+      "height": 108,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0.23809523809523817,
+            "y": 1
+          },
+          {
+            "x": 0.23809523809523817,
+            "y": 0.48148148148148145
+          },
+          {
+            "x": 1,
+            "y": 0.48148148148148145
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "embedding-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "pair-matrix-object-18",
+          "x": 0.4999999999999998,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "encoder-note",
+      "kind": "text",
+      "label": "Independent encoders",
+      "parentId": "branches",
+      "x": 52,
+      "y": 462,
+      "width": 560,
+      "height": 28,
+      "textRole": "body",
+      "textStyle": {
+        "size": 16,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "pairing-note",
+      "kind": "text",
+      "label": "Pair identity only\nNo observed scores",
+      "parentId": "pairing",
+      "x": 696,
+      "y": 366,
+      "width": 256,
+      "height": 64,
+      "textRole": "body",
+      "textStyle": {
+        "size": 16,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "双路表征 · 身份与交互",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "TopConf · aaai2023-25531",
+        "reference": "https://ojs.aaai.org/index.php/AAAI/article/view/25531 · 图片 https://raw.githubusercontent.com/qwdwqfwq/topconf-paper-figure-gallery/77a7d84570a6a9f3e63c22bb31b9fb59757e3dab/images/aaai/final/aaai2023-25531.jpg · SHA-256 7114c8e27b631d380df8f0fda6d119e074bff646873ae5fca86c4a19921c24e9 · 仅抽象构图关系，论文原图权利归原作者。"
+      }
+    },
+    {
+      "id": "branches",
+      "parentId": "stage",
+      "title": "a  Keep branch identity",
+      "role": "component",
+      "x": 24,
+      "y": 96,
+      "width": 624,
+      "height": 418,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "pairing",
+      "parentId": "stage",
+      "title": "b  Pair correspondence",
+      "role": "component",
+      "x": 672,
+      "y": 96,
+      "width": 304,
+      "height": 418,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "metricScale": 0.8,
+      "id": "pair-matrix",
+      "parentId": "pairing",
+      "title": "配对身份矩阵",
+      "role": "component",
+      "x": 704,
+      "y": 168,
+      "width": 240,
+      "height": 136,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 11.200000000000001,
+        "strokeWidth": 0.96,
+        "padding": 0
+      },
+      "titleDetached": true,
+      "textStyle": {
+        "size": 16
+      },
+      "component": {
+        "assetId": "gallery-part-identity-matrix",
+        "name": "配对身份矩阵",
+        "revision": "2026-11-07T00:00:00.000Z",
+        "sources": [
+          {
+            "title": "FigureForge · ImmunoStruct_contrastive",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/figures4papers/assets/ImmunoStruct_contrastive.png · SHA-256 c2590ba1ecac5e1d0976df3be6e9fa4056dcdd78670201c6db461e3e4f18b0d0 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          }
+        ],
+        "lineage": []
+      },
+      "evidence": {
+        "title": "FigureForge · ImmunoStruct_contrastive",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/figures4papers/assets/ImmunoStruct_contrastive.png · SHA-256 c2590ba1ecac5e1d0976df3be6e9fa4056dcdd78670201c6db461e3e4f18b0d0 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    }
+  ],
+  "references": []
+}

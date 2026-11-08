@@ -1,0 +1,294 @@
+{
+  "renderer": "FastFigure production SVG + Chromium",
+  "assets": [
+    {
+      "id": "gallery-part-phase-transfer",
+      "nodes": 5,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 4,
+        "checkedFields": 4,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-state-slots",
+      "nodes": 5,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 5,
+        "checkedFields": 5,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-identity-matrix",
+      "nodes": 18,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 8,
+        "checkedFields": 8,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-relation-key",
+      "nodes": 6,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 3,
+        "checkedFields": 3,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-trainability-key",
+      "nodes": 2,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 2,
+        "checkedFields": 2,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-evidence-slot",
+      "nodes": 4,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 4,
+        "checkedFields": 4,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-crop-correspondence",
+      "nodes": 7,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 4,
+        "checkedFields": 4,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-panel-heading",
+      "nodes": 4,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 3,
+        "checkedFields": 3,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-modality-rows",
+      "nodes": 10,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 10,
+        "checkedFields": 10,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-part-shared-label-grid",
+      "nodes": 12,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 12,
+        "checkedFields": 12,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-retrieval-rewrite",
+      "nodes": 19,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 13,
+        "checkedFields": 13,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-paired-representations",
+      "nodes": 34,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 17,
+        "checkedFields": 17,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-training-deployment",
+      "nodes": 49,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 17,
+        "checkedFields": 17,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-temporal-state",
+      "nodes": 24,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 16,
+        "checkedFields": 16,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-tool-feedback",
+      "nodes": 18,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 11,
+        "checkedFields": 11,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-mechanism-evidence",
+      "nodes": 21,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 13,
+        "checkedFields": 13,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-image-comparison",
+      "nodes": 24,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 21,
+        "checkedFields": 21,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    },
+    {
+      "id": "gallery-benchmark-perturbation-validation",
+      "nodes": 16,
+      "textCheck": {
+        "version": 1,
+        "engine": "native-wrap-v1",
+        "checkedNodes": 13,
+        "checkedFields": 13,
+        "positionedNodes": 0,
+        "invisibleNodes": 0,
+        "hiddenStructureLabels": 0,
+        "total": 0,
+        "omitted": 0,
+        "issues": []
+      }
+    }
+  ],
+  "scope": "Actual browser fonts; no text overflow. Visual inspection is recorded in gallery-study.md."
+}

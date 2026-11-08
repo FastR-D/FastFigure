@@ -5,9 +5,11 @@ import { join } from 'node:path';
 import { createServer } from 'vite';
 import { chromium } from 'playwright-core';
 import { checkEditor } from './editor.mjs';
+import {checkGalleryStudy} from './gallery-study.mjs';
 import { checkData } from './data.mjs';
 import { checkAssistant } from './assistant.mjs';
 import { checkReconstruction } from './reconstruction.mjs';
+import { checkNotifications } from './notifications.mjs';
 // One supported desktop viewport. A private fixture service never uses the user's CLI/session.
 process.env.FASTFIGURE_CODEX_COMMAND = join(process.cwd(), 'server/harness/fixtures/cli.mjs');
 process.env.FASTFIGURE_CLAUDE_COMMAND = process.env.FASTFIGURE_CODEX_COMMAND;
@@ -30,7 +32,7 @@ try {
     await server.listen();
     const base = `http://127.0.0.1:${server.httpServer.address().port}`;
     browser = await chromium.launch({ headless: true, executablePath });
-    for (const [name, check] of [['editor', checkEditor], ['data', checkData], ['assistant', checkAssistant], ['reconstruction', checkReconstruction]]) {
+    for (const [name, check] of (process.argv.includes('--gallery-study')?[['gallery-study',checkGalleryStudy]]:process.argv.includes('--notifications')?[['notifications',checkNotifications]]:[['editor', checkEditor], ['data', checkData], ['assistant', checkAssistant], ['reconstruction', checkReconstruction], ['notifications',checkNotifications]])) {
         const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } }), errors = [];
         page.on('pageerror', e => errors.push(e.message));
         page.on('dialog', d => void d.dismiss());

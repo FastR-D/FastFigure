@@ -1,0 +1,640 @@
+{
+  "version": "0.2",
+  "title": "检索改写 · 对照与主路径",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "compare-heading",
+      "kind": "text",
+      "label": "a  Compact alternatives",
+      "parentId": "compare",
+      "x": 36,
+      "y": 104,
+      "width": 928,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "query-0",
+      "kind": "rectangle",
+      "label": "Query",
+      "parentId": "compare",
+      "x": 44,
+      "y": 146,
+      "width": 100,
+      "height": 48,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "retrieve-0",
+      "kind": "rectangle",
+      "label": "Direct retrieval",
+      "parentId": "compare",
+      "x": 184,
+      "y": 146,
+      "width": 226,
+      "height": 48,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "alternative-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 144,
+      "y": 170,
+      "width": 40,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "query-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "retrieve-0",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "query-1",
+      "kind": "rectangle",
+      "label": "Query",
+      "parentId": "compare",
+      "x": 514,
+      "y": 146,
+      "width": 100,
+      "height": 48,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "retrieve-1",
+      "kind": "rectangle",
+      "label": "Rewrite + retrieve",
+      "parentId": "compare",
+      "x": 654,
+      "y": 146,
+      "width": 226,
+      "height": 48,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "alternative-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 614,
+      "y": 170,
+      "width": 40,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "query-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "retrieve-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "main-heading",
+      "kind": "text",
+      "label": "b  Context-conditioned retrieval",
+      "parentId": "main",
+      "x": 36,
+      "y": 250,
+      "width": 928,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "main-0",
+      "kind": "rectangle",
+      "label": "Query",
+      "parentId": "main",
+      "x": 48,
+      "y": 366,
+      "width": 190,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "main-1",
+      "kind": "rectangle",
+      "label": "Rewrite",
+      "parentId": "main",
+      "x": 282,
+      "y": 366,
+      "width": 190,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "main-2",
+      "kind": "rectangle",
+      "label": "Retrieve",
+      "parentId": "main",
+      "x": 516,
+      "y": 366,
+      "width": 190,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "main-3",
+      "kind": "rectangle",
+      "label": "Results",
+      "parentId": "main",
+      "x": 750,
+      "y": 366,
+      "width": 190,
+      "height": 60,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "main-flow-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 238,
+      "y": 396,
+      "width": 44,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "main-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "main-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "main-flow-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 472,
+      "y": 396,
+      "width": 44,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "main-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "main-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "main-flow-2",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 706,
+      "y": 396,
+      "width": 44,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "main-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "main-3",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "context",
+      "kind": "rectangle",
+      "label": "Preference context",
+      "parentId": "main",
+      "x": 282,
+      "y": 290,
+      "width": 190,
+      "height": 48,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 2,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "condition-rewrite",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 377,
+      "y": 338,
+      "width": 0,
+      "height": 28,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "context",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "main-1",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "context-note",
+      "kind": "text",
+      "label": "Context input",
+      "parentId": "main",
+      "x": 492,
+      "y": 300,
+      "width": 180,
+      "height": 26,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "result-note",
+      "kind": "text",
+      "label": "Replace with your own inputs, retrieval rule and result examples.",
+      "parentId": "main",
+      "x": 48,
+      "y": 464,
+      "width": 900,
+      "height": 28,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "检索改写 · 对照与主路径",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "TopConf · aaai2026-37741",
+        "reference": "https://ojs.aaai.org/index.php/AAAI/article/view/37741 · 图片 https://raw.githubusercontent.com/qwdwqfwq/topconf-paper-figure-gallery/77a7d84570a6a9f3e63c22bb31b9fb59757e3dab/images/aaai/final/aaai2026-37741.jpg · SHA-256 6266d83107422b664fc070ce34cdc538046ca13779186cf6a986722a9ac6e1fb · 仅抽象构图关系，论文原图权利归原作者。"
+      }
+    },
+    {
+      "id": "compare",
+      "parentId": "stage",
+      "title": "a  Compact alternatives",
+      "role": "component",
+      "x": 24,
+      "y": 96,
+      "width": 952,
+      "height": 124,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "main",
+      "parentId": "stage",
+      "title": "b  Context-conditioned retrieval",
+      "role": "component",
+      "x": 24,
+      "y": 242,
+      "width": 952,
+      "height": 276,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    }
+  ],
+  "references": []
+}

@@ -1,0 +1,585 @@
+{
+  "version": "0.2",
+  "title": "干预验证 · 流程与证据包",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "protocol-heading",
+      "kind": "text",
+      "label": "a  Declared intervention protocol",
+      "parentId": "protocol",
+      "x": 36,
+      "y": 104,
+      "width": 928,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "protocol-0",
+      "kind": "rectangle",
+      "label": "Baseline",
+      "parentId": "protocol",
+      "x": 50,
+      "y": 156,
+      "width": 180,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "protocol-1",
+      "kind": "rectangle",
+      "label": "Intervention",
+      "parentId": "protocol",
+      "x": 290,
+      "y": 156,
+      "width": 180,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "protocol-2",
+      "kind": "rectangle",
+      "label": "Follow-up",
+      "parentId": "protocol",
+      "x": 530,
+      "y": 156,
+      "width": 180,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 2,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "protocol-3",
+      "kind": "rectangle",
+      "label": "Readout",
+      "parentId": "protocol",
+      "x": 770,
+      "y": 156,
+      "width": 180,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 3,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "protocol-link-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 230,
+      "y": 182,
+      "width": 60,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "protocol-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "protocol-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "protocol-link-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 470,
+      "y": 182,
+      "width": 60,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "protocol-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "protocol-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "protocol-link-2",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 710,
+      "y": 182,
+      "width": 60,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "protocol-2",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "protocol-3",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "validation-0-heading",
+      "kind": "text",
+      "label": "b  Primary endpoint",
+      "parentId": "validation-0",
+      "x": 36,
+      "y": 268,
+      "width": 442,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "data-slot-0",
+      "kind": "rectangle",
+      "label": "Insert evidence · metric · source",
+      "parentId": "validation-0",
+      "x": 42,
+      "y": 308,
+      "width": 430,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "validation-1-heading",
+      "kind": "text",
+      "label": "c  Perturbation",
+      "parentId": "validation-1",
+      "x": 522,
+      "y": 268,
+      "width": 442,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "data-slot-1",
+      "kind": "rectangle",
+      "label": "Insert evidence · metric · source",
+      "parentId": "validation-1",
+      "x": 528,
+      "y": 308,
+      "width": 430,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "validation-2-heading",
+      "kind": "text",
+      "label": "d  Specificity",
+      "parentId": "validation-2",
+      "x": 36,
+      "y": 404,
+      "width": 442,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "data-slot-2",
+      "kind": "rectangle",
+      "label": "Insert evidence · metric · source",
+      "parentId": "validation-2",
+      "x": 42,
+      "y": 444,
+      "width": 430,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 2,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "validation-3-heading",
+      "kind": "text",
+      "label": "e  Tolerability",
+      "parentId": "validation-3",
+      "x": 522,
+      "y": 404,
+      "width": 442,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "data-slot-3",
+      "kind": "rectangle",
+      "label": "Insert evidence · metric · source",
+      "parentId": "validation-3",
+      "x": 528,
+      "y": 444,
+      "width": 430,
+      "height": 52,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 3,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5,
+          4
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "干预验证 · 流程与证据包",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "FigureForge · fig3-in-vivo-efficacy-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig3-in-vivo-efficacy-rich.png · SHA-256 25d6fc50f5808104a7cb19f4795cea4229fbc6159fa7509f716a94f7c160a033 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    },
+    {
+      "id": "protocol",
+      "parentId": "stage",
+      "title": "a  Declared intervention protocol",
+      "role": "component",
+      "x": 24,
+      "y": 96,
+      "width": 952,
+      "height": 140,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "validation-0",
+      "parentId": "stage",
+      "title": "b  Primary endpoint",
+      "role": "component",
+      "x": 24,
+      "y": 260,
+      "width": 466,
+      "height": 122,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "validation-1",
+      "parentId": "stage",
+      "title": "c  Perturbation",
+      "role": "component",
+      "x": 510,
+      "y": 260,
+      "width": 466,
+      "height": 122,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "validation-2",
+      "parentId": "stage",
+      "title": "d  Specificity",
+      "role": "component",
+      "x": 24,
+      "y": 396,
+      "width": 466,
+      "height": 122,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "validation-3",
+      "parentId": "stage",
+      "title": "e  Tolerability",
+      "role": "component",
+      "x": 510,
+      "y": 396,
+      "width": 466,
+      "height": 122,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    }
+  ],
+  "references": []
+}

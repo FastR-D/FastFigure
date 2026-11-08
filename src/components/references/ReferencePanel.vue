@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Box, Button, Disclosure, DisclosureTrigger, Field, Heading, Icon, Select, Text, TextArea, TextField } from '../ui'
+import { ErrorMessage, Box, Button, Disclosure, DisclosureTrigger, Field, Heading, Icon, Select, Text, TextArea, TextField } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { findObject } from '../../core/geometry'
 import { readReferenceImage,readImageDraftBundle, resizeReference, wholeImage } from '../../core/references'
@@ -69,7 +69,7 @@ function regionChange(field: keyof EvidenceRegion, event: Event) {
     <Field><Text>{{ busy ? '正在处理图片…' : '添加参考图' }}</Text><TextField type="file" accept="image/png,image/jpeg,image/webp" :disabled="busy" aria-label="导入参考图" @change="importImage" /></Field>
     <Text class="muted-caption">PNG / JPEG / WebP，原图 ≤ 12 MB。每个工程最多 3 张，图片随工程 JSON 备份。</Text>
     <Disclosure><DisclosureTrigger size="xs">导入已保存的 AI 草稿包</DisclosureTrigger><TextField type="file" accept=".json,application/json" :disabled="busy" aria-label="导入 AI 草稿包" @change="importBundle" /><Text class="muted-caption">fastfigure.image-draft，包含原图及生成规格，≤ 17 MB。</Text></Disclosure>
-    <Text v-if="error" role="alert" class="error-text">{{ error }}</Text>
+    <ErrorMessage v-if="error" class="error-text" :message="error" />
     <template v-if="image">
       <OriginalImageCache :key="image.sha256+cacheRevision" :image="image" />
       <Text v-if="image.generated" class="muted-caption">AI 视觉设计草稿，请按原始内容规格核对后重建。</Text><ImageDraftOriginView v-if="generatedOrigin" :origin="generatedOrigin" />

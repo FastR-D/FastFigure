@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref,shallowRef,watch} from 'vue'
-import {Box,Button,Text} from '../ui'
+import { ErrorMessage,Box,Button,Text} from '../ui'
 import ComponentMetadataFields from './ComponentMetadataFields.vue'
 import type {ComponentAsset} from '../../core/assets'
 import {componentMetadataDraft,reviseComponentMetadata} from '../../core/componentMetadata'
@@ -25,7 +25,7 @@ function editAgain(){if(!busy.value){frozen.value=null;attempted.value=false;err
   <Box class="component-metadata-revision">
     <ComponentMetadataFields v-model="draft" :inherited-sources="asset.sources.length" :disabled="busy||attempted" />
     <Text v-if="frozen" class="repository-directory">本次新快照 · {{ frozen.thumbnail.assetSha256 }}</Text>
-    <Text v-if="error" class="error-text" role="alert">{{ error }}</Text>
+    <ErrorMessage v-if="error" class="error-text" :message="error" />
     <Text v-if="attempted&&error" class="muted-caption">本次内容已冻结，可重试同一快照。重新编辑会准备另一个版本，已提交内容不回滚。</Text>
     <Box class="component-metadata-actions"><Button size="xs" :disabled="busy" @click="emit('cancel')">返回原快照</Button><Button v-if="attempted&&error" size="xs" :disabled="busy" @click="editAgain">重新编辑草稿</Button><Button variant="primary" size="xs" :disabled="busy||editor.repository.publishing.value" @click="save">{{ busy?'正在保存…':attempted?'重试保存同一快照':'另存整理后的新快照' }}</Button></Box>
   </Box>

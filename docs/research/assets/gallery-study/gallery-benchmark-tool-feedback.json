@@ -1,0 +1,639 @@
+{
+  "version": "0.2",
+  "title": "工具反馈 · 主循环与执行记录",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "execution-heading",
+      "kind": "text",
+      "label": "a  Execution and revision",
+      "parentId": "execution",
+      "x": 36,
+      "y": 104,
+      "width": 588,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "trace-heading",
+      "kind": "text",
+      "label": "b  Inspect a real run",
+      "parentId": "trace",
+      "x": 672,
+      "y": 104,
+      "width": 292,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "task",
+      "kind": "rectangle",
+      "label": "Task",
+      "parentId": "execution",
+      "x": 52,
+      "y": 166,
+      "width": 140,
+      "height": 54,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "actor",
+      "kind": "rectangle",
+      "label": "Actor",
+      "parentId": "execution",
+      "x": 250,
+      "y": 166,
+      "width": 150,
+      "height": 54,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "tool",
+      "kind": "rectangle",
+      "label": "Tool call",
+      "parentId": "execution",
+      "x": 454,
+      "y": 166,
+      "width": 150,
+      "height": 54,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 2,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "observation",
+      "kind": "rectangle",
+      "label": "Observation",
+      "parentId": "execution",
+      "x": 454,
+      "y": 328,
+      "width": 150,
+      "height": 58,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "revision",
+      "kind": "rectangle",
+      "label": "Revision",
+      "parentId": "execution",
+      "x": 250,
+      "y": 328,
+      "width": 150,
+      "height": 58,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "task-actor",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 192,
+      "y": 193,
+      "width": 58,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "task",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "actor",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "actor-tool",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 400,
+      "y": 193,
+      "width": 54,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "actor",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "tool",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "tool-observation",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 529,
+      "y": 220,
+      "width": 0,
+      "height": 108,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 1
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "tool",
+          "x": 0.5,
+          "y": 1
+        },
+        "end": {
+          "nodeId": "observation",
+          "x": 0.5,
+          "y": 0
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "observe-revise",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 400,
+      "y": 357,
+      "width": 54,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 1,
+            "y": 0
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "observation",
+          "x": 0,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "revision",
+          "x": 1,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "revise-actor",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 325,
+      "y": 220,
+      "width": 0,
+      "height": 108,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "revision",
+          "x": 0.5,
+          "y": 0
+        },
+        "end": {
+          "nodeId": "actor",
+          "x": 0.5,
+          "y": 1
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "loop-caption",
+      "kind": "text",
+      "label": "Repeat only when the method calls for revision.",
+      "parentId": "execution",
+      "x": 52,
+      "y": 450,
+      "width": 552,
+      "height": 30,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "run-record-object-2",
+      "kind": "text",
+      "label": "",
+      "parentId": "run-record",
+      "x": 690.8,
+      "y": 177.6,
+      "width": 21.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17.1,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "run-record-object-3",
+      "kind": "text",
+      "label": "",
+      "parentId": "run-record",
+      "x": 719.6,
+      "y": 177.6,
+      "width": 219.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 15.3,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "run-record-object-4",
+      "kind": "rectangle",
+      "label": "Insert observed data",
+      "parentId": "run-record",
+      "x": 696.2,
+      "y": 213.6,
+      "width": 237.6,
+      "height": 70.2,
+      "textStyle": {
+        "size": 14.4,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 8.1,
+        "strokeWidth": 0.9,
+        "padding": 3.6,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          4.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "run-record-object-5",
+      "kind": "text",
+      "label": "Metric · units · source",
+      "parentId": "run-record",
+      "x": 696.2,
+      "y": 294.6,
+      "width": 237.6,
+      "height": 21.6,
+      "textRole": "body",
+      "textStyle": {
+        "size": 11.700000000000001,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "id": "trace-caption",
+      "kind": "text",
+      "label": "Input → tool output → decision\nReplace with an actual trace.",
+      "parentId": "trace",
+      "x": 682,
+      "y": 370,
+      "width": 270,
+      "height": 64,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "工具反馈 · 主循环与执行记录",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "TopConf · iclr2025-1473",
+        "reference": "https://openreview.net/forum?id=9YNyiCJE3k · 图片 https://raw.githubusercontent.com/qwdwqfwq/topconf-paper-figure-gallery/77a7d84570a6a9f3e63c22bb31b9fb59757e3dab/images/iclr/final/iclr2025-1473.jpg · SHA-256 3115db647de7d850551e6f324ca51058b73cfade8fcbfe4d8a3d9cd3f9fa7276 · 仅抽象构图关系，论文原图权利归原作者。"
+      }
+    },
+    {
+      "id": "execution",
+      "parentId": "stage",
+      "title": "a  Execution and revision",
+      "role": "component",
+      "x": 24,
+      "y": 96,
+      "width": 612,
+      "height": 422,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "trace",
+      "parentId": "stage",
+      "title": "b  Inspect a real run",
+      "role": "component",
+      "x": 660,
+      "y": 96,
+      "width": 316,
+      "height": 422,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "metricScale": 0.9,
+      "id": "run-record",
+      "parentId": "trace",
+      "title": "带角色的证据槽",
+      "role": "component",
+      "x": 680,
+      "y": 174,
+      "width": 270,
+      "height": 153,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 12.6,
+        "strokeWidth": 1.08,
+        "padding": 0
+      },
+      "titleDetached": true,
+      "textStyle": {
+        "size": 18
+      },
+      "component": {
+        "assetId": "gallery-part-evidence-slot",
+        "name": "带角色的证据槽",
+        "revision": "2026-11-07T00:00:00.000Z",
+        "sources": [
+          {
+            "title": "FigureForge · fig1-material-mechanism-rich",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          }
+        ],
+        "lineage": []
+      },
+      "evidence": {
+        "title": "FigureForge · fig1-material-mechanism-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    }
+  ],
+  "references": []
+}

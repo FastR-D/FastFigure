@@ -5,13 +5,15 @@
 | 来源 | 固定版本 | 本轮已复用 | 本轮未接入 |
 | --- | --- | --- | --- |
 | [Top-Conf Figure Gallery](https://github.com/qwdwqfwq/topconf-paper-figure-gallery) | `77a7d84570a6a9f3e63c22bb31b9fb59757e3dab` | 3,449 条索引及 CPU 检索筛选；语义 / 细节分区、对象目录、版本补丁和原子回滚，接入 FigureIR 与 Harness 候选审阅 | 摘要语料、CLIP / ONNX 权重、四路混合语义检索、图像生成、自动重建质量评估与迭代 |
-| [FigureForge / nature-figure-skill](https://github.com/jing1312/nature-figure-skill) | `af778027c866e2e6b3432b946e44a4a2b4434d82` | `templates.js` 中 20 个可用模板（共 22 个）、`palettes.js` 的 16 组配色、图形 `data-role` / `data-series` 的关联换色机制 | 另外 4 个模板、83 个 atlas 展板、无限画布、格式刷、AI 生成 API 和该项目的导出器 |
+| [FigureForge / nature-figure-skill](https://github.com/jing1312/nature-figure-skill) | `af778027c866e2e6b3432b946e44a4a2b4434d82` | `templates.js` 中 20 个可用模板（共 22 个）、`palettes.js` 的 16 组配色、图形 `data-role` / `data-series` 的关联换色机制 | 其余 2 个模板、无限画布、格式刷、AI 生成 API 和该项目的导出器 |
 
 数量来自固定版本的实际数据与转换检查，不能用 README 的宣传统计替代。图库包含 ICLR / ICML / NeurIPS / CVPR / ACL / AAAI，2023–2026 年；结构分类有 conceptual / framework / pipeline / architecture / taxonomy / teaser / comparison / results。Oral / Spotlight 等标记沿用原索引，本轮没有重新核对全部会议官方记录。
 
 第廿八批让工程中的至多三张参考图共同进入助手，人可逐图选择用途，逐图回看实际输入与模型说明；已采用来源随素材保留。它未新增自动跨图检索或独立风格资产，见 [多参考图](multiple-references.md)。
 
 `editable-native.mjs` 已裁剪为重建所需的路径几何函数，删除上游 PPTX 导出、OOXML 回读校验及专用文字排版模块。`third-party/sources.json` 记录裁剪后的 SHA-256 和修改范围，`resources:build` 只复制保留的实现。
+
+2026-11-07 补充：已对固定版本的 3,449 张 TopConf 图件逐图记录构图，并读取 FigureForge 的 66 个 PNG/SVG 文件与 22 个模板。实际 chart-atlas 为 10 张展板，每张 16 个面板；旧文的“83 个 atlas 展板”混淆了统计口径。新增 10 个原生构件和 8 个主题组合，阅读深度、逐图台账、占位模板与内容示例的区别见[图库阅读与主题扩展](../research/2026-11-07-gallery-study.md)。
 
 ## 用户入口与数据流
 

@@ -14,7 +14,7 @@ async function copy(value:string) { try { await navigator.clipboard.writeText(va
 </script>
 <template>
   <Box class="library-body palette-library" aria-label="配色资源库">
-    <Box><Text class="section-eyebrow">COLOR PALETTES</Text><Heading>画盘</Heading><Text class="muted-caption">FastPPT 与 FigureForge 的 {{ colorPalettes.length.toLocaleString() }} 组配色，按色号、风格和来源寻找。</Text></Box>
+    <Box><Text class="section-eyebrow">COLOR PALETTES</Text><Heading>画盘</Heading></Box>
     <TextField v-model="query" type="search" aria-label="搜索配色" placeholder="搜索色号、科研、柔和、蓝色…" />
     <Select :value="source" :options="sources" aria-label="配色来源" @change="source=$event" /><Select :value="kind" :options="types" aria-label="配色类型" @change="kind=$event" />
     <Box class="palette-quick"><Button v-for="term in ['科研','柔和','蓝色','自然']" :key="term" size="xs" variant="quiet" @click="query=term">{{ term }}</Button></Box>

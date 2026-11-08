@@ -3,6 +3,7 @@ import { effectScope } from 'vue'
 import { createEditor } from '../composables/useEditor'
 import { clone, createExample, parseDocument } from './model'
 import { edgePath, exportSvg } from './svg'
+import {buildRecipe,componentRecipes} from '../data/recipes'
 
 let scope: ReturnType<typeof effectScope>
 beforeEach(() => {
@@ -50,6 +51,43 @@ describe('FigureIR integrity and editing', () => {
     expect(() => parseDocument(e.figure.value)).not.toThrow()
     e.undo(); expect(e.figure.value).toEqual(original)
     e.redo(); expect(e.figure.value.nodes).toHaveLength(original.nodes.length-1)
+  })
+  it('deletes the selected root and its content into a writable blank canvas as one undoable edit',()=>{
+    const e=editor()
+    e.setCanvasSize('width',1200);e.setCanvasSize('height',800)
+    e.update(doc=>{
+      doc.folder='Methods';doc.canvas.frame={x:40,y:90,width:1000,height:600}
+      doc.references=[{id:'ref',title:'Keep reference',citation:'Authored fixture',fileName:'source.png',sha256:'a'.repeat(64),pixelWidth:800,pixelHeight:400,dataUrl:'data:image/png;base64,iVBORw0KGgo=',placement:{x:0,y:0,width:800,height:400}}]
+      doc.containers.push({id:'nested',parentId:'stage',role:'component',title:'Nested group',x:100,y:160,width:200,height:120})
+      doc.nodes.push({id:'nested-note',parentId:'nested',kind:'text',label:'Delete with parent',x:110,y:170,width:160,height:30})
+    })
+    const original=clone(e.figure.value),history=e.past.value.length
+    e.select('stage');e.removeSelected()
+    const blank=clone(e.figure.value)
+    expect(blank.nodes).toEqual([]);expect(blank.edges).toEqual([]);expect(blank.containers).toHaveLength(1)
+    expect(blank.containers[0]).toMatchObject({id:'stage',x:0,y:0,width:1200,height:800,titleDetached:true,visual:{fill:'none',stroke:'none'}})
+    expect(blank.canvas).toEqual({width:1200,height:800})
+    for(const field of ['title','folder','style','references'] as const)expect(blank[field]).toEqual(original[field])
+    expect(e.selectedIds.value).toEqual([]);expect(e.past.value).toHaveLength(history+1)
+    e.removeSelected();expect(e.past.value).toHaveLength(history+1)
+    e.addNode('rectangle','New content');expect(e.figure.value.nodes).toHaveLength(1)
+    expect(()=>parseDocument(e.figure.value)).not.toThrow()
+    e.undo();expect(e.figure.value).toEqual(blank)
+    e.undo();expect(e.figure.value).toEqual(original)
+    e.redo();expect(e.figure.value).toEqual(blank)
+    e.save();expect(editor().figure.value).toEqual(blank)
+  })
+  it('removes root component ownership, recipe bindings and native paths rather than leaving stale structure',()=>{
+    const e=editor(),recipe=componentRecipes.find(r=>r.id==='streaming-memory')!
+    e.insertComponent(buildRecipe(recipe.id,recipe.defaults),true,true)
+    const original=clone(e.figure.value)
+    expect(original.containers[0]!.component).toBeDefined();expect(original.containers[0]!.parametric).toBeDefined()
+    expect(original.nodes.some(n=>n.path)).toBe(true)
+    e.select('stage');e.removeSelected()
+    expect(e.figure.value.containers[0]!.component).toBeUndefined();expect(e.figure.value.containers[0]!.parametric).toBeUndefined()
+    expect(e.figure.value.nodes).toEqual([]);expect(e.figure.value.edges).toEqual([])
+    expect(()=>parseDocument(e.figure.value)).not.toThrow()
+    e.undo();expect(e.figure.value).toEqual(original)
   })
   it('rejects invalid import atomically and round-trips local project state', () => {
     const e = editor(), original = clone(e.figure.value)

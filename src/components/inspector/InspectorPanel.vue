@@ -124,7 +124,6 @@ function showEvidence() {
       <ReconstructionReuseSummary v-if="container?.reconstructionReuse" :record="container.reconstructionReuse" />
     <ReconstructionInspector v-if="container?.reconstruction&&!multiple" :container-id="container.id" />
       <Button v-if="object?.parentId && !multiple" variant="quiet" class="parent-navigation" @click="editor.select(object.parentId!)"><Icon name="layers" />选择父容器</Button>
-      <Button v-if="container && !multiple" @click="editor.assetDialog.value = {mode:'capture',containerId:container.id}"><Icon name="book" />存为我的组件</Button>
       <Button v-if="recipeOwner && !multiple" @click="editor.recipeDialogId.value=recipeOwner!.id"><Icon name="grid" />调整组合参数</Button>
       <Box v-if="object?.evidence" class="component-origin evidence-origin"><Text v-if="object.evidence.generated">AI 设计草稿来源 · 非实验依据</Text><Text>重绘来源：{{ object.evidence.title }}</Text><Text>{{ object.evidence.reference }}</Text><Text v-if="object.evidence.file">源文件：{{ object.evidence.file.fileName }}</Text><Text v-if="object.evidence.file?.page">原页面：{{ object.evidence.file.page.index+1 }} · {{ object.evidence.file.page.name }} · {{ object.evidence.file.page.id }}</Text><Text v-if="object.evidence.file?.objectId">源对象 ID：{{ object.evidence.file.objectId }}</Text><Text v-if="object.evidence.image">原图区域：{{ Math.round(object.evidence.image.region.x * 100) }}%, {{ Math.round(object.evidence.image.region.y * 100) }}% · {{ Math.round(object.evidence.image.region.width * 100) }}% × {{ Math.round(object.evidence.image.region.height * 100) }}%</Text><Button v-if="object.evidence.image" size="xs" @click="showEvidence"><Icon name="image" />查看原图区域</Button><Button variant="quiet" size="xs" @click="editor.clearEvidence">解除对象来源关联</Button></Box>
       <Box v-if="container?.component && !multiple" class="component-origin"><Text>来自组件：{{ container.component.name }}</Text><Text v-for="source in container.component.sources" :key="source.reference">{{ source.title }} · {{ source.reference }}</Text><Text v-if="container.component.lineage.length">保留 {{ container.component.lineage.length }} 条派生记录</Text></Box>
@@ -139,7 +138,7 @@ function showEvidence() {
         <Box class="material-actions"><Button size="xs" @click="editor.materialEdit.value='edge-route'">指定连线折点</Button><Button size="xs" @click="editor.materialEdit.value='line-style'">调整连线样式</Button></Box><Text v-if="edge.manualRoute" class="muted-caption">{{ edge.manualRoute.points.length }} 个指定折点；拖动蓝点或用方向键微调，Delete 删除。受阻时保留原指定路线。</Text>
         <Field><Text>连线方式</Text><Select :value="edge.routing??'orthogonal'" :options="[{value:'orthogonal',label:'折线避障'},{value:'straight',label:'直线'},{value:'manual',label:'指定折点'}]" aria-label="连线方式" @change="setEdgeRouting" /></Field>
       </Box>
-      <Button v-if="!node?.socket && (multiple || node || edge || container?.parentId)" variant="danger" @click="editor.removeSelected"><Icon name="trash" />删除{{ multiple ? '所选对象' : node ? '组件' : edge ? '连接' : '容器' }}</Button>
+      <Button v-if="editor.selectedIds.value.length && !node?.socket && (multiple || node || edge || container)" variant="danger" @click="editor.removeSelected"><Icon name="trash" />删除{{ multiple ? '所选对象' : node ? '组件' : edge ? '连接' : '容器' }}</Button>
     </Box>
   </Aside>
 </template>

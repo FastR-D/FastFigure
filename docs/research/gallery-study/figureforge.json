@@ -1,0 +1,790 @@
+{
+  "version": 1,
+  "commit": "af778027c866e2e6b3432b946e44a4a2b4434d82",
+  "files": 66,
+  "templates": 22,
+  "images": [
+    {
+      "path": "assets/before-after-improvements.svg",
+      "sha256": "dca06c3c78704a38593baa5ec70e02e5c5de4461d80f04ab46740304b536f139",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 1,
+      "note": "对照修订：图例外置、突出语义主色",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/figure-workflow.svg",
+      "sha256": "7a9b1fb10bdf89513a61fe49fea9d096b5d7a693acb40708062362722fb9bde1",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 2,
+      "note": "工作流程主链，下方三个扩展框",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/figureforge-canvas.svg",
+      "sha256": "cf51eaa8c4b256a6771427ea7fe05fcf61f615e59de2e45d778cfd82a4e87386",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 3,
+      "note": "编辑器宣传截图；不提取应用界面",
+      "use": "排除宣传界面"
+    },
+    {
+      "path": "assets/figureforge-editor.svg",
+      "sha256": "adde011645dbf7d6f9562e6bc43a10d7d2eca4b761f2017701e8066f262c38ef",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 4,
+      "note": "编辑器宣传截图；不提取应用界面",
+      "use": "排除宣传界面"
+    },
+    {
+      "path": "assets/nature-figure-cover.svg",
+      "sha256": "e5d3e9c7e14af2282ef35b5f4827c0a33dcd23ae4397e65ee75b3477e8a87170",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 5,
+      "note": "文字封面；不作为科研构图",
+      "use": "排除宣传界面"
+    },
+    {
+      "path": "assets/showcase-apex.svg",
+      "sha256": "540ef93719b29aa5db9a47dd7b05cb7e73f544c00235176574f6f86f5074450f",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 6,
+      "note": "九宫图表：三元、极坐标、弧、注释矩阵、气泡、拟合、流、区间、网格",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase-bio.svg",
+      "sha256": "05b745b1c9638d09c5320e3050ecca392694fe149832af64b4ec6f84558b43ad",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 7,
+      "note": "生物图表展板：矩阵、基因组、环图、分布、组成",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase-extra.svg",
+      "sha256": "71b3fbc8358fe1ebbc4e21ff0c7fe74faf354cb7159e4697097b39a3c15d5017",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 8,
+      "note": "九宫图表：瀑布、棒棒糖、流向、山峦、散点与堆叠",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase-max.svg",
+      "sha256": "481b20c22163ba9c6f88296b5dba8c8cbf88e8116ee669cc4bb47e1c1220170a",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 9,
+      "note": "九宫图表：多轴、点阵、矩阵与分布",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase-nova.svg",
+      "sha256": "45b94a43df4dfe2dee35c4e56d92920319a4ea3a77ce3f951d6e948e26d203f3",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 10,
+      "note": "九宫图表：流向、气泡矩阵、马赛克、火山、人口、环、双轴、三维、ECDF",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase-plus.svg",
+      "sha256": "0bbd38857a4f993353e5324e5ebb48076a6a5e60b2c568c80c5bb70eb81e8ca9",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 11,
+      "note": "九宫图表：弦、点区间、轨迹、三元、热图、矩形分区、环、hexbin、平行坐标",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase-pro.svg",
+      "sha256": "4e13edd2899b0a4cd6c22e36c9a7a2b0900112cf722959138557fe779344dab5",
+      "level": "layout",
+      "sheet": 1,
+      "cell": 12,
+      "note": "九宫图表：雷达、极坐标、气泡、火山、矩阵与分布",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase-ultra.svg",
+      "sha256": "78f6d0f6147b78e2c53208ead7d8e1f0b1c6ec347075b001054e78a6887fffba",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 1,
+      "note": "九宫图表：弦、拟合、生存、半小提琴、区间、集合、时间轴、网络、堆叠",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "assets/showcase.svg",
+      "sha256": "cea861bce3b52f4afbd3c31922b24a6699024711ff7f3768a383e8b912012123",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 2,
+      "note": "十二宫图表：基础散点、线、柱、箱体、热图、雷达与误差",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skill_scatter_plot.png",
+      "sha256": "cf0dda9ef5b6836c75361647984149503de458e8e793906c15a5c40f7cc240bc",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 3,
+      "note": "散点+直接文字标注；类别标签放在点旁",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skill_scatter_plot.svg",
+      "sha256": "a2c04a4d6336e37164cf31e2f508f3749d302dc08c5b100668f14228c7181409",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 4,
+      "note": "同一散点SVG版本；属于文件级重复",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/Dispersion_motivation.png",
+      "sha256": "04c2f6ab2bedf8e6a19449f0260ef36f8ab736a93dccf19458cdc80d4b593547",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 5,
+      "note": "纵向Transformer层，右侧球面表示对照和问题框",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/Dispersion_observation.png",
+      "sha256": "59846b700abcf89c2779abce27b5d667637f6429cf4a52ca1892c687359f2aa7",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 6,
+      "note": "八个局部曲线与四个模型族对照；底部总结带",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/Dispersion_observation_distillation.png",
+      "sha256": "134b0fcb07dbab1baa769854100fc9791b846f6f6c50591485564fc8492b6660",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 7,
+      "note": "多个层曲线与右侧蒸馏条件对照",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/ImmunoStruct_contrastive.png",
+      "sha256": "c2590ba1ecac5e1d0976df3be6e9fa4056dcdd78670201c6db461e3e4f18b0d0",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 8,
+      "note": "上下配对编码，右侧配对/维度身份矩阵；不重用论文关系",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/ImmunoStruct_results_CEDAR.png",
+      "sha256": "f1f564e0c7221f24f4bffe14cce5b5df6786c75f7dfcf1b6d2be7566820050ec",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 9,
+      "note": "上部定量比较，下部蛋白结构和区域标注",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/ImmunoStruct_results_IEDB.png",
+      "sha256": "2768b1a5ef0c501dc03c53c594a28e028df2cd57b51c4fd80c9a57906f6195c5",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 10,
+      "note": "多面板：曲线、分布、热图、结构与位置分析",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/ImmunoStruct_schematic.png",
+      "sha256": "2d3ddf56ae63b34ead168cb95b484881f934e61204a8740c67d6dc1678bbaf7d",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 11,
+      "note": "上部三模态融合总览，下部结构准备和迁移细节",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/assets/RNAGenScape_schematic.png",
+      "sha256": "ef85b974a990b74c230dc1a80d3bb357f4f8a430d13c12c6120927c9fb797287",
+      "level": "layout",
+      "sheet": 2,
+      "cell": 12,
+      "note": "潜空间与编码/生成分区；以虚实线区分可训练与冻结",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_CellSpliceNet/figures/ablation.png",
+      "sha256": "3373085ababf07481a352fe542fd79a58701e0e052c5593ca56984008ddad027",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 1,
+      "note": "消融柱图与从基准到各变体的差值引线",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_CellSpliceNet/figures/comparison.png",
+      "sha256": "49d4ebc7d1867918b9d0167d8e821d8ce7845459a9da55a6fefcef87eeb7024d",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 2,
+      "note": "三个指标横排，突出方法深色、基线浅色，右外侧共用图例",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_Cflows/figures/diffusion_swiss_roll.png",
+      "sha256": "9f02fa4603dae748e3745b95b0ed252f2ba386da6101dc1be6c4a2a886c78eb0",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 3,
+      "note": "二维密度与三维轨迹对照",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_Cflows/figures/fig2_comparison_GeneRegulatory.png",
+      "sha256": "96075eb70285f4f72869b99398c9a923336fbc3a5188883d9e8415e1cc027a46",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 4,
+      "note": "三个规模面板，共用类别/方法图例，带误差线",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_Cflows/figures/fig2_comparison_Trajectory.png",
+      "sha256": "91b214f745a99f1f2b472ddae7661dfa2d9241791768767180219315b89047ec",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 5,
+      "note": "三个指标横排；同方法颜色跨图保持一致",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_Cflows/figures/figX_comparison_Ablation.png",
+      "sha256": "4f7b7b4b01a1b498540850ddabc217fd964eb37142e99a6ee6b5c26cf12aba7f",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 6,
+      "note": "四指标消融横排；单一共用图例",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_Dispersion/figures/idea.png",
+      "sha256": "e805fb0f7ccdf8aa3ae764e8156cf6b61b6d56ef7dded0fc7556566e316649a3",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 7,
+      "note": "三个球面表示对照，细向量与浓集区域",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_Dispersion/figures/illustration.png",
+      "sha256": "2528309a41ba6edab9c377a2304c144813c0e99565239a849c427ab00a14643b",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 8,
+      "note": "四种向量几何处理并列，箭头和短标题解释差异",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_FPGM/figures/freq_prior.png",
+      "sha256": "0f8f77c4de67324cf7ddd7ee370a8ef39f10417b241142b9bacbc830677ff0fe",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 9,
+      "note": "六个频率曲线小图，统一横轴语义与方法样式",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_ImmunoStruct/figures/bars_ablation_Cancer.png",
+      "sha256": "46c9e05df9d7c941628791ac447c5d84a29d942896ce3a13d00432e9f5c720ef",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 10,
+      "note": "三指标消融；局部截断纵轴不可直接移植为默认柱轴",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_ImmunoStruct/figures/bars_ablation_IEDB.png",
+      "sha256": "854fe931bde6ca6c50eda6b147907f00d8f10d74c3b40bad1714b903bf945f00",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 11,
+      "note": "横向消融方法清单，三个指标共享行标签",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_ImmunoStruct/figures/bars_comparison_Cancer.png",
+      "sha256": "0c35bb8a1fb21d5e30e16be152fc92959af580d9e24f04ccc61444adba8c7aa2",
+      "level": "layout",
+      "sheet": 3,
+      "cell": 12,
+      "note": "三指标多方法柱图；方法身份跨面板一致",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_ImmunoStruct/figures/bars_comparison_IEDB.png",
+      "sha256": "18a52f7a910fe9c9ff06015f5a1e63527458a86c847f573eb96ba254d4645ac1",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 1,
+      "note": "三指标多方法柱图；方法身份跨面板一致",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_RNAGenScape/figures/manifold.png",
+      "sha256": "83e55ca23d8aa2fa591a46d3fe4f9d6ac11e17cbc9657e2615d883ea6deb937c",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 2,
+      "note": "连续三维流形；无需用论文曲面作为基础组件",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_RNAGenScape/figures/manifold_holes.png",
+      "sha256": "2ad2be6fa9c9165e800dba4d997850c9a426cbe9b441c78b76518335bcc3f948",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 3,
+      "note": "平滑与缺口流形并列；只提取对照结构",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_RNAGenScape/figures/results_comparison_optimization.png",
+      "sha256": "4cf8539d0521b7268f0227b56cecddf2f70c1bb4bbcf9b5e3be886e95a54927a",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 4,
+      "note": "双热图同方法行；下方逐列改进注释",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_RNAGenScape/figures/results_comparison_speed.png",
+      "sha256": "cd1fec84f615a43dbe91cc94bfbb94fe07e086fdd5d8191fbff2ec990e38d4f5",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 5,
+      "note": "吞吐柱图使用对数纵轴；需真实正值与量纲",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_RNAGenScape/figures/results_sweep.png",
+      "sha256": "4db30b32b65e6b7160ebe025993c2ffdaf6e240d836c253419e91649d3da8deb",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 6,
+      "note": "两条优化指标并排；同条件配色贯通",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_VIGIL/figures/comparison_posttraining.png",
+      "sha256": "a6f2e75e7d8361754445d86ce04386b5764a46bf2cbc94e8df0c75ecf1bab142",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 7,
+      "note": "多方法训练步数曲线和横向参考基线",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_VIGIL/figures/comparison_radar.png",
+      "sha256": "d6613715d9d4564fb0c7354430b227d43c9df04032e32b346601971381e5ba2d",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 8,
+      "note": "多任务雷达；每轴尺度需单独说明",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_brainteaser/figures/brute_force.png",
+      "sha256": "abb63055b0d49edbe9002e820294a622db1429d31b1d2446340036cf1db92607",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 9,
+      "note": "两行四列堆叠柱图，颜色表方法、纹理表类别",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_brainteaser/figures/correctness_by_category.png",
+      "sha256": "bc2cc547f15430bc9af2ebdfba0b8cf1c73702e8fbea35d8b2953cc960da117b",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 10,
+      "note": "六任务小倍图，右外侧共用图例",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_brainteaser/figures/correctness_by_subcategory.png",
+      "sha256": "b6639239da2fa9f2bec3eb096ec0db3942965ed38e57446de4b8a240a77c02c6",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 11,
+      "note": "超宽二十个子类别小倍图；最终刊印需拆版",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_brainteaser/figures/rewriting.png",
+      "sha256": "0460f09210bc23c272602ecb8b3fcf3984f42fc055df3b0e4982eab50303607f",
+      "level": "layout",
+      "sheet": 4,
+      "cell": 12,
+      "note": "前后重写两面板；颜色区分模型、纹理区分结果",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_brainteaser/figures/selfcorrection_math.png",
+      "sha256": "71133ed59cc16f8c36a4e8b2325575d185f36a8534c29579d2eff177544e9e53",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 1,
+      "note": "八个纠错类别柱图，方向箭头标明指标好坏",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_ophthal_review/figures/composition_heatmap.png",
+      "sha256": "38a9c4e8fd691cbd7dcb4f5b5abb69398b4974d32cad19a4a33819db1cb34f3a",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 2,
+      "note": "带数值和样本总数的任务×验证级别矩阵",
+      "use": "结构词汇候选"
+    },
+    {
+      "path": "skills/nature-figure/assets/figures4papers/figure_ophthal_review/figures/trend_by_month.png",
+      "sha256": "66fe0f27f44697547b6cb219ff90696f54a6fef48984c9578ace258e0ebce4d4",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 3,
+      "note": "上下累计面积图；里程碑文字与时间点引线",
+      "use": "结构词汇候选"
+    },
+    {
+      "template": "bar",
+      "sha256": "3c5f334562bc23a4e37841cd9a0c6f2b52b382b9991e50a7354d3bbca939d2fc",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 4,
+      "note": "柱+样本点+误差+显著性括线；演示统计不能保留",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "grouped-bar",
+      "sha256": "3677aecbbc72abf6a8838149d753aa94fb42c622e25b97403a9a70c7712b480b",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 5,
+      "note": "分组柱与灰色基线/蓝色主方法",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "line",
+      "sha256": "e7e0e0282da55fcc78d40388017679bd8281da4ae67f5917bf58dc44498c812b",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 6,
+      "note": "折线+半透明区间带；区间类型必须声明",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "multi-line",
+      "sha256": "8e1ef8aa7f9dce5140d3b741c59bf1f6d451f5f5588fb19aabc7e979d131ebef",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 7,
+      "note": "多折线末端直接标注与虚线基线",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "scatter",
+      "sha256": "4892347daf3c72ae2e33b8e6fdd5d3a2a5016a19f8a037d27fe271a817be910b",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 8,
+      "note": "散点回归、区间带、相关统计演示",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "pie",
+      "sha256": "1d8782f545a564a37830dab7b65ccc8f63c1815b952bd6a4abb153b67431f2b7",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 9,
+      "note": "环形组成和中心样本数；无原始数据不重用扇区",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "area",
+      "sha256": "a354acf0a8ecea0026fbf2688455547370cff57f873731d218fe0af842c9cce1",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 10,
+      "note": "双面积同轴；不得把叠加误读为堆积",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "box",
+      "sha256": "e5e10c989d11f4f4be524b3ba17f991086d9350cd2f409d9fa21253974d6cfd5",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 11,
+      "note": "箱体+原始点+显著性括线，统计演示",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "heatmap",
+      "sha256": "3ec03801b1f2f73dd4f46476997c9e27f7c41c49de2712237551ed47318aa3dc",
+      "level": "layout",
+      "sheet": 5,
+      "cell": 12,
+      "note": "行列聚类树+身份带+热图色标",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "forest",
+      "sha256": "c32f104adc3d89966c47b629dea964a345f30644eff3969a2a399630b7d8380b",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 1,
+      "note": "森林点区间、无效参考线、右侧直接数值",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "violin",
+      "sha256": "96bfcc9fa350d38e832cc4ee71908d2b617bab4303efede1236212d548dd277f",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 2,
+      "note": "小提琴和观测点；源含负高矩形，维持禁用",
+      "use": "保留禁用"
+    },
+    {
+      "template": "km",
+      "sha256": "dcea6ebae2e5204af9316a01267a8363786c4924c5db258cb04da8702afc548c",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 3,
+      "note": "生存阶梯+删失标记+区间带，不能视为真实生存估计",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "volcano",
+      "sha256": "60bca9a061ccc3cb051f047335e51a93bcff33386081e1389fa542187734ad94",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 4,
+      "note": "火山阈值虚线与强调点标注",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "single",
+      "sha256": "a87011b6814ee95559c7a2ef5491a934459def0c4f04f95683b03f76f8ef6831",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 5,
+      "note": "单面板+字母角标",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "two-h",
+      "sha256": "c16a91f3cb37557e982db2ecdac178295d97acafb03078cfd1a6673abf3f3d3d",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 6,
+      "note": "左右双面板共用外框",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "two-v",
+      "sha256": "2f3128dffbcef2c55b63915695d92eeed469e63c42c450842b129eb8b571946b",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 7,
+      "note": "上下双面板：趋势与矩阵",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "four-grid",
+      "sha256": "9589fd32055c4e65f846e78c9e06e1b185f83a22512ca653654acb34e1e6e9fa",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 8,
+      "note": "四宫面板：不同证据类型但统一边距",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "title-caption",
+      "sha256": "5357ec410a9a28c817245a61f2d34adff6b0947118042754f81ed32455b3151a",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 9,
+      "note": "标题+主体+底部图注带",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "schematic",
+      "sha256": "c00aaa975cb45eed1180bd7f47661100f3ea9477871bc05048c1687aaa3e44ae",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 10,
+      "note": "上方方法主链，下方三类验证分支",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "comp-ab",
+      "sha256": "404ad9b812794b968e094c269c5ca363ba9d40f55186326b5ab1b4367fa36abc",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 11,
+      "note": "左右小提琴/折线组合；负高几何维持禁用",
+      "use": "保留禁用"
+    },
+    {
+      "template": "comp-abc",
+      "sha256": "3967e33a2a568259aa2f124a00e2eb503d70d1c1820fbb82ef3fd2b415c80686",
+      "level": "layout",
+      "sheet": 6,
+      "cell": 12,
+      "note": "上二下宽矩阵，组合层级明确",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "template": "comp-hero",
+      "sha256": "e2b4d3ccf1a0940bd4ae9a1ff5d3f0a46c913b27fb4fdc133a9525c323ed413f",
+      "level": "layout",
+      "sheet": 7,
+      "cell": 1,
+      "note": "左侧主图，右侧上下两张支持图",
+      "use": "已接入模板；避免重复实现"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-01-bar-charts.png",
+      "sha256": "4a0e3040bbdbfe5ec48b66515f719f83ad7304fadb2e56432cd3e8f7ccbabd65",
+      "level": "detail",
+      "note": "单系列/分组/堆积/正负差值，四列各四变体",
+      "panels": "a–p，逐面板阅读",
+      "caution": "不采用标题中未实际出现的对数轴",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-02-line-trends.png",
+      "sha256": "9a8189149180a68679738bc4be152ee40b17d71261d71b3759d315a7169da0d9",
+      "level": "detail",
+      "note": "多折线/区间带/事件线/个体轨迹",
+      "panels": "a–p，逐面板阅读",
+      "caution": "区间带和群体/个体需区分",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-03-heatmaps.png",
+      "sha256": "40dd7c7c14c45b45cc22ee23e19f2dc1901f38b26a1fb4b0f26a30dbd10c0423",
+      "level": "detail",
+      "note": "发散/顺序/带值矩阵",
+      "panels": "a–p，逐面板阅读",
+      "caution": "标题中的聚类并不代表实际有树；部分顺序标题有负数",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-04-scatter-bubble.png",
+      "sha256": "1bbfbc38a3f246e4fd7c59b9ed1003ddbc7280ee160b7c38abf8d410b27fe6f8",
+      "level": "detail",
+      "note": "相关/簇/火山/气泡象限",
+      "panels": "a–p，逐面板阅读",
+      "caution": "面积、阈值与回归均需原始数据",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-05-radar-polar.png",
+      "sha256": "e7fa7d98cd4f5263f5550d7ac8824e60071c20b2927aef52ac6d18d62fd29ffa",
+      "level": "detail",
+      "note": "双/三系列雷达、极坐标柱与密度",
+      "panels": "a–p，逐面板阅读",
+      "caution": "雷达面积不作总体性能",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-06-distributions.png",
+      "sha256": "a1fe533d07dae36d11c997577ded61adb16bf5d4dd5c0dee2ff92ae570f0f01e",
+      "level": "detail",
+      "note": "直方/小提琴/箱体/山峦",
+      "panels": "a–p，逐面板阅读",
+      "caution": "分布图必须回到观测和统计定义",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-07-forest-interval.png",
+      "sha256": "dc61a5257eae4748348c72c51f2e70e59979c6892f52dadf7bb4ba6f8b98b00b",
+      "level": "detail",
+      "note": "森林/区间/配对斜率/点区间",
+      "panels": "a–p，逐面板阅读",
+      "caution": "参考线与区间类型不可省略",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-08-area-stacked.png",
+      "sha256": "350c25e427d945dee5fd98316eb6ebe307304b9d187d954a88c05852d664a60b",
+      "level": "detail",
+      "note": "填充趋势/堆积比例/流/累计",
+      "panels": "a–p，逐面板阅读",
+      "caution": "四列不混淆累计与分段",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-09-image-plates.png",
+      "sha256": "bbc8c0b8708d42465e57cb7c56b4d2ecfbaa63340a5a6dfefbcb51189cd1a995",
+      "level": "detail",
+      "note": "三通道/合成/局部图像",
+      "panels": "a–p，逐面板阅读",
+      "caution": "不复制演示图像、50um标尺和样本身份",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/chart-atlas/atlas-10-network-matrix.png",
+      "sha256": "cd384abe10aa86bd310c1288a42f33735cb555c267bddae1ecd262905a7a1de5",
+      "level": "detail",
+      "note": "气泡矩阵/邻接/节点线/二部图",
+      "panels": "a–p，逐面板阅读",
+      "caution": "格点、权重和拓扑分别定义",
+      "use": "提取分面与图例规则，不复制示例数值"
+    },
+    {
+      "path": "skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png",
+      "sha256": "2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192",
+      "level": "detail",
+      "note": "机制主图占左上双列，其余物理验证按证据分组；红色局部框指到定量区域。",
+      "use": "提取面板角色组合；保留空证据槽，不复制医学数据"
+    },
+    {
+      "path": "skills/nature-figure/assets/gallery/fig2-spatial-imaging-rich.png",
+      "sha256": "90081b3f778b9ede2dba41c60b6abf0c28a239060c69428344539529cd7f3257",
+      "level": "detail",
+      "note": "三行条件×六列通道，最后局部放大；下方定量与关系证据。",
+      "use": "提取面板角色组合；保留空证据槽，不复制医学数据"
+    },
+    {
+      "path": "skills/nature-figure/assets/gallery/fig3-in-vivo-efficacy-rich.png",
+      "sha256": "25d6fc50f5808104a7cb19f4795cea4229fbc6159fa7509f716a94f7c160a033",
+      "level": "detail",
+      "note": "左上试验时间线，右上主终点宽图；下方个体、分布、免疫和耐受证据。",
+      "use": "提取面板角色组合；保留空证据槽，不复制医学数据"
+    },
+    {
+      "path": "skills/nature-figure/assets/gallery/fig4-single-cell-systems-rich.png",
+      "sha256": "999edb06b942f988a51b11f947845e42e4c346b2f9e5d5a6425def9e43bb69d1",
+      "level": "detail",
+      "note": "左侧大表示图，右上组成与矩阵，右下轨迹、富集和关系矩阵。",
+      "use": "提取面板角色组合；保留空证据槽，不复制医学数据"
+    },
+    {
+      "path": "skills/nature-figure/assets/gallery/fig5-validation-perturbation-rich.png",
+      "sha256": "245ad31f97b2054628987444e44d6a007f352f65ae6254189f5ed8ba9b0301c6",
+      "level": "detail",
+      "note": "左上干预链，剂量/协同矩阵/分布/免疫/安全性构成证据包；不把演示相关当因果。",
+      "use": "提取面板角色组合；保留空证据槽，不复制医学数据"
+    }
+  ]
+}

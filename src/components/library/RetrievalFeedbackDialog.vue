@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import {Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text,TextArea} from '../ui'
+import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text,TextArea} from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import AssetPreview from './AssetPreview.vue'
 import {feedbackRatingLabels,feedbackReceiptSchema,verifyFeedbackCase,type FeedbackCase,type FeedbackInput} from '../../core/retrievalFeedback'
@@ -59,7 +59,7 @@ function backup(){if(sample.value?.revisions.length)downloadFile(`retrieval-feed
           <Disclosure v-if="sample.revisions.length>1"><DisclosureTrigger size="xs">改判记录 · {{ sample.revisions.length }} 次</DisclosureTrigger><Box v-for="revision in sample.revisions" :key="revision.record.id" class="feedback-revision"><Text>{{ feedbackRatingLabels[revision.record.rating] }} · {{ new Date(revision.record.createdAt).toLocaleString() }}</Text><Text>{{ revision.record.note||'未补充说明' }}</Text></Box></Disclosure>
         </Box>
       </Box>
-      <Text v-if="message" role="status" class="placement-message">{{ message }}</Text><Text v-if="error" role="alert" class="error-text">{{ error }}</Text>
+      <Text v-if="message" role="status" class="placement-message">{{ message }}</Text><ErrorMessage v-if="error" class="error-text" :message="error" />
     </ModalBody>
     <Footer><Button :disabled="loading||saving" @click="load">重新读取反馈</Button><Button :disabled="!sample?.revisions.length||loading||saving" @click="backup">导出反馈样本</Button><Box class="header-spacer" /><Button v-if="latest&&!editing" :disabled="loading||saving" @click="modify">修改判断</Button><Button v-if="latest&&editing" :disabled="loading||saving" @click="cancelEdit">取消改判</Button><Button v-if="editing" variant="primary" :disabled="!sample||loading||saving||!rating||!frozen&&!changed" @click="save">{{ saving?'正在记录…':frozen?'重试保存同一反馈':'保存适用性反馈' }}</Button></Footer>
   </Modal>

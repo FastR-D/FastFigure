@@ -1,0 +1,251 @@
+{
+  "version": "0.2",
+  "title": "原图与局部对应框",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 170
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "image-placeholder",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "stage",
+      "x": 12,
+      "y": 30,
+      "width": 124,
+      "height": 104,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "image-label",
+      "kind": "text",
+      "label": "Source image",
+      "parentId": "stage",
+      "x": 16,
+      "y": 34,
+      "width": 116,
+      "height": 26,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "crop-placeholder",
+      "kind": "rectangle",
+      "label": "Detail crop",
+      "parentId": "stage",
+      "x": 190,
+      "y": 30,
+      "width": 98,
+      "height": 104,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "roi",
+      "kind": "rectangle",
+      "label": "ROI",
+      "parentId": "stage",
+      "x": 78,
+      "y": 74,
+      "width": 46,
+      "height": 42,
+      "textStyle": {
+        "size": 12,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          4,
+          3
+        ]
+      }
+    },
+    {
+      "id": "crop-top",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 124,
+      "y": 30,
+      "width": 66,
+      "height": 44,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "crop-bottom",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 124,
+      "y": 116,
+      "width": 66,
+      "height": 18,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "crop-note",
+      "kind": "text",
+      "label": "Use a real crop; no implied scale",
+      "parentId": "stage",
+      "x": 12,
+      "y": 142,
+      "width": 276,
+      "height": 22,
+      "textRole": "body",
+      "textStyle": {
+        "size": 12,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "原图与局部对应框",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 170,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "FigureForge · fig2-spatial-imaging-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig2-spatial-imaging-rich.png · SHA-256 90081b3f778b9ede2dba41c60b6abf0c28a239060c69428344539529cd7f3257 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    }
+  ],
+  "references": []
+}

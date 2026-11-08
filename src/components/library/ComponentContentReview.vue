@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import {Box,Button,Text} from '../ui'
+import { ErrorMessage,Box,Button,Text} from '../ui'
 import AssetPreview from './AssetPreview.vue'
 import ComponentSourceDetails from './ComponentSourceDetails.vue'
 import type {ComponentAsset} from '../../core/assets'
@@ -31,7 +31,7 @@ async function inspect(id:string){
     <Text v-if="batchOf" class="muted-caption">与本批「{{ batchOf }}」的图形内容相同，快照身份各自保留。</Text>
     <Text v-if="review?.index.remaining" class="muted-caption" aria-live="polite">本机图形索引核对进度：{{ review.index.total-review.index.remaining }} / {{ review.index.total }}。尚未核对的快照不计入当前结果。</Text>
     <Text v-if="review?.index.unreadable" class="error-text">{{ review.index.unreadable }} 个快照暂不可读，本次核对未覆盖全部素材。</Text>
-    <Text v-if="error||readError" class="error-text">{{ error||readError }}</Text>
+    <ErrorMessage v-if="error||readError" class="error-text" :message="error||readError" />
     <Text v-if="review&&!review.total&&!batchOf&&!review.index.remaining&&!review.index.unreadable&&!error" class="muted-caption">核对时未发现其他相同图形快照。</Text>
     <Box class="component-metadata-actions"><Button size="xs" variant="quiet" :disabled="busy" @click="emit('check')">重新核对相同图形</Button><Button v-if="editable&&!selected&&(review?.total||batchOf)" size="xs" :disabled="busy" @click="emit('keep')">保留为独立快照</Button></Box>
   </Box>

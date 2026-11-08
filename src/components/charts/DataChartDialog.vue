@@ -6,7 +6,7 @@ import AssetPreview from '../library/AssetPreview.vue'
 import FigureRenderer from '../figure/FigureRenderer'
 import { useEditor } from '../../composables/useEditor'
 import { clone } from '../../core/model'
-import { captureComponent,instantiateComponent,scaleComponent } from '../../core/assets'
+import { instantiateComponent,scaleComponent } from '../../core/assets'
 import { buildDataChart,replaceDataChart } from '../../core/dataChart'
 import { chartExample,chartScaleExample,chartTableText,parseChartTable } from '../../core/dataChartTable'
 import { dataChartSpecSchema,type DataChartSpec } from '../../core/dataChartSchema'
@@ -51,8 +51,7 @@ function example(){loadExample(chartExample(form.value.kind))}
 function scaleExample(){if(form.value.kind==='line'||form.value.kind==='scatter')loadExample(chartScaleExample(form.value.kind))}
 function changePalette(value:string){form.value.paletteId=value;if(heatmapPaletteById.get(value)?.mode==='sequential')colorCenter.value=''}
 async function file(event:Event){const input=event.target as HTMLInputElement,f=input.files?.[0];if(!f)return;try{if(f.size>60_000)throw new Error('数据文件最多 60 KB');changeTable(await f.text());if(boxplot.value)rawConfirmed.value=false;if(!form.value.dataSource)form.value.dataSource=`用户导入文件：${f.name}`;error.value=''}catch(e){error.value=message(e)}finally{input.value=''}}
-function configured(){const result=state.value.replacement,asset=context.containerId&&result?captureComponent(result.document,context.containerId,form.value.title,state.value.asset!.description,state.value.asset!.tags):clone(state.value.asset!);asset.id=`asset-${crypto.randomUUID()}`;asset.createdAt=new Date().toISOString();asset.updatedAt=asset.createdAt;return asset}
-function save(toAssistant=false){try{if(!state.value.asset||context.containerId&&!state.value.replacement)return;const asset=editor.library.save(configured());editor.libraryTab.value='mine';editor.activePanel.value='components';editor.notice.value=`已保存图表「${asset.name}」`;close();if(toAssistant){editor.assistantAssetId.value=asset.id;editor.useMaterialPrompt(`复用刚保存的图表「${asset.name}」。保持其输入数据、缺失值、误差说明与示例标记，仅根据我的后续要求调整图件。`)}}catch(e){error.value=message(e)}}
+
 function insert(newCanvas:boolean){if(state.value.asset&&editor.insertComponent(state.value.asset,true,newCanvas))close();else error.value=editor.notice.value}
 function apply(){if(stale.value){error.value='工程已变化，请关闭后重新编辑数据';return}const result=state.value.replacement;if(!result)return;if(editor.update(doc=>Object.assign(doc,result.document))){editor.selectedId.value=context.containerId!;editor.notice.value=`已重绘 ${result.generated} 个图元，保留 ${result.preserved} 个额外对象，可撤销`;close()}else error.value=editor.notice.value}
 </script>
@@ -85,6 +84,6 @@ function apply(){if(stale.value){error.value='工程已变化，请关闭后重�
       </Box>
       </Box><Text v-if="stale" role="alert" class="error-text">工程已变化，请关闭后重新编辑数据。</Text><Text v-if="error" role="alert" class="error-text">{{ error }}</Text>
     </ModalBody>
-    <Footer><Button :disabled="!state.asset||!!context.containerId&&!state.replacement" @click="save()">存为我的组件</Button><Button :disabled="!state.asset||!!context.containerId&&!state.replacement" @click="save(true)">存为组件并交给助手</Button><Box class="header-spacer" /><template v-if="context.containerId"><Button @click="close">取消</Button><Button variant="primary" :disabled="!state.replacement||stale" @click="apply">更新图表</Button></template><template v-else><Button :disabled="!state.asset||!!insertionProblem" @click="insert(false)">插入当前容器</Button><Button variant="primary" :disabled="!state.asset" @click="insert(true)">新建图件</Button></template></Footer>
+    <Footer><template v-if="context.containerId"><Button @click="close">取消</Button><Button variant="primary" :disabled="!state.replacement||stale" @click="apply">更新图表</Button></template><template v-else><Button :disabled="!state.asset||!!insertionProblem" @click="insert(false)">插入当前容器</Button><Button variant="primary" :disabled="!state.asset" @click="insert(true)">新建图件</Button></template></Footer>
   </Modal>
 </template>

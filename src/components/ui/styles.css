@@ -373,6 +373,9 @@
   padding: 18px var(--fp-modal-padding);
 }
 .fp-modal > header {
+  min-height: 46px;
+  padding: 8px 16px;
+  gap: 12px;
   border-bottom: 1px solid var(--color-border);
 }
 .fp-modal > footer {
@@ -404,3 +407,5 @@
 :root[data-theme='dark'] .fp-select[multiple] {
   background-image: none;
 }
+
+.fp-modal > header h2 { margin:0; font-size:15px; line-height:1.4; }

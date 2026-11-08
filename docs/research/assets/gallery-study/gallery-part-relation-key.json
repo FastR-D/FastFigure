@@ -1,0 +1,227 @@
+{
+  "version": "0.2",
+  "title": "关系线型图例",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 170
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "key-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 16,
+      "y": 35,
+      "width": 62,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "key-label-0",
+      "kind": "text",
+      "label": "Data flow",
+      "parentId": "stage",
+      "x": 90,
+      "y": 20,
+      "width": 198,
+      "height": 30,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "key-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 16,
+      "y": 83,
+      "width": 62,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "key-label-1",
+      "kind": "text",
+      "label": "Parameter transfer",
+      "parentId": "stage",
+      "x": 90,
+      "y": 68,
+      "width": 198,
+      "height": 30,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "key-2",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 16,
+      "y": 131,
+      "width": 62,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "key-label-2",
+      "kind": "text",
+      "label": "Detail correspondence",
+      "parentId": "stage",
+      "x": 90,
+      "y": 116,
+      "width": 198,
+      "height": 30,
+      "textRole": "body",
+      "textStyle": {
+        "size": 15,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "关系线型图例",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 170,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "TopConf · aaai2023-25392",
+        "reference": "https://ojs.aaai.org/index.php/AAAI/article/view/25392 · 图片 https://raw.githubusercontent.com/qwdwqfwq/topconf-paper-figure-gallery/77a7d84570a6a9f3e63c22bb31b9fb59757e3dab/images/aaai/final/aaai2023-25392.jpg · SHA-256 46c2c7691c6d1b21cd930697119db308f65362c5c22e9c84be1ba8b940998f4d · 仅抽象构图关系，论文原图权利归原作者。"
+      }
+    }
+  ],
+  "references": []
+}

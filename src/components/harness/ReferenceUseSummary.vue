@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed,onBeforeUnmount,ref } from 'vue'
-import { Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text } from '../ui'
+import { ErrorMessage, Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { referencePurposeLabels,type ReferenceInputInfo,type ReferenceUse } from '../../core/referenceInputs'
 const props=withDefaults(defineProps<{inputs?:ReferenceInputInfo[];uses?:ReferenceUse[];runId?:string;available?:boolean;removable?:boolean}>(),{inputs:()=>[],uses:()=>[],available:true,removable:false,runId:undefined})
@@ -38,5 +38,5 @@ onBeforeUnmount(release)
       <Button v-if="removable" size="xs" variant="quiet" :aria-label="`移除参考来源记录 ${i+1}`" @click="emit('remove',i)">移除此来源记录</Button>
     </Box>
   </Box>
-  <Modal :open="!!selected" size="xl" label="本轮实际参考图" @close="close"><Header><Box><Heading>图 {{ selected?.index }} · {{ selected?.title }}</Heading><Text v-if="selected" class="muted-caption">{{ referencePurposeLabels[selected.purpose] }} · 本轮图片输入快照 · {{ selected.width }} × {{ selected.height }}</Text></Box><IconButton icon="close" label="关闭实际参考图" @click="close" /></Header><ModalBody><Text v-if="loading" role="status">正在读取本轮图片…</Text><Text v-if="error" role="alert" class="error-text">{{ error }}</Text><Image v-if="source" :src="source" class="reference-input-image" :alt="`本轮参考图 ${selected?.index}`" /></ModalBody><Footer><Button @click="close">关闭</Button></Footer></Modal>
+  <Modal :open="!!selected" size="xl" label="本轮实际参考图" @close="close"><Header><Box><Heading>图 {{ selected?.index }} · {{ selected?.title }}</Heading><Text v-if="selected" class="muted-caption">{{ referencePurposeLabels[selected.purpose] }} · 本轮图片输入快照 · {{ selected.width }} × {{ selected.height }}</Text></Box><IconButton icon="close" label="关闭实际参考图" @click="close" /></Header><ModalBody><Text v-if="loading" role="status">正在读取本轮图片…</Text><ErrorMessage v-if="error" class="error-text" :message="error" /><Image v-if="source" :src="source" class="reference-input-image" :alt="`本轮参考图 ${selected?.index}`" /></ModalBody><Footer><Button @click="close">关闭</Button></Footer></Modal>
 </template>

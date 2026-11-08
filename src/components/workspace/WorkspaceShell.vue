@@ -15,6 +15,8 @@ import LayoutDialog from './LayoutDialog.vue'
 import TextToolbar from './TextToolbar.vue'
 import StructureExpandDialog from './StructureExpandDialog.vue'
 import ScaleDialog from './ScaleDialog.vue'
+import WorkspaceNotifications from './WorkspaceNotifications.vue'
+import { createNotifications, isNetworkError, notificationsKey } from '../../composables/useNotifications'
 const MaterialEditDialog=defineAsyncComponent(()=>import('./MaterialEditDialog.vue'))
 const CalloutDialog=defineAsyncComponent(()=>import('./CalloutDialog.vue'))
 const ComponentCaptureDialog=defineAsyncComponent(()=>import('../library/ComponentCaptureDialog.vue'))
@@ -28,9 +30,15 @@ const PublicationDialog=defineAsyncComponent(()=>import('./PublicationDialog.vue
 const DetailInsetDialog=defineAsyncComponent(()=>import('./DetailInsetDialog.vue'))
 const editor = createEditor()
 provide(editorKey, editor)
+const notifications = createNotifications()
+provide(notificationsKey, notifications)
 const exportOpen = ref(false), projectOpen = ref(false)
 let toastTimer: ReturnType<typeof setTimeout> | undefined
-watch(editor.notice, message => { if (message) { clearTimeout(toastTimer); toastTimer = setTimeout(() => { editor.notice.value = '' }, 4000) } })
+watch(editor.notice, message => {
+  clearTimeout(toastTimer)
+  if (message && isNetworkError(message)) { notifications.networkError(message); editor.notice.value = ''; return }
+  if (message) toastTimer = setTimeout(() => { editor.notice.value = '' }, 4000)
+})
 function keyboard(e: KeyboardEvent) {
   if (e.defaultPrevented || exportOpen.value || projectOpen.value || editor.publicationOpen.value || editor.detailInsetOpen.value || editor.assetDialog.value || editor.recipeDialogId.value || editor.componentCapture.value || editor.styleDialog.value || editor.chartDialog.value||editor.chartDataImportOpen.value||editor.vectorImportOpen.value||editor.layoutDialogOpen.value||editor.panelLayoutOpen.value||editor.structureExpandId.value||editor.scaleDialogId.value) return
   const target = e.target as HTMLElement
@@ -58,6 +66,7 @@ onBeforeUnmount(() => { window.removeEventListener('keydown', keyboard); window.
 
 <template>
   <Box class="workspace-shell">
+    <WorkspaceNotifications />
     <RecipeParametersDialog v-if="editor.recipeDialogId.value" :key="editor.recipeDialogId.value" />
     <WorkspaceHeader @export="exportOpen = true" @project="projectOpen = true" />
     <Box class="workspace-body">

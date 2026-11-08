@@ -1,5 +1,5 @@
 import {designRasterSchema,designReviewInfoSchema,designReviewReportSchema,createDesignReviewContext,designReviewPrompt} from './designReview.ts'
-import {paperDesignGuide,visualRoleLabels,textRoleLabels} from './paperStyle.ts'
+import {paperDesignGuide,paperAlignmentGuide,visualRoleLabels,textRoleLabels} from './paperStyle.ts'
 import {scientificFigureDesign} from '../data/scientificPresentation.ts'
 import {applyMaterialEdits,materialEditsSchema} from './materialEditing.ts'
 import {reflowCallouts,existingCalloutTargets} from './calloutReflow.ts'
@@ -258,7 +258,7 @@ export function harnessPrompt(input: HarnessRunInput,manifest?:ReferenceInputInf
     palettes: [...new Set(paletteIds)].flatMap(id=>{const p=paletteById.get(id);return p?[{id:p.id,name:p.title,colors:p.colors}]:[]}),
     ...((chartAssets.some(asset=>rootContainer(asset.figure).dataChart?.spec.kind==='heatmap')||input.figure.containers.some(container=>container.dataChart?.spec.kind==='heatmap'))?{heatmapScales:heatmapPalettes.map(p=>({id:p.id,name:p.title,mode:p.mode,colors:p.colors}))}:{}),
   } }
-  return `${repositoryRecallPrompt(repositoryRecall)}你是 FastFigure 科研绘图助手，面向计算机期刊与会议。根据用户要求解释或修改当前可编辑图。先确定一张图要表达的论点，再按概览、核心机制、局部解释或证据选择合适结构；复杂主图可组合分层、编解码、张量、树、矩阵、循环、网络及对照。主次、阅读顺序、留白和一致的符号配色共同服务论点，不能为增加结构种类而堆模板，也不要全用箭头流程。绘制时落实 materials.figureDesign：表示、模型、算子、解码使用有含义的视觉词汇；按语义保留阶段底带与内容卡片，减少没有含义的重复套框，留一个视觉重点，不把所有对象做成同样的圆角框。
+  return `${repositoryRecallPrompt(repositoryRecall)}你是 FastFigure 科研绘图助手，面向计算机期刊与会议。根据用户要求解释或修改当前可编辑图。先确定一张图要表达的论点，再按概览、核心机制、局部解释或证据选择合适结构；复杂主图可组合分层、编解码、张量、树、矩阵、循环、网络及对照。主次、阅读顺序、留白和一致的符号配色共同服务论点，不能为增加结构种类而堆模板，也不要全用箭头流程。绘制时落实 materials.figureDesign：表示、模型、算子、解码使用有含义的视觉词汇；只在真实阶段或分组需要时使用浅底与内容卡片，减少没有含义的重复套框，留一个视觉重点，不把所有对象做成同样的圆角框。
 只返回一个 JSON 对象：{"message":"简洁的中文说明","figure":完整可编辑底图或null,"instances":[],"instanceLinks":[],"attachments":[],"recipeUpdates":[],"sharedYAxes":[],"sharedLegends":[],"plotAlignments":[],"sharedColorbars":[],"callouts":[],"calloutReflows":[],"materialEdits":[]}。仅讨论、更新已有组合参数、统一现有图表纵轴或创建共享图例时 figure=null；新绘图时返回完整底图（包含根容器与自定义节点），复用组件通过 instances 添加。不要返回 Markdown 或省略号。
 ${input.intent==='edit-recipes'?'本轮是“调整已有组合参数”：只可返回 figure=null 与 recipeUpdates（或空数组表示需要补充信息），不能返回新底图、instances、instanceLinks、attachments 或其他额外字段。只操作当前工程，修改成为待审候选，不会直接应用。':''}
 图必须 version="0.2"；canvas 须保持当前工程的 width=${input.figure.canvas.width}、height=${input.figure.canvas.height}（各为100–4096的整数）；可选 canvas.frame={x,y,width,height} 指定竖幅或宽幅出图区域，须完整位于画板内。出图区域只控制预览和 SVG 裁切，不缩放对象或改变编辑坐标；新图应根据实际内容和阅读顺序选择比例，已有出图区域须保留。不要返回 references 或图片数据。style 包含 preset（precise/soft/header/dashed/bracket/sketch）、accent（blue/slate/teal/sand/rose）、roughness（0..2）、seed（正整数）。
@@ -270,8 +270,8 @@ path 节点须含 path={points:[{x,y},...],arrow:"none"/"open"/"filled",startArr
 容器 parametric 的完整对应表由程序保管，不在上下文图件中展开；普通图件编辑时会保留已知记录，不得新造或改写它。选中配方的新实例仍使用下述 parameters，由程序展开。
 图片节点 kind=image 的像素由程序管理，复用当前图片时保持其 ID 并省略 image 字段，新增图片通过已选图片组件实例复用；不能编写或修改图片字节。
 默认样式遵循 materials.paperStyle：figure.style.designSystem=paper 时，使用 visual.role 声明对象颜色与卡片职责，textRole 声明 heading/body/caption/math/code；无需逐项复制字体与圆角。paperTheme 完整保存轮廓和字号层级；保持所选主题快照，不丢字段。perception/planning/execution 分别表示感知、规划、执行阶段；相同机制在总览和局部保持同一角色。模块至少留10–12单位内边距，按标题／正文／注释层级排版；已有显式字号和外观优先。精确几何与手写正文可同时使用，不因此启用 sketch。
-默认布局必须对齐、居中：先用共同的行中心 y、列中心 x 和固定 gap 推导各对象位置，禁止逐个凭感觉填坐标。同一行 y=行中心-height/2，同一列 x=列中心-width/2；分区内容包围框与分区内容区同心，重复模块等尺寸等间距。文字和公式继承居中；图标标题优先使用同一节点的 iconId+label，由渲染器整体居中，不另画一个偏左的图标。token 条带总宽=count*cellWidth+(count-1)*gap，起点=所属区域中心-总宽/2。连线端口接中点，分支围绕主轴安排。新建图按此规则生成；编辑既有内容时保留用户明确的排版，避免破坏数据坐标、导入定位文字或素材内部几何。
-视觉质量要求：先规划模块语义、视觉层次和留白，再绘制。不要把整图画成一排只含短文本的同款方框。按语义选择 token、特征张量、立方体、圆形算子和图标；必要时用独立 text 节点放简洁注释。节点可含 description（≤240字）作为次级注释、iconId（从 materials.icons 选择，"none" 清除），图示与注释需真实说明功能，不堆砌装饰。kind=icon 必须有有效 iconId。标签在基础形状可为空。
+默认布局与文字对齐：${paperAlignmentGuide} 同一行 y=行中心-height/2，同一列 x=列中心-width/2；token 条带总宽=count*cellWidth+(count-1)*gap，再按所属阅读轴定位。图标与短标签需要居中时优先使用同一节点的 iconId+label。独立分区标题与说明使用 textStyle.align=left；这不改变已有人为对齐。不要把分区内容包围框与内容区强制同心，也不要把所有连接固定到中点。
+视觉质量要求：逐项落实 materials.figureDesign 的内容依据、对象角色、布局与关系约束；默认论文风格与已保存风格都沿用这些规则，用户明确要求优先。先规划模块语义、视觉层次和留白，再绘制。不要把整图画成一排只含短文本的同款方框。按语义选择 token、特征张量、立方体、圆形算子和图标；必要时用独立 text 节点放简洁注释。节点可含 description（≤240字）作为次级注释、iconId（从 materials.icons 选择，"none" 清除），图示与注释需真实说明功能，不堆砌装饰。kind=icon 必须有有效 iconId。标签在基础形状可为空。
 module 可设 structure={type,repeats,labels}：type 从 materials.structures 选择，repeats=1..12（编码器/解码器层数），labels 为按清单顺序的内部标签（每项≤40字，最多6项）；type=none 清除。请显式选择与方法一致的结构，编码器也可能是 CNN，不能一律假设 Transformer。结构会生成真实的分层块、残差、Q/K/V 分路、神经元网络、卷积特征图、索引检索或融合汇合；不要以普通图标替代内部结构。优先采用清单推荐尺寸，太小仅显示紧凑轮廓。需要独立节点级操作时使用 catalogue 的组合配方。已有对象的结构参数应保留。
 形状和路径可用 visual.fillGradient / strokeGradient={type:"linear",vector:[a,b,c],stops:[{offset:0..1,color:"#RRGGBB",opacity:0..1},...],spread:"pad"|"reflect"|"repeat",interpolation:"sRGB"|"linearRGB"}，2–32个按位置排序的停靠点；归一化坐标u=(x-node.x)/(node.width||node.height)、v=(y-node.y)/(node.height||node.width)，颜色位置t=a*u+b*v+c。省略保留原渐变；显式null改回单色。渐变覆盖同通道单色。暂不用于容器、文字、图标、接口，不将渐变系列伪装为单色共享图例。保留导入渐变映射，除非用户要求调整。
 kind=text 可用 textRuns=[{text,family?,color?,bold?,italic?,script?:normal/super/sub}] 表示混合字体、局部代码着色和上下标，片段拼接须完全等于 label；不含变换，可保留为原生 SVG 文字。

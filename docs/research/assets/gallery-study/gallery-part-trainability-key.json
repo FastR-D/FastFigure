@@ -1,0 +1,111 @@
+{
+  "version": "0.2",
+  "title": "冻结与可训练标记",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 170
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "status-0",
+      "kind": "rectangle",
+      "label": "Frozen",
+      "parentId": "stage",
+      "x": 24,
+      "y": 24,
+      "width": 252,
+      "height": 50,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      },
+      "iconId": "paper:lock"
+    },
+    {
+      "id": "status-1",
+      "kind": "rectangle",
+      "label": "Trainable",
+      "parentId": "stage",
+      "x": 24,
+      "y": 90,
+      "width": 252,
+      "height": 50,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      },
+      "iconId": "paper:fire"
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "冻结与可训练标记",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 300,
+      "height": 170,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "TopConf · icml2026-0316",
+        "reference": "https://openreview.net/forum?id=pLvye0zHUC · 图片 https://raw.githubusercontent.com/qwdwqfwq/topconf-paper-figure-gallery/77a7d84570a6a9f3e63c22bb31b9fb59757e3dab/images/icml/final/icml2026-0316.jpg · SHA-256 f19c42a517c9a99697f3e68942d750bb036915f3ff526a13843e8122cfddf2d3 · 仅抽象构图关系，论文原图权利归原作者。"
+      }
+    }
+  ],
+  "references": []
+}

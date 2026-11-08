@@ -1,0 +1,818 @@
+{
+  "version": "0.2",
+  "title": "图像对照 · 通道与局部对应",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "plate-heading",
+      "kind": "text",
+      "label": "a  Matched conditions and channels",
+      "parentId": "plate",
+      "x": 36,
+      "y": 104,
+      "width": 564,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-2",
+      "kind": "text",
+      "label": "Input",
+      "parentId": "matched-plate",
+      "x": 159.4,
+      "y": 180.2,
+      "width": 129.60000000000002,
+      "height": 35.1,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20.25,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.7550000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-3",
+      "kind": "text",
+      "label": "Output",
+      "parentId": "matched-plate",
+      "x": 299.8,
+      "y": 180.2,
+      "width": 129.60000000000002,
+      "height": 35.1,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20.25,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.7550000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-4",
+      "kind": "text",
+      "label": "Detail",
+      "parentId": "matched-plate",
+      "x": 440.20000000000005,
+      "y": 180.2,
+      "width": 129.60000000000002,
+      "height": 35.1,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20.25,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.7550000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-5",
+      "kind": "text",
+      "label": "Group A",
+      "parentId": "matched-plate",
+      "x": 51.4,
+      "y": 250.4,
+      "width": 102.60000000000001,
+      "height": 75.60000000000001,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17.55,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.7550000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-6",
+      "kind": "rectangle",
+      "label": "Image",
+      "parentId": "matched-plate",
+      "x": 159.4,
+      "y": 236.9,
+      "width": 129.60000000000002,
+      "height": 86.4,
+      "textStyle": {
+        "size": 17.55,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 2.7,
+        "strokeWidth": 1.35,
+        "padding": 5.4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5.4,
+          4.050000000000001
+        ]
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-7",
+      "kind": "rectangle",
+      "label": "Image",
+      "parentId": "matched-plate",
+      "x": 299.8,
+      "y": 236.9,
+      "width": 129.60000000000002,
+      "height": 86.4,
+      "textStyle": {
+        "size": 17.55,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 2.7,
+        "strokeWidth": 1.35,
+        "padding": 5.4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5.4,
+          4.050000000000001
+        ]
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-8",
+      "kind": "rectangle",
+      "label": "Image",
+      "parentId": "matched-plate",
+      "x": 440.20000000000005,
+      "y": 236.9,
+      "width": 129.60000000000002,
+      "height": 86.4,
+      "textStyle": {
+        "size": 17.55,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 2.7,
+        "strokeWidth": 1.35,
+        "padding": 5.4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5.4,
+          4.050000000000001
+        ]
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-9",
+      "kind": "text",
+      "label": "Group B",
+      "parentId": "matched-plate",
+      "x": 51.4,
+      "y": 355.70000000000005,
+      "width": 102.60000000000001,
+      "height": 75.60000000000001,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17.55,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.7550000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-10",
+      "kind": "rectangle",
+      "label": "Image",
+      "parentId": "matched-plate",
+      "x": 159.4,
+      "y": 342.20000000000005,
+      "width": 129.60000000000002,
+      "height": 86.4,
+      "textStyle": {
+        "size": 17.55,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 2.7,
+        "strokeWidth": 1.35,
+        "padding": 5.4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5.4,
+          4.050000000000001
+        ]
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-11",
+      "kind": "rectangle",
+      "label": "Image",
+      "parentId": "matched-plate",
+      "x": 299.8,
+      "y": 342.20000000000005,
+      "width": 129.60000000000002,
+      "height": 86.4,
+      "textStyle": {
+        "size": 17.55,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 2.7,
+        "strokeWidth": 1.35,
+        "padding": 5.4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5.4,
+          4.050000000000001
+        ]
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-12",
+      "kind": "rectangle",
+      "label": "Image",
+      "parentId": "matched-plate",
+      "x": 440.20000000000005,
+      "y": 342.20000000000005,
+      "width": 129.60000000000002,
+      "height": 86.4,
+      "textStyle": {
+        "size": 17.55,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 2.7,
+        "strokeWidth": 1.35,
+        "padding": 5.4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5.4,
+          4.050000000000001
+        ]
+      }
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate-object-13",
+      "kind": "text",
+      "label": "Matched samples · replace every image",
+      "parentId": "matched-plate",
+      "x": 62.2,
+      "y": 439.40000000000003,
+      "width": 507.6,
+      "height": 29.700000000000003,
+      "textRole": "body",
+      "textStyle": {
+        "size": 16.200000000000003,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.7550000000000001,
+        "padding": 0
+      }
+    },
+    {
+      "id": "detail-heading",
+      "kind": "text",
+      "label": "b  Region correspondence",
+      "parentId": "detail",
+      "x": 648,
+      "y": 104,
+      "width": 316,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop-object-2",
+      "kind": "rectangle",
+      "label": "",
+      "parentId": "paired-crop",
+      "x": 662.36,
+      "y": 176.9,
+      "width": 127.72,
+      "height": 107.12,
+      "textStyle": {
+        "size": 16.48,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 9.27,
+        "strokeWidth": 1.03,
+        "padding": 4.12,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop-object-3",
+      "kind": "text",
+      "label": "Source image",
+      "parentId": "paired-crop",
+      "x": 666.48,
+      "y": 181.02,
+      "width": 119.48,
+      "height": 26.78,
+      "textRole": "body",
+      "textStyle": {
+        "size": 14.42,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.3390000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop-object-4",
+      "kind": "rectangle",
+      "label": "Detail crop",
+      "parentId": "paired-crop",
+      "x": 845.7,
+      "y": 176.9,
+      "width": 100.94,
+      "height": 107.12,
+      "textStyle": {
+        "size": 16.48,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 9.27,
+        "strokeWidth": 1.03,
+        "padding": 4.12,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop-object-5",
+      "kind": "rectangle",
+      "label": "ROI",
+      "parentId": "paired-crop",
+      "x": 730.34,
+      "y": 222.22,
+      "width": 47.38,
+      "height": 43.26,
+      "textStyle": {
+        "size": 12.36,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 0,
+        "strokeWidth": 1.03,
+        "padding": 4.12,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          4.12,
+          3.09
+        ]
+      }
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop-object-6",
+      "kind": "path",
+      "label": "",
+      "parentId": "paired-crop",
+      "x": 777.72,
+      "y": 176.9,
+      "width": 67.98,
+      "height": 45.32,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 1
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "none"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.545,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          5.15,
+          4.12
+        ]
+      }
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop-object-7",
+      "kind": "path",
+      "label": "",
+      "parentId": "paired-crop",
+      "x": 777.72,
+      "y": 265.48,
+      "width": 67.98,
+      "height": 18.54,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 1
+          }
+        ],
+        "arrow": "none"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.545,
+        "handDrawn": false,
+        "lineJoin": "round",
+        "dash": [
+          5.15,
+          4.12
+        ]
+      }
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop-object-8",
+      "kind": "text",
+      "label": "Use a real crop; no implied scale",
+      "parentId": "paired-crop",
+      "x": 662.36,
+      "y": 292.26,
+      "width": 284.28000000000003,
+      "height": 22.66,
+      "textRole": "body",
+      "textStyle": {
+        "size": 12.36,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.3390000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "id": "quantify-heading",
+      "kind": "text",
+      "label": "c  Quantification",
+      "parentId": "quantify",
+      "x": 648,
+      "y": 368,
+      "width": 316,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "quantification-slot",
+      "kind": "rectangle",
+      "label": "Insert observed measurements",
+      "parentId": "quantify",
+      "x": 654,
+      "y": 408,
+      "width": 304,
+      "height": 58,
+      "textStyle": {
+        "size": 14,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          5,
+          4
+        ]
+      }
+    },
+    {
+      "id": "quantification-caption",
+      "kind": "text",
+      "label": "Units · samples · source",
+      "parentId": "quantify",
+      "x": 654,
+      "y": 476,
+      "width": 304,
+      "height": 24,
+      "textRole": "body",
+      "textStyle": {
+        "size": 13,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "图像对照 · 通道与局部对应",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "FigureForge · fig2-spatial-imaging-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig2-spatial-imaging-rich.png · SHA-256 90081b3f778b9ede2dba41c60b6abf0c28a239060c69428344539529cd7f3257 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    },
+    {
+      "id": "plate",
+      "parentId": "stage",
+      "title": "a  Matched conditions and channels",
+      "role": "component",
+      "x": 24,
+      "y": 96,
+      "width": 588,
+      "height": 422,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "metricScale": 1.35,
+      "id": "matched-plate",
+      "parentId": "plate",
+      "title": "共享行列标签的图像槽",
+      "role": "component",
+      "x": 46,
+      "y": 164,
+      "width": 540,
+      "height": 310.5,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 18.900000000000002,
+        "strokeWidth": 1.62,
+        "padding": 0
+      },
+      "titleDetached": true,
+      "textStyle": {
+        "size": 27
+      },
+      "component": {
+        "assetId": "gallery-part-shared-label-grid",
+        "name": "共享行列标签的图像槽",
+        "revision": "2026-11-07T00:00:00.000Z",
+        "sources": [
+          {
+            "title": "FigureForge · fig2-spatial-imaging-rich",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig2-spatial-imaging-rich.png · SHA-256 90081b3f778b9ede2dba41c60b6abf0c28a239060c69428344539529cd7f3257 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          }
+        ],
+        "lineage": []
+      },
+      "evidence": {
+        "title": "FigureForge · fig2-spatial-imaging-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig2-spatial-imaging-rich.png · SHA-256 90081b3f778b9ede2dba41c60b6abf0c28a239060c69428344539529cd7f3257 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    },
+    {
+      "id": "detail",
+      "parentId": "stage",
+      "title": "b  Region correspondence",
+      "role": "component",
+      "x": 636,
+      "y": 96,
+      "width": 340,
+      "height": 240,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "metricScale": 1.03,
+      "id": "paired-crop",
+      "parentId": "detail",
+      "title": "原图与局部对应框",
+      "role": "component",
+      "x": 650,
+      "y": 146,
+      "width": 309,
+      "height": 175.1,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 14.42,
+        "strokeWidth": 1.236,
+        "padding": 0
+      },
+      "titleDetached": true,
+      "textStyle": {
+        "size": 20.6
+      },
+      "component": {
+        "assetId": "gallery-part-crop-correspondence",
+        "name": "原图与局部对应框",
+        "revision": "2026-11-07T00:00:00.000Z",
+        "sources": [
+          {
+            "title": "FigureForge · fig2-spatial-imaging-rich",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig2-spatial-imaging-rich.png · SHA-256 90081b3f778b9ede2dba41c60b6abf0c28a239060c69428344539529cd7f3257 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          },
+          {
+            "title": "FigureForge · atlas-09-image-plates",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/chart-atlas/atlas-09-image-plates.png · SHA-256 bbc8c0b8708d42465e57cb7c56b4d2ecfbaa63340a5a6dfefbcb51189cd1a995 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          }
+        ],
+        "lineage": []
+      },
+      "evidence": {
+        "title": "FigureForge · fig2-spatial-imaging-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig2-spatial-imaging-rich.png · SHA-256 90081b3f778b9ede2dba41c60b6abf0c28a239060c69428344539529cd7f3257 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    },
+    {
+      "id": "quantify",
+      "parentId": "stage",
+      "title": "c  Quantification",
+      "role": "component",
+      "x": 636,
+      "y": 360,
+      "width": 340,
+      "height": 158,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    }
+  ],
+  "references": []
+}

@@ -1,0 +1,778 @@
+{
+  "version": "0.2",
+  "title": "机制证据 · 总览与验证面板",
+  "canvas": {
+    "width": 1000,
+    "height": 620,
+    "frame": {
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580
+    }
+  },
+  "style": {
+    "designSystem": "paper",
+    "paperTheme": {
+      "variant": "soft",
+      "radius": 10,
+      "padding": 10,
+      "strokeWidth": 1.2,
+      "containerRadius": 14,
+      "containerHeadingSize": 20,
+      "headingSize": 18,
+      "bodySize": 16,
+      "captionSize": 12,
+      "titleFill": "#e7efd9",
+      "ink": "#282b29",
+      "outline": "precise",
+      "titleStyle": "inline"
+    },
+    "fontFamily": "MiSans",
+    "preset": "precise",
+    "roughness": 0,
+    "seed": 38191,
+    "accent": "blue",
+    "paletteId": "paper-reference"
+  },
+  "nodes": [
+    {
+      "id": "mechanism-heading",
+      "kind": "text",
+      "label": "a  Mechanism overview",
+      "parentId": "mechanism",
+      "x": 36,
+      "y": 104,
+      "width": 928,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "id": "mechanism-0",
+      "kind": "rectangle",
+      "label": "Input",
+      "parentId": "mechanism",
+      "x": 64,
+      "y": 174,
+      "width": 244,
+      "height": 64,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 0,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mechanism-1",
+      "kind": "rectangle",
+      "label": "Core mechanism",
+      "parentId": "mechanism",
+      "x": 378,
+      "y": 174,
+      "width": 244,
+      "height": 64,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 1,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mechanism-2",
+      "kind": "rectangle",
+      "label": "Output",
+      "parentId": "mechanism",
+      "x": 692,
+      "y": 174,
+      "width": 244,
+      "height": 64,
+      "textStyle": {
+        "size": 16,
+        "align": "center"
+      },
+      "visual": {
+        "stroke": "#81908f",
+        "colorIndex": 2,
+        "radius": 9,
+        "strokeWidth": 1,
+        "padding": 4,
+        "tone": "fill",
+        "handDrawn": false
+      }
+    },
+    {
+      "id": "mechanism-link-0",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 308,
+      "y": 206,
+      "width": 70,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mechanism-0",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "mechanism-1",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "mechanism-link-1",
+      "kind": "path",
+      "label": "",
+      "parentId": "stage",
+      "x": 622,
+      "y": 206,
+      "width": 70,
+      "height": 0,
+      "path": {
+        "points": [
+          {
+            "x": 0,
+            "y": 0
+          },
+          {
+            "x": 1,
+            "y": 0
+          }
+        ],
+        "arrow": "filled",
+        "start": {
+          "nodeId": "mechanism-1",
+          "x": 1,
+          "y": 0.5
+        },
+        "end": {
+          "nodeId": "mechanism-2",
+          "x": 0,
+          "y": 0.5
+        }
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#526463",
+        "colorIndex": 0,
+        "strokeWidth": 1.5,
+        "handDrawn": false,
+        "lineJoin": "round"
+      }
+    },
+    {
+      "id": "evidence-0-heading",
+      "kind": "text",
+      "label": "b  Observation",
+      "parentId": "evidence-0",
+      "x": 36,
+      "y": 320,
+      "width": 280,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-0-object-2",
+      "kind": "text",
+      "label": "",
+      "parentId": "evidence-slot-0",
+      "x": 51.8,
+      "y": 357.6,
+      "width": 21.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17.1,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-0-object-3",
+      "kind": "text",
+      "label": "",
+      "parentId": "evidence-slot-0",
+      "x": 80.6,
+      "y": 357.6,
+      "width": 219.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 15.3,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-0-object-4",
+      "kind": "rectangle",
+      "label": "Insert observed data",
+      "parentId": "evidence-slot-0",
+      "x": 57.2,
+      "y": 393.6,
+      "width": 237.6,
+      "height": 70.2,
+      "textStyle": {
+        "size": 14.4,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 8.1,
+        "strokeWidth": 0.9,
+        "padding": 3.6,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          4.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-0-object-5",
+      "kind": "text",
+      "label": "Metric · units · source",
+      "parentId": "evidence-slot-0",
+      "x": 57.2,
+      "y": 474.6,
+      "width": 237.6,
+      "height": 21.6,
+      "textRole": "body",
+      "textStyle": {
+        "size": 11.700000000000001,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "id": "evidence-1-heading",
+      "kind": "text",
+      "label": "c  Quantification",
+      "parentId": "evidence-1",
+      "x": 360,
+      "y": 320,
+      "width": 280,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-1-object-2",
+      "kind": "text",
+      "label": "",
+      "parentId": "evidence-slot-1",
+      "x": 375.8,
+      "y": 357.6,
+      "width": 21.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17.1,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-1-object-3",
+      "kind": "text",
+      "label": "",
+      "parentId": "evidence-slot-1",
+      "x": 404.6,
+      "y": 357.6,
+      "width": 219.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 15.3,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-1-object-4",
+      "kind": "rectangle",
+      "label": "Insert observed data",
+      "parentId": "evidence-slot-1",
+      "x": 381.2,
+      "y": 393.6,
+      "width": 237.6,
+      "height": 70.2,
+      "textStyle": {
+        "size": 14.4,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 8.1,
+        "strokeWidth": 0.9,
+        "padding": 3.6,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          4.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-1-object-5",
+      "kind": "text",
+      "label": "Metric · units · source",
+      "parentId": "evidence-slot-1",
+      "x": 381.2,
+      "y": 474.6,
+      "width": 237.6,
+      "height": 21.6,
+      "textRole": "body",
+      "textStyle": {
+        "size": 11.700000000000001,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "id": "evidence-2-heading",
+      "kind": "text",
+      "label": "d  Robustness",
+      "parentId": "evidence-2",
+      "x": 684,
+      "y": 320,
+      "width": 280,
+      "height": 28,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 20,
+        "bold": true,
+        "align": "left"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-2-object-2",
+      "kind": "text",
+      "label": "",
+      "parentId": "evidence-slot-2",
+      "x": 699.8,
+      "y": 357.6,
+      "width": 21.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 17.1,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-2-object-3",
+      "kind": "text",
+      "label": "",
+      "parentId": "evidence-slot-2",
+      "x": 728.6,
+      "y": 357.6,
+      "width": 219.6,
+      "height": 25.2,
+      "textRole": "heading",
+      "textStyle": {
+        "size": 15.3,
+        "bold": true,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-2-object-4",
+      "kind": "rectangle",
+      "label": "Insert observed data",
+      "parentId": "evidence-slot-2",
+      "x": 705.2,
+      "y": 393.6,
+      "width": 237.6,
+      "height": 70.2,
+      "textStyle": {
+        "size": 14.4,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "#81908f",
+        "colorIndex": 4,
+        "radius": 8.1,
+        "strokeWidth": 0.9,
+        "padding": 3.6,
+        "tone": "fill",
+        "handDrawn": false,
+        "dash": [
+          4.5,
+          3.6
+        ]
+      }
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-2-object-5",
+      "kind": "text",
+      "label": "Metric · units · source",
+      "parentId": "evidence-slot-2",
+      "x": 705.2,
+      "y": 474.6,
+      "width": 237.6,
+      "height": 21.6,
+      "textRole": "body",
+      "textStyle": {
+        "size": 11.700000000000001,
+        "bold": false,
+        "align": "center"
+      },
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "strokeWidth": 1.1700000000000002,
+        "padding": 0
+      }
+    }
+  ],
+  "edges": [],
+  "containers": [
+    {
+      "id": "stage",
+      "parentId": null,
+      "title": "机制证据 · 总览与验证面板",
+      "role": "component",
+      "x": 0,
+      "y": 0,
+      "width": 1000,
+      "height": 580,
+      "visual": {
+        "fill": "none",
+        "stroke": "none"
+      },
+      "titleDetached": true,
+      "evidence": {
+        "title": "FigureForge · fig1-material-mechanism-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    },
+    {
+      "id": "mechanism",
+      "parentId": "stage",
+      "title": "a  Mechanism overview",
+      "role": "component",
+      "x": 24,
+      "y": 96,
+      "width": 952,
+      "height": 190,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "id": "evidence-0",
+      "parentId": "stage",
+      "title": "b  Observation",
+      "role": "component",
+      "x": 24,
+      "y": 312,
+      "width": 304,
+      "height": 206,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-0",
+      "parentId": "evidence-0",
+      "title": "带角色的证据槽",
+      "role": "component",
+      "x": 41,
+      "y": 354,
+      "width": 270,
+      "height": 153,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 12.6,
+        "strokeWidth": 1.08,
+        "padding": 0
+      },
+      "titleDetached": true,
+      "textStyle": {
+        "size": 18
+      },
+      "component": {
+        "assetId": "gallery-part-evidence-slot",
+        "name": "带角色的证据槽",
+        "revision": "2026-11-07T00:00:00.000Z",
+        "sources": [
+          {
+            "title": "FigureForge · fig1-material-mechanism-rich",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          }
+        ],
+        "lineage": []
+      },
+      "evidence": {
+        "title": "FigureForge · fig1-material-mechanism-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    },
+    {
+      "id": "evidence-1",
+      "parentId": "stage",
+      "title": "c  Quantification",
+      "role": "component",
+      "x": 348,
+      "y": 312,
+      "width": 304,
+      "height": 206,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-1",
+      "parentId": "evidence-1",
+      "title": "带角色的证据槽",
+      "role": "component",
+      "x": 365,
+      "y": 354,
+      "width": 270,
+      "height": 153,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 12.6,
+        "strokeWidth": 1.08,
+        "padding": 0
+      },
+      "titleDetached": true,
+      "textStyle": {
+        "size": 18
+      },
+      "component": {
+        "assetId": "gallery-part-evidence-slot",
+        "name": "带角色的证据槽",
+        "revision": "2026-11-07T00:00:00.000Z",
+        "sources": [
+          {
+            "title": "FigureForge · fig1-material-mechanism-rich",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          }
+        ],
+        "lineage": []
+      },
+      "evidence": {
+        "title": "FigureForge · fig1-material-mechanism-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    },
+    {
+      "id": "evidence-2",
+      "parentId": "stage",
+      "title": "d  Robustness",
+      "role": "component",
+      "x": 672,
+      "y": 312,
+      "width": 304,
+      "height": 206,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 0,
+        "strokeWidth": 1,
+        "handDrawn": false
+      },
+      "titleDetached": true
+    },
+    {
+      "metricScale": 0.9,
+      "id": "evidence-slot-2",
+      "parentId": "evidence-2",
+      "title": "带角色的证据槽",
+      "role": "component",
+      "x": 689,
+      "y": 354,
+      "width": 270,
+      "height": 153,
+      "visual": {
+        "fill": "none",
+        "stroke": "none",
+        "radius": 12.6,
+        "strokeWidth": 1.08,
+        "padding": 0
+      },
+      "titleDetached": true,
+      "textStyle": {
+        "size": 18
+      },
+      "component": {
+        "assetId": "gallery-part-evidence-slot",
+        "name": "带角色的证据槽",
+        "revision": "2026-11-07T00:00:00.000Z",
+        "sources": [
+          {
+            "title": "FigureForge · fig1-material-mechanism-rich",
+            "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+          }
+        ],
+        "lineage": []
+      },
+      "evidence": {
+        "title": "FigureForge · fig1-material-mechanism-rich",
+        "reference": "https://raw.githubusercontent.com/jing1312/nature-figure-skill/af778027c866e2e6b3432b946e44a4a2b4434d82/skills/nature-figure/assets/gallery/fig1-material-mechanism-rich.png · SHA-256 2e0706fae3256e1de2388f8605f35b9b6ac23cfc397161a952f34cc5fa2f2192 · 仅参考面板组织；示例数据不复用。MIT 代码许可不替代图片权利。"
+      }
+    }
+  ],
+  "references": []
+}

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,onBeforeUnmount,ref} from 'vue'
-import {Box,Button,Header,Heading,Image,Modal,ModalBody,Text} from '../ui'
+import { ErrorMessage,Box,Button,Header,Heading,Image,Modal,ModalBody,Text} from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import type {CataloguePreviewInfo} from '../../core/cataloguePreviewContract'
 const props=defineProps<{info:CataloguePreviewInfo;runId:string;available:boolean;selectionPage?:number}>(),open=ref(false),zoom=ref(false),loading=ref(false),source=ref(''),error=ref('');let request:AbortController|undefined
@@ -20,5 +20,5 @@ onBeforeUnmount(close)
 </script>
 <template>
   <Box class="catalogue-input-summary"><Text>{{ selectionPage?`筛选图谱 · 第 ${selectionPage} 页`:'本轮组件图谱' }} · {{ info.tiles.length }} 项 · 第 {{ selectionPage?selectionPage+1:2 }} 张输入</Text><Text class="muted-caption">实际默认 / 保存外观；参数变化后的结果须另行核对。</Text><Text v-for="tile in info.tiles" :key="tile.key" class="muted-caption">{{ tile.index }}. {{ tile.name }} · {{ tile.key }}</Text><Button size="xs" :disabled="!available" @click="inspect">{{ selectionPage?`查看筛选图谱第 ${selectionPage} 页`:'查看本轮组件图谱' }}</Button><Text class="reference-fingerprint">图谱 SHA-256：{{ info.sha256 }}</Text></Box>
-  <Modal :open="open" label="本轮组件图谱" @close="close"><Header><Heading>{{ imageTitle }}</Heading><IconButton icon="close" label="关闭组件图谱" @click="close" /></Header><ModalBody><Text v-if="loading">正在读取本轮图片…</Text><Text v-if="error" role="alert">{{ error }}</Text><Button v-if="source" size="xs" :aria-pressed="zoom" @click="zoom=!zoom">{{ zoom?'适合窗口':'原始像素' }}</Button><Box class="catalogue-input-scroll"><Image v-if="source" :src="source" :alt="imageTitle" class="catalogue-input-image" :class="{'is-actual':zoom}" /></Box><Text class="muted-caption">{{ info.width }} × {{ info.height }} · {{ info.renderer }} · 素材快照 {{ info.snapshotSha256 }}</Text></ModalBody></Modal>
+  <Modal :open="open" label="本轮组件图谱" @close="close"><Header><Heading>{{ imageTitle }}</Heading><IconButton icon="close" label="关闭组件图谱" @click="close" /></Header><ModalBody><Text v-if="loading">正在读取本轮图片…</Text><ErrorMessage v-if="error" :message="error" /><Button v-if="source" size="xs" :aria-pressed="zoom" @click="zoom=!zoom">{{ zoom?'适合窗口':'原始像素' }}</Button><Box class="catalogue-input-scroll"><Image v-if="source" :src="source" :alt="imageTitle" class="catalogue-input-image" :class="{'is-actual':zoom}" /></Box><Text class="muted-caption">{{ info.width }} × {{ info.height }} · {{ info.renderer }} · 素材快照 {{ info.snapshotSha256 }}</Text></ModalBody></Modal>
 </template>

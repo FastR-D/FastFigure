@@ -53,7 +53,7 @@ async function choose(event:Event){
   const token=++generation;busy.value=true;error.value='';result.value=null;inventory.value=null;file.value=null
   try{
     const read=await readComponentImportFile(selected);if(token!==generation)return
-    if(read.format==='json')throw new Error('组件 JSON 请使用批量导入；此处选择 SVG 或 draw.io 文件')
+    if(read.format==='json')throw new Error('此处仅支持 SVG 或 draw.io 文件')
     file.value=read;name.value=selected.name.replace(/(?:\.drawio)?\.(svg|drawio|xml)$/i,'').slice(0,100);group.value='all';page.value=read.drawing?.pages.length===1?read.drawing.pages[0]!.key:''
     await parse()
   }catch(e){if(token===generation){error.value=e instanceof Error?e.message:'矢量文件读取失败';busy.value=false}}
@@ -62,12 +62,6 @@ watch([group,keepGroups,preferMetadata],()=>{void parse()})
 watch(page,()=>{inventory.value=null;group.value='all';void parse()})
 function close(){generation++;editor.vectorImportOpen.value=false}
 function insert(newCanvas=false){if(asset.value&&editor.insertComponent(asset.value,true,newCanvas))close();else error.value=editor.notice.value}
-function save(){try{if(!asset.value)return;editor.library.save(asset.value);editor.libraryTab.value='mine';editor.notice.value=`已保存 ${asset.value.name}，助手也可从组件库复用`;close()}catch(e){error.value=e instanceof Error?e.message:'素材保存失败'}}
-async function enqueue(){
-  if(!asset.value||busy.value)return
-  busy.value=true;const token=generation
-  try{const rows=await editor.repository.imports.addVector([asset.value],result.value?.report.warnings??[]);if(token!==generation)return;if(!rows.length)throw new Error(editor.repository.imports.error.value||'当前入库队列不可用');close();editor.activePanel.value='components';editor.libraryTab.value='repository';editor.repository.importOpen.value=true}catch(e){if(token===generation)error.value=(e as Error).message}finally{if(token===generation)busy.value=false}
-}
 onBeforeUnmount(()=>{generation++})
 </script>
 <template>
@@ -95,6 +89,6 @@ onBeforeUnmount(()=>{generation++})
       <Text v-if="error" class="error-text" role="alert">{{ error }}</Text>
       <Text v-if="!file" class="muted-caption">支持常见矢量形状、曲线、文字与分组；draw.io 可读取压缩和多页文件。复杂模板形状、渐变、裁剪、滤镜和外部图片需先展开；解析失败不更改工程。</Text>
     </ModalBody>
-    <Footer><Button @click="close">取消</Button><Button :disabled="!asset||busy" @click="save">存入工作组件</Button><Button :disabled="!asset||busy||editor.repository.imports.locked.value" @click="enqueue">加入入库队列</Button><Button :disabled="!asset||busy" @click="insert(true)">新建图件并插入</Button><Button variant="primary" :disabled="!asset||busy" @click="insert(false)">插入当前容器</Button></Footer>
+    <Footer><Button @click="close">取消</Button><Button :disabled="!asset||busy" @click="insert(true)">新建图件并插入</Button><Button variant="primary" :disabled="!asset||busy" @click="insert(false)">插入当前容器</Button></Footer>
   </Modal>
 </template>
