@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Footer,Header,Heading,Modal,ModalBody,Text} from '../ui'
+import {Box,Button,Footer,Header,Heading,Modal,ModalBody,Text} from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 defineProps<{open:boolean}>();defineEmits<{close:[]}>()
 const sections=[

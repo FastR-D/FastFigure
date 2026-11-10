@@ -12,7 +12,7 @@ interface Run{info:ImageDraftRun;input:ImageDraftInput;fingerprint:string;contro
 export class ImageDraftService{
   private runs=new Map<string,Run>();private requests=new Map<string,{id:string;fingerprint:string}>()
   constructor(private factory:()=>DraftImageAdapter=()=>new CodexImageDraftAdapter({...(process.env.FASTFIGURE_CODEX_COMMAND?{command:process.env.FASTFIGURE_CODEX_COMMAND}:{})})){}
-  async status(){const adapter=this.factory();try{return await adapter.status()}finally{adapter.dispose()}}
+  async status(){const adapter=this.factory();try{return await adapter.status()}finally{await adapter.dispose()}}
   list(){return [...this.runs.values()].map(r=>structuredClone(r.info)).reverse()}
   get(id:string){const run=this.runs.get(id);if(!run)throw new ImageDraftError(404,'草稿记录已过期或不存在');return run}
   start(raw:unknown){
@@ -43,11 +43,11 @@ export class ImageDraftService{
       const finishedAt=new Date().toISOString(),origin=imageDraftOriginSchema.parse({version:1,runId:run.info.id,provider:'codex-imagegen',illustrative:true,title:run.input.title,content:run.input.content,visual:run.input.visual,aspect:run.input.aspect,...(run.input.outputKind?{outputKind:run.input.outputKind}:{}),...(run.input.model?{model:run.input.model}:{}),...(result.imageModel?{imageModel:result.imageModel}:{}),style:run.input.style,...(run.input.composition?{composition:run.input.composition}:{}),submittedPrompt:prompt,...(result.revisedPrompt?{revisedPrompt:result.revisedPrompt.slice(0,24000),revisedPromptTruncated:result.revisedPrompt.length>24000}:{}),createdAt:run.info.createdAt,finishedAt,sha256:sha(result.bytes),...dimensions,referenceInputs:run.info.referenceInputs,inputVerification:result.inputImages===undefined?'unreported':observedReferenceIndices.length===paths.length?'verified':'partial',observedReferenceIndices:observedReferenceIndices.sort(),cliVersion:status.version,timeoutSeconds:run.input.timeoutSeconds})
       run.image={bytes:result.bytes,mime};run.info.origin=origin;run.info.available=true;run.info.status='completed';activity('草稿已生成，请核对后导入为参考图并重绘')
     }catch(e){const reason=run.controller.signal.aborted?run.controller.signal.reason:e;run.info.status=run.controller.signal.aborted?'cancelled':'failed';run.info.error=(reason instanceof Error?reason.message:'图像生成失败').slice(0,1000)}
-    finally{clearTimeout(timer);run.adapter.dispose();run.info.finishedAt=new Date().toISOString();run.input.references=[];if(run.cwd)await rm(run.cwd,{recursive:true,force:true});this.prune()}
+    finally{clearTimeout(timer);await run.adapter.dispose();run.info.finishedAt=new Date().toISOString();run.input.references=[];if(run.cwd)await rm(run.cwd,{recursive:true,force:true});this.prune()}
   }
   cancel(id:string){const run=this.get(id);if(run.info.status==='running')run.controller.abort(new DOMException('已停止生成草稿','AbortError'));return run.info}
   review(id:string,decision:'imported'|'discarded'){const run=this.get(id);if(run.info.status!=='completed'||!run.image)throw new ImageDraftError(409,'草稿图片当前不可用');if(run.info.review!=='pending'&&run.info.review!==decision)throw new ImageDraftError(409,'草稿已经处理，请保留历史记录');run.info.review=decision;return run.info}
   image(id:string){const run=this.get(id);if(!run.image)throw new ImageDraftError(410,'草稿图片已过期，请重新导入已下载的原文件');return run.image}
   private prune(){let count=0,bytes=0;for(const run of [...this.runs.values()].reverse()){if(run.image){count++;bytes+=run.image.bytes.length;if(count>12||bytes>96_000_000){run.image=undefined;run.info.available=false}}}for(const [id,run]of this.runs)if(this.runs.size>20&&run.info.status!=='running')this.runs.delete(id);while(this.requests.size>200)this.requests.delete(this.requests.keys().next().value!)}
-  async dispose(){for(const run of this.runs.values())if(run.info.status==='running')run.controller.abort(new DOMException('本地服务已关闭','AbortError'));await Promise.allSettled([...this.runs.values()].map(run=>run.done));for(const run of this.runs.values())run.adapter.dispose();this.runs.clear()}
+  async dispose(){for(const run of this.runs.values())if(run.info.status==='running')run.controller.abort(new DOMException('本地服务已关闭','AbortError'));await Promise.allSettled([...this.runs.values()].map(run=>run.done));await Promise.all([...this.runs.values()].map(run=>run.adapter.dispose()));this.runs.clear()}
 }

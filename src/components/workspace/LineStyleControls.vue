@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Field,Select,Text,TextField} from '../ui'
+import {Box,Button,Field,Select,Text,TextField} from '@fastrd/ui-vue'
 import type {LineStyleDraft} from './lineStyleDraft'
 const props=defineProps<{modelValue:LineStyleDraft}>(),emit=defineEmits<{'update:modelValue':[value:LineStyleDraft]}>()
 const arrows=[{value:'none',label:'无箭头'},{value:'open',label:'开放箭头'},{value:'filled',label:'实心箭头'}]

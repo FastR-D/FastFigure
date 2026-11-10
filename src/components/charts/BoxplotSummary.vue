@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Box,Disclosure,DisclosureTrigger,Table,TableBody,TableCell,TableHead,TableHeader,TableRow,Text } from '../ui'
+import { Box,Disclosure,DisclosureTrigger,Table,TableBody,TableCell,TableHead,TableHeader,TableRow,Text } from '@fastrd/ui-vue'
 import type { BoxplotReport } from '../../core/boxplotContract'
 defineProps<{report:BoxplotReport}>()
 </script>

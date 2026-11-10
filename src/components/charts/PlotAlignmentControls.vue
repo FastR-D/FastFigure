@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Field,Select,Text,TextField} from '../ui'
+import {Box,Button,Field,Select,Text,TextField} from '@fastrd/ui-vue'
 import type {chartPlotTargets} from '../../core/chartPlotAlignment'
 defineProps<{targets:ReturnType<typeof chartPlotTargets>;selectedIds:string[];columns:number}>()
 const emit=defineEmits<{toggle:[id:string,checked:boolean];move:[id:string,delta:number];columns:[value:number]}>()

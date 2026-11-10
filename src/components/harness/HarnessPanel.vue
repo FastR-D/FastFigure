@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, useTemplateRef, watch } from 'vue'
-import { ErrorMessage, Article, Aside, Box, BrandMark, Button, Disclosure, DisclosureTrigger, Field, Footer, Header, Heading, Icon, Modal,ModalBody,Select, Text, TextArea, TextField } from '../ui'
+import { Article, Aside, Box, Button, Disclosure, DisclosureTrigger, Field, Footer, Header, Heading, Modal,ModalBody,Select, Text, TextArea, TextField } from '@fastrd/ui-vue'
+import { ErrorMessage, BrandMark, Icon } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { useEditor } from '../../composables/useEditor'
 import { createHarness } from '../../composables/useHarness'
@@ -57,7 +58,7 @@ onBeforeUnmount(harness.dispose)
       <Text v-if="harness.omittedTurns.value" class="muted-caption">保留 {{ harness.turns.value.length }} 条消息，另有 {{ harness.omittedTurns.value }} 轮已清理；当前候选优先保留。</Text>
       <HarnessTurn v-for="(turn,index) in harness.turns.value" :key="turn.id" :turn="turn" :number="harness.omittedTurns.value + index + 1" :harness="harness" :provider="provider" @retry="retry" @inspect="inspect" />
       <Article v-if="harness.userContent.value && !harness.runId.value" class="assistant-message assistant-message-user"><Header><Icon name="cursor" /><Text>你</Text></Header><Text>{{ harness.userContent.value }}</Text></Article>
-      <ErrorMessage v-if="harness.error.value" class="error-text" :message="harness.error.value" />
+       <ErrorMessage v-if="harness.error.value && !settingsOpen" class="error-text" :message="harness.error.value" />
       <Text v-if="harness.reviewSync.value" role="status" class="muted-caption">正在保存候选图处理状态…</Text>
       <Box v-if="harness.reviewError.value" class="assistant-sync-error"><ErrorMessage class="error-text" :message="harness.reviewError.value" /><Button size="xs" :disabled="harness.reviewSync.value" @click="harness.syncReview">重试同步处理状态</Button></Box>
     </Box>
@@ -79,6 +80,7 @@ onBeforeUnmount(harness.dispose)
   <Modal :open="settingsOpen&&open" label="助手设置" size="md" class="assistant-settings-dialog" @close="settingsOpen=false">
     <Header><Heading>助手设置</Heading><IconButton icon="close" label="关闭助手设置" @click="settingsOpen=false" /></Header>
     <ModalBody>
+      <ErrorMessage :message="harness.error.value" />
       <Box class="assistant-settings">
       <Box class="assistant-setting-grid"><Field><Text>Harness</Text><Select :value="harness.kind.value" :disabled="harness.locked.value || harness.loading.value" :options="[{value:'codex',label:'Codex'}, {value:'claude',label:'Claude'}]" size="sm" aria-label="Harness 类型" @change="harness.setKind($event as HarnessKind)" /></Field><Field><Text>模型</Text><TextField v-model="harness.model.value" :disabled="harness.locked.value" maxlength="100" aria-label="Harness 模型" placeholder="CLI 默认模型" /></Field></Box>
       <Box class="harness-status"><Icon :name="harness.status.value?.state === 'ready' ? 'check' : 'info'" /><Text>{{ harness.loading.value ? '正在连接…' : harness.status.value?.state === 'ready' ? 'CLI 可用' : 'CLI 不可用' }}</Text><IconButton icon="refresh" label="重新检测 Harness" :disabled="harness.loading.value || harness.locked.value" @click="harness.refresh" /></Box>

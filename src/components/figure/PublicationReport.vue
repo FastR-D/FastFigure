@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Disclosure,DisclosureTrigger,Text} from '../ui'
+import {Box,Button,Disclosure,DisclosureTrigger,Text} from '@fastrd/ui-vue'
 import {textCheckFieldLabel} from '../../core/textCheckContract'
 import type {PublicationReport,PublicationSettings} from '../../core/publicationContract'
 withDefaults(defineProps<{report:PublicationReport;settings:PublicationSettings;expanded?:boolean}>(),{expanded:false})

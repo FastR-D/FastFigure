@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Box, Button, Disclosure, DisclosureTrigger, Select, Text } from '../ui'
+import { Box, Button, Disclosure, DisclosureTrigger, Select, Text } from '@fastrd/ui-vue'
 import FigureRenderer from '../figure/FigureRenderer'
 import TextCheckReport from '../figure/TextCheckReport.vue'
 import {checkFigureText} from '../../core/figureTextCheck'

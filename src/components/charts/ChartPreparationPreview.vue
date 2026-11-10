@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed,ref } from 'vue'
-import { Box,Button,Footer,Header,Heading,Modal,ModalBody,Table,TableBody,TableCell,TableHead,TableHeader,TableRow,Text } from '../ui'
+import { Box,Button,Footer,Header,Heading,Modal,ModalBody,Table,TableBody,TableCell,TableHead,TableHeader,TableRow,Text } from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import type { ChartPreparation } from '../../core/chartDatasetContract'
 import { preparedChartDataset } from '../../core/chartDataset'

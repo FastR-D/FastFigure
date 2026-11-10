@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Box, Button, Heading, Select, Text } from '../ui'
+import { Box, Button, Heading, Select, Text } from '@fastrd/ui-vue'
 import { useEditor } from '../../composables/useEditor'
 import { reconstructionGroup, reconstructionWorkers, sceneForReconstruction } from '../../core/reconstruction'
 import ReferencePreview from '../references/ReferencePreview'

@@ -23,6 +23,9 @@
     "benchmark:retrieval": "node scripts/evaluate-component-retrieval.mjs"
   },
   "dependencies": {
+    "@fastrd/ui-vue": "https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-vue-0.1.0.tgz",
+    "@fastrd/ui-foundation": "https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-foundation-0.1.0.tgz",
+    "@fastrd/harness-transport": "https://github.com/FastR-D/FastHarness/releases/download/v0.1.0/fastrd-harness-transport-0.1.0.tgz",
     "roughjs": "^4.6.6",
     "svgpath": "^2.6.0",
     "vue": "^3.5.44",

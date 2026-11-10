@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {onBeforeUnmount,ref} from 'vue'
-import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Image,Text,TextArea} from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Image,Text,TextArea} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import type {ComponentImageQuery} from '../../core/componentSearch'
 import {selectionEvidenceSchema} from '../../core/repositorySelection'
 const props=defineProps<{query:ComponentImageQuery}>(),image=ref(''),error=ref(''),loading=ref(false),evidence=ref<{prompt:string;response?:string}|null>(null)

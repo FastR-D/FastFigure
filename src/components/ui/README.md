@@ -1,7 +1,5 @@
-# FastFigure UI 基础组件
+# FastFigure 品牌与业务 UI
 
-初始实现直接复制自 `/home/gugumur/FastPPT/packages/components/src`，在当前应用中维护，不建立 workspace 或 monorepo 包依赖。
+通用原语、按钮、输入、原生 Select 和 Modal 直接从 `@fastrd/ui-vue` 导入，颜色模式由 `@fastrd/ui-foundation` 初始化，保留 `fastfigure.color-mode` 存储键。
 
-保留基础布局、按钮、输入、下拉、模态框、焦点管理、图标、颜色令牌及主题能力。FastFigure 调整品牌资源与存储键，并将复制组件的模板元素也改为使用组件原语。业务界面统一从本目录导入，不在业务模板中直接写 HTML。SVG 绘图由 `components/figure` 与 `core/svg.ts` 负责。
-
-`styles.css` 管控基础控件；应用 CSS 仅负责布局和业务组件样式。ESLint 的 `fastfigure/component-only-template` 会检查 Vue 模板。
+本目录只维护品牌素材、绘图应用 Icon、IconButton 组合及接入业务通知的 ErrorMessage。`src/styles/app.css` 将宿主布局变量映射到 FastUI token，`workspace.css` 保留业务布局；不在这里复制公共控件或颜色表。SVG 绘图、图像和导出由 `components/figure` 与 `core` 负责。

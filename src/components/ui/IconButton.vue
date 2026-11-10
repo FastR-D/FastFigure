@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button } from './primitives'
+import { Button } from '@fastrd/ui-vue'
 import Icon from './Icon.vue'
 defineOptions({ inheritAttrs: false })
 defineProps<{ label: string; icon: string; active?: boolean; disabled?: boolean }>()

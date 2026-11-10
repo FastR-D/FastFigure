@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ComponentAsset } from '../../core/assets'
 import { rootContainer } from '../../core/model'
-import { Box } from '../ui'
+import { Box } from '@fastrd/ui-vue'
 import FigureRenderer from '../figure/FigureRenderer'
 defineProps<{ asset: ComponentAsset }>()
 </script>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed,ref } from 'vue'
-import { Header, Box, Text, BrandMark, Button, Icon,Modal,ModalBody,Footer,Heading,Field,TextField } from '../ui'
+import { Header, Box, Text, Button, Modal, ModalBody, Footer, Heading, Field, TextField } from '@fastrd/ui-vue'
+import { BrandMark, Icon } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import WorkspaceHelp from './WorkspaceHelp.vue'
 import { useEditor } from '../../composables/useEditor'

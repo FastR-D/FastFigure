@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Text} from '../ui'
+import {Box,Text} from '@fastrd/ui-vue'
 import type {SharedYAxisReport} from '../../core/sharedYAxisContract'
 import {formatChartValue} from '../../core/chartText'
 defineProps<{reports:SharedYAxisReport[]}>()

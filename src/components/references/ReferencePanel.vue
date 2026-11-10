@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { ErrorMessage, Box, Button, Disclosure, DisclosureTrigger, Field, Heading, Icon, Select, Text, TextArea, TextField } from '../ui'
+import { Box, Button, Disclosure, DisclosureTrigger, Field, Heading, Select, Text, TextArea, TextField } from '@fastrd/ui-vue'
+import { ErrorMessage, Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { findObject } from '../../core/geometry'
 import { readReferenceImage,readImageDraftBundle, resizeReference, wholeImage } from '../../core/references'

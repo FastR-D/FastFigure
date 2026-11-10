@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Box, Button, Text, Field, TextField } from '../ui'
+import { Box, Button, Text, Field, TextField } from '@fastrd/ui-vue'
 import type { Harness } from '../../composables/useHarness'
 import {catalogueAsset} from '../../core/catalogue'
 const props=defineProps<{harness:Harness}>()

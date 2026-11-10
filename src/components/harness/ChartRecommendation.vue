@@ -2,7 +2,7 @@
 import SharedColorbarSummary from '../charts/SharedColorbarSummary.vue'
 import PlotAlignmentSummary from '../charts/PlotAlignmentSummary.vue'
 import { computed } from 'vue'
-import { Box, Disclosure, DisclosureTrigger, Text } from '../ui'
+import { Box, Disclosure, DisclosureTrigger, Text } from '@fastrd/ui-vue'
 import type { ChartRecommendationReport } from '../../core/chartRecommendationContract'
 import ChartRecommendationView from './ChartRecommendationView.vue'
 import SharedLegendSummary from '../charts/SharedLegendSummary.vue'

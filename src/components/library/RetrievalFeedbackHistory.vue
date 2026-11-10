@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,defineAsyncComponent,onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import { ErrorMessage,Box,Button,Footer,Header,Heading,Link,Modal,ModalBody,Select,Text,TextField} from '../ui'
+import { Box,Button,Footer,Header,Heading,Link,Modal,ModalBody,Select,Text,TextField} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import {feedbackPageSchema,feedbackRatingLabels} from '../../core/retrievalFeedback'
 import {feedbackRequest} from '../../composables/retrievalFeedbackApi'

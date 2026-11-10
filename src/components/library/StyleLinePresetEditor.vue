@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,ref,watch} from 'vue'
-import {Box,Button,Field,Select,Text,TextField} from '../ui'
+import {Box,Button,Field,Select,Text,TextField} from '@fastrd/ui-vue'
 import LineStyleControls from '../workspace/LineStyleControls.vue'
 import {createLineStyleDraft,lineStyleFromDraft} from '../workspace/lineStyleDraft'
 import {captureLineStyle,lineStyleTargets} from '../../core/lineAppearance'

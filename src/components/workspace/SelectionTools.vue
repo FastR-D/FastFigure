@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed} from 'vue'
-import { Box, Button, Icon, Select, Text } from '../ui'
+import { Box, Button, Select, Text } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import type { AlignMode } from '../../core/geometry'
 const editor = useEditor()

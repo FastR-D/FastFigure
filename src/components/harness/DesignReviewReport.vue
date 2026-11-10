@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,onBeforeUnmount,ref,useTemplateRef,watch} from 'vue'
-import { ErrorMessage,Box,Button,Heading,Image,Text} from '../ui'
+import { Box,Button,Heading,Image,Text} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import type {Harness} from '../../composables/useHarness'
 import type {HarnessTurn} from '../../core/harness'
 import {designReviewCategories} from '../../core/designReview'

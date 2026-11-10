@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed,onBeforeUnmount,ref,useTemplateRef,watch } from 'vue'
-import { ErrorMessage, Box,Button,Field,Heading,Image,Text,TextField } from '../ui'
+import { Box,Button,Field,Heading,Image,Text,TextField } from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import type { Harness } from '../../composables/useHarness'
 import type { HarnessTurn } from '../../core/harness'
 const props=defineProps<{turn:HarnessTurn;harness:Harness}>(),selected=ref(''),chosen=ref<string[]>([]),mode=ref('candidate'),sourceUrl=ref(''),candidateUrl=ref(''),imageError=ref(''),loading=ref(false),preview=useTemplateRef<HTMLElement>('preview')

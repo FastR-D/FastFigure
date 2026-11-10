@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed,ref,watch } from 'vue'
-import { Box, Text, TextField,Select,Button,Icon } from '../ui'
+import { Box, Text, TextField,Select,Button } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { useEditor } from '../../composables/useEditor'
 const editor = useEditor()

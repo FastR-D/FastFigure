@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Field,Text,TextField} from '../ui'
+import {Box,Button,Field,Text,TextField} from '@fastrd/ui-vue'
 import type {chartYAxisTargets} from '../../core/sharedYAxis'
 import {formatChartValue} from '../../core/chartText'
 defineProps<{targets:ReturnType<typeof chartYAxisTargets>;selectedIds:string[]}>()

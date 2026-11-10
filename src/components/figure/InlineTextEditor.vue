@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount,onMounted,ref, useTemplateRef, watch } from 'vue'
-import { Box, Button, TextArea, Text } from '../ui'
+import { Box, Button, TextArea, Text } from '@fastrd/ui-vue'
 import { useEditor } from '../../composables/useEditor'
 import { findObject } from '../../core/geometry'
 import { fontStack } from '../../data/materials'

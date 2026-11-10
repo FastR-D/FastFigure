@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Text} from '../ui'
+import {Box,Text} from '@fastrd/ui-vue'
 import type {CalloutReflowReport} from '../../core/calloutReflowContract'
 import type {PathBinding} from '../../core/paths'
 defineProps<{reports:CalloutReflowReport[]}>()

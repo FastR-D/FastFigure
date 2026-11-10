@@ -8,6 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@fastrd/harness-transport':
+        specifier: https://github.com/FastR-D/FastHarness/releases/download/v0.1.0/fastrd-harness-transport-0.1.0.tgz
+        version: https://github.com/FastR-D/FastHarness/releases/download/v0.1.0/fastrd-harness-transport-0.1.0.tgz
+      '@fastrd/ui-foundation':
+        specifier: https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-foundation-0.1.0.tgz
+        version: https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-foundation-0.1.0.tgz
+      '@fastrd/ui-vue':
+        specifier: https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-vue-0.1.0.tgz
+        version: https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-vue-0.1.0.tgz(vue@3.5.44(typescript@6.0.2))
       roughjs:
         specifier: ^4.6.6
         version: 4.6.6
@@ -124,6 +133,21 @@ packages:
   '@eslint/plugin-kit@0.7.3':
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@fastrd/harness-transport@https://github.com/FastR-D/FastHarness/releases/download/v0.1.0/fastrd-harness-transport-0.1.0.tgz':
+    resolution: {integrity: sha512-/z1hrN4BlFVPW86RuaCwIMypQ7nMXajgA120Lkim+n2oNdLasAWmBs235gjlVe2ON4dcGb1xBq5xAjLgo6jlwA==, tarball: https://github.com/FastR-D/FastHarness/releases/download/v0.1.0/fastrd-harness-transport-0.1.0.tgz}
+    version: 0.1.0
+    engines: {node: '>=22'}
+
+  '@fastrd/ui-foundation@https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-foundation-0.1.0.tgz':
+    resolution: {integrity: sha512-5O4s9BXXHXWk7GbzPfMYX6HjNi0DKryfWLRPYMZINNb4ew3arjCKbJvxFaSvqcCvhHxmrf8OZDg9GPmfvdnRtw==, tarball: https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-foundation-0.1.0.tgz}
+    version: 0.1.0
+
+  '@fastrd/ui-vue@https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-vue-0.1.0.tgz':
+    resolution: {integrity: sha512-HlZncAErMt0kRgJSHim2EyK1Wr2Ed1Sx4ahkEKnqEeKsJkegJfKGs5Nz0c/087yyOUyfoiBF3ILcSxi8ilXrzw==, tarball: https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-vue-0.1.0.tgz}
+    version: 0.1.0
+    peerDependencies:
+      vue: ^3.5.0
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -1078,6 +1102,15 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@fastrd/harness-transport@https://github.com/FastR-D/FastHarness/releases/download/v0.1.0/fastrd-harness-transport-0.1.0.tgz': {}
+
+  '@fastrd/ui-foundation@https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-foundation-0.1.0.tgz': {}
+
+  '@fastrd/ui-vue@https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-vue-0.1.0.tgz(vue@3.5.44(typescript@6.0.2))':
+    dependencies:
+      '@fastrd/ui-foundation': https://github.com/FastR-D/FastUI/releases/download/v0.1.0/fastrd-ui-foundation-0.1.0.tgz
+      vue: 3.5.44(typescript@6.0.2)
 
   '@humanfs/core@0.19.2':
     dependencies:

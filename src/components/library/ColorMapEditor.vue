@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from 'vue'
-import {Box,Field,Select,Text,TextField} from '../ui'
+import {Box,Field,Select,Text,TextField} from '@fastrd/ui-vue'
 import {defaultPaletteId,paletteById} from '../../data/materials'
 import {colorSlotInventory} from '../../core/colorMapping'
 import {colorSlotKey,sourceSlotColor,type ColorMapping} from '../../core/colorMappingContract'

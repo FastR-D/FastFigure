@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Box, Button, Text } from '../ui'
+import { Box, Button, Text } from '@fastrd/ui-vue'
 import type { Harness } from '../../composables/useHarness'
 const props=defineProps<{harness:Harness}>()
 const plan=computed(()=>props.harness.repairPlan.value)

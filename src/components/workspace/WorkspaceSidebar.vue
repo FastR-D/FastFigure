@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from 'vue'
-import { Box } from '../ui'
+import { Box } from '@fastrd/ui-vue'
 import { useEditor } from '../../composables/useEditor'
 import LibraryPanel from '../library/LibraryPanel.vue'
 import HarnessPanel from '../harness/HarnessPanel.vue'

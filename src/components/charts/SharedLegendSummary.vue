@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Text} from '../ui'
+import {Box,Text} from '@fastrd/ui-vue'
 import type {SharedLegendReport} from '../../core/sharedLegendContract'
 defineProps<{reports:SharedLegendReport[]}>()
 </script>

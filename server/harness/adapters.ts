@@ -12,7 +12,7 @@ export interface HarnessAdapter {
   kind: HarnessKind
   status(): Promise<HarnessStatus>
   send(input: HarnessTurn): Promise<string>
-  dispose(): void
+  dispose(): void | Promise<void>
 }
 export interface AdapterOptions { command?: string; args?: string[]; env?: NodeJS.ProcessEnv }
 async function cliStatus(kind: HarnessKind, options: AdapterOptions): Promise<HarnessStatus> {
@@ -36,14 +36,14 @@ export class CodexAdapter implements HarnessAdapter {
         '-c', 'features.shell_tool=false', '-c', 'features.unified_exec=false', '-c', 'features.multi_agent=false',
         '-c', 'features.apps=false', '-c', 'features.plugins=false', '-c', 'features.hooks=false', '-c', 'web_search="disabled"', '-c', 'mcp_servers={}'], input.cwd, this.options.env)
       this.rpc = rpc
-      const abortInitialization = () => this.dispose()
+      const abortInitialization = () => { void this.dispose().catch(() => undefined) }
       input.signal.addEventListener('abort', abortInitialization, { once: true })
       try {
         await rpc.request('initialize', { clientInfo: { name: 'fastfigure', version: '0.2.0' } }); rpc.notify('initialized')
         const started = record(await rpc.request('thread/start', { cwd: input.cwd, approvalPolicy: 'never', sandbox: 'read-only', ephemeral: true }))
         this.threadId = String(record(started.thread).id ?? '')
         if (!this.threadId) throw new Error('Codex 未返回会话 ID')
-      } catch (e) { this.dispose();input.signal.throwIfAborted(); throw e }
+      } catch (e) { await this.dispose();input.signal.throwIfAborted(); throw e }
       finally { input.signal.removeEventListener('abort', abortInitialization) }
     }
     input.signal.throwIfAborted()
@@ -52,7 +52,7 @@ export class CodexAdapter implements HarnessAdapter {
       let turnId = '', finished = false, finalText = ''
       const deltas = new Map<string, string>(), finals = new Map<string, string>(), early: RpcMessageWithParams[] = []
       const cleanup = () => { rpc.listeners.delete(handle); rpc.exits.delete(fail); input.signal.removeEventListener('abort', abort) }
-      const fail = (error: Error) => { if (finished) return; finished = true; cleanup(); this.dispose(); reject(error) }
+      const fail = (error: Error) => { if (finished) return; finished = true; cleanup(); reject(error) }
       const finish = () => { if (finished) return; finished = true; cleanup(); resolve(finalText || [...finals.values()].at(-1) || [...deltas.values()].at(-1) || '') }
       const abort = () => {
         if (turnId) void rpc.request('turn/interrupt', { threadId: this.threadId, turnId }).catch(() => undefined)
@@ -94,9 +94,16 @@ export class CodexAdapter implements HarnessAdapter {
         if (!turnId) { fail(new Error('Codex 未返回运行 ID')); return }
         for (const event of early) handle(event)
       }, fail)
-    })
+    }).catch(async error => { await this.dispose(); throw error })
   }
-  dispose() { const rpc = this.rpc; this.rpc = undefined; this.threadId = ''; rpc?.dispose() }
+  async dispose(): Promise<void> {
+    const rpc = this.rpc
+    this.threadId = ''
+    if (rpc) {
+      await rpc.dispose()
+      if (this.rpc === rpc) this.rpc = undefined
+    }
+  }
 }
 interface RpcMessageWithParams { method?: string; params: Record<string, unknown> }
 

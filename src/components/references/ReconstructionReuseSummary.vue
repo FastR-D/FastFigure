@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Heading,Text} from '../ui'
+import {Box,Heading,Text} from '@fastrd/ui-vue'
 import type {ReconstructionReuseRecord} from '../../core/reconstructionContract'
 defineProps<{record:ReconstructionReuseRecord}>()
 </script>

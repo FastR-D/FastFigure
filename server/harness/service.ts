@@ -75,7 +75,7 @@ export class HarnessService {
   private plans=new Map<string,PlanJob>()
   private factory: AdapterFactory
   constructor(factory: AdapterFactory = defaultAdapterFactory,private library?:ComponentLibraryStore) { this.factory = factory }
-  async status() { return await Promise.all((['codex', 'claude'] as const).map(async kind => { const adapter = this.factory(kind); try { return await adapter.status() } finally { adapter.dispose() } })) }
+  async status() { return await Promise.all((['codex', 'claude'] as const).map(async kind => { const adapter = this.factory(kind); try { return await adapter.status() } finally { await adapter.dispose() } })) }
   listSessions() { return [...this.sessions.values()].map(s => ({...s.info,...(s.plan?{activePlanId:s.plan}:{})})).reverse() }
   createSession(kind: HarnessKind, title: string): HarnessSession {
     if (this.sessions.size >= 12) throw new HarnessError(409, '最多保留 12 个会话，请先移除不需要的会话')
@@ -115,7 +115,7 @@ export class HarnessService {
     const session = this.sessions.get(id)
     if (!session) throw new HarnessError(404, '会话不存在，服务重启后请新建会话')
     if (session.active||session.plan) throw new HarnessError(409, '请先停止当前运行或分区核对')
-    this.sessions.delete(id); session.adapter.dispose()
+    this.sessions.delete(id); await session.adapter.dispose()
     for (const [runId, run] of this.runs) if (run.sessionId === id) this.runs.delete(runId)
     for(const [planId,plan] of this.plans)if(plan.state.sessionId===id)this.plans.delete(planId)
     if (session.cwd) await rm(session.cwd, { recursive: true, force: true })
@@ -413,7 +413,7 @@ export class HarnessService {
       let emitted=0
       response=await adapter.send({cwd:directory,content:prompt,images:[{path,dataUrl:image.dataUrl}],signal:run.controller.signal,...(input.model?{model:input.model}:{}),emit:(type,text)=>{if(run.controller.signal.aborted)return;emitted+=text.length;if(emitted>20_000){run.controller.abort(new Error('看图检索输出超过 20000 字'));return}if(type==='activity')this.emit(run,'activity',`看图检索：${text}`)}})
       run.controller.signal.throwIfAborted()
-    }finally{adapter.dispose()}
+    }finally{await adapter.dispose()}
     run.imageQueryEvidence.response=response
     await writeFile(join(directory,'image-query-response.txt'),response,{mode:0o600})
     if(response.length>20_000)throw new Error('看图检索响应超过 20000 字')
@@ -472,7 +472,7 @@ export class HarnessService {
       Object.assign(selection,{status:reason instanceof Error&&reason.name==='AbortError'?'cancelled':'failed',message:(reason instanceof Error?reason.message:'素材筛选失败').slice(0,1500),elapsedMs:Date.now()-started})
       this.updateRepositoryRecall(run,report)
       throw error
-    }finally{adapter.dispose();run.selectionInputs=undefined}
+    }finally{await adapter.dispose();run.selectionInputs=undefined}
   }
   private emit(run: Run, type: HarnessEvent['type'], text?: string, proposal?: HarnessEvent['proposal'], components?: HarnessEvent['components'],auditReport?:VisualAuditReport,chartRecommendation?:ChartRecommendationReport,referenceUse?:ReferenceUse[],compositionRecord?:CompositionRecord,recipeUpdates?:HarnessEvent['recipeUpdates'],sharedYAxes?:HarnessEvent['sharedYAxes'],sharedLegends?:HarnessEvent['sharedLegends'],plotAlignments?:HarnessEvent['plotAlignments'],sharedColorbars?:HarnessEvent['sharedColorbars'],callouts?:HarnessEvent['callouts'],calloutReflows?:HarnessEvent['calloutReflows']) {
     const textCheck=type==='run.completed'&&proposal?checkFigureText(proposal):undefined,designReviewReport=type==='run.completed'?this.summary(run.id).designReviewReport:undefined
@@ -581,12 +581,12 @@ export class HarnessService {
       if(recall?.selection?.status==='pending'){const report=clone(recall);Object.assign(report.selection!,{status:cancelled?'cancelled':'failed',message:(reason instanceof Error?reason.message:'素材筛选未完成').slice(0,1500)});this.updateRepositoryRecall(run,report)}
       run.status = cancelled ? 'cancelled' : 'failed'
       this.emit(run, cancelled ? 'run.cancelled' : 'run.failed', reason instanceof Error ? reason.message.slice(0, 1200) : 'Harness 运行失败')
-    } finally { clearTimeout(flushTimer);auditAdapter?.dispose();run.selectionInputs=undefined;run.feedbackInputs=undefined;run.feedbackInherited=undefined;session.active = undefined }
+    } finally { clearTimeout(flushTimer);await auditAdapter?.dispose();run.selectionInputs=undefined;run.feedbackInputs=undefined;run.feedbackInherited=undefined;session.active = undefined }
   }
   async dispose() {
     for(const p of this.plans.values())if(p.state.status==='running')this.cancelPlan(p.state.id)
     for (const run of this.runs.values()) if (run.status === 'running') this.cancel(run.id)
-    for (const session of this.sessions.values()) session.adapter.dispose()
+    await Promise.all([...this.sessions.values()].map(session => session.adapter.dispose()))
     await Promise.allSettled([...this.runs.values()].flatMap(r => r.done ? [r.done] : []))
     await Promise.allSettled([...this.plans.values()].flatMap(p=>p.done?[p.done]:[]))
     await Promise.allSettled([...this.sessions.values()].flatMap(s => s.cwd ? [rm(s.cwd, { recursive: true, force: true })] : []))

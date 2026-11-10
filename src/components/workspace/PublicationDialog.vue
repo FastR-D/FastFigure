@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {outputFrame,outputFrameSchema} from '../../core/outputFrame'
 import {computed,ref} from 'vue'
-import {Box,Button,Field,Footer,Header,Heading,Link,Modal,ModalBody,Select,Text,TextField} from '../ui'
+import {Box,Button,Field,Footer,Header,Heading,Link,Modal,ModalBody,Select,Text,TextField} from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import FigureRenderer from '../figure/FigureRenderer'
 import PublicationReport from '../figure/PublicationReport.vue'

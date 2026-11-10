@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
-import { ErrorMessage, Article, Box, Button, Footer, Header, Heading, Image, Link, Modal, ModalBody, Select, Text, TextField } from '../ui'
+import { Article, Box, Button, Footer, Header, Heading, Image, Link, Modal, ModalBody, Select, Text, TextField } from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { useEditor } from '../../composables/useEditor'
 import { createPaperGallery, defaultGalleryFilters, importPaperReference, paperCitation, paperImageUrl, paperReferencePrompt, patternNames, searchPaperGallery, topconfUrl, type PaperFigure, type PaperGallery } from '../../core/paperGallery'

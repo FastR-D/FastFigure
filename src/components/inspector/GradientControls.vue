@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,ref} from 'vue'
-import {Box,Button,Field,Select,Text,TextField} from '../ui'
+import {Box,Button,Field,Select,Text,TextField} from '@fastrd/ui-vue'
 import {useEditor} from '../../composables/useEditor'
 import {clone,type FigureNode} from '../../core/model'
 import {defaultGradient,type LinearGradient} from '../../core/gradient'

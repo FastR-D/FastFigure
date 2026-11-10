@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Disclosure,DisclosureTrigger,Text} from '../ui'
+import {Box,Button,Disclosure,DisclosureTrigger,Text} from '@fastrd/ui-vue'
 import {textCheckFieldLabel,textCheckReasonLabels,type TextCheckReport,type TextCheckReason} from '../../core/textCheckContract'
 withDefaults(defineProps<{report:TextCheckReport;expanded?:boolean}>(),{expanded:false})
 const emit=defineEmits<{locate:[nodeId:string]}>()

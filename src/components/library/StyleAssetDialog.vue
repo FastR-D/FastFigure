@@ -2,7 +2,7 @@
 import {paperThemes} from '../../core/figureThemes'
 import {textRoleLabels} from '../../core/paperStyle'
 import {computed,ref} from 'vue'
-import {Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Modal,ModalBody,Select,Text,TextArea,TextField} from '../ui'
+import {Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Modal,ModalBody,Select,Text,TextArea,TextField} from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import {useEditor} from '../../composables/useEditor'
 import {captureStyleAsset,styleFromCompositionDraft,applyStyleAsset,styleAssetSchema,type StyleAsset} from '../../core/styleAsset'

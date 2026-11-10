@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed,ref } from 'vue'
-import { Modal, Header, Heading, Text, ModalBody, Footer, Button, Box, Icon } from '../ui'
+import { Modal, Header, Heading, Text, ModalBody, Footer, Button, Box } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { useEditor } from '../../composables/useEditor'
 import { exportSvg } from '../../core/svg'

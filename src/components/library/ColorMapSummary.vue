@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Text} from '../ui'
+import {Box,Text} from '@fastrd/ui-vue'
 import {paletteById} from '../../data/materials'
 import {sourceSlotColor,colorSlotKey,type ColorMapping} from '../../core/colorMappingContract'
 withDefaults(defineProps<{rows?:ColorMapping[]}>(),{rows:undefined})

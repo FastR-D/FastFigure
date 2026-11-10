@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Disclosure,DisclosureTrigger,Heading,Text} from '../ui'
+import {Box,Button,Disclosure,DisclosureTrigger,Heading,Text} from '@fastrd/ui-vue'
 import {compositionRoles,compositionStructures,compositionConnectionLabels,type CompositionRecord} from '../../core/compositionPlanContract'
 import {paletteById} from '../../data/materials'
 import {containerSurfaceLabels} from '../../core/containerSurface'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Text} from '../ui'
+import {Box,Text} from '@fastrd/ui-vue'
 import type {CalloutReport} from '../../core/calloutContract'
 defineProps<{reports:CalloutReport[]}>()
 const sides={right:'右侧',left:'左侧',top:'上方',bottom:'下方'}

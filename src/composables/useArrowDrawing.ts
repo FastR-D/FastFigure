@@ -32,7 +32,7 @@ export function useArrowDrawing(editor:Editor){
     catch(error){editor.notice.value=(error as Error).message}
   }
   watch(editor.arrowFinishRequest,finish)
-  function key(event:KeyboardEvent){if(!editor.arrowDrawMode.value||(event.target as HTMLElement).closest('input,textarea,[aria-modal="true"]'))return;if(event.key==='Enter'||event.key==='Escape'||event.key==='Backspace'||event.key==='Delete'){event.preventDefault();event.stopImmediatePropagation();if(event.key==='Enter')finish();else if(event.key==='Escape')editor.arrowDrawMode.value=false;else{points.value=points.value.slice(0,-1);cursor.value=null}}}
+  function key(event:KeyboardEvent){if(!editor.arrowDrawMode.value||(event.target as HTMLElement).closest('input,textarea,select,[contenteditable="true"],dialog[open]'))return;if(event.key==='Enter'||event.key==='Escape'||event.key==='Backspace'||event.key==='Delete'){event.preventDefault();event.stopImmediatePropagation();if(event.key==='Enter')finish();else if(event.key==='Escape')editor.arrowDrawMode.value=false;else{points.value=points.value.slice(0,-1);cursor.value=null}}}
   onMounted(()=>window.addEventListener('keydown',key,true));onBeforeUnmount(()=>{stopDrag?.();window.removeEventListener('keydown',key,true)})
   return{points,preview,down,hover,finish}
 }

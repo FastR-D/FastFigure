@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed,onBeforeUnmount,ref } from 'vue'
-import { ErrorMessage, Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text } from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text } from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { referencePurposeLabels,type ReferenceInputInfo,type ReferenceUse } from '../../core/referenceInputs'
 const props=withDefaults(defineProps<{inputs?:ReferenceInputInfo[];uses?:ReferenceUse[];runId?:string;available?:boolean;removable?:boolean}>(),{inputs:()=>[],uses:()=>[],available:true,removable:false,runId:undefined})

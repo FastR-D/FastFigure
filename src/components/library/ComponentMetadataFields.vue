@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Field,Text,TextArea,TextField} from '../ui'
+import {Box,Button,Field,Text,TextArea,TextField} from '@fastrd/ui-vue'
 import type {ComponentMetadataDraft} from '../../core/componentMetadata'
 const props=withDefaults(defineProps<{modelValue:ComponentMetadataDraft;disabled?:boolean;inheritedSources:number}>(),{disabled:false}),emit=defineEmits<{'update:modelValue':[value:ComponentMetadataDraft]}>()
 function field(key:'name'|'description'|'tags',event:Event){emit('update:modelValue',{...props.modelValue,[key]:(event.target as HTMLInputElement).value})}

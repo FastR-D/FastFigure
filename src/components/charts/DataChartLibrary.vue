@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Box,Button,Text } from '../ui'
+import { Box,Button,Text } from '@fastrd/ui-vue'
 import { useEditor } from '../../composables/useEditor'
 import { chartExample } from '../../core/dataChartTable'
 import { buildDataChart } from '../../core/dataChart'

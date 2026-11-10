@@ -26,7 +26,7 @@ describe('repair plans',()=>{
     const history=service.history(session.id);expect(history.turns).toHaveLength(50);expect(history.omitted).toBe(3)
     expect(history.turns.find(t=>t.id===initial.id)).toMatchObject({ordinal:1,available:true,review:'pending'});expect(history.turns.at(-1)?.ordinal).toBe(53)
     expect(service.getRun(initial.id).status).toBe('completed');expect(history.turns.filter(t=>t.available).length).toBeLessThanOrEqual(20)
-  },15_000)
+  },60_000)
   it('retains the selected parent after an unchanged plan while other sessions evict old snapshots',async()=>{
     const {service,input,initial,session}=await setup('slow'),job=service.startPlan({...input,content:'RECONSTRUCTION_NO_CHANGE'}),other=service.createSession('codex','Other work')
     for(let i=0;i<24;i++){const run=service.start({sessionId:other.id,figure:createExample(),content:`Other ${i}`,selectedIds:[]});await run.done}

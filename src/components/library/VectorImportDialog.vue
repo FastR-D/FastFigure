@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
-import { Box, Button, Field, Footer, Header, Heading, Modal, ModalBody, Select, Text, TextField } from '../ui'
+import { Box, Button, Field, Footer, Header, Heading, Modal, ModalBody, Select, Text, TextField } from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import AssetPreview from './AssetPreview.vue'
 import { useEditor } from '../../composables/useEditor'

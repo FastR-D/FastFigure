@@ -10,13 +10,17 @@ import { checkData } from './data.mjs';
 import { checkAssistant } from './assistant.mjs';
 import { checkReconstruction } from './reconstruction.mjs';
 import { checkNotifications } from './notifications.mjs';
+import { checkFastUi } from './fastui.mjs';
 // One supported desktop viewport. A private fixture service never uses the user's CLI/session.
-process.env.FASTFIGURE_CODEX_COMMAND = join(process.cwd(), 'server/harness/fixtures/cli.mjs');
+process.env.FASTFIGURE_CODEX_COMMAND = process.env.FASTFIGURE_UI_CLI_FIXTURE ?? join(process.cwd(), 'server/harness/fixtures/cli.mjs');
 process.env.FASTFIGURE_CLAUDE_COMMAND = process.env.FASTFIGURE_CODEX_COMMAND;
 process.env.FASTFIGURE_TEST_SCENARIO = 'slow';
 const libraryDirectory=mkdtempSync(join(tmpdir(),'fastfigure-ui-library-'));
 process.env.FASTFIGURE_LIBRARY_DIR=libraryDirectory;
-const results = join(process.cwd(), 'test-results/ui');
+const checks = [['fastui', checkFastUi], ['editor', checkEditor], ['data', checkData], ['assistant', checkAssistant], ['reconstruction', checkReconstruction], ['notifications', checkNotifications], ['gallery-study', checkGalleryStudy]];
+const selected = checks.find(([name]) => process.argv.includes(`--${name}`));
+const scenarios = selected ? [selected] : checks.filter(([name]) => name !== 'gallery-study');
+const results = join(process.cwd(), selected ? `test-results/ui-${selected[0]}` : 'test-results/ui');
 // This directory belongs to this runner; avoid stale passing screenshots/results after a failed run.
 rmSync(results, { recursive: true, force: true });
 mkdirSync(results, { recursive: true });
@@ -32,16 +36,16 @@ try {
     await server.listen();
     const base = `http://127.0.0.1:${server.httpServer.address().port}`;
     browser = await chromium.launch({ headless: true, executablePath });
-    for (const [name, check] of (process.argv.includes('--gallery-study')?[['gallery-study',checkGalleryStudy]]:process.argv.includes('--notifications')?[['notifications',checkNotifications]]:[['editor', checkEditor], ['data', checkData], ['assistant', checkAssistant], ['reconstruction', checkReconstruction], ['notifications',checkNotifications]])) {
+    for (const [name, check] of scenarios) {
         const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } }), errors = [];
         page.on('pageerror', e => errors.push(e.message));
         page.on('dialog', d => void d.dismiss());
-        const choose = async (label, option, scope = page) => { await scope.getByRole('button', { name: label, exact: true }).click(); await page.getByRole('option', { name: option, exact: true }).click(); };
+        const choose = async (label, option, scope = page) => { await scope.getByRole('combobox', { name: label, exact: true }).selectOption({ label: option }); };
         // Persist explicitly before reading: refresh must not trigger the unsaved-edit guard.
         const saveProject = async () => { await page.keyboard.press('Control+s'); return page.evaluate(() => JSON.parse(localStorage.getItem('fastfigure.project.v2'))); };
         const undo = () => page.getByRole('button', { name: '撤销 · Ctrl / ⌘ Z', exact: true }).click(), redo = () => page.getByRole('button', { name: '重做 · Ctrl / ⌘ Shift Z', exact: true }).click();
         const panel = page.getByRole('complementary', { name: 'Harness 绘图助手', exact: true }), turn = id => panel.locator(`[data-turn-id="${id}"]`);
-        const send = async (content) => { await panel.getByRole('textbox', { name: '绘图要求', exact: true }).fill(content); const response = page.waitForResponse(r => r.url().endsWith('/api/harness/runs') && r.request().method() === 'POST'); await panel.getByRole('button', { name: '发送要求', exact: true }).click(); const accepted = await response; assert.equal(accepted.status(), 202); return { ...(await accepted.json()), input: accepted.request().postDataJSON() }; };
+        const send = async (content) => { await panel.getByRole('textbox', { name: '绘图要求', exact: true }).fill(content); const [accepted] = await Promise.all([page.waitForResponse(r => r.url().endsWith('/api/harness/runs') && r.request().method() === 'POST'), panel.getByRole('button', { name: '发送要求', exact: true }).click()]); assert.equal(accepted.status(), 202); return { ...(await accepted.json()), input: accepted.request().postDataJSON() }; };
         const run = async (id) => (await page.request.get(`${base}/api/harness/runs/${id}`)).json();
         try {
             await page.goto(base);
@@ -51,6 +55,7 @@ try {
             assert.deepEqual(errors, []);
             await page.screenshot({ path: join(results, `${name}.png`), animations: 'disabled' });
             reports.push({ name, status: 'passed' });
+            writeFileSync(join(results, 'results.json'), JSON.stringify({ status: 'partial', viewport: { width: 1920, height: 1080 }, reports }, null, 2));
             console.log(`1920px ${name}: passed`);
         }
         catch (error) {
@@ -61,7 +66,7 @@ try {
             await page.close();
         }
     }
-    writeFileSync(join(results, 'results.json'), JSON.stringify({ viewport: { width: 1920, height: 1080 }, seconds: (Date.now() - started) / 1000, reports }, null, 2));
+    writeFileSync(join(results, 'results.json'), JSON.stringify({ status: 'passed', viewport: { width: 1920, height: 1080 }, seconds: (Date.now() - started) / 1000, reports }, null, 2));
 }
 finally {
     await browser?.close();

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Box, Button, Field, Select, Text, TextField } from '../ui'
+import { Box, Button, Field, Select, Text, TextField } from '@fastrd/ui-vue'
 import { useEditor } from '../../composables/useEditor'
 import { findObject, resolveStyle } from '../../core/geometry'
 import { fontOptions } from '../../data/materials'
