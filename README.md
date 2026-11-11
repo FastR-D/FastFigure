@@ -13,6 +13,8 @@ pnpm dev
 
 访问 `http://127.0.0.1:5178`。`pnpm build` 生成 `dist`，`pnpm preview` 在 4178 端口预览构建结果。
 
+共享包从官方 npm registry 消费：`@fastrd/ui-foundation`、`@fastrd/ui-vue`、`@fastrd/harness-transport` 均精确锁定 `0.1.2`。安装使用 `pnpm install --frozen-lockfile --registry=https://registry.npmjs.org/`；更新锁前先用 `npm view <包名>@0.1.2 version dist --json --registry=https://registry.npmjs.org/` 确认版本、tarball 和 provenance。发布尚未可用时等待发布完成，不切换到 GitHub tarball。
+
 ## 当前功能
 
 当前优先迭代素材、箭头和样式，新增数据绘图暂停。导出支持 SVG、PNG 和工程 JSON，draw.io / PPTX 导出相关代码已移除。
