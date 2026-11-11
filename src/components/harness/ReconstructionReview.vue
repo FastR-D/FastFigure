@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
-import { ErrorMessage, Box, Button, Field, Heading, Text, TextField } from '../ui'
+import { Box, Button, Field, Heading, Text, TextField } from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import { rootContainer, type FigureDocument } from '../../core/model'
 import type { ReconstructionTask, ReconstructionImageInfo } from '../../core/reconstructionContract'
 import { captureComponent } from '../../core/assets'

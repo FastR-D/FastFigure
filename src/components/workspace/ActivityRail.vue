@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Nav, Button, Icon, Text, Box } from '../ui'
+import { Nav, Button, Text, Box } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 const editor = useEditor()
 const items = [{ id: 'components', icon: 'grid', label: '组件' }, { id: 'icons', icon: 'creation', label: '图标' }, { id: 'palettes', icon: 'palette', label: '配色' }, { id: 'gallery', icon: 'book', label: '图库' }, { id: 'references', icon: 'image', label: '参考图' }, { id: 'layers', icon: 'layers', label: '图层' }, { id: 'styles', icon: 'theme', label: '样式' }, { id: 'assistant', icon: 'chat', label: '助手' }] as const

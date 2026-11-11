@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,onBeforeUnmount,ref} from 'vue'
-import { ErrorMessage,Box,Button,Header,Heading,Image,Modal,ModalBody,Text} from '../ui'
+import { Box,Button,Header,Heading,Image,Modal,ModalBody,Text} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import type {CataloguePreviewInfo} from '../../core/cataloguePreviewContract'
 const props=defineProps<{info:CataloguePreviewInfo;runId:string;available:boolean;selectionPage?:number}>(),open=ref(false),zoom=ref(false),loading=ref(false),source=ref(''),error=ref('');let request:AbortController|undefined

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import { ErrorMessage,Box,Button,Text} from '../ui'
+import { Box,Button,Text} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import AssetPreview from './AssetPreview.vue'
 import ComponentSourceDetails from './ComponentSourceDetails.vue'
 import type {ComponentAsset} from '../../core/assets'

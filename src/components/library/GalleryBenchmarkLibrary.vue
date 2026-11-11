@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,ref} from 'vue'
-import {Box,Text,TextField,Select,Button} from '../ui'
+import {Box,Text,TextField,Select,Button} from '@fastrd/ui-vue'
 import {useEditor} from '../../composables/useEditor'
 import {galleryBenchmarkSpecs,galleryBenchmark} from '../../data/galleryBenchmarks'
 import AssetPreview from './AssetPreview.vue'

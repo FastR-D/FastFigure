@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {defineAsyncComponent,onBeforeUnmount,onMounted,ref} from 'vue'
-import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Image,Select,Text,TextField} from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Image,Select,Text,TextField} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import {repositoryScopeSchema} from '../../core/componentRepository'
 import {useEditor} from '../../composables/useEditor'
 import ComponentBatchImport from './ComponentBatchImport.vue'

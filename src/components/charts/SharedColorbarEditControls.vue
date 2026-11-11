@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,ref,watch} from 'vue'
-import {Box,Field,Select,Text,TextField} from '../ui'
+import {Box,Field,Select,Text,TextField} from '@fastrd/ui-vue'
 import {fontOptions} from '../../data/materials'
 import {heatmapPalettes,heatmapPaletteById} from '../../data/heatmapPalettes'
 import {formatChartValue} from '../../core/chartText'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed,ref } from 'vue'
-import { Box,Button,Field,Footer,Header,Heading,Modal,ModalBody,Select,Text,TextArea,TextField } from '../ui'
+import { Box,Button,Field,Footer,Header,Heading,Modal,ModalBody,Select,Text,TextArea,TextField } from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import AssetPreview from '../library/AssetPreview.vue'
 import FigureRenderer from '../figure/FigureRenderer'

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text,TextArea} from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Footer,Header,Heading,Image,Modal,ModalBody,Text,TextArea} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import AssetPreview from './AssetPreview.vue'
 import {feedbackRatingLabels,feedbackReceiptSchema,verifyFeedbackCase,type FeedbackCase,type FeedbackInput} from '../../core/retrievalFeedback'

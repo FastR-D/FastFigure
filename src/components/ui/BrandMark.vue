@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { fastfigureIconUrl } from './brand.js'
-import { Image } from './primitives'
+import { Image } from '@fastrd/ui-vue'
 </script>
 
 <template>

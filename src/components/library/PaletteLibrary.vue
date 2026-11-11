@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Article, Box, Button, Heading, Link, Select, Text, TextField } from '../ui'
+import { Article, Box, Button, Heading, Link, Select, Text, TextField } from '@fastrd/ui-vue'
 import { colorPalettes, defaultPaletteId, searchPalettes } from '../../data/materials'
 import { foreground } from '../../core/paint'
 import { useEditor } from '../../composables/useEditor'

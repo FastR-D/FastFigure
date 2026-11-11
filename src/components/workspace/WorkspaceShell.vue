@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, onBeforeUnmount, onMounted, provide, ref, watch } from 'vue'
-import { Box, Main, Text, Icon } from '../ui'
+import { Box, Main, Text } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import { createEditor, editorKey } from '../../composables/useEditor'
 import WorkspaceHeader from './WorkspaceHeader.vue'
 import ActivityRail from './ActivityRail.vue'
@@ -42,7 +43,7 @@ watch(editor.notice, message => {
 function keyboard(e: KeyboardEvent) {
   if (e.defaultPrevented || exportOpen.value || projectOpen.value || editor.publicationOpen.value || editor.detailInsetOpen.value || editor.assetDialog.value || editor.recipeDialogId.value || editor.componentCapture.value || editor.styleDialog.value || editor.chartDialog.value||editor.chartDataImportOpen.value||editor.vectorImportOpen.value||editor.layoutDialogOpen.value||editor.panelLayoutOpen.value||editor.structureExpandId.value||editor.scaleDialogId.value) return
   const target = e.target as HTMLElement
-  if(target.closest('[aria-modal="true"]'))return
+  if(target.closest('dialog[open]'))return
   const mod = e.ctrlKey || e.metaKey
   if (mod && e.key.toLowerCase() === 's') { e.preventDefault(); editor.save() }
   else if (target.closest('[data-assistant-panel]')) return

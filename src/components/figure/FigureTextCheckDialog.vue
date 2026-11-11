@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,ref} from 'vue'
-import {Box,Button,Footer,Header,Heading,Modal,ModalBody,Text} from '../ui'
+import {Box,Button,Footer,Header,Heading,Modal,ModalBody,Text} from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import {useEditor} from '../../composables/useEditor'
 import {checkFigureText} from '../../core/figureTextCheck'

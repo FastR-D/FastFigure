@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from 'vue'
-import {Box,Button,Heading,Text} from '../ui'
+import {Box,Button,Heading,Text} from '@fastrd/ui-vue'
 import {useEditor} from '../../composables/useEditor'
 import {internalContainerEdges,setContainerEdgeRouting} from '../../core/edgeRouting'
 import type {AutomaticEdgeRouting} from '../../core/model'

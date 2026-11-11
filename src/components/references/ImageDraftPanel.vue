@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import {readImageAsset} from '../../core/imageAsset'
 import {computed,ref,watch} from 'vue'
-import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Image,Modal,ModalBody,Select,Text,TextArea,TextField} from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Image,Modal,ModalBody,Select,Text,TextArea,TextField} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import {useEditor} from '../../composables/useEditor'
 import {useImageDrafts} from '../../composables/useImageDrafts'
 import {captureStyleAsset} from '../../core/styleAsset'

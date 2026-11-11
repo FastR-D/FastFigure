@@ -33,7 +33,7 @@ const fixture = fileURLToPath(new URL('./fixtures/cli.mjs', import.meta.url))
 const options = (scenario = 'proposal', log?: string): AdapterOptions => ({ command: process.execPath, args: [fixture], env: { ...process.env, FASTFIGURE_TEST_SCENARIO: scenario, ...(log ? { FASTFIGURE_TEST_LOG: log } : {}) } })
 const adapters: HarnessAdapter[] = [], services: HarnessService[] = [], servers: Server[] = [], dirs: string[] = []
 afterEach(async () => {
-  adapters.splice(0).forEach(a => a.dispose())
+  await Promise.all(adapters.splice(0).map(a => a.dispose()))
   await Promise.all(services.splice(0).map(s => s.dispose()))
   await Promise.all(servers.splice(0).map(s => new Promise<void>(resolve => { s.closeAllConnections(); s.close(() => resolve()) })))
   await Promise.all(dirs.splice(0).map(d => rm(d, { recursive: true, force: true })))

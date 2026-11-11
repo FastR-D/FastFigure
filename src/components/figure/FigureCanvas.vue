@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { nextTick,onBeforeUnmount, ref,watch } from 'vue'
-import { Box, Image } from '../ui'
+import { Box, Image } from '@fastrd/ui-vue'
 import { useEditor } from '../../composables/useEditor'
 import { findObject, type Rect } from '../../core/geometry'
 import FigureRenderer from './FigureRenderer'

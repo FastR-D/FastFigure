@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from 'vue'
-import {Box,Field,Select,Text,TextField} from '../ui'
+import {Box,Field,Select,Text,TextField} from '@fastrd/ui-vue'
 import {useEditor} from '../../composables/useEditor'
 import type {FigureNode} from '../../core/model'
 import {canBindPathTarget} from '../../core/paths'

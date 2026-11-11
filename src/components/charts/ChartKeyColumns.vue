@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Field,Text,TextField} from '../ui'
+import {Box,Button,Field,Text,TextField} from '@fastrd/ui-vue'
 const props=defineProps<{modelValue:string[];options:{value:string;label:string}[];label:string}>()
 const emit=defineEmits<{'update:modelValue':[value:string[]]}>()
 function choose(id:string,event:Event){const checked=(event.target as HTMLInputElement).checked;emit('update:modelValue',checked?[...props.modelValue,id]:props.modelValue.filter(value=>value!==id))}

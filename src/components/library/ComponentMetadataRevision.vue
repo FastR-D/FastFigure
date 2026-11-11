@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref,shallowRef,watch} from 'vue'
-import { ErrorMessage,Box,Button,Text} from '../ui'
+import { Box,Button,Text} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import ComponentMetadataFields from './ComponentMetadataFields.vue'
 import type {ComponentAsset} from '../../core/assets'
 import {componentMetadataDraft,reviseComponentMetadata} from '../../core/componentMetadata'

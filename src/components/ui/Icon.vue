@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Svg, SvgPath } from './primitives'
+import { Svg, SvgPath } from '@fastrd/ui-vue'
 defineProps<{ name: string }>()
 const paths: Record<string, string> = {
   help:'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM9 8a3 3 0 0 1 6 0c0 2-3 2-3 5M12 17h.01',

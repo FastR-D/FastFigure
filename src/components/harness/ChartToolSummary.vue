@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Box,Text } from '../ui'
+import { Box,Text } from '@fastrd/ui-vue'
 import ChartPreparationPreview from '../charts/ChartPreparationPreview.vue'
 import ChartAxesSummary from '../charts/ChartAxesSummary.vue'
 import BoxplotSummary from '../charts/BoxplotSummary.vue'

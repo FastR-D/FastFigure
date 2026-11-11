@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed,ref } from 'vue'
-import { Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Modal,ModalBody,Select,Table,TableBody,TableCell,TableHead,TableHeader,TableRow,Text,TextArea,TextField } from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Modal,ModalBody,Select,Table,TableBody,TableCell,TableHead,TableHeader,TableRow,Text,TextArea,TextField } from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import { useEditor } from '../../composables/useEditor'
 import ChartPreparationPreview from './ChartPreparationPreview.vue'

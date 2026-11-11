@@ -5,6 +5,7 @@ import {checkResizing} from './resizing.mjs';
 import {checkLibraryDrag} from './library-drag.mjs';
 import {checkWorkspaceSettings,checkRootDeletion,checkCompactAttachments} from './workspace-settings.mjs';
 import {checkGalleryStudy} from './gallery-study.mjs';
+import {checkProjectImport} from './project-import.mjs';
 export async function checkEditor({ page, results, saveProject, undo, choose, panel, turn, send, run }) {
     const original = await saveProject(), canvas = page.getByTestId('figure-canvas');
     const navigation=page.getByRole('navigation',{name:'工作区导航',exact:true}),sidebar=page.locator('#workspace-sidebar');
@@ -25,7 +26,7 @@ export async function checkEditor({ page, results, saveProject, undo, choose, pa
     await checkWorkspaceSettings({page,canvas,panel,original,saveProject,undo,results});
     await checkRootDeletion({page,saveProject,undo,results});
     await checkCompactAttachments({page,panel,saveProject,undo,choose,results});
-    const initialPaper=await page.locator('.figure-paper').boundingBox(),at=await screen(500,310);await page.mouse.move(at.x,at.y);await page.mouse.wheel(0,-120);await page.waitForTimeout(120);assert.notEqual((await page.getByRole('button',{name:'画布缩放',exact:true}).textContent()).trim(),'100%');assert.deepEqual(await saveProject(),original);
+    const initialPaper=await page.locator('.figure-paper').boundingBox(),at=await screen(500,310);await page.mouse.move(at.x,at.y);await page.mouse.wheel(0,-120);await page.waitForTimeout(120);assert.notEqual(await page.getByRole('combobox',{name:'画布缩放',exact:true}).inputValue(),'1');assert.deepEqual(await saveProject(),original);
     const beforePan=await canvas.boundingBox();await page.mouse.move(at.x,at.y);await page.mouse.down({button:'right'});await page.mouse.move(at.x+40,at.y+25,{steps:4});await page.mouse.up({button:'right'});const afterPan=await canvas.boundingBox();assert(Math.abs(afterPan.x-beforePan.x-40)<1);assert(Math.abs(afterPan.y-beforePan.y-25)<1);assert.deepEqual(await saveProject(),original);
     await page.getByRole('button',{name:'适应画布',exact:true}).click();const resetPaper=await page.locator('.figure-paper').boundingBox();assert(Math.abs(resetPaper.x-initialPaper.x)<1);assert(Math.abs(resetPaper.y-initialPaper.y)<1);
     const snapInput={...original,nodes:[{id:'snap-a',parentId:'stage',kind:'rectangle',label:'A',x:200,y:250,width:100,height:60},{id:'snap-b',parentId:'stage',kind:'rectangle',label:'B',x:400,y:250,width:100,height:60}],edges:[]};
@@ -108,7 +109,7 @@ export async function checkEditor({ page, results, saveProject, undo, choose, pa
     assert.equal(await canvas.locator('[data-object-id="encoder"] > path[data-sketch-style="comic"]').count(),1);
     await navigation.getByRole('button',{name:'组件',exact:true}).click();
     await page.getByRole('button',{name:'添加文字与注释',exact:true}).click();
-    assert((await page.getByRole('button',{name:'文字字体',exact:true}).textContent()).includes('Comic Sans MS'));
+    assert.equal(await page.getByRole('combobox',{name:'文字字体',exact:true}).inputValue(),'Comic Sans MS');
     await choose('文字字体','MiSans · 小米黑体');const manualFont=await saveProject();assert.equal(manualFont.style.fontFamily,'Comic Sans MS');assert.equal(manualFont.nodes.at(-1).textStyle.family,'MiSans');
     await undo();await undo();await undo();assert.deepEqual(await saveProject(),original);
     await navigation.getByRole('button',{name:'组件',exact:true}).click();
@@ -122,9 +123,7 @@ export async function checkEditor({ page, results, saveProject, undo, choose, pa
     await page.getByRole('button', { name: '文字加粗', exact: true }).click();
     await page.getByRole('button', { name: '文字斜体', exact: true }).click();
     await choose('文字字体','Comic Neue · 漫画');
-    const fontButton = page.getByRole('button', { name: '文字字体', exact: true });
-    await fontButton.click();
-    await page.getByRole('option').filter({ hasText: 'MiSans' }).click();
+    await choose('文字字体', 'MiSans · 小米黑体');
     const beforePublication=await saveProject();
     await page.getByRole('toolbar',{name:'画布工具',exact:true}).getByRole('button',{name:'论文尺寸与可读性',exact:true}).click();
     const publication=page.getByRole('dialog',{name:'论文尺寸与可读性',exact:true});
@@ -150,6 +149,7 @@ export async function checkEditor({ page, results, saveProject, undo, choose, pa
     assert(svg.includes('<metadata'));
     assert(!svg.includes('data-hit-layer')&&!svg.includes('data-marker-halo'));
     assert(svg.includes('width="182mm" height="112.84mm"'));assert(svg.includes('viewBox="0 0 1000 620"'));
+    await checkProjectImport({page,results,saveProject},edited);
     await page.getByRole('button', { name: '工程', exact: true }).click();
     await page.getByLabel('导入工程文件', { exact: true }).setInputFiles({ name: 'invalid.json', mimeType: 'application/json', buffer: Buffer.from('{"version":"invalid"}') });
     await page.getByRole('dialog', { name: '工程管理', exact: true }).getByRole('alert').waitFor();
@@ -227,6 +227,8 @@ export async function checkEditor({ page, results, saveProject, undo, choose, pa
     await page.getByRole('toolbar',{name:'画布工具',exact:true}).getByRole('button',{name:'按点绘制直角箭头',exact:true}).click();
     const cancelledPoint=await screen(100,180);await page.mouse.click(cancelledPoint.x,cancelledPoint.y);await page.keyboard.press('Escape');assert.equal(await canvas.locator('[data-arrow-draft-point]').count(),0);assert.deepEqual(await saveProject(),formatted);await page.getByRole('button',{name:'按点绘制直角箭头',exact:true}).click();
     for(const [x,y]of [[100,180],[300,300],[600,300]]){const p=await screen(x,y);await page.mouse.click(p.x,p.y);}
+    await page.getByRole('combobox',{name:'画布缩放',exact:true}).focus();await page.keyboard.press('Backspace');await page.keyboard.press('Escape');assert.equal(await canvas.locator('[data-arrow-draft-point]').count(),4);
+    await header.getByRole('button',{name:'使用指南',exact:true}).click();await page.keyboard.press('Escape');await help.waitFor({state:'hidden'});assert.equal(await canvas.locator('[data-arrow-draft-point]').count(),4);
     assert.equal(await canvas.locator('[data-arrow-draft-point]').count(),4);const corner=await screen(300,180),to=await screen(320,200);await page.mouse.move(corner.x,corner.y);await page.mouse.down();await page.mouse.move(to.x,to.y,{steps:4});await page.mouse.up();await page.getByRole('button',{name:'完成箭头',exact:true}).click();
     const connected=await saveProject(),path=connected.nodes.at(-1),points=await page.evaluate(async doc=>{const{pathPoints}=await import('/src/core/paths.ts');return pathPoints(doc,doc.nodes.at(-1));},connected);assert.equal(points.length,4);for(const [i,p]of points.entries())if(i)assert(Math.abs(p.x-points[i-1].x)<.001||Math.abs(p.y-points[i-1].y)<.001);assert.equal(path.path.arrow,'filled');assert.equal(path.path.orthogonal,true);assert.deepEqual(connected.nodes.slice(0,-1),formatted.nodes);
     const bend=canvas.getByRole('button',{name:'路径点 2',exact:true}),bendBox=await bend.boundingBox();await page.mouse.move(bendBox.x+bendBox.width/2,bendBox.y+bendBox.height/2);await page.mouse.down();await page.mouse.move(bendBox.x+bendBox.width/2+8,bendBox.y+bendBox.height/2+6,{steps:4});await page.mouse.up();const adjusted=await saveProject(),adjustedPoints=await page.evaluate(async doc=>{const{pathPoints}=await import('/src/core/paths.ts');return pathPoints(doc,doc.nodes.at(-1));},adjusted);for(const [i,p]of adjustedPoints.entries())if(i)assert(Math.abs(p.x-adjustedPoints[i-1].x)<.001||Math.abs(p.y-adjustedPoints[i-1].y)<.001);await undo();assert.deepEqual(await saveProject(),connected);await canvas.locator(`[data-object-id="${path.id}"]`).press('Enter');await page.screenshot({path:join(results,'materials-editing.png'),animations:'disabled'});

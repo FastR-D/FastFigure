@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Disclosure,DisclosureTrigger,Text} from '../ui'
+import {Box,Disclosure,DisclosureTrigger,Text} from '@fastrd/ui-vue'
 import type {StyleAsset} from '../../core/styleAssetContract'
 import {paletteById} from '../../data/materials'
 import {containerSurfaceLabels} from '../../core/containerSurface'

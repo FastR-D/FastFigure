@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,ref} from 'vue'
-import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Image,Modal,ModalBody,Text,TextField} from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Image,Modal,ModalBody,Text,TextField} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import ComponentContentReview from './ComponentContentReview.vue'
 import ComponentMetadataFields from './ComponentMetadataFields.vue'

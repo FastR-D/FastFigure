@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,defineAsyncComponent,onBeforeUnmount,ref} from 'vue'
-import { ErrorMessage,Box,Button,Disclosure,DisclosureTrigger,Text,TextArea} from '../ui'
+import { Box,Button,Disclosure,DisclosureTrigger,Text,TextArea} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import {useEditor} from '../../composables/useEditor'
 import type {RepositoryRecall} from '../../core/repositoryRecall'
 import {selectionEvidenceSchema} from '../../core/repositorySelection'

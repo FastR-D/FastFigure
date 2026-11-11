@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import {Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Modal,ModalBody,Select,Text,TextArea,TextField} from '../ui'
+import {Box,Button,Disclosure,DisclosureTrigger,Field,Footer,Header,Heading,Modal,ModalBody,Select,Text,TextArea,TextField} from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import AssetPreview from './AssetPreview.vue'
 import ComponentSourceDetails from './ComponentSourceDetails.vue'

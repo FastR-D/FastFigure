@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from 'vue'
-import {Box,Button,Text} from '../ui'
+import {Box,Button,Text} from '@fastrd/ui-vue'
 import {defaultPaletteId,paletteById} from '../../data/materials'
 const props=withDefaults(defineProps<{paletteId?:string;modelValue?:number;effectiveIndex?:number;label:string;inherit?:boolean;disabled?:boolean}>(),{paletteId:undefined,modelValue:undefined,effectiveIndex:undefined,inherit:false,disabled:false})
 const emit=defineEmits<{'update:modelValue':[value:number|undefined]}>()

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Disclosure,DisclosureTrigger,Text} from '../ui'
+import {Box,Disclosure,DisclosureTrigger,Text} from '@fastrd/ui-vue'
 import type {RecipeUpdateUse} from '../../core/recipeUpdateContract'
 defineProps<{updates:RecipeUpdateUse[]}>()
 </script>

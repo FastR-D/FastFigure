@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Box, Disclosure, DisclosureTrigger, Text } from '../ui'
+import { Box, Disclosure, DisclosureTrigger, Text } from '@fastrd/ui-vue'
 import type { ChartReadyRecommendation, CompiledChartView } from '../../core/chartRecommendationContract'
 import ChartAxesSummary from '../charts/ChartAxesSummary.vue'
 import BoxplotSummary from '../charts/BoxplotSummary.vue'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed} from 'vue'
-import {Box,Button,Disclosure,DisclosureTrigger,Text} from '../ui'
+import {Box,Button,Disclosure,DisclosureTrigger,Text} from '@fastrd/ui-vue'
 import {useEditor} from '../../composables/useEditor'
 import {recipeUpdateTargets} from '../../core/recipeUpdate'
 import {recipeFieldValue,visibleRecipeFields} from '../../data/recipes'

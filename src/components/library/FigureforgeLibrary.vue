@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
-import { ErrorMessage, Box, Button, Image, Link, Text, TextField } from '../ui'
+import { Box, Button, Image, Link, Text, TextField } from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { convertFigureforgeTemplate, figureforgeResources, figureforgeUrl, type FigureforgeTemplate } from '../../core/figureforge'
 const editor=useEditor(),templates=shallowRef<FigureforgeTemplate[]>([]),error=ref(''),busy=ref(''),query=ref('')

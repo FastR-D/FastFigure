@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Box, Button, Field, Footer, Header, Heading, Modal, ModalBody, Select, Text, TextField } from '../ui'
+import { Box, Button, Field, Footer, Header, Heading, Modal, ModalBody, Select, Text, TextField } from '@fastrd/ui-vue'
 import IconButton from '../ui/IconButton.vue'
 import FigureRenderer from '../figure/FigureRenderer'
 import { useEditor } from '../../composables/useEditor'

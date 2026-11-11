@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { Box, Button, Disclosure, DisclosureTrigger, Field, Select, Text, TextArea } from '../ui'
+import { Box, Button, Disclosure, DisclosureTrigger, Field, Select, Text, TextArea } from '@fastrd/ui-vue'
 import type { Harness } from '../../composables/useHarness'
 import type { FigureDocument } from '../../core/model'
 import type { ReconstructionTask } from '../../core/reconstructionContract'

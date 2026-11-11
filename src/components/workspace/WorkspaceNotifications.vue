@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject } from 'vue'
-import { Box, Disclosure, DisclosureTrigger, Heading, Icon, Text } from '../ui'
+import { Box, Disclosure, DisclosureTrigger, Heading, Text } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import { notificationsKey } from '../../composables/useNotifications'
 const notifications = inject(notificationsKey)!

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref, watch } from 'vue'
-import { Box, Button, Disclosure, DisclosureTrigger, Field, Heading, Text, TextField } from '../ui'
+import { Box, Button, Disclosure, DisclosureTrigger, Field, Heading, Text, TextField } from '@fastrd/ui-vue'
 import type { ReferenceImage } from '../../core/model'
 import { originalImage, removeOriginalImage } from '../../core/originalImages'
 import { readReferenceImage } from '../../core/references'

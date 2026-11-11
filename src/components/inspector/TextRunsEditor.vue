@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref,watch,computed} from 'vue'
-import {Box,Button,Disclosure,DisclosureTrigger,Field,Select,Text,TextArea,TextField} from '../ui'
+import {Box,Button,Disclosure,DisclosureTrigger,Field,Select,Text,TextArea,TextField} from '@fastrd/ui-vue'
 import {clone} from '../../core/model'
 import {useEditor} from '../../composables/useEditor'
 import {fontOptions} from '../../data/materials'

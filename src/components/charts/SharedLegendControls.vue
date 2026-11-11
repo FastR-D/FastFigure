@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Button,Field,Text,TextField} from '../ui'
+import {Box,Button,Field,Text,TextField} from '@fastrd/ui-vue'
 import type {chartLegendTargets,sharedLegendStates} from '../../core/sharedLegend'
 defineProps<{targets:ReturnType<typeof chartLegendTargets>;selectedIds:string[];groups:ReturnType<typeof sharedLegendStates>}>()
 const emit=defineEmits<{toggle:[id:string,checked:boolean];detach:[id:string]}>()

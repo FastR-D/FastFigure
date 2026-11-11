@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,defineAsyncComponent,ref} from 'vue'
-import {Box,Button,Field,Icon,Select,Text,TextField} from '../ui'
+import {Box,Button,Field,Select,Text,TextField} from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import {useEditor} from '../../composables/useEditor'
 import {canColorContainer,setContainerColor} from '../../core/containerColor'
 import {containerSurface,containerSurfaceOptions,setContainerSurface,type ContainerSurface} from '../../core/containerSurface'

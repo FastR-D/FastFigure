@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed,ref} from 'vue'
-import {Article,Box,Button,Field,Heading,Text,TextField} from '../ui'
+import {Article,Box,Button,Field,Heading,Text,TextField} from '@fastrd/ui-vue'
 import {useEditor} from '../../composables/useEditor'
 import {paletteById} from '../../data/materials'
 import {downloadFile} from '../../core/export'

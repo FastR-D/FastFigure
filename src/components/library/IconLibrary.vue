@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { Box, Button, Select, Text, TextField } from '../ui'
+import { Box, Button, Select, Text, TextField } from '@fastrd/ui-vue'
 import { materialIcons, searchIcons } from '../../data/materials'
 import { useEditor } from '../../composables/useEditor'
 import MaterialGlyph from './MaterialGlyph'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Box,Text } from '../ui'
+import { Box,Text } from '@fastrd/ui-vue'
 import type { ChartAxesReport } from '../../core/chartAxisContract'
 import { formatChartValue } from '../../core/chartText'
 defineProps<{axes:ChartAxesReport}>()

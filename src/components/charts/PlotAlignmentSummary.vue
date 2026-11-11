@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Text} from '../ui'
+import {Box,Text} from '@fastrd/ui-vue'
 import type {PlotAlignmentReport} from '../../core/chartPlotContract'
 defineProps<{reports:PlotAlignmentReport[]}>()
 const bounds=(area:PlotAlignmentReport['charts'][number]['after'])=>`${(area.right-area.left).toFixed(1)} × ${(area.bottom-area.top).toFixed(1)}`

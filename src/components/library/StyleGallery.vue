@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Box, Button, Text, Icon } from '../ui'
+import { Box, Button, Text } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { styles } from '../../core/model'
 import StylePreview from './StylePreview'

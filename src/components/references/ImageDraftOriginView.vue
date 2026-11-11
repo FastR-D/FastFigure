@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Disclosure,DisclosureTrigger,Text} from '../ui'
+import {Disclosure,DisclosureTrigger,Text} from '@fastrd/ui-vue'
 import type {ImageDraftOrigin} from '../../core/imageDraftContract'
 import CompositionPlanView from '../harness/CompositionPlanView.vue'
 defineProps<{origin:ImageDraftOrigin}>()

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Box, Button, Icon, Text } from '../ui'
+import { Box, Button, Text } from '@fastrd/ui-vue'
+import { Icon } from '../ui'
 import { useEditor } from '../../composables/useEditor'
 import { findObject } from '../../core/geometry'
 import ReferencePreview from './ReferencePreview'

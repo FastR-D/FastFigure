@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed,defineAsyncComponent,onBeforeUnmount,ref,shallowRef,watch} from 'vue'
-import { ErrorMessage,Box,Button,Field,Footer,Header,Heading,Image,Modal,ModalBody,Select,Text,TextField} from '../ui'
+import { Box,Button,Field,Footer,Header,Heading,Image,Modal,ModalBody,Select,Text,TextField} from '@fastrd/ui-vue'
+import { ErrorMessage } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import AssetPreview from '../library/AssetPreview.vue'
 import {useEditor} from '../../composables/useEditor'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Box,Disclosure,DisclosureTrigger,Text,TextArea} from '../ui'
+import {Box,Disclosure,DisclosureTrigger,Text,TextArea} from '@fastrd/ui-vue'
 import type {ComponentSource} from '../../core/model'
 defineProps<{source:ComponentSource}>()
 const reviews={none:'未记录处理状态',pending:'待审阅',applied:'已应用到画布',discarded:'已丢弃候选'}
