@@ -21,7 +21,7 @@
     "benchmark:controls": "node scripts/reconstruction-benchmark-controls.mjs",
     "benchmark:audit-context": "node scripts/evaluate-visual-audit-context.mjs",
     "benchmark:retrieval": "node scripts/evaluate-component-retrieval.mjs",
-    "start": "node server-dist/server.mjs"
+    "start": "bun server-dist/server.mjs"
   },
   "dependencies": {
     "roughjs": "^4.6.6",

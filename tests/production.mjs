@@ -21,7 +21,7 @@ function reservePort() {
 test('production serves the UI and retains local API boundaries', { timeout: 20_000 }, async () => {
   const directory = await mkdtemp(join(tmpdir(), 'fastfigure-production-'))
   const port = await reservePort()
-  const child = spawn(process.execPath, ['server-dist/server.mjs'], {
+  const child = spawn(process.env.FASTFIGURE_RUNTIME || process.execPath, ['server-dist/server.mjs'], {
     env: { ...process.env, HOST: '127.0.0.1', PORT: String(port), FASTFIGURE_LIBRARY_DIR: directory },
     stdio: ['ignore', 'pipe', 'pipe'],
   })
@@ -40,6 +40,13 @@ test('production serves the UI and retains local API boundaries', { timeout: 20_
     }
     assert.ok(ready, logs)
     assert.deepEqual(await (await fetch(`${origin}/api/health`)).json(), { ok: true })
+    // Force the lazy SQLite store to initialize under the production runtime.
+    const library = await fetch(`${origin}/api/component-library/snapshots`)
+    assert.equal(library.status, 200)
+    assert.equal((await library.json()).total, 0)
+    const feedback = await fetch(`${origin}/api/component-library/feedback`)
+    assert.equal(feedback.status, 200)
+    assert.equal((await feedback.json()).total, 0)
     const page = await fetch(origin)
     assert.equal(page.status, 200)
     assert.match(page.headers.get('content-type'), /text\/html/)
