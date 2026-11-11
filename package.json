@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5178",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vue-tsc --noEmit && vite build && node scripts/build-server.mjs",
     "preview": "vite preview --host 127.0.0.1 --port 4178",
     "typecheck": "vue-tsc --noEmit",
     "test": "vitest run",
@@ -20,7 +20,8 @@
     "benchmark:evaluate": "node scripts/evaluate-reconstruction-benchmark.mjs",
     "benchmark:controls": "node scripts/reconstruction-benchmark-controls.mjs",
     "benchmark:audit-context": "node scripts/evaluate-visual-audit-context.mjs",
-    "benchmark:retrieval": "node scripts/evaluate-component-retrieval.mjs"
+    "benchmark:retrieval": "node scripts/evaluate-component-retrieval.mjs",
+    "start": "node server-dist/server.mjs"
   },
   "dependencies": {
     "@fastrd/ui-vue": "0.1.2",
