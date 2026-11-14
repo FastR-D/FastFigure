@@ -19,7 +19,7 @@ try{
     const figure=JSON.parse(readFileSync(seed,'utf8')),before=JSON.stringify(figure)
     service=new HarnessService(kind=>{const adapter=kind==='codex'?new CodexAdapter():new ClaudeAdapter();return{kind:adapter.kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:async input=>{realCalls++;writeFileSync(join(output,'design-review-prompt.txt'),input.content);return adapter.send(input)}}})
     const session=service.createSession('codex','Main figure design review'),status=(await service.status()).find(s=>s.kind==='codex');assert.equal(status.state,'ready');assert(!status.version.includes('fixture'))
-    await server.listen();browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH??'/home/gugumur/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome'});const page=await browser.newPage({viewport:{width:1920,height:1080}})
+    await server.listen();browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH}: {})});const page=await browser.newPage({viewport:{width:1920,height:1080}})
     await page.goto(`http://127.0.0.1:${server.httpServer.address().port}`);await page.getByTestId('figure-canvas').waitFor()
     const designImage=await page.evaluate(async figure=>{const{prepareDesignReviewImage}=await import('/src/core/visualAuditImage.ts');return prepareDesignReviewImage(figure)},figure)
     const content=args.includes('--goal')?arg('--goal'):'本图希望解释 U 形编解码器的多尺度跳连与拼接机制。作为论文主图，请看整图实际阅读路径、主次、结构搭配与文字密度；先说值得保留的表达，再提出有证据的建议，不要求一定发现问题。'
@@ -42,7 +42,7 @@ try{
   })
   const session=service.createSession('codex','Controlled visual audit'),status=(await service.status()).find(s=>s.kind==='codex');assert.equal(status.state,'ready');assert(!status.version.includes('fixture'))
   const parent=service.start({sessionId:session.id,figure:base,content:'Replay controlled corrupted seed',selectedIds:[],task:{kind:'reconstruct',referenceId:base.references[0].id,region:root.reconstruction.region,destination:'new',parentId:'stage'}});await parent.done;assert.equal(parent.status,'completed');const candidate=parent.events.at(-1).proposal
-  await server.listen();browser=await chromium.launch({headless:true,executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH??'/home/gugumur/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome'});const page=await browser.newPage({viewport:{width:1920,height:1080}})
+   await server.listen();browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH}: {})});const page=await browser.newPage({viewport:{width:1920,height:1080}})
   await page.goto(`http://127.0.0.1:${server.httpServer.address().port}`);await page.getByTestId('figure-canvas').waitFor()
   const task={kind:'repair',containerId:'stage',regionId:text.reconstruction.owner},images=await page.evaluate(async({candidate,task})=>{const{prepareVisualAuditImages}=await import('/src/core/visualAuditImage.ts');return prepareVisualAuditImages(candidate,task)},{candidate,task})
   const audit=service.startAudit({sessionId:session.id,parentRunId:parent.id,regionId:task.regionId,content:'比较原图和当前候选，列出本区域可确认的视觉差异。识别不清的地方明确列为不确定，不要求产生问题。',...images})

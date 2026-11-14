@@ -4,7 +4,7 @@
 
 ## 本地 PPTX
 
-[模板合集](/home/gugumur/下载/模板合集20260627.pptx) 包含 29 页。按 presentation relationships 解析实际页序后，XML 清单记录 2,007 个 shape、1,454 个 connector、132 个 group 和 26 个 picture。shape 计数包括 AlternateContent 的备选表示，不能直接当成同时可见对象或独立组件数。
+用户提供的模板合集包含 29 页。按 presentation relationships 解析实际页序后，XML 清单记录 2,007 个 shape、1,454 个 connector、132 个 group 和 26 个 picture。shape 计数包括 AlternateContent 的备选表示，不代表同时可见对象或独立组件数。
 
 常见预设几何包括矩形、圆角矩形、椭圆、cube、梯形和平行四边形。原生对象和分组为提炼特征体、重复模块、算子、分支和子图边界提供了来源。第 15 页已渲染查看，包含完整科研架构与简化图元版本，可对照其中的不同颜色分区、虚线阶段、特征体、C/+ 等算子与跨组连接。
 

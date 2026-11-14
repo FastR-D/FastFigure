@@ -200,7 +200,7 @@ SVG 输出与画布相同的折线路径；工程 JSON 和 SVG 元数据保留�
 
 ## 组件与代码结构
 
-界面基础组件直接复制自 `/home/gugumur/FastPPT/packages/components/src`，放在 `src/components/ui`，调整了品牌、存储键和组件模板。布局遵循 FastPPT 工作台与 `/home/gugumur/FastRD/FastResearch/前端风格.txt`。业务模板统一组合组件；HTML 入口只用于挂载 Vue。
+界面基础组件维护在 `src/components/ui`，并按本项目的品牌、存储键和组件模板调整。业务模板统一组合组件；HTML 入口只用于挂载 Vue。
 
 ```text
 src/components/ui/          FastPPT 基础组件、控件和颜色令牌

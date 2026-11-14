@@ -1,33 +1,12 @@
 # Harness 接入
 
-2026-11-08：组件、图库和参考图改为从缩略图弹窗选中后加入本轮，默认仅显式选择，自动检索移到助手设置；组件详情与设置弹窗采用紧凑布局。当前入口见[紧凑布局与参考选择](compact-assistant.md)。
-
-2026-10-28 实现，2026-10-29 调整为左侧助手 Tab。保留 pnpm 单应用，在 Vite 开发服务与本地 preview 中注册同端口接口；助手与组件、图库等共用左侧栏，右侧始终显示对象属性。
-
-第廿八批补充 [多参考图用途与来源](multiple-references.md)：普通绘图与数据选图可同时选择至多三图，逐图指定用途，返回可核对的采用说明，历史回看本轮输入。重建 / 视觉审阅的固定来源流程保持。
-
-第七十九批补充节点连线的 `materialEdits/edge-route`：保留两端绑定，按世界坐标指定中间折点，交给程序补齐直角段、预览与核对；详见[指定折点](edge-connections.md#指定折点第七十九批)。
-
-第廿九批补充[原生直线连接](edge-connections.md)：`edges` 和 `instanceLinks` 可指定 `routing: "straight" / "orthogonal"`，全连接网络配方默认直线；既有素材内部设置保留，连线方式变化进入候选修改审阅。
-
-第卅批补充[网络间距和实例内部方式](network-presentation.md)：MLP 参数可选 `layerGap` / `neuronGap`，`instances.edgeRouting` 只设置该实例内部语义连接，并记录到复用报告。保存素材不接受配方参数，保持手工几何；外部连接继续独立设置。
-
-第卅一批补充[原生文字检查](text-checks.md)：普通提示携带程序产生的 `context.textCheck`，完成候选后程序重算记录，模型不能声明检查通过；源图与候选可定位核对，图片视觉审阅仍独立使用。
-
-第卅二批补充[可审阅绘图方案](composition-plans.md)：只规划时返回分区、原生素材参数、样式和逐图说明，明确采用后才固定来源并生成候选；数据附件另可填写表达目标，目标随原始数据快照进入推荐报告。
-
-第四十三批补充[本机持久素材库](component-repository.md)：检索本机快照，取回为工作组件后可显式用于助手，携带快照派生 SHA。它不自动发送、不让模型直接写库；本轮所选结构仍完整冻结，浏览器副本删除后已发送任务仍使用原快照。
-
-第四十四批补充[普通绘图与规划的自动召回](repository-recall.md)：自动模式可发送 `librarySearch=true`，服务检索并校验本机快照，合并 / 冻结至多六项，返回程序产生的 `summary.repositoryRecall`。直接 API 缺省不检索；其他任务不得混用，采用方案恢复固定清单。界面显示实际附带与命中词，模型复用仍另行报告，不将文字匹配当作科学或视觉质量判断。
-
 ## 参考实现
 
-- `/home/gugumur/FastPPT/packages/harness-core/src/index.ts`：统一适配器、会话和流式事件。
-- `/home/gugumur/FastPPT/packages/harness-codex/src/codex-adapter.ts` 与 `jsonl-rpc.ts`：Codex app-server stdio RPC、通知、端点绑定与取消。
-- `/home/gugumur/FastPPT/apps/web/src/components/workspace/AgentWorkspace.vue`：会话、运行状态、模型输出与活动信息。
-- `/home/gugumur/FastRD/FastWrite/packages/harness-core/src/index.ts`：Harness / Session / Run 契约。
-- `/home/gugumur/FastRD/FastWrite/packages/harness-claude/src/cli-bridge.ts`：Claude CLI 的 stream-json、会话续接和进程清理。
-- `/home/gugumur/FastRD/FastWrite/apps/server/src/agent/harness-run-service.ts`、`harness-session-service.ts`：运行和会话管理。
+- 共享 Harness 包：统一适配器、会话和流式事件。
+- 共享 Harness 包：Codex/Claude 适配器、通知、端点绑定与取消。
+- `apps/web/src/components/workspace/AgentWorkspace.vue`：会话、运行状态、模型输出与活动信息。
+- Harness / Session / Run 契约由共享包提供。
+- `server/harness/`：运行和会话管理。
 
 没有引入它们的 monorepo 包或 workspace 依赖。FastFigure 将契约、适配器、本地服务与 UI 保留在当前应用；业务产物为 FigureIR 候选图。
 

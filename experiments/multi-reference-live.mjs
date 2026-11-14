@@ -49,7 +49,7 @@ try {
     save('source.fastfigure-component.json', asset);
     const sources = [buildRecipe('pipeline', { stages: 3, direction: 'row' }), buildDataChart(chartExample('bar')), asset], titles = ['Authored horizontal flow', 'Authored palette and whitespace', 'Authored MLP structure'], purposes = ['layout', 'style', 'content'];
     await server.listen();
-    browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ?? '/home/gugumur/.cache/ms-playwright/chromium-1248/chrome-linux64/chrome' });
+    browser = await chromium.launch({ headless: true, ...(process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH } : {}) });
     const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
     await page.goto(`http://127.0.0.1:${server.httpServer.address().port}`);
     await page.getByTestId('figure-canvas').waitFor();
