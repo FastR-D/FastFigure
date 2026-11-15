@@ -126,10 +126,17 @@ describe('Harness run service and HTTP event replay', () => {
       const plan=service.start({...data,content:'COMPOSITION_PLAN_TEST SELECTION_DEEP_TEST poolneedle pipeline',intent:'plan'});await plan.done;expect(plan.status,service.summary(plan.id).error).toBe('completed');library.close();const sends=prompts.length
       const drawn=service.start({sessionId:session.id,content:'COMPOSITION_PLAN_DRAW',figure:base,selectedIds:[],compositionPlanRunId:plan.id});await drawn.done;expect(drawn.status,service.summary(drawn.id).error).toBe('completed');expect(prompts).toHaveLength(sends+1);expect(service.summary(drawn.id).repositoryRecall!.selection!.evidenceRunId).toBe(plan.id)
       expect((await service.feedbackContext(drawn.id,'recipe:patch-embedding')).context.capabilities).toEqual(recipeFeedback.context.capabilities)
-      for(const marker of ['SELECTION_BAD_KEY','SELECTION_BAD_QUOTE','SELECTION_MISSING','SELECTION_INVALID']){const count=prompts.length,failed=service.start({...data,content:marker+' poolneedle pipeline'});await failed.done;expect(failed.status).toBe('failed');expect(service.summary(failed.id).repositoryRecall!.selection!.status).toBe('failed');expect(service.getSelectionEvidence(failed.id).response).toBeTruthy();expect(prompts).toHaveLength(count+1);expect(failed.events.at(-1)!.proposal).toBeUndefined()}
-      const empty=service.start({...data,content:'SELECTION_EMPTY poolneedle pipeline'});await empty.done;expect(empty.status,service.summary(empty.id).error).toBe('completed');expect(service.summary(empty.id).repositoryRecall!.catalogue).toEqual([]);expect(service.summary(empty.id).components).toEqual([])
       expect(()=>service.start({...data,librarySearch:false})).toThrow('需要开启')
       const stopped=service.start(data);service.cancel(stopped.id);await stopped.done;expect(stopped.status).toBe('cancelled');expect(service.summary(stopped.id).repositoryRecall!.selection!.status).toBe('cancelled')
+    }finally{library.close()}
+  })
+  it.each(['SELECTION_BAD_KEY','SELECTION_BAD_QUOTE','SELECTION_MISSING','SELECTION_INVALID','SELECTION_EMPTY'])('%s: handles rejected or uncertain material selection',async marker=>{
+    const library=new ComponentLibraryStore(await directory()),asset=buildRecipe('pipeline',{stages:2,direction:'row'});asset.tags=['poolneedle'];library.publish({asset})
+    let sends=0;const service=new HarnessService(()=>{const adapter=new CodexAdapter(options());return{kind:adapter.kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:turn=>{sends++;return adapter.send(turn)}}},library);services.push(service)
+    try{
+      const session=service.createSession('codex','Selection failure'),run=service.start({sessionId:session.id,content:marker+' poolneedle pipeline',figure:createBlank(),selectedIds:[],catalogue:[{kind:'seed',id:'decoder'},{kind:'recipe',id:'patch-embedding'}],librarySearch:true,libraryReview:true});await run.done
+      if(marker==='SELECTION_EMPTY'){expect(run.status,service.summary(run.id).error).toBe('completed');expect(service.summary(run.id).repositoryRecall!.catalogue).toEqual([]);expect(service.summary(run.id).components).toEqual([])}
+      else{expect(sends).toBe(1);expect(run.events.at(-1)!.proposal).toBeUndefined();expect(run.status).toBe('failed');expect(service.summary(run.id).repositoryRecall!.selection!.status).toBe('failed');expect(service.getSelectionEvidence(run.id).response).toBeTruthy()}
     }finally{library.close()}
   })
   it('recalls server library sources, freezes the selected version and reuses plan sources without a new search',async()=>{
@@ -276,34 +283,48 @@ describe('Harness run service and HTTP event replay', () => {
     expect(images[1]).toBe(repairImage.dataUrl);expect(repaired.nodes.find(n=>n.reconstruction?.objectId==='label')!.label).toBe('Encoder corrected');expect(repaired.nodes[3]).toEqual(candidate.nodes[3]);expect(repaired.containers[0]!.reconstruction!.revision).toBe(1)
     await service.removeSession(session.id);expect((await fetch(`${base}/runs/${first.id}/input-image`)).status).toBe(404)
   })
-  it('finds reconstruction materials, freezes selection and crop through adoption and persists source-visible feedback',async()=>{
+  it.each(['previews','adoption','feedback'])('finds reconstruction materials and preserves frozen selection and crop through %s',async mode=>{
     const path=await directory(),library=new ComponentLibraryStore(path),asset=buildRecipe('tensor-stack',componentRecipes.find(recipe=>recipe.id==='tensor-stack')!.defaults);asset.name='Frozen lookup tensor';asset.tags.push('tensor-stack');const stored=library.publish({asset})
     let release!:()=>void,ready!:()=>void,gated=true;const gate=new Promise<void>(resolve=>release=resolve),selectionStarted=new Promise<void>(resolve=>ready=resolve),received:{content:string;image:string}[]=[]
     const service=new HarnessService(kind=>{const adapter=new ClaudeAdapter(options());return{kind,status:()=>adapter.status(),dispose:()=>adapter.dispose(),send:async turn=>{if(turn.content.includes('实际检索裁片指纹：')){const line=turn.content.split('\n').find(line=>line.startsWith('实际筛选图谱目录：'));expect(turn.images).toHaveLength(1+(line?JSON.parse(line.slice('实际筛选图谱目录：'.length)).length:0));received.push({content:turn.content,image:turn.images![0]!.dataUrl})}if(gated&&turn.content.startsWith('你是 FastFigure 的素材筛选助手')){gated=false;ready();await gate}return adapter.send(turn)}}},library);services.push(service)
     try{
       const session=service.createSession('claude','Look-up source'),data=reconstructionInput(session.id),image=cropInput(data.figure,data.task),before=clone(data.figure),request={...data,content:'IMAGE_COMPONENT_LOOKUP_TEST LOOKUP_SAVED：为此裁片寻找可编辑 tensor-stack 素材，不代替作者核对。'.padEnd(12_000,'x'),catalogue:[],inputImage:image,intent:'find-components' as const},lookup=service.start(request)
       const rendering=await pendingSelectionPreviews(service,lookup)
+      if(mode==='previews'){
       await expect(service.submitSelectionPreviews(lookup.id,{...rendering.payload,sessionId:randomUUID()})).rejects.toThrow('会话')
       const forged=clone(rendering.previews);forged[0]!.snapshotSha256='f'.repeat(64);await expect(service.submitSelectionPreviews(lookup.id,{...rendering.payload,previews:forged})).rejects.toThrow('素材指纹')
       await expect(service.submitSelectionPreviews(lookup.id,{...rendering.payload,previews:[]})).rejects.toThrow('提交无效')
-      await service.submitSelectionPreviews(lookup.id,rendering.payload);await service.submitSelectionPreviews(lookup.id,rendering.payload)
+      }
+      await service.submitSelectionPreviews(lookup.id,rendering.payload)
+      if(mode==='previews'){
+      await service.submitSelectionPreviews(lookup.id,rendering.payload)
       const conflicting=clone(rendering.previews);conflicting[0]!.fonts=['different'];await expect(service.submitSelectionPreviews(lookup.id,{...rendering.payload,previews:conflicting})).rejects.toThrow('另一份')
       expect(createHash('sha256').update(service.getSelectionPreviewImage(lookup.id,1).bytes).digest('hex')).toBe(rendering.previews[0]!.sha256)
+      }
       await Promise.race([selectionStarted,lookup.done!.then(()=>{throw new Error(service.summary(lookup.id).error||'Selection did not start')})]);asset.figure.nodes.find(n=>n.label)!.label='Changed after candidate freeze';library.publish({asset});library.setState(stored.record.id,{archived:true});release();await lookup.done
       expect(lookup.status,service.summary(lookup.id).error).toBe('completed');expect(lookup.events.at(-1)!.proposal).toBeUndefined();expect(service.summary(lookup.id)).toMatchObject({hasProposal:false,review:'none',intent:'find-components'})
       const packet=service.getComponentSearch(lookup.id),report=service.summary(lookup.id).repositoryRecall!
       expect(report.query).toBe(request.content);expect(report.visualQuery!.searchQuery).not.toContain('invisible-secret-algorithm');expect(received).toHaveLength(2);expect(received.every(row=>row.image===image.dataUrl)).toBe(true)
       expect(packet.catalogue).toHaveLength(1);expect(packet.catalogue[0]!.kind).toBe('asset');expect(JSON.stringify(packet.catalogue)).not.toContain('Changed after candidate freeze');expect(service.getImageQueryEvidence(lookup.id).responseSha256).toBe(report.visualQuery!.responseSha256)
+      if(mode==='previews'){expect(data.figure).toEqual(before);return}
       const base={...data,content:'RECONSTRUCTION_REUSE_TEST',catalogue:[],componentSearchRunId:lookup.id,inputImage:packet.inputImage,cataloguePreview:previewFixture(packet.catalogue)}
       const changed=clone(data.figure);changed.title='Changed baseline';expect(()=>service.start({...base,figure:changed})).toThrow('已变化');expect(()=>service.start({...base,inputImage:{...image,dataUrl:image.dataUrl+'AAAA'}})).toThrow('沿用检索');expect(()=>service.start({...base,sessionId:service.createSession(session.kind,'Other').id})).toThrow('当前会话')
-      const child=service.start(base);await child.done;expect(child.status,service.summary(child.id).error).toBe('completed');expect(child.events.at(-1)!.proposal!.containers.some(c=>c.reconstructionReuse?.assetName==='Frozen lookup tensor'||c.component?.name==='Frozen lookup tensor')).toBe(true);expect(service.summary(child.id).repositoryRecall!.fromSearchRunId).toBe(lookup.id);expect(received).toHaveLength(2)
-      const failed=service.start({...request,content:'IMAGE_LOOKUP_BAD_ANALYSIS'});await failed.done;expect(failed.status).toBe('failed');expect(failed.events.some(event=>event.proposal)).toBe(false);expect(()=>service.getComponentSearch(failed.id)).toThrow('已完成')
-      const empty=service.start({...request,content:'IMAGE_COMPONENT_LOOKUP_TEST SELECTION_EMPTY'});const emptyRendering=await pendingSelectionPreviews(service,empty);await service.submitSelectionPreviews(empty.id,emptyRendering.payload);await empty.done;expect(empty.status).toBe('completed');expect(service.summary(empty.id).repositoryRecall!.catalogue).toEqual([]);expect(()=>service.getComponentSearch(empty.id)).toThrow('匹配素材')
+      if(mode==='adoption'){const child=service.start(base);await child.done;expect(child.status,service.summary(child.id).error).toBe('completed');expect(child.events.at(-1)!.proposal!.containers.some(c=>c.reconstructionReuse?.assetName==='Frozen lookup tensor'||c.component?.name==='Frozen lookup tensor')).toBe(true);expect(service.summary(child.id).repositoryRecall!.fromSearchRunId).toBe(lookup.id);expect(received).toHaveLength(2);expect(data.figure).toEqual(before);return}
       const key=report.catalogue[0]!.key,context=await service.feedbackContext(lookup.id,key);expect(context.context.referenceImage!.dataUrl).toBe(image.dataUrl)
       const receipt=await service.recordFeedback(lookup.id,{id:randomUUID(),componentKey:key,rating:'uncertain',note:'Development protocol judgment, not independent human evidence',previousId:null});await service.removeSession(session.id);library.close()
       const reopened=new ComponentLibraryStore(path);try{const saved=await verifyFeedbackCase(reopened.readFeedbackCase(receipt.record.caseId));expect(saved.context.referenceImage!.dataUrl).toBe(image.dataUrl);const forged=clone(saved.context);forged.referenceImage!.dataUrl=image.dataUrl+'AAAA';expect(()=>reopened.recordFeedback(forged,{id:randomUUID(),componentKey:key,rating:'suitable',note:'Tampered image',previousId:receipt.record.id})).toThrow('冻结内容')}finally{reopened.close()}
       expect(data.figure).toEqual(before)
     }finally{release();library.close()}
+  })
+  it.each(['IMAGE_LOOKUP_BAD_ANALYSIS','IMAGE_COMPONENT_LOOKUP_TEST SELECTION_EMPTY'])('%s: retains an unsuccessful material lookup without a drawable search result',async content=>{
+    const library=new ComponentLibraryStore(await directory()),service=new HarnessService(()=>new ClaudeAdapter(options()),library);services.push(service)
+    try{
+      const session=service.createSession('claude','Unsuccessful lookup'),data=reconstructionInput(session.id),run=service.start({...data,content,catalogue:[],inputImage:cropInput(data.figure,data.task),intent:'find-components'})
+      if(content.includes('SELECTION_EMPTY')){const rendering=await pendingSelectionPreviews(service,run);await service.submitSelectionPreviews(run.id,rendering.payload)}
+      await run.done;expect(run.events.some(event=>event.proposal)).toBe(false)
+      if(content==='IMAGE_LOOKUP_BAD_ANALYSIS'){expect(run.status).toBe('failed');expect(()=>service.getComponentSearch(run.id)).toThrow('已完成')}
+      else{expect(run.status).toBe('completed');expect(service.summary(run.id).repositoryRecall!.catalogue).toEqual([]);expect(()=>service.getComponentSearch(run.id)).toThrow('匹配素材')}
+    }finally{library.close()}
   })
   it.each(['cancel','render-error'] as const)('stops a pending candidate render on %s without sending the selector or producing a candidate',async mode=>{
     const path=await directory(),library=new ComponentLibraryStore(path);let calls=0
@@ -470,7 +491,7 @@ describe('Harness run service and HTTP event replay', () => {
     expect(service.summary(run.id).textCheck).toEqual(expected);expect(service.history(session.id).turns[0]!.textCheck).toEqual(expected)
     expect(service.summary(run.id).review).toBe('pending');expect(figure).toEqual(saved)
   })
-  it('reviews plans before generation, restores frozen image/material snapshots and enforces source and style guards',async()=>{
+  it.each(['snapshots','roles','COMPOSITION_DRAW_BAD_STYLE','COMPOSITION_DRAW_SKIP_ASSET','incomplete'])('reviews plans before generation and preserves %s',async mode=>{
     const kind='claude' as const
     const service=new HarnessService(provider=>provider==='codex'?new CodexAdapter(options()):new ClaudeAdapter(options()));services.push(service)
     const session=service.createSession(kind,'Composition plan'),asset=buildRecipe('pipeline',{stages:2,direction:'row'});asset.id='plan-frozen';asset.figure.nodes[0]!.label='Frozen feature'
@@ -478,16 +499,20 @@ describe('Harness run service and HTTP event replay', () => {
     const saved=clone(figure),data={sessionId:session.id,content:'COMPOSITION_PLAN_TEST MULTI_REF_OMIT_LAST',figure,selectedIds:[],intent:'plan',catalogue:[{kind:'asset',asset}],referenceInputs:[{id:'plan-image-2',purpose:'style'},{id:'plan-image-0',purpose:'layout'},{id:'plan-image-1',purpose:'content'}]},plan=service.start(data)
     asset.figure.nodes[0]!.label='Changed library copy';await plan.done;expect(plan.status).toBe('completed');const report=service.summary(plan.id).compositionRecord!
     expect(service.summary(plan.id)).toMatchObject({intent:'plan',hasProposal:false,review:'none'});expect(report.plan.sections[0]!.components).toEqual([{id:'planned-0',colorIndex:2,key:'asset:plan-frozen'}]);expect(report.references.map(r=>r.decision)).toEqual(['use','use','omit']);expect(service.history(session.id).turns[0]!.compositionRecord).toEqual(report);expect(plan.events.at(-1)!.proposal).toBeUndefined();expect(figure).toEqual(saved)
-    const unplanned=service.start({...data,content:'COMPOSITION_PLAN_MISSING_LAYOUT MULTI_REF_OMIT_LAST'});await unplanned.done;expect(unplanned.status).toBe('failed');expect(service.summary(unplanned.id).error).toContain('每个分区');expect(service.summary(unplanned.id).hasProposal).toBe(false)
+    if(mode==='incomplete'){const unplanned=service.start({...data,content:'COMPOSITION_PLAN_MISSING_LAYOUT MULTI_REF_OMIT_LAST'});await unplanned.done;expect(unplanned.status).toBe('failed');expect(service.summary(unplanned.id).error).toContain('每个分区');expect(service.summary(unplanned.id).hasProposal).toBe(false)}
     const request={sessionId:session.id,figure:saved,selectedIds:[],catalogue:[],compositionPlanRunId:plan.id,content:'COMPOSITION_PLAN_DRAW MULTI_REF_OMIT_LAST'},draw=service.start(request);await draw.done;expect(draw.status).toBe('completed');const candidate=draw.events.at(-1)!.proposal!
     expect(candidate.containers.find(c=>c.id==='planned-0')!.appearance).toMatchObject({paletteId:report.plan.style.paletteId,colorIndex:2});expect(candidate.compositionPlans).toEqual([report]);expect(candidate.containers[0]!.title).toBe(report.plan.title);expect(candidate.nodes.some(n=>n.label==='Frozen feature')).toBe(true);expect(candidate.nodes.some(n=>n.label==='Changed library copy')).toBe(false);expect(service.summary(draw.id).adoptedComposition).toEqual(report);expect(service.summary(draw.id).components[0]!.componentKey).toBe('asset:plan-frozen')
+    if(mode==='roles'){
     const rolePlan=service.start({...data,content:'COMPOSITION_PLAN_TEST COMPOSITION_COLOR_MAP MULTI_REF_OMIT_LAST'});await rolePlan.done;expect(rolePlan.status).toBe('completed');const roleRecord=service.summary(rolePlan.id).compositionRecord!
     const roleDraw=service.start({...request,compositionPlanRunId:rolePlan.id});await roleDraw.done;expect(roleDraw.status).toBe('completed');const roleMap=roleRecord.plan.sections[0]!.components[0]!.colorMap!
     expect(roleDraw.events.at(-1)!.proposal!.containers.find(c=>c.id==='planned-0')!.appearance!.colorMap).toEqual(roleMap);expect(service.summary(roleDraw.id).components[0]!.colorMap).toEqual(roleMap)
+    }
     for(let i=1;i<=3;i++)expect(service.referenceImage(draw.id,i).bytes).toEqual(service.referenceImage(plan.id,i).bytes)
     const stale=clone(saved);stale.title='Changed canvas';expect(()=>service.start({...request,figure:stale})).toThrow('已变化');expect(()=>service.start({...request,catalogue:[{kind:'asset',asset}]})).toThrow('固定来源');expect(()=>service.start({...request,sessionId:service.createSession(kind,'Other').id})).toThrow('当前会话')
-    for(const marker of ['COMPOSITION_DRAW_BAD_STYLE','COMPOSITION_DRAW_SKIP_ASSET']){const bad=service.start({...request,content:`COMPOSITION_PLAN_DRAW ${marker} MULTI_REF_OMIT_LAST`});await bad.done;expect(bad.status).toBe('failed');expect(service.summary(bad.id).hasProposal).toBe(false);expect(service.summary(draw.id).hasProposal).toBe(true)}
+    if(mode.startsWith('COMPOSITION_DRAW_')){const bad=service.start({...request,content:`COMPOSITION_PLAN_DRAW ${mode} MULTI_REF_OMIT_LAST`});await bad.done;expect(bad.status).toBe('failed');expect(service.summary(bad.id).hasProposal).toBe(false);expect(service.summary(draw.id).hasProposal).toBe(true)}
+    if(mode==='incomplete'){
     const unresolved=service.start({...data,figure:saved,content:'COMPOSITION_PLAN_NEEDS_INPUT MULTI_REF_OMIT_LAST'});await unresolved.done;expect(service.summary(unresolved.id).compositionRecord!.plan.status).toBe('needs-input');expect(()=>service.start({...request,compositionPlanRunId:unresolved.id})).toThrow('补充')
+    }
     const recordsOnly=clone(saved);recordsOnly.compositionPlans=[report];expect(compositionBaseKey(recordsOnly)).toBe(compositionBaseKey(saved));expect(figure).toEqual(saved)
   })
   it('freezes reusable styles across normal runs and adopted plans and refuses contradictory candidates',async()=>{

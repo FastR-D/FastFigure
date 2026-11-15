@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import '@fastrd/ui-vue/styles.css'
+import '@fastrd/ui-foundation/tokens.css'
+import '@fastrd/ui-foundation/controls.css'
 import './styles/app.css'
 import { initColorMode } from '@fastrd/ui-foundation'
 import './styles/fonts.css'
