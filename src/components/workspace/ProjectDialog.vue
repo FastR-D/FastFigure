@@ -14,7 +14,9 @@ function close() { operation++; emit('close') }
 watch(() => props.open, open => { operation++; if (open) { title.value = editor.figure.value.title; error.value = '' } })
 function save() {
   if (!title.value.trim()) { error.value = '请输入工程名称'; return }
-  editor.update(doc => { doc.title = title.value.trim() }); editor.save(); close()
+  editor.update(doc => { doc.title = title.value.trim() })
+  if (!editor.save()) { error.value = editor.storageError.value; return }
+  close()
 }
 function loadExample() {
   operation++

@@ -11,13 +11,14 @@ import { checkAssistant } from './assistant.mjs';
 import { checkReconstruction } from './reconstruction.mjs';
 import { checkNotifications } from './notifications.mjs';
 import { checkFastUi } from './fastui.mjs';
+import { checkProjectSave } from './project-save.mjs';
 // One supported desktop viewport. A private fixture service never uses the user's CLI/session.
 process.env.FASTFIGURE_CODEX_COMMAND = process.env.FASTFIGURE_UI_CLI_FIXTURE ?? join(process.cwd(), 'server/harness/fixtures/cli.mjs');
 process.env.FASTFIGURE_CLAUDE_COMMAND = process.env.FASTFIGURE_CODEX_COMMAND;
 process.env.FASTFIGURE_TEST_SCENARIO = 'slow';
 const libraryDirectory=mkdtempSync(join(tmpdir(),'fastfigure-ui-library-'));
 process.env.FASTFIGURE_LIBRARY_DIR=libraryDirectory;
-const checks = [['fastui', checkFastUi], ['editor', checkEditor], ['data', checkData], ['assistant', checkAssistant], ['reconstruction', checkReconstruction], ['notifications', checkNotifications], ['gallery-study', checkGalleryStudy]];
+const checks = [['fastui', checkFastUi], ['project-save', checkProjectSave], ['editor', checkEditor], ['data', checkData], ['assistant', checkAssistant], ['reconstruction', checkReconstruction], ['notifications', checkNotifications], ['gallery-study', checkGalleryStudy]];
 const selected = checks.find(([name]) => process.argv.includes(`--${name}`));
 const scenarios = selected ? [selected] : checks.filter(([name]) => name !== 'gallery-study');
 const results = join(process.cwd(), selected ? `test-results/ui-${selected[0]}` : 'test-results/ui');
