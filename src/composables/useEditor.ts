@@ -438,8 +438,8 @@ export function createEditor() {
     past.value.push(clone(figure.value)); figure.value = next; future.value = future.value.slice(0, -1); selectedId.value = 'stage'
   }
   function save() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(figure.value)); saved.value = true; storageError.value = ''; notice.value = '工程已保存到当前浏览器' }
-    catch { storageError.value = '本地保存失败，请导出工程文件保存。'; notice.value = storageError.value }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(figure.value)); saved.value = true; storageError.value = ''; notice.value = '工程已保存到当前浏览器'; return true }
+    catch { saved.value = false; storageError.value = '本地保存失败，请导出工程文件保存。'; notice.value = storageError.value; return false }
   }
   function importProject(text: string) {
     if (new TextEncoder().encode(text).length > maxProjectBytes) throw new Error('工程文件过大，限制为 8 MB')
