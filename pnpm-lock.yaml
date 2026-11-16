@@ -12,11 +12,11 @@ importers:
         specifier: 0.1.2
         version: 0.1.2
       '@fastrd/ui-foundation':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: 0.4.0
+        version: 0.4.0
       '@fastrd/ui-vue':
-        specifier: 0.3.0
-        version: 0.3.0(vue@3.5.45(typescript@5.9.3))
+        specifier: 0.4.0
+        version: 0.4.0(vue@3.5.45(typescript@5.9.3))
       roughjs:
         specifier: ^4.6.6
         version: 4.6.6
@@ -147,16 +147,16 @@ packages:
     resolution: {integrity: sha512-W5+AMNxuTRhq7u/XbVDZslTVs9UfETISn60RIqZTGXuRs7Of5ui3R67KBQo6TyaiPm5BSZ+PWV/3MpjnHP4NWA==}
     engines: {node: '>=22'}
 
-  '@fastrd/ui-foundation@0.3.0':
-    resolution: {integrity: sha512-GRyPlXiVpZlCYsAbQykUScxWDjn846U5lsa2GymwICJbH0fuqc9Xwn8pSdOWmzpPOC1sdT6WVKoMgAhtUw438w==}
+  '@fastrd/ui-foundation@0.4.0':
+    resolution: {integrity: sha512-2Tp6/KQ13VfUfh89p4e/5jCycNtvB79H7mVaD1M72rcwYnFkqKqmiVLFoh6G4+mNrmkEGDMpvA5paaXyTwlO3Q==}
     peerDependencies:
       unocss: ^66.12.0
     peerDependenciesMeta:
       unocss:
         optional: true
 
-  '@fastrd/ui-vue@0.3.0':
-    resolution: {integrity: sha512-QYahhjXPxVLTr3r0rR8oO/l10EtJqT53jwvT4e4XtaKIRJ87LSz1twvq6Pgjz6tRfydb3WD8DduGnh7fmXMwxQ==}
+  '@fastrd/ui-vue@0.4.0':
+    resolution: {integrity: sha512-hqpi3Gv1EFF4bqylJ/0RbFv1UcfqU4W1fPgXK9mMKqgssbJOgkb8KdnYJ9elu/2x8Cnren2XeFfmseiW6RH2kQ==}
     peerDependencies:
       vue: ^3.5.0
 
@@ -1171,11 +1171,11 @@ snapshots:
 
   '@fastrd/harness-transport@0.1.2': {}
 
-  '@fastrd/ui-foundation@0.3.0': {}
+  '@fastrd/ui-foundation@0.4.0': {}
 
-  '@fastrd/ui-vue@0.3.0(vue@3.5.45(typescript@5.9.3))':
+  '@fastrd/ui-vue@0.4.0(vue@3.5.45(typescript@5.9.3))':
     dependencies:
-      '@fastrd/ui-foundation': 0.3.0
+      '@fastrd/ui-foundation': 0.4.0
       vue: 3.5.45(typescript@5.9.3)
     transitivePeerDependencies:
       - unocss

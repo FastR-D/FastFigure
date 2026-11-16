@@ -24,8 +24,8 @@
     "start": "bun server-dist/server.mjs"
   },
   "dependencies": {
-    "@fastrd/ui-vue": "0.3.0",
-    "@fastrd/ui-foundation": "0.3.0",
+    "@fastrd/ui-vue": "0.4.0",
+    "@fastrd/ui-foundation": "0.4.0",
     "@fastrd/harness-transport": "0.1.2",
     "roughjs": "^4.6.6",
     "svgpath": "^2.6.0",
