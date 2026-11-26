@@ -4,6 +4,7 @@ import { Header, Box, Text, Button, Modal, ModalBody, Footer, Heading, Field, Te
 import { BrandMark, Icon } from '../ui'
 import IconButton from '../ui/IconButton.vue'
 import WorkspaceHelp from './WorkspaceHelp.vue'
+import WorkspaceAccountMenu from './WorkspaceAccountMenu.vue'
 import { useEditor } from '../../composables/useEditor'
 const editor = useEditor()
 defineEmits<{ export: []; project: [] }>()
@@ -22,7 +23,7 @@ function saveName(){const value=name.value.trim();if(!value)return;if(editor.upd
     <Button variant="quiet" class="project-trigger" @click="$emit('project')"><Icon name="files" /><Text>工程</Text></Button>
     <Button variant="primary" class="export-trigger" @click="$emit('export')"><Icon name="export" /><Text>导出图件</Text></Button>
     <IconButton class="workspace-help-trigger" icon="help" label="使用指南" @click="helpOpen=true" />
-    <Box class="user-avatar" title="本地工作空间">F</Box>
+    <WorkspaceAccountMenu @project="$emit('project')" @help="helpOpen = true" />
   </Header>
   <Modal :open="!!rename" :label="rename==='folder'?'重命名文件夹':'重命名图件'" size="md" @close="rename=null"><Header><Heading>{{ rename==='folder'?'重命名文件夹':'重命名图件' }}</Heading><IconButton icon="close" label="关闭重命名" @click="rename=null" /></Header><ModalBody><Field><Text>名称</Text><TextField v-model="name" maxlength="100" aria-label="新名称" @keydown.enter="saveName" /></Field></ModalBody><Footer><Button @click="rename=null">取消</Button><Button variant="primary" :disabled="!name.trim()" @click="saveName">保存名称</Button></Footer></Modal>
   <WorkspaceHelp :open="helpOpen" @close="helpOpen=false" />
