@@ -1,5 +1,6 @@
 import { selectedReferenceInputs,referenceSelectionSchema,type ReferenceSelection,type ReferencePurpose } from '../core/referenceInputs'
 import { computed, ref, shallowRef, watch } from 'vue'
+import {applyFigurePreviewDelta} from '../core/figurePreview'
 import { z } from 'zod'
 import { harnessEventSchema, harnessHistorySchema, harnessSessionSchema, harnessStatusSchema, harnessTurnSchema, type HarnessKind, type HarnessSession, type HarnessStatus, type HarnessTurn } from '../core/harness'
 import { clone, figureDocumentSchema, type FigureDocument } from '../core/model'
@@ -54,6 +55,7 @@ export function createHarness(editor: Editor) {
   const userContent = ref(''), output = ref(''), message = ref(''), activities = ref<string[]>([])
   const turns = ref<HarnessTurn[]>([]), omittedTurns = ref(0), reviewSync = ref(false), reviewError = ref('')
   const reviewFigure = shallowRef<FigureDocument | null>(null), reviewBase = shallowRef<FigureDocument | null>(null)
+  const streamPreview=shallowRef<FigureDocument|null>(null),streamProgress=ref('')
   const reviewBaseline=shallowRef<FigureDocument|null>(null)
   const currentTurn = computed(() => turns.value.find(t => t.id === runId.value))
   const catalogueMode = ref<'auto' | 'selected' | 'none'>('none'), catalogueQuery = ref(''), selectedComponentKeys = ref<string[]>([]), usedComponents = ref<ComponentUse[]>([])
@@ -122,7 +124,7 @@ export function createHarness(editor: Editor) {
     if(runStatus.value==='running'&&previews?.status==='pending'&&!selectionPreviewJobs.has(runId.value))void renderSelectionPreviews(runId.value,previews.requestId,selectedSessionId.value)
   })
   function disconnect() { source?.close(); source = undefined; connection.value = '' }
-  function clearRun() { disconnect(); lastSequence = 0; runId.value = ''; runStatus.value = 'idle'; userContent.value = ''; output.value = ''; message.value = ''; activities.value = []; usedComponents.value = []; proposal.value = null; reviewFigure.value = null; reviewBase.value = null;reviewBaseline.value=null; baseline.value = ''; error.value = ''; reviewError.value = '' }
+  function clearRun() { disconnect(); lastSequence = 0; runId.value = ''; runStatus.value = 'idle'; userContent.value = ''; output.value = ''; message.value = ''; activities.value = []; usedComponents.value = []; proposal.value = null; reviewFigure.value = null;streamPreview.value=null;streamProgress.value=''; reviewBase.value = null;reviewBaseline.value=null; baseline.value = ''; error.value = ''; reviewError.value = '' }
   function clearCandidateRefinement(){auditRepairSelection.value=null;if(refinementFrom.value){refinementFrom.value=null;reconstructionTask.value=null}}
   function clearSession() { clearTimeout(planTimer);repairPlan.value=null;planCanvasBaseline.value='';clearRun();clearCandidateRefinement();clearComposition(); turns.value = []; omittedTurns.value = 0 }
   function remember(turn: HarnessTurn) {
@@ -134,10 +136,13 @@ export function createHarness(editor: Editor) {
     const event = harnessEventSchema.parse(raw)
     if (event.runId !== runId.value || event.sessionId !== selectedSessionId.value || event.sequence <= lastSequence) return
     if (event.sequence !== lastSequence + 1) throw new Error('事件流不连续，请重新选择此会话恢复运行记录')
+    const previewBase=streamPreview.value??reviewBase.value
+    const resolvedPreview=event.type==='proposal.preview'&&event.previewDelta&&previewBase?applyFigurePreviewDelta(previewBase,event.previewDelta):null
     lastSequence = event.sequence
     if (event.type === 'run.started') runStatus.value = 'running'
     if (event.type === 'assistant.delta') output.value = (output.value + (event.text ?? '')).slice(-300_000)
     if (event.type === 'activity') activities.value = [...activities.value.slice(-49), event.text ?? '处理中']
+    if(event.type==='proposal.preview'&&runStatus.value==='running'&&resolvedPreview){streamPreview.value=resolvedPreview;streamProgress.value=event.text??'正在更新候选预览'}
     const turn = currentTurn.value
     if(turn&&event.repositoryRecall)turn.repositoryRecall=event.repositoryRecall
     if (event.type === 'run.completed') {
@@ -162,7 +167,7 @@ export function createHarness(editor: Editor) {
     if (event.type === 'run.failed') { runStatus.value = 'failed'; if (turn) { turn.status = 'failed'; turn.error = event.text ?? '运行失败' } }
     if (event.type === 'run.cancelled') { runStatus.value = 'cancelled'; message.value = '运行已停止'; if (turn) { turn.status = 'cancelled'; turn.message = message.value } }
     if (turn && event.type.startsWith('run.') && event.type !== 'run.started') turn.finishedAt = event.timestamp
-    if (event.type.startsWith('run.') && event.type !== 'run.started') { cancelling.value = false; disconnect() }
+    if (event.type.startsWith('run.') && event.type !== 'run.started') { streamPreview.value=null;streamProgress.value='';cancelling.value = false; disconnect() }
   }
   function follow(id: string) {
     disconnect()
@@ -522,7 +527,7 @@ export function createHarness(editor: Editor) {
   function resumeDataSelection(content:string){if(!locked.value&&!loading.value)draft.value=content}
   watch(intent,value=>{if(value==='edit-recipes'||value==='design-review'){clearComposition();clearCandidateRefinement();reconstructionTask.value=null;adoptedComponentSearch.value=null;editor.assistantDataset.value=null;editor.assistantStyle.value=null}})
   return { statuses, sessions, selectedSessionId, selectedSession, kind, model, draft,intent,adoptedComposition,compositionStale,adoptComposition,clearComposition, attachReference,selectedReferences,toggleReference,setReferencePurpose, chartDataset:editor.assistantDataset,adoptedComponentSearch,componentSearchStale,clearComponentSearch,findReconstructionComponents,adoptReconstructionSearch,reconstructionTask,reuseReconstructionComponents,refinementFrom,refinementStale, preparingImage, prepareReconstruction,prepareCandidateRepair, clearReconstruction, loading, busy, cancelling, error, connection, runStatus,
-    resumeDataSelection,userContent, output, message, activities, proposal, stale, status, catalogueMode,librarySearch,libraryReview, catalogueQuery, componentOptions, setComponentSelection, setReferenceSelection, selectedComponentKeys, catalogueResults, referenceComponents, usedComponents, toggleComponent,
+    resumeDataSelection,userContent, output, message, activities, proposal,streamPreview,streamProgress, stale, status, catalogueMode,librarySearch,libraryReview, catalogueQuery, componentOptions, setComponentSelection, setReferenceSelection, selectedComponentKeys, catalogueResults, referenceComponents, usedComponents, toggleComponent,
     runId, turns, omittedTurns, currentTurn, reviewFigure, reviewBase,reviewBaseline, reviewSync, reviewError, locked, inspectTurn, syncReview,
     repairPlan,planRunning,planPreparing,startRepairPlan,cancelRepairPlan,refreshRepairPlan,
     startVisualAudit,prepareAuditRepair,reauditRepair,auditRepairSelection,locateDesignObjects,prepareDesignReview,

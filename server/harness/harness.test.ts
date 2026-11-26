@@ -10,6 +10,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { ClaudeAdapter, CodexAdapter, type AdapterOptions, type HarnessAdapter } from './adapters'
 import { HarnessService,type Run } from './service'
+import type { HarnessEvent } from '../../src/core/harness'
 import {selectionPreviewGroups} from '../../src/core/selectionPreviews'
 import { harnessHttp } from './http'
 import { clone, createBlank, createExample } from '../../src/core/model'
@@ -65,6 +66,15 @@ function cropInput(figure:FigureDocument,task:ReconstructionTask,width=1600,heig
 }
 
 describe('Native CLI Harness adapters', () => {
+  it('publishes validated patch previews while running and retains a candidate only after complete',async()=>{
+    const {service,session}=serviceSession('codex','Streaming native patches'),data={...input(session.id),catalogue:[],content:'STREAM_PATCH_TEST'},before=clone(data.figure),run=service.start(data)
+    const preview=await new Promise<HarnessEvent>(resolve=>{const listener=(event:HarnessEvent)=>{if(event.type==='proposal.preview'){run.listeners.delete(listener);resolve(event)}};run.listeners.add(listener)})
+    expect(run.status).toBe('running');expect(preview.previewDelta!.nodes.find(n=>n.id==='encoder')!.label).toBe('Streaming encoder');expect(preview.proposal).toBeUndefined();expect(service.summary(run.id).hasProposal).toBe(false);expect(service.summary(run.id).review).toBe('none')
+    await run.done;expect(run.status).toBe('completed');expect(service.summary(run.id).review).toBe('pending')
+    expect(run.events.at(-1)!.proposal!.nodes.find(n=>n.id==='encoder')!.description).toBe('Incremental final annotation');expect(data.figure).toEqual(before)
+    const incomplete=service.start({...data,content:'STREAM_PATCH_TEST STREAM_PATCH_INCOMPLETE'});await incomplete.done
+    expect(incomplete.status).toBe('failed');expect(service.summary(incomplete.id).error).toContain('complete');expect(service.summary(incomplete.id).hasProposal).toBe(false);expect(incomplete.events.at(-1)!.proposal).toBeUndefined()
+  })
   it('preserves the explicit abort reason while Codex is still initializing its RPC connection',async()=>{
     const adapter=new CodexAdapter(options('stall-init'));adapters.push(adapter)
     const controller=new AbortController(),reason=new Error('Explicit run budget exhausted'),running=adapter.send({cwd:await directory(),content:'ping',signal:controller.signal,emit:()=>undefined})

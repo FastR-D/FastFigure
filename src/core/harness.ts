@@ -1,5 +1,10 @@
 import {designRasterSchema,designReviewInfoSchema,designReviewReportSchema,createDesignReviewContext,designReviewPrompt} from './designReview.ts'
 import {paperDesignGuide,paperAlignmentGuide,visualRoleLabels,textRoleLabels} from './paperStyle.ts'
+import {applyFigurePatch,figurePatchSchema,figurePatchKey} from './figurePatch.ts'
+import {decodeFigurePatchStream} from './figurePatchStream.ts'
+import {compactDrawingPrompt,useCompactDrawing} from './figurePatchPrompt.ts'
+import {diffFigures} from './figureDiff.ts'
+import {figurePreviewDeltaSchema} from './figurePreview.ts'
 import {scientificFigureDesign} from '../data/scientificPresentation.ts'
 import {applyMaterialEdits,materialEditsSchema} from './materialEditing.ts'
 import {reflowCallouts,existingCalloutTargets} from './calloutReflow.ts'
@@ -32,7 +37,7 @@ import {textCheckReportSchema} from './textCheckContract.ts'
 import {checkFigureText} from './figureTextCheck.ts'
 import {compositionRecordSchema,type CompositionRecord} from './compositionPlanContract.ts'
 import {compositionPlanPrompt} from './compositionPlan.ts'
-import {styleAssetSchema} from './styleAssetContract.ts'
+import {styleAssetSchema,type StyleAsset} from './styleAssetContract.ts'
 import {componentAttachmentSchema} from './componentAttachmentContract.ts'
 import {attachComponentLeaders} from './componentAttachments.ts'
 import {cataloguePreviewInfoSchema,cataloguePreviewSchema} from './cataloguePreviewContract.ts'
@@ -53,12 +58,13 @@ const shape = figureDocumentSchema.shape
 // Guides are owned by the application. Models return the editable graph, never image data URLs.
 export const editableFigureSchema = z.object({ version: shape.version, title: shape.title,folder:shape.folder, canvas: shape.canvas, style: shape.style,
   nodes: shape.nodes, edges: shape.edges, containers: shape.containers })
-export const harnessResponseSchema = z.object({ message: z.string().min(1).max(5000), figure: editableFigureSchema.nullable(),materialEdits:materialEditsSchema.default([]),calloutReflows:calloutReflowRequestsSchema.default([]),callouts:calloutRequestsSchema.default([]),sharedColorbars:sharedColorbarRequestsSchema.default([]),plotAlignments:plotAlignmentRequestsSchema.default([]),sharedLegends:sharedLegendRequestsSchema.default([]),sharedYAxes:sharedYAxisRequestsSchema.default([]),recipeUpdates:recipeUpdateRequestsSchema.default([]),
+export const harnessResponseSchema = z.object({ message: z.string().min(1).max(5000), figure: editableFigureSchema.nullable().default(null),patch:figurePatchSchema.optional(),materialEdits:materialEditsSchema.default([]),calloutReflows:calloutReflowRequestsSchema.default([]),callouts:calloutRequestsSchema.default([]),sharedColorbars:sharedColorbarRequestsSchema.default([]),plotAlignments:plotAlignmentRequestsSchema.default([]),sharedLegends:sharedLegendRequestsSchema.default([]),sharedYAxes:sharedYAxisRequestsSchema.default([]),recipeUpdates:recipeUpdateRequestsSchema.default([]),
   referenceNotes:referenceNotesSchema.optional(),attachments:z.array(componentAttachmentSchema).max(12).default([]),instances: z.array(componentInstanceSchema).max(12).default([]), instanceLinks: z.array(instanceLinkSchema).max(120).default([]) })
 export const harnessRunInputSchema = z.object({ sessionId: z.uuid(), content: z.string().trim().min(1).max(12000), model: z.string().trim().max(100).optional(),librarySearch:z.boolean().optional(),libraryReview:z.boolean().optional(),
   designImage:designRasterSchema.optional(),figure: figureDocumentSchema, selectedIds: z.array(z.string().max(80)).max(261), referenceId: z.string().max(80).optional(),referenceInputs:z.array(referenceSelectionSchema).max(3).optional(), catalogue: catalogueSchema,cataloguePreview:cataloguePreviewSchema.optional(),task:reconstructionTaskSchema.optional(),inputImage:reconstructionImageSchema.optional(),refineFromRunId:z.uuid().optional(),auditRepair:auditRepairSelectionSchema.optional(),chartData:chartDatasetSchema.optional(),intent:z.enum(['draw','plan','find-components','edit-recipes','design-review']).optional(),compositionPlanRunId:z.uuid().optional(),componentSearchRunId:z.uuid().optional(),styleReference:styleAssetSchema.optional() }).refine(input=>input.intent==='design-review'?!!input.designImage&&!input.task&&!input.chartData&&!input.refineFromRunId&&!input.auditRepair&&!input.compositionPlanRunId&&!input.componentSearchRunId&&!input.catalogue.length&&!input.cataloguePreview&&!input.librarySearch&&!input.libraryReview&&!input.styleReference&&!input.referenceId&&!input.referenceInputs?.length:!input.designImage,'构图审阅只接收当前图件与实际整图渲染，不能混用绘制、素材或参考附件').refine(input=>!input.cataloguePreview||input.task?.kind==='reconstruct'&&(!!input.catalogue.length||!!input.componentSearchRunId),'组件图谱仅用于带素材的初次重建').refine(input=>input.task?.kind!=='reconstruct'||!input.catalogue.length&&!input.componentSearchRunId||!!input.cataloguePreview,'素材辅助重建需要本轮实际组件图谱').refine(input=>input.task?.kind!=='repair'||!input.catalogue.length,'分区修复不能附加替换素材').refine(input=>!input.inputImage||!!input.task,'局部图片只能用于重建任务').refine(input=>!input.refineFromRunId||input.task?.kind==='repair','候选继续修复必须指定分区').refine(input=>!input.auditRepair||!!input.refineFromRunId,'视觉问题修复必须基于受审候选').refine(input=>!input.chartData||!input.task&&!input.refineFromRunId&&!input.auditRepair&&!input.catalogue.length,'数据选图不能同时使用重建任务或参考组件').refine(input=>input.intent!=='plan'||!input.task&&!input.chartData&&!input.refineFromRunId&&!input.auditRepair&&!input.compositionPlanRunId,'方案规划不能与数据、重建或已采用方案混用').refine(input=>!input.compositionPlanRunId||input.intent!=='plan'&&!input.task&&!input.chartData&&!input.refineFromRunId&&!input.auditRepair&&!input.catalogue.length&&!input.referenceInputs?.length&&!input.referenceId,'采用方案时由服务恢复固定来源，不能另附组件、图片或其他任务').refine(input=>!input.styleReference||!input.chartData&&!input.task&&!input.refineFromRunId&&!input.auditRepair&&!input.compositionPlanRunId,'风格素材仅用于普通绘图和规划；已采用方案由服务恢复固定风格').refine(input=>input.intent!=='find-components'||input.task?.kind==='reconstruct'&&!!input.inputImage&&!input.catalogue.length&&!input.cataloguePreview&&!input.componentSearchRunId&&!input.librarySearch&&!input.libraryReview&&!input.referenceInputs?.length&&!input.styleReference,'看图找素材需要初建裁片，不能另附组件或其他检索入口').refine(input=>!input.componentSearchRunId||input.intent!=='find-components'&&input.task?.kind==='reconstruct'&&!!input.inputImage&&!input.catalogue.length&&!input.compositionPlanRunId&&!input.librarySearch&&!input.libraryReview,'采用看图素材时由服务恢复冻结清单，仅用于初次重建').refine(input=>input.intent!=='edit-recipes'||!input.task&&!input.chartData&&!input.refineFromRunId&&!input.auditRepair&&!input.catalogue.length&&!input.compositionPlanRunId&&!input.componentSearchRunId&&!input.librarySearch&&!input.libraryReview&&!input.styleReference,'组合参数任务只使用当前工程，不能混入素材检索、方案、数据或重建任务').superRefine((input,ctx)=>{try{selectedReferenceInputs(input)}catch(e){ctx.addIssue({code:'custom',message:(e as Error).message})}})
 export type HarnessRunInput = z.infer<typeof harnessRunInputSchema>
 export const harnessEventSchema = z.object({ sequence: z.number().int().positive(), runId: z.uuid(), sessionId: z.uuid(), timestamp: z.string(),
+  previewDelta:figurePreviewDeltaSchema.optional(),
   recipeUpdates:z.array(recipeUpdateUseSchema).max(12).optional(),
   plotAlignments:z.array(plotAlignmentReportSchema).max(1).optional(),
   callouts:z.array(calloutReportSchema).max(8).optional(),
@@ -66,7 +72,7 @@ export const harnessEventSchema = z.object({ sequence: z.number().int().positive
   sharedColorbars:z.array(sharedColorbarReportSchema).max(1).optional(),
   sharedLegends:z.array(sharedLegendReportSchema).max(1).optional(),
   sharedYAxes:z.array(sharedYAxisReportSchema).max(4).optional(),
-  type: z.enum(['run.started', 'assistant.delta', 'activity', 'repository.updated', 'run.completed', 'run.failed', 'run.cancelled']),
+  type: z.enum(['run.started', 'assistant.delta', 'activity', 'repository.updated', 'proposal.preview', 'run.completed', 'run.failed', 'run.cancelled']),
   repositoryRecall:repositoryRecallSchema.optional(),
   text: z.string().optional(), proposal: figureDocumentSchema.optional(), components: z.array(componentUseSchema).max(12).optional(),
   designReviewReport:designReviewReportSchema.optional(),auditReport:visualAuditReportSchema.optional(),referenceInputs:z.array(referenceInputInfoSchema).max(3).optional(),referenceUse:z.array(referenceUseSchema).max(3).optional(),
@@ -104,18 +110,30 @@ export const harnessTurnSchema = z.object({
 export type HarnessTurn = z.infer<typeof harnessTurnSchema>
 export const harnessHistorySchema = z.object({ turns: z.array(harnessTurnSchema).max(50), omitted: z.number().int().nonnegative(),repairPlan:repairPlanSchema.optional() })
 
-export function parseHarnessResponse(text: string, original: FigureDocument, catalogue: CatalogueEntry[] = [],referenceInputs:ReferenceInputInfo[]=[],adoptedComposition?:CompositionRecord,recipeOnly=false): { message: string; figure: FigureDocument | null; used: ComponentUse[];referenceUse?:ReferenceUse[];recipeUpdates?:RecipeUpdateUse[];sharedYAxes?:SharedYAxisReport[];sharedLegends?:SharedLegendReport[];plotAlignments?:PlotAlignmentReport[];sharedColorbars?:SharedColorbarReport[];callouts?:CalloutReport[];calloutReflows?:CalloutReflowReport[] } {
+export function parseHarnessResponse(text: string, original: FigureDocument, catalogue: CatalogueEntry[] = [],referenceInputs:ReferenceInputInfo[]=[],adoptedComposition?:CompositionRecord,recipeOnly=false,preferredStyle?:StyleAsset): { message: string; figure: FigureDocument | null; used: ComponentUse[];referenceUse?:ReferenceUse[];recipeUpdates?:RecipeUpdateUse[];sharedYAxes?:SharedYAxisReport[];sharedLegends?:SharedLegendReport[];plotAlignments?:PlotAlignmentReport[];sharedColorbars?:SharedColorbarReport[];callouts?:CalloutReport[];calloutReflows?:CalloutReflowReport[] } {
   let json = text.trim()
   const fence = /^```(?:json)?\s*([\s\S]*?)\s*```$/.exec(json)
   if (fence) json = fence[1]!
   let value: unknown
-  try { value = JSON.parse(json) } catch { throw new Error('模型未返回有效 JSON；当前画布未改变，可补充要求后重试') }
+  let streamed:ReturnType<typeof decodeFigurePatchStream>
+  try { streamed=decodeFigurePatchStream(text,original,preferredStyle);value=streamed?.response??JSON.parse(json) } catch(error) { throw new Error(`模型未返回有效 JSON 或完整补丁流：${(error as Error).message}；当前画布未改变，可补充要求后重试`,{cause:error}) }
   const parsed = (recipeOnly?harnessResponseSchema.strict():harnessResponseSchema).safeParse(value)
   if (!parsed.success) {
-    const reasons=[...new Set(parsed.error.issues.map(issue=>issue.message))].slice(0,3).join('；')
-    throw new Error(`模型结果不符合绘图契约：${reasons}。当前画布未改变，可补充要求后重试`)
+    const reasons=[...new Set(parsed.error.issues.map(issue=>{
+      const path=issue.path.reduce<string>((path,key)=>typeof key==='number'?`${path}[${key}]`:`${path}${path?'.':''}${String(key)}`,'')
+      const message=issue.code==='too_small'&&issue.origin==='string'&&issue.message.startsWith('Too small:')?issue.minimum===1?'字符串不能为空':`字符串至少需要 ${issue.minimum} 个字符`:issue.message
+      return `${path||'响应'}：${message}`
+    }))].slice(0,3).join('；')
+    throw new Error(`模型结果不符合绘图契约：${reasons}。当前画布未改变，请重试；若仍失败，请反馈上述字段信息`,{cause:parsed.error})
   }
   const referenceUse=resolveReferenceNotes(parsed.data.referenceNotes,referenceInputs)
+  if(parsed.data.patch){
+    const data=parsed.data
+    if(recipeOnly||catalogue.length||adoptedComposition||data.figure||data.instances.length||data.instanceLinks.length||data.attachments.length||data.materialEdits.length||data.callouts.length||data.calloutReflows.length||data.recipeUpdates.length||data.sharedColorbars.length||data.sharedLegends.length||data.sharedYAxes.length||data.plotAlignments.length)throw new Error('增量补丁须单独提交，不能混入完整底图、组件或专用操作')
+    const candidate=streamed?.figure??applyFigurePatch(original,data.patch,preferredStyle),uses=mergeReferenceUses(original.referenceUses,referenceUse)
+    if(uses)candidate.referenceUses=uses
+    return{message:data.message,figure:diffFigures(original,candidate).changes.length?candidate:null,used:[],...(referenceUse.length?{referenceUse}:{})}
+  }
   if(parsed.data.materialEdits.length){
     if(recipeOnly||parsed.data.calloutReflows.length||parsed.data.callouts.length||parsed.data.sharedColorbars.length||parsed.data.plotAlignments.length||parsed.data.sharedLegends.length||parsed.data.sharedYAxes.length||parsed.data.recipeUpdates.length||parsed.data.figure!==null||parsed.data.instances.length||parsed.data.instanceLinks.length||parsed.data.attachments.length||adoptedComposition)throw new Error('素材编辑须单独提交 materialEdits，figure 为 null，不混入其他操作')
     try{
@@ -250,14 +268,15 @@ export function harnessPrompt(input: HarnessRunInput,manifest?:ReferenceInputInf
   const paletteIds=[input.figure.style.paletteId??defaultPaletteId,...input.content.matchAll(/[a-z][a-z0-9]*(?:-[a-z0-9]+){2,}/g)].map(value=>typeof value==='string'?value:value[0])
   for(const asset of chartAssets)paletteIds.push(rootContainer(asset.figure).dataChart!.spec.paletteId)
   if(chartAssets.length)paletteIds.push(...colorPalettes.filter(p=>p.source==='FigureForge').map(p=>p.id))
-  const context = {existingCallouts:existingCalloutTargets(input.figure,input.selectedIds),calloutTargets:calloutTargets(input.figure,input.selectedIds),intent:input.intent??'draw',recipeUpdateTargets:recipeUpdateTargets(input.figure,input.selectedIds),colorbarTargets:chartColorbarTargets(input.figure,input.selectedIds),sharedColorbars:sharedColorbarEditTargets(input.figure,input.selectedIds),plotAlignmentTargets:chartPlotTargets(input.figure,input.selectedIds),sharedYAxisTargets:chartYAxisTargets(input.figure,input.selectedIds),sharedLegendTargets:chartLegendTargets(input.figure,input.selectedIds),sharedLegends:sharedLegendEditTargets(input.figure,input.selectedIds),...(input.figure.publication?{publication:{settings:input.figure.publication,report:checkPublication(input.figure,input.figure.publication,20)}}:{}),...(input.styleReference?{styleReference:input.styleReference}:{}), figure:{...figure,nodes:figure.nodes.map(({image,...node})=>image?{...node,imageRef:{sha256:image.sha256,pixelWidth:image.pixelWidth,pixelHeight:image.pixelHeight,fit:image.fit,alt:image.alt}}:node)},textCheck:checkFigureText(input.figure,20),...(adoptedComposition?{adoptedComposition}:{}), selectedIds: input.selectedIds, referenceInputs, catalogue: describeCatalogue(input.catalogue), materials: {
+  const context = {patchRevision:figurePatchKey(input.figure),existingCallouts:existingCalloutTargets(input.figure,input.selectedIds),calloutTargets:calloutTargets(input.figure,input.selectedIds),intent:input.intent??'draw',recipeUpdateTargets:recipeUpdateTargets(input.figure,input.selectedIds),colorbarTargets:chartColorbarTargets(input.figure,input.selectedIds),sharedColorbars:sharedColorbarEditTargets(input.figure,input.selectedIds),plotAlignmentTargets:chartPlotTargets(input.figure,input.selectedIds),sharedYAxisTargets:chartYAxisTargets(input.figure,input.selectedIds),sharedLegendTargets:chartLegendTargets(input.figure,input.selectedIds),sharedLegends:sharedLegendEditTargets(input.figure,input.selectedIds),...(input.figure.publication?{publication:{settings:input.figure.publication,report:checkPublication(input.figure,input.figure.publication,20)}}:{}),...(input.styleReference?{styleReference:input.styleReference}:{}), figure:{...figure,nodes:figure.nodes.map(({image,...node})=>image?{...node,imageRef:{sha256:image.sha256,pixelWidth:image.pixelWidth,pixelHeight:image.pixelHeight,fit:image.fit,alt:image.alt}}:node)},textCheck:checkFigureText(input.figure,20),...(adoptedComposition?{adoptedComposition}:{}), selectedIds: input.selectedIds, referenceInputs, catalogue: describeCatalogue(input.catalogue), materials: {
     figureDesign:scientificFigureDesign,paperStyle:{guide:paperDesignGuide,visualRoles:visualRoleLabels,textRoles:textRoleLabels},
     structures:structurePresets.map(p=>({type:p.type,name:p.name,labels:p.labels,note:p.note,recommendedWidth:184,recommendedHeight:p.height})),
-    themes:[...paperThemes,...figureThemes].map(({id,name,designSystem,paperTheme,preset,sketchStyle,roughness,paletteId,fontFamily,fontRoles,surface})=>({id,name,designSystem,paperTheme,preset,sketchStyle,roughness,paletteId,fontFamily,fontRoles,surface})),
+    themes:[...paperThemes,...figureThemes].map(({id,name,designSystem,paperTheme,preset,sketchStyle,roughness,paletteId,fontFamily,fontRoles,surface,guide})=>({id,name,designSystem,paperTheme,preset,sketchStyle,roughness,paletteId,fontFamily,fontRoles,surface,guide})),
     fonts: [...new Set([...fontFamilies,...input.figure.nodes.flatMap(n=>n.textStyle?.family?[n.textStyle.family]:[]),...input.catalogue.flatMap(c=>c.kind==='asset'?c.asset.figure.nodes.flatMap(n=>n.textStyle?.family?[n.textStyle.family]:[]):[])])], icons: materialIcons.map(i=>({id:i.id,name:i.name,category:i.category})),
     palettes: [...new Set(paletteIds)].flatMap(id=>{const p=paletteById.get(id);return p?[{id:p.id,name:p.title,colors:p.colors}]:[]}),
     ...((chartAssets.some(asset=>rootContainer(asset.figure).dataChart?.spec.kind==='heatmap')||input.figure.containers.some(container=>container.dataChart?.spec.kind==='heatmap'))?{heatmapScales:heatmapPalettes.map(p=>({id:p.id,name:p.title,mode:p.mode,colors:p.colors}))}:{}),
   } }
+  if(useCompactDrawing(input,adoptedComposition))return publicationNote+compactDrawingPrompt(input,context,referenceInputs,repositoryRecallPrompt(repositoryRecall))
   return `${repositoryRecallPrompt(repositoryRecall)}你是 FastFigure 科研绘图助手，面向计算机期刊与会议。根据用户要求解释或修改当前可编辑图。先确定一张图要表达的论点，再按概览、核心机制、局部解释或证据选择合适结构；复杂主图可组合分层、编解码、张量、树、矩阵、循环、网络及对照。主次、阅读顺序、留白和一致的符号配色共同服务论点，不能为增加结构种类而堆模板，也不要全用箭头流程。绘制时落实 materials.figureDesign：表示、模型、算子、解码使用有含义的视觉词汇；只在真实阶段或分组需要时使用浅底与内容卡片，减少没有含义的重复套框，留一个视觉重点，不把所有对象做成同样的圆角框。
 只返回一个 JSON 对象：{"message":"简洁的中文说明","figure":完整可编辑底图或null,"instances":[],"instanceLinks":[],"attachments":[],"recipeUpdates":[],"sharedYAxes":[],"sharedLegends":[],"plotAlignments":[],"sharedColorbars":[],"callouts":[],"calloutReflows":[],"materialEdits":[]}。仅讨论、更新已有组合参数、统一现有图表纵轴或创建共享图例时 figure=null；新绘图时返回完整底图（包含根容器与自定义节点），复用组件通过 instances 添加。不要返回 Markdown 或省略号。
 ${input.intent==='edit-recipes'?'本轮是“调整已有组合参数”：只可返回 figure=null 与 recipeUpdates（或空数组表示需要补充信息），不能返回新底图、instances、instanceLinks、attachments 或其他额外字段。只操作当前工程，修改成为待审候选，不会直接应用。':''}

@@ -1,4 +1,5 @@
 import {editableFigure} from './editableFigure'
+import { createFigurePreviewDelta } from './figurePreview';
 import {routeFigure,segmentsCross} from './routing'
 import {pathPoints} from './paths'
 import {createCallouts} from './callouts'
@@ -8,6 +9,7 @@ import { createEditor } from '../composables/useEditor'
 import { createHarness } from '../composables/useHarness'
 import { clone, createBlank, createExample as sourceExample, type FigureDocument } from './model'
 import { harnessPrompt,parseHarnessResponse, type HarnessEvent, type HarnessTurn } from './harness'
+import {figurePatchKey} from './figurePatch.ts'
 import {instantiateComponent,scaleComponent} from './assets'
 import { buildRecipe } from '../data/recipes'
 import type { RepairPlan } from './repairPlan'
@@ -60,6 +62,18 @@ const turn = (overrides: Partial<HarnessTurn> = {}): HarnessTurn => ({ id: runId
   message: 'Model response', error: '', components: [], hasProposal: true, review: 'pending', available: true, ...overrides })
 
 describe('Harness response validation and figure review', () => {
+  it('shows ordered streaming previews without enabling apply, then replaces them with the completed candidate',async()=>{
+    const {editor,harness}=setup();await harness.newSession();harness.draft.value='Stream the declared edit';const before=clone(editor.figure.value);await harness.send()
+    const preview=candidate();Source.all[0]!.event('proposal.preview',1,undefined,{previewDelta:createFigurePreviewDelta(before,preview),text:'已校验 1 批增量更新'})
+    expect(harness.streamPreview.value).toEqual(preview);expect(harness.proposal.value).toBeNull();harness.apply();expect(editor.figure.value).toEqual(before)
+    const later=clone(preview);later.nodes[0]!.label='Final output';Source.all[0]!.event('proposal.preview',1,later);expect(harness.streamPreview.value).toEqual(preview)
+    Source.all[0]!.event('run.completed',2,later);expect(harness.streamPreview.value).toBeNull();expect(harness.proposal.value).toEqual(later);expect(editor.figure.value).toEqual(before);harness.dispose()
+  })
+  it('clears an interrupted stream preview without retaining an applicable partial candidate',async()=>{
+    const {editor,harness}=setup();await harness.newSession();harness.draft.value='Interrupted edit';const before=clone(editor.figure.value);await harness.send()
+    Source.all[0]!.event('proposal.preview',1,undefined,{previewDelta:createFigurePreviewDelta(before,candidate())});Source.all[0]!.event('run.cancelled',2)
+    expect(harness.streamPreview.value).toBeNull();expect(harness.proposal.value).toBeNull();expect(editor.figure.value).toEqual(before);harness.dispose()
+  })
   it('rejects a changed render snapshot and only selects review targets while the reviewed canvas is current',async()=>{
     const {editor,harness}=setup();await harness.newSession();harness.prepareDesignReview('检查主次');const before=clone(editor.figure.value),image={dataUrl:'data:image/png;base64,iVBORw0KGgo=',width:1600,height:992,viewport:'canvas-1000x620' as const,renderer:'fastfigure-browser-v1' as const,figureSha256:'a'.repeat(64),imageSha256:'b'.repeat(64),fonts:[]}
     vi.mocked(prepareDesignReviewImage).mockImplementationOnce(async()=>{editor.figure.value.title='Edited while rendering';return image})
@@ -293,7 +307,11 @@ describe('Harness response validation and figure review', () => {
   })
   it('rejects malformed/truncated responses, invalid geometry and invented topology', () => {
     const doc = createExample()
-    for (const response of ['{"message":', 'prose before {"message":"a","figure":null}', '{"message":"missing figure"}']) expect(() => parseHarnessResponse(response, doc)).toThrow()
+    for (const response of ['{"message":', 'prose before {"message":"a","figure":null}']) expect(() => parseHarnessResponse(response, doc)).toThrow()
+    expect(parseHarnessResponse('{"message":"需要补充信息"}',doc).figure).toBeNull()
+    expect(()=>parseHarnessResponse('{"message":""}',doc)).toThrow('message：字符串不能为空')
+    const blankGroup={message:'Transformer',patch:{base:figurePatchKey(doc),operations:[{op:'reset',title:'Transformer'},{op:'add-container',container:{id:'transformer',title:''}}]}}
+    expect(()=>parseHarnessResponse(JSON.stringify(blankGroup),doc)).toThrow('patch.operations[1].container.title：字符串不能为空')
     const outside = candidate(); outside.nodes[0]!.x = 0
     expect(() => parseHarnessResponse(JSON.stringify({ message: 'Outside', figure: outside }), doc)).toThrow('校验')
     const dangling = candidate(); dangling.edges[0]!.source = 'missing'

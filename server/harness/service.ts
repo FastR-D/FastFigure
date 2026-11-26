@@ -1,4 +1,6 @@
 import {editableFigure} from '../../src/core/editableFigure.ts'
+import {FigurePatchStream} from '../../src/core/figurePatchStream.ts'
+import {createFigurePreviewDelta} from '../../src/core/figurePreview.ts'
 import {createDesignReviewContext,parseDesignReviewResponse,designReviewPrompt} from '../../src/core/designReview.ts'
 import { selectedReferenceInputs,type ReferenceUse } from '../../src/core/referenceInputs.ts'
 import {checkFigureText} from '../../src/core/figureTextCheck.ts'
@@ -500,6 +502,28 @@ export class HarnessService {
   }
   private async execute(session: Session, run: Run, input: HarnessRunInput,audit?:AuditExecution,repairEvidence='') {
     let emitted = 0,pending='',flushTimer:ReturnType<typeof setTimeout>|undefined,auditAdapter:HarnessAdapter|undefined
+    let previewTimer: ReturnType<typeof setTimeout> | undefined
+    let pendingPreview: FigureDocument | undefined
+    let previewRevision = 0
+    let previousPreview = input.figure
+    const flushPreview = () => {
+      clearTimeout(previewTimer)
+      previewTimer = undefined
+      if (!pendingPreview || run.controller.signal.aborted || run.status !== 'running') return
+      try {
+        const event: HarnessEvent = {
+          sequence: run.events.length + 1, runId: run.id, sessionId: run.sessionId, timestamp: new Date().toISOString(),
+          type: 'proposal.preview', text: `已校验 ${previewRevision} 批增量更新`,
+          previewDelta: createFigurePreviewDelta(previousPreview, pendingPreview),
+        }
+        previousPreview = pendingPreview
+        pendingPreview = undefined
+        run.events.push(event)
+        for (const listener of run.listeners) listener(event)
+      } catch (error) {
+        run.controller.abort(error)
+      }
+    }
     const flush=()=>{clearTimeout(flushTimer);flushTimer=undefined;if(pending){const text=pending;pending='';this.emit(run,'assistant.delta',text)}}
     try {
       run.controller.signal.throwIfAborted()
@@ -542,17 +566,32 @@ export class HarnessService {
         const dataUrl=input.designImage.dataUrl,format=dataUrl.startsWith('data:image/png')?'png':'webp',path=join(directory,`design.${format}`),bytes=Buffer.from(dataUrl.split(',')[1]!,'base64');await writeFile(path,bytes,{mode:0o600});images.push({path,dataUrl});run.candidateImage={bytes,contentType:`image/${format}`}
       }
       run.controller.signal.throwIfAborted()
+      const patchStream=!audit&&!designContext&&!input.task&&!input.chartData&&input.intent!=='plan'&&input.intent!=='edit-recipes'&&!adoptedComposition&&!input.catalogue.length?new FigurePatchStream(input.figure,input.styleReference):undefined
       const text = await (auditAdapter??session.adapter).send({ cwd: designContext?directory:session.cwd, content: prompt, signal: run.controller.signal,
         ...(input.model ? { model: input.model } : {}), ...(images.length ? { images } : {}),
         emit: (type, text) => {
           if (run.controller.signal.aborted||run.status!=='running') return
           emitted += text.length
           if (emitted > 300_000 || run.events.length > 5000) { run.controller.abort(new Error('Harness 输出超过限制，请缩小绘图任务')); return }
-          if(type==='assistant.delta'){pending+=text;if(pending.length>=128)flush();else flushTimer??=setTimeout(flush,100)}else{flush();this.emit(run,type,text)}
+          if(type==='assistant.delta'){
+            try {
+              if (patchStream?.push(text)) {
+                pendingPreview = editableFigure(patchStream.preview)
+                previewRevision = patchStream.revision
+                previewTimer ??= setTimeout(flushPreview, 150)
+              }
+            } catch (error) {
+              run.controller.abort(error)
+              return
+            }
+            pending+=text;if(pending.length>=128)flush();else flushTimer??=setTimeout(flush,100)
+          }else{flush();this.emit(run,type,text)}
         },
       })
       run.controller.signal.throwIfAborted()
       flush()
+      flushPreview()
+      run.controller.signal.throwIfAborted()
       if (text.length > 300_000) throw new Error('Harness 输出超过限制，请缩小绘图任务')
       if(designContext){const report=parseDesignReviewResponse(text,designContext);await writeFile(join(directory,'response.json'),JSON.stringify(report),{mode:0o600});session.turns.find(turn=>turn.id===run.id)!.designReviewReport=report;run.status='completed';this.emit(run,'run.completed',report.message);return}
       if(auditContext){const report=parseVisualAuditResponse(text,auditContext);await writeFile(join(directory,'response.json'),JSON.stringify(report),{mode:0o600});run.status='completed';this.emit(run,'run.completed',report.message,undefined,undefined,report);return}
@@ -561,7 +600,7 @@ export class HarnessService {
         await writeFile(join(directory,'response.json'),JSON.stringify(planned),{mode:0o600});run.status='completed';this.emit(run,'run.completed',planned.message,undefined,undefined,undefined,undefined,planned.referenceUse,planned.compositionRecord);return
       }
       const chartResponse=input.chartData?parseChartRecommendationResponse(text,input.figure,input.chartData,referenceInputs):undefined
-      const response = chartResponse??(input.task?parseReconstructionResponse(text,input.figure,input.task,input.inputImage,input.catalogue,input.cataloguePreview?cataloguePreviewInfo(input.cataloguePreview):undefined):parseHarnessResponse(text, input.figure, input.catalogue,referenceInputs,adoptedComposition,input.intent==='edit-recipes'))
+      const response = chartResponse??(input.task?parseReconstructionResponse(text,input.figure,input.task,input.inputImage,input.catalogue,input.cataloguePreview?cataloguePreviewInfo(input.cataloguePreview):undefined):parseHarnessResponse(text, input.figure, input.catalogue,referenceInputs,adoptedComposition,input.intent==='edit-recipes',input.styleReference))
       await writeFile(join(directory, 'response.json'), JSON.stringify(response), { mode: 0o600 })
       // A no-op repair retains its parent candidate; it has not reached the canvas yet.
       let candidate=response.figure??(input.refineFromRunId?input.figure:null)
@@ -581,7 +620,7 @@ export class HarnessService {
       if(recall?.selection?.status==='pending'){const report=clone(recall);Object.assign(report.selection!,{status:cancelled?'cancelled':'failed',message:(reason instanceof Error?reason.message:'素材筛选未完成').slice(0,1500)});this.updateRepositoryRecall(run,report)}
       run.status = cancelled ? 'cancelled' : 'failed'
       this.emit(run, cancelled ? 'run.cancelled' : 'run.failed', reason instanceof Error ? reason.message.slice(0, 1200) : 'Harness 运行失败')
-    } finally { clearTimeout(flushTimer);await auditAdapter?.dispose();run.selectionInputs=undefined;run.feedbackInputs=undefined;run.feedbackInherited=undefined;session.active = undefined }
+    } finally { clearTimeout(flushTimer);clearTimeout(previewTimer);await auditAdapter?.dispose();run.selectionInputs=undefined;run.feedbackInputs=undefined;run.feedbackInherited=undefined;session.active = undefined }
   }
   async dispose() {
     for(const p of this.plans.values())if(p.state.status==='running')this.cancelPlan(p.state.id)

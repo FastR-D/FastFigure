@@ -10,6 +10,7 @@ import { Article, Box, Button, Disclosure, DisclosureTrigger, Header, Text, Text
 import { ErrorMessage, BrandMark, Icon } from '../ui'
 import type { Harness } from '../../composables/useHarness'
 import type { HarnessTurn } from '../../core/harness'
+import FigureRenderer from '../figure/FigureRenderer'
 import FigureReview from './FigureReview.vue'
 import ReconstructionReview from './ReconstructionReview.vue'
 import CatalogueInputPreview from './CatalogueInputPreview.vue'
@@ -61,6 +62,10 @@ const badge = computed(() => props.turn.status === 'running' ? props.turn.design
       <CatalogueInputPreview v-if="turn.cataloguePreview" :info="turn.cataloguePreview" :run-id="turn.id" :available="turn.available" />
       <Box v-if="turn.status === 'running'" class="harness-result-status" role="status" aria-live="polite"><Icon name="refresh" /><Text>{{ turn.designReview?'正在审阅整图…':'正在生成…' }} 已接收 {{ current ? harness.output.value.length : 0 }} 字符</Text></Box>
       <Text v-if="turn.status === 'cancelled'" role="status">运行已停止</Text>
+      <Box v-if="current && turn.status === 'running' && harness.streamPreview.value" class="figure-review" aria-label="流式候选预览">
+        <Text class="muted-caption">{{ harness.streamProgress.value }} · 生成中</Text>
+        <FigureRenderer :figure="harness.streamPreview.value" />
+      </Box>
       <Text v-if="current && harness.connection.value" class="muted-caption">{{ harness.connection.value }}</Text>
       <Text v-if="turn.message && turn.status !== 'cancelled'" class="harness-answer">{{ turn.message }}</Text>
       <Text v-if="turn.textCheck" class="muted-caption">生成时文字检查：{{ turn.textCheck.total }} 项 · {{ turn.textCheck.engine }}</Text>

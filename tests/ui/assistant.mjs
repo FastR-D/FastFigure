@@ -3,6 +3,13 @@ import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 export async function checkAssistant({ page, base, results, panel, turn, send, run, saveProject, undo, choose }) {
     const original = await saveProject(), asset = await page.evaluate(async () => { const {buildRecipe,componentRecipes} = await import('/src/data/recipes.ts'); return buildRecipe('pipeline',componentRecipes.find(recipe=>recipe.id==='pipeline').defaults); });
+    await page.getByRole('button',{name:'助手',exact:true}).click();await panel.getByRole('button',{name:'新建会话',exact:true}).click();
+    const streamed=await send('STREAM_PATCH_TEST：分两批更新编码器标签和注释。'),live=turn(streamed.id).getByLabel('流式候选预览',{exact:true});await live.waitFor();
+    assert.equal(await turn(streamed.id).getByRole('button',{name:'应用候选图',exact:true}).count(),0);assert((await live.textContent()).includes('Streaming encoder'));
+    const mainEncoder=page.getByTestId('figure-canvas').locator('[data-object-id="encoder"] text[data-edit-field="label"]').first();assert.equal(await mainEncoder.textContent(),original.nodes.find(n=>n.id==='encoder').label);
+    await turn(streamed.id).getByRole('button',{name:'应用候选图',exact:true}).waitFor();await live.waitFor({state:'hidden'});const streamResult=await run(streamed.id),streamCandidate=streamResult.events.find(e=>e.type==='run.completed').proposal;
+    assert(streamResult.events.some(e=>e.type==='proposal.preview'&&e.previewDelta&&!e.proposal));assert.deepEqual(await saveProject(),original);
+    await turn(streamed.id).getByRole('button',{name:'应用候选图',exact:true}).click();assert.deepEqual(await saveProject(),streamCandidate);await undo();assert.deepEqual(await saveProject(),original);
     await page.getByRole('button', { name: '样式', exact: true }).click();
     await page.getByRole('button', { name: '保存当前风格', exact: true }).click();
     const dialog = page.getByRole('dialog', { name: '保存与预览风格', exact: true });

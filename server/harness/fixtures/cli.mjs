@@ -103,6 +103,11 @@ function rawResponse(content) {
   if (scenario === 'text' || !content.includes(marker)) return JSON.stringify({ message: 'Fixture connection ready', figure: null })
   const context = JSON.parse(content.split(marker)[1].split('\n')[0])
   const figure = context.figure
+  if(content.includes('STREAM_PATCH_TEST')){
+    const target=figure.nodes.find(n=>n.id==='encoder')??figure.nodes.find(n=>n.kind!=='path'),lines=[{type:'start',protocol:'fastfigure.patch.v1',base:context.patchRevision},{type:'patch',seq:1,operations:[{op:'update-node',id:target.id,changes:{label:'Streaming encoder'}}]},{type:'patch',seq:2,operations:[{op:'update-node',id:target.id,changes:{description:'Incremental final annotation'}}]},{type:'complete',seq:3,message:'测试夹具：流式补丁完成，等待人工应用。'}]
+    if(content.includes('STREAM_PATCH_INCOMPLETE'))lines.pop()
+    return lines.map(line=>JSON.stringify(line)).join('\n')+'\n'
+  }
   if(content.includes('EDGE_WAYPOINT_TEST'))return JSON.stringify({message:'测试夹具：恢复选中连线的自动避障，等待人工采用。',figure:null,materialEdits:[{kind:'edge-route',edgeId:context.selectedIds.find(id=>figure.edges.some(e=>e.id===id)),points:[],direction:'horizontal'},{kind:'line-style',objectIds:context.selectedIds.filter(id=>figure.edges.some(e=>e.id===id)),includeDescendants:false,style:{stroke:'#287f72',strokeWidth:2,arrow:'open',startArrow:'open',arrowSize:10}}]})
   if(content.includes('RECIPE_UPDATES_TEST')){
     const target=context.recipeUpdateTargets.find(target=>target.recipeId==='tensor-stack')??context.recipeUpdateTargets[0];if(!target)throw new Error('Parameter fixture requires an existing native target')
@@ -174,6 +179,13 @@ if (args.includes('app-server')) {
     }
     validateReferenceImages(message.params.input[0].text,message.params.input.filter(i=>i.type==='localImage').map(i=>readFileSync(i.path)))
     const text = response(message.params.input[0].text)
+    if(message.params.input[0].text.includes('STREAM_PATCH_TEST')){
+      write({id:message.id,result:{turn:{id:turnId}}})
+      const lines=text.trimEnd().split('\n');let delay=20
+      for(const line of lines){setTimeout(()=>write({method:'item/agentMessage/delta',params:{...params,itemId:'answer',delta:line+'\n'}}),delay);delay+=350}
+      setTimeout(()=>{write({method:'item/completed',params:{...params,item:{id:'answer',type:'agentMessage',phase:'final_answer',text}}});write({method:'turn/completed',params:{threadId,turn:{id:turnId,status:'completed'}}})},delay)
+      return
+    }
     const send = () => {
       write({ method: 'item/agentMessage/delta', params: { ...params, threadId: 'unrelated-thread', itemId: 'other', delta: 'DO NOT LEAK' } })
       write({ method: 'item/agentMessage/delta', params: { ...params, turnId: 'old-turn', itemId: 'other', delta: 'DO NOT LEAK' } })
